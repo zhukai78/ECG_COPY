@@ -1,0 +1,192 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent">
+
+    <SeekBar
+        android:id="@+id/record_scrol_sb"
+        android:layout_width="fill_parent"
+        android:layout_height="36.0dip"
+        android:layout_alignParentBottom="true" />
+
+    <com.warick.drawable.WarickSurfaceView
+        android:id="@+id/record_heart_rate_sv"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_above="@id/record_scrol_sb" />
+
+    <LinearLayout
+        android:id="@+id/record_values_ll"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:visibility="visible">
+
+        <TextView
+            android:id="@+id/record_a1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="A1：-- mV" />
+
+        <TextView
+            android:id="@+id/record_a2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="A2：-- mV" />
+
+        <TextView
+            android:id="@+id/record_a1a2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="A1-A2：-- ms" />
+    </LinearLayout>
+
+    <RelativeLayout
+        android:id="@+id/his_ecg_hr_rl"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginTop="10.0dip"
+        android:layout_marginRight="10.0dip"
+        android:visibility="visible">
+
+        <ImageView
+            android:id="@+id/his_ecg_hr_iv"
+            android:layout_width="28.0dip"
+            android:layout_height="28.0dip"
+            android:src="@drawable/heartbeat" />
+
+        <TextView
+            android:id="@+id/his_ecg_hr"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5.0dip"
+            android:layout_toRightOf="@id/his_ecg_hr_iv"
+            android:text="NaN"
+            android:textSize="24.0sp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@id/his_ecg_hr"
+            android:layout_toRightOf="@id/his_ecg_hr"
+            android:text="bpm" />
+    </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/record_scrol_sb"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="10.0dip"
+        android:layout_marginBottom="10.0dip"
+        android:gravity="right"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/record_usename"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="name"
+                android:textSize="18.0sp" />
+
+            <TextView
+                android:id="@+id/record_useage"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5.0dip"
+                android:text="68岁"
+                android:textSize="12.0sp" />
+
+            <TextView
+                android:id="@+id/record_period"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5.0dip"
+                android:text="00:00:00"
+                android:textSize="12.0sp" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/record_datatime"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="2014-05-01 00:00:00" />
+
+        <TextView
+            android:id="@+id/ecg_scale_info"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="25mm/s, 50mm/mV"
+            android:textSize="12.0sp" />
+
+        <TextView
+            android:id="@+id/record_ecg_description"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/desription"
+            android:textSize="10.0dip" />
+    </LinearLayout>
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginTop="10.0dip"
+        android:layout_marginRight="10.0dip"
+        android:visibility="gone">
+
+        <ImageView
+            android:id="@+id/record_heartrate_iv"
+            android:layout_width="28.0dip"
+            android:layout_height="28.0dip"
+            android:src="@drawable/heartbeat" />
+
+        <TextView
+            android:id="@+id/record_heartrate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5.0dip"
+            android:layout_toRightOf="@id/record_heartrate_iv"
+            android:text="75"
+            android:textSize="24.0sp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@id/record_heartrate"
+            android:layout_toRightOf="@id/record_heartrate"
+            android:text="bpm" />
+    </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/record_scrol_sb"
+        android:layout_alignParentLeft="true"
+        android:layout_marginLeft="10.0dip"
+        android:layout_marginBottom="10.0dip"
+        android:orientation="horizontal"
+        android:visibility="gone">
+
+        <ImageView
+            android:layout_width="15.0dip"
+            android:layout_height="15.0dip"
+            android:src="@drawable/location" />
+
+        <TextView
+            android:id="@+id/record_location"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:text="广州市萝岗区科学城科学大道182号创新大厦C2-208室"
+            android:textSize="10.0sp" />
+    </LinearLayout>
+</RelativeLayout>

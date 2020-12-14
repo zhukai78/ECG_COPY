@@ -1,0 +1,473 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@color/app_bg">
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="5.0dip"
+            android:background="@drawable/corners_bg"
+            android:orientation="vertical"
+            android:padding="5.0dip">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="5.0dip"
+                android:layout_marginLeft="10.0dip"
+                android:text="@string/ECG"
+                android:textColor="@color/actionbar_cl"
+                android:textSize="22.0sp" />
+
+            <View
+                android:layout_width="fill_parent"
+                android:layout_height="1.0dip"
+                android:layout_margin="5.0dip"
+                android:background="@color/stroke_cl" />
+
+            <CheckBox
+                android:id="@+id/set_ecg_alarm"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/l_heart_rate_alarm" />
+
+            <LinearLayout
+                android:id="@+id/set_ecg_alarm_div"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="10.0dip">
+
+                <RelativeLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:text="@string/l_ha_higher_than" />
+
+                    <EditText
+                        android:id="@+id/ecg_warn_rate_max"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="100.0dip"
+                        android:digits="\ 1234567890" />
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:text="@string/l_ha_less_than" />
+
+                    <EditText
+                        android:id="@+id/ecg_warn_rate_min"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="100.0dip"
+                        android:digits="\ 1234567890" />
+                </RelativeLayout>
+
+                <View
+                    android:layout_width="fill_parent"
+                    android:layout_height="1.0dip"
+                    android:layout_marginBottom="5.0dip"
+                    android:background="@color/stroke_cl" />
+
+                <TextView
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/l_ha_type"
+                    android:textSize="18.0sp" />
+
+                <RadioGroup
+                    android:id="@+id/setting_alarm_type"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <RadioButton
+                        android:id="@+id/setting_alarm_type_vibration"
+                        android:checked="true"
+                        android:text="@string/l_ha_type_vibration" />
+
+                    <RadioButton
+                        android:id="@+id/setting_alarm_type_sound"
+                        android:text="@string/l_ha_type_sound" />
+
+                    <RadioButton
+                        android:id="@+id/setting_alarm_type_vibration_sound"
+                        android:text="@string/l_ha_type_vibration_sound" />
+                </RadioGroup>
+
+                <View
+                    android:layout_width="fill_parent"
+                    android:layout_height="1.0dip"
+                    android:layout_marginBottom="5.0dip"
+                    android:background="@color/stroke_cl" />
+
+                <TextView
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/Heartrate_alarm_delay"
+                    android:textSize="18.0sp" />
+
+                <RadioGroup
+                    android:id="@+id/setting_alarm_delay"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <RadioButton
+                        android:id="@+id/time_10s"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:checked="true"
+                        android:text="@string/ten_Second" />
+
+                    <RadioButton
+                        android:id="@+id/time_20s"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/twenty_Second" />
+
+                    <RadioButton
+                        android:id="@+id/time_30s"
+                        android:text="@string/thirtieth_Second" />
+                </RadioGroup>
+            </LinearLayout>
+
+            <View
+                android:layout_width="fill_parent"
+                android:layout_height="1.0dip"
+                android:layout_marginBottom="5.0dip"
+                android:background="@color/stroke_cl" />
+
+            <TextView
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/ECG_measurement_time"
+                android:textSize="18.0sp" />
+
+            <RadioGroup
+                android:id="@+id/setting_time"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <RadioButton
+                    android:id="@+id/time_unlimit"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:checked="true"
+                    android:text="@string/Limitless" />
+
+                <RadioButton
+                    android:id="@+id/time_1m"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/one_Minute" />
+
+                <RadioButton
+                    android:id="@+id/time_5m"
+                    android:text="@string/five_Minute" />
+
+                <RadioButton
+                    android:id="@+id/time_10m"
+                    android:text="@string/ten_Minute" />
+            </RadioGroup>
+
+            <View
+                android:layout_width="fill_parent"
+                android:layout_height="1.0dip"
+                android:layout_margin="5.0dip"
+                android:background="@color/stroke_cl" />
+
+            <CheckBox
+                android:id="@+id/setting_auto_record"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/Automatic_save_data"
+                android:visibility="visible" />
+
+            <CheckBox
+                android:id="@+id/setting_auto_upload"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/Automatically_upload_data"
+                android:visibility="visible" />
+
+            <CheckBox
+                android:id="@+id/setting_realtime_upload"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/Real_time_data_upload"
+                android:visibility="visible" />
+
+            <CheckBox
+                android:id="@+id/setting_ecg_waveform_analysis"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/ECG_waveform_analysis"
+                android:visibility="visible" />
+        </LinearLayout>
+
+        <RelativeLayout
+            android:id="@+id/person_info_setting"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="5.0dip"
+            android:background="@drawable/corners_bg"
+            android:orientation="horizontal"
+            android:padding="5.0dip"
+            android:visibility="visible">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="5.0dip"
+                android:layout_marginLeft="10.0dip"
+                android:text="@string/Personal_information"
+                android:textSize="22.0sp" />
+
+            <ImageView
+                android:layout_width="24.0dip"
+                android:layout_height="24.0dip"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_margin="5.0dip"
+                android:focusable="false"
+                android:src="@drawable/arrow_right" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/pedometer_setting_rl"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="5.0dip"
+            android:background="@drawable/corners_bg"
+            android:orientation="horizontal"
+            android:padding="5.0dip"
+            android:visibility="visible">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="5.0dip"
+                android:layout_marginLeft="10.0dip"
+                android:text="@string/Pedometer"
+                android:textSize="22.0sp" />
+
+            <ImageView
+                android:layout_width="24.0dip"
+                android:layout_height="24.0dip"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_margin="5.0dip"
+                android:focusable="false"
+                android:src="@drawable/arrow_right" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/sos_setting"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="5.0dip"
+            android:background="@drawable/corners_bg"
+            android:orientation="horizontal"
+            android:padding="5.0dip"
+            android:visibility="visible">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="5.0dip"
+                android:layout_marginLeft="10.0dip"
+                android:text="@string/l_sos_title"
+                android:textSize="22.0sp" />
+
+            <ImageView
+                android:layout_width="24.0dip"
+                android:layout_height="24.0dip"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_margin="5.0dip"
+                android:focusable="false"
+                android:src="@drawable/arrow_right" />
+        </RelativeLayout>
+
+        <LinearLayout
+            android:id="@+id/setting_device_info_ll"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="5.0dip"
+            android:background="@drawable/corners_bg"
+            android:orientation="vertical"
+            android:padding="5.0dip"
+            android:visibility="gone">
+
+            <TextView
+                android:id="@+id/setting_item1_text1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="5.0dip"
+                android:layout_marginLeft="10.0dip"
+                android:text="@string/Device_information"
+                android:textColor="@color/actionbar_cl"
+                android:textSize="22.0sp" />
+
+            <View
+                android:layout_width="fill_parent"
+                android:layout_height="1.0dip"
+                android:background="@color/stroke_cl" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5.0dip"
+                android:text="@string/Device_Name"
+                android:textSize="18.0sp" />
+
+            <TextView
+                android:id="@+id/setting_machine_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="1.0dip"
+                android:text="N/A" />
+
+            <View
+                android:layout_width="fill_parent"
+                android:layout_height="0.5dip"
+                android:background="@color/stroke_cl" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5.0dip"
+                android:text="@string/Device_ID"
+                android:textSize="18.0sp" />
+
+            <TextView
+                android:id="@+id/setting_machine_id"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="1.0dip"
+                android:text="N/A" />
+
+            <View
+                android:layout_width="fill_parent"
+                android:layout_height="0.5dip"
+                android:background="@color/stroke_cl" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5.0dip"
+                android:text="@string/Firmware_version"
+                android:textSize="18.0sp" />
+
+            <TextView
+                android:id="@+id/setting_machine_ver"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="1.0dip"
+                android:text="N/A" />
+
+            <View
+                android:layout_width="fill_parent"
+                android:layout_height="0.5dip"
+                android:background="@color/stroke_cl" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5.0dip"
+                android:text="@string/device_battery"
+                android:textSize="18.0sp" />
+
+            <TextView
+                android:id="@+id/setting_machine_battery"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="1.0dip"
+                android:text="UnKnow" />
+        </LinearLayout>
+
+        <RelativeLayout
+            android:id="@+id/setting_update_sw"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="5.0dip"
+            android:background="@drawable/corners_bg"
+            android:orientation="horizontal"
+            android:padding="5.0dip"
+            android:visibility="gone">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="5.0dip"
+                android:layout_marginLeft="10.0dip"
+                android:text="@string/Firmware_Updata"
+                android:textSize="22.0sp" />
+
+            <ImageView
+                android:layout_width="24.0dip"
+                android:layout_height="24.0dip"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_margin="5.0dip"
+                android:focusable="false"
+                android:src="@drawable/arrow_right" />
+        </RelativeLayout>
+
+        <TextView
+            android:id="@+id/setting_ver_info"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="8.0dip"
+            android:text="@string/app_name" />
+
+        <RelativeLayout
+            android:id="@+id/setting_check_update"
+            android:layout_width="fill_parent"
+            android:layout_height="50.0dip"
+            android:background="@drawable/rec_item_sel">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:text="@string/check_update"
+                android:textSize="20.0dip" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/login_out"
+            android:layout_width="fill_parent"
+            android:layout_height="55.0dip"
+            android:layout_marginTop="20.0dip"
+            android:background="@drawable/rec_item_sel">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:text="@string/login_out"
+                android:textSize="20.0sp" />
+        </RelativeLayout>
+    </LinearLayout>
+</ScrollView>

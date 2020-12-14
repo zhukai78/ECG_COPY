@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="to:" />
+
+    <EditText
+        android:id="@+id/email_to"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:hint="邮件地址" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="tile:" />
+
+    <EditText
+        android:id="@+id/email_title"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:hint="邮件标题" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="content:" />
+
+    <EditText
+        android:id="@+id/email_content"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:hint="邮件内容" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="extra:" />
+
+    <EditText
+        android:id="@+id/email_extra"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:hint="邮件附件" />
+
+    <Button
+        android:id="@+id/eamil_send_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:text="send" />
+</LinearLayout>

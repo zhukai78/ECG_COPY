@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/corners_bg_ecg_tool">
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5.0dip"
+        android:gravity="center_horizontal"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/l_ecg_comment" />
+
+        <EditText
+            android:id="@+id/ecg_comment_content"
+            android:layout_width="fill_parent"
+            android:layout_height="180.0dip"
+            android:layout_marginLeft="1.0dip"
+            android:layout_marginTop="10.0dip"
+            android:layout_marginRight="1.0dip"
+            android:layout_marginBottom="10.0dip"
+            android:background="@drawable/rec_stroke_t_b"
+            android:gravity="top"
+            android:hint="@string/p_comment_input" />
+
+        <RelativeLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="5.0dip">
+
+            <Button
+                android:id="@+id/ecg_comment_ok"
+                android:layout_width="100.0dip"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_marginLeft="20.0dip"
+                android:background="@drawable/corners_bg"
+                android:text="@string/ok" />
+
+            <Button
+                android:id="@+id/ecg_comment_cancel"
+                android:layout_width="100.0dip"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="20.0dip"
+                android:background="@drawable/corners_bg"
+                android:text="@string/cancle" />
+        </RelativeLayout>
+    </LinearLayout>
+</RelativeLayout>

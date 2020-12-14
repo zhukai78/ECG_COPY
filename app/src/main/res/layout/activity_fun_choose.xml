@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@color/app_bg">
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:orientation="vertical">
+
+        <FrameLayout
+            android:id="@+id/id_content"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_weight="20.0" />
+
+        <RadioGroup
+            android:id="@+id/nav"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:layout_weight="1.0"
+            android:background="@drawable/rec_stroke_t"
+            android:orientation="horizontal">
+
+            <RadioButton
+                android:id="@+id/nav_home"
+                style="@style/MyTabButton"
+                android:checked="true"
+                android:drawableTop="@drawable/nav_home_sel"
+                android:text="@string/l_main" />
+
+            <RadioButton
+                android:id="@+id/nav_step"
+                style="@style/MyTabButton"
+                android:drawableTop="@drawable/nav_step_sel"
+                android:text="@string/l_step" />
+
+            <RadioButton
+                android:id="@+id/nav_about_ecg"
+                style="@style/MyTabButton"
+                android:drawableTop="@drawable/nav_about_sel"
+                android:text="@string/l_knowledge" />
+
+            <RadioButton
+                android:id="@+id/nav_set"
+                style="@style/MyTabButton"
+                android:drawableTop="@drawable/nav_set_sel"
+                android:text="@string/l_set" />
+        </RadioGroup>
+    </LinearLayout>
+</LinearLayout>

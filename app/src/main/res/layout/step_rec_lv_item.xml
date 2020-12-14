@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/corners_bg"
+    android:orientation="vertical"
+    android:padding="10.0dip">
+
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/step_rec_year_month"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="2014-12-"
+            android:textColor="@android:color/black"
+            android:textSize="18.0sp" />
+
+        <TextView
+            android:id="@+id/step_rec_day"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@id/step_rec_year_month"
+            android:text="18"
+            android:textColor="@android:color/black"
+            android:textSize="18.0sp" />
+
+        <TextView
+            android:id="@+id/step_rec_finish_rate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toLeftOf="@id/step_rec_rate_flag"
+            android:text="99"
+            android:textColor="@color/brown1"
+            android:textSize="16.0sp" />
+
+        <TextView
+            android:id="@+id/step_rec_rate_flag"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:text="%"
+            android:textColor="@color/gray_text_cl"
+            android:textSize="16.0sp" />
+    </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="3.0dip"
+        android:background="@drawable/rec_stroke_t"
+        android:padding="8.0dip">
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1.0">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:text="@string/l_step_rec_total"
+                android:textColor="@color/gray_text_cl" />
+
+            <TextView
+                android:id="@+id/step_rec_step_count"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="20.0dip"
+                android:text="0"
+                android:textColor="@android:color/black" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1.0"
+            android:background="@drawable/rec_stroke_l">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:text="@string/l_step_rec_target"
+                android:textColor="@color/gray_text_cl" />
+
+            <TextView
+                android:id="@+id/step_rec_target"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="20.0dip"
+                android:text="0"
+                android:textColor="@android:color/black" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1.0"
+            android:background="@drawable/rec_stroke_l">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:text="@string/l_calories"
+                android:textColor="@color/gray_text_cl" />
+
+            <TextView
+                android:id="@+id/step_rec_cal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="20.0dip"
+                android:text="0"
+                android:textColor="@android:color/black" />
+        </RelativeLayout>
+    </LinearLayout>
+</LinearLayout>

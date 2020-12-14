@@ -1,0 +1,312 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@color/app_bg"
+    android:focusable="true"
+    android:focusableInTouchMode="true">
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="5.0dip"
+            android:background="@drawable/corners_bg"
+            android:orientation="vertical"
+            android:padding="5.0dip">
+
+            <TextView
+                android:id="@+id/setting_item1_text1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="5.0dip"
+                android:layout_marginLeft="10.0dip"
+                android:text="@string/Personal_information"
+                android:textColor="@color/actionbar_cl"
+                android:textSize="22.0sp" />
+
+            <View
+                android:layout_width="fill_parent"
+                android:layout_height="1.0dip"
+                android:layout_margin="5.0dip"
+                android:background="@color/stroke_cl" />
+
+            <TableLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content">
+
+                <TableRow>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1.0"
+                        android:text="@string/first_name" />
+
+                    <EditText
+                        android:id="@+id/setting_user_firstname"
+                        android:layout_width="0.0dip"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="9.0"
+                        android:hint=""
+                        android:inputType="text"
+                        android:scrollHorizontally="true"
+                        android:singleLine="true" />
+                </TableRow>
+
+                <TableRow>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1.0"
+                        android:text="@string/last_name" />
+
+                    <EditText
+                        android:id="@+id/setting_user_lastname"
+                        android:layout_width="0.0dip"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="9.0"
+                        android:hint=""
+                        android:inputType="text"
+                        android:scrollHorizontally="true"
+                        android:singleLine="true" />
+                </TableRow>
+
+                <TableRow>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1.0"
+                        android:text="@string/user_name" />
+
+                    <TextView
+                        android:id="@+id/setting_user_name"
+                        android:layout_width="0.0dip"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="9.0"
+                        android:hint=""
+                        android:inputType="text"
+                        android:scrollHorizontally="true"
+                        android:singleLine="true" />
+                </TableRow>
+
+                <TableRow>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1.0"
+                        android:text="@string/birthdate" />
+
+                    <EditText
+                        android:id="@+id/setting_user_date_of_brith"
+                        android:layout_width="0.0dip"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="9.0"
+                        android:ems="10"
+                        android:hint=""
+                        android:inputType="text" />
+                </TableRow>
+
+                <TableRow>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_weight="3.0"
+                        android:text="@string/sex" />
+
+                    <RadioGroup
+                        android:id="@+id/setting_sex"
+                        android:layout_width="0.0dip"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="10.0"
+                        android:orientation="vertical">
+
+                        <RadioButton
+                            android:id="@+id/sex_men"
+                            android:checked="true"
+                            android:text="@string/men" />
+
+                        <RadioButton
+                            android:id="@+id/sex_women"
+                            android:text="@string/women" />
+                    </RadioGroup>
+                </TableRow>
+
+                <TableRow>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="3.0"
+                        android:text="@string/profession" />
+
+                    <EditText
+                        android:id="@+id/setting_user_profession"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="10.0"
+                        android:hint=""
+                        android:inputType="text"
+                        android:scrollHorizontally="true"
+                        android:singleLine="true" />
+                </TableRow>
+
+                <TableRow>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="3.0"
+                        android:text="@string/Phone" />
+
+                    <EditText
+                        android:id="@+id/setting_user_phone"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="10.0"
+                        android:hint=""
+                        android:inputType="phone"
+                        android:scrollHorizontally="true"
+                        android:singleLine="true" />
+                </TableRow>
+
+                <TableRow>
+
+                    <TextView
+                        android:layout_width="100.0dip"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="3.0"
+                        android:text="@string/Email" />
+
+                    <EditText
+                        android:id="@+id/setting_user_email"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="10.0"
+                        android:hint=""
+                        android:inputType="textEmailAddress"
+                        android:scrollHorizontally="true"
+                        android:singleLine="true" />
+                </TableRow>
+
+                <TableRow>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="3.0"
+                        android:text="@string/Address" />
+
+                    <EditText
+                        android:id="@+id/setting_user_addr"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="10.0"
+                        android:hint="" />
+                </TableRow>
+            </TableLayout>
+
+            <View
+                android:layout_width="fill_parent"
+                android:layout_height="1.0dip"
+                android:layout_margin="5.0dip"
+                android:background="@color/stroke_cl" />
+
+            <TableLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content">
+
+                <TableRow>
+
+                    <TextView android:text="@string/height" />
+
+                    <EditText
+                        android:id="@+id/setting_user_h"
+                        android:layout_weight="2.0"
+                        android:digits="0123456789."
+                        android:hint=""
+                        android:inputType="numberDecimal" />
+
+                    <TextView android:text="cm" />
+                </TableRow>
+
+                <TableRow>
+
+                    <TextView android:text="@string/weight" />
+
+                    <EditText
+                        android:id="@+id/setting_user_w"
+                        android:layout_weight="2.0"
+                        android:digits="0123456789."
+                        android:hint=""
+                        android:singleLine="true" />
+
+                    <TextView android:text="kg" />
+                </TableRow>
+
+                <TableRow>
+
+                    <TextView
+                        android:layout_gravity="center_vertical"
+                        android:layout_weight="1.0"
+                        android:text="@string/smoker" />
+
+                    <RadioGroup
+                        android:id="@+id/setting_smoker"
+                        android:layout_weight="10.0"
+                        android:orientation="horizontal">
+
+                        <RadioButton
+                            android:id="@+id/smoker_yes"
+                            android:text="@string/yes" />
+
+                        <RadioButton
+                            android:id="@+id/smoker_no"
+                            android:checked="true"
+                            android:text="@string/no" />
+                    </RadioGroup>
+                </TableRow>
+            </TableLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/medicine" />
+
+            <EditText
+                android:id="@+id/setting_user_medications"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:hint=""
+                android:inputType="text" />
+
+            <View
+                android:layout_width="fill_parent"
+                android:layout_height="1.0dip"
+                android:layout_margin="5.0dip"
+                android:background="@color/stroke_cl" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5.0dip"
+                android:text="@string/eme_phone" />
+
+            <EditText
+                android:id="@+id/setting_user_emergency_phoneNum"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/eme_phone_hint"
+                android:inputType="phone" />
+        </LinearLayout>
+    </LinearLayout>
+</ScrollView>

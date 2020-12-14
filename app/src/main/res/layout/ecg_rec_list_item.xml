@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/corners_bg"
+    android:orientation="vertical"
+    android:padding="10.0dip">
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="1.0">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/l_ecg_rec_name"
+            android:textColor="@android:color/black"
+            android:textSize="16.0sp" />
+
+        <TextView
+            android:id="@+id/ecg_rec_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="100.0dip"
+            android:text="Ecg Rec Name"
+            android:textColor="@android:color/black"
+            android:textSize="16.0sp" />
+    </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/l_ecg_rec_desec"
+            android:textColor="@color/text_cl"
+            android:textSize="16.0sp" />
+
+        <TextView
+            android:id="@+id/ecg_rec_comment"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="ECG Comment"
+            android:textColor="@color/text_cl"
+            android:textSize="16.0sp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/ecg_rec_info_div"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_marginTop="5.0dip"
+        android:background="@drawable/rec_stroke_t"
+        android:orientation="vertical"
+        android:paddingTop="5.0dip">
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/l_ecg_rec_date"
+                android:textColor="@color/text_cl"
+                android:textSize="16.0sp" />
+
+            <TextView
+                android:id="@+id/ecg_rec_date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="100.0dip"
+                android:text="2015-1-2 13:21"
+                android:textColor="@color/text_cl" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/l_ecg_lead"
+                android:textColor="@color/text_cl"
+                android:textSize="16.0sp" />
+
+            <TextView
+                android:id="@+id/ecg_lead_type"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="100.0dip"
+                android:text="LEAD I"
+                android:textColor="@color/text_cl" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/l_ecg_rec_long"
+                android:textColor="@color/text_cl"
+                android:textSize="16.0sp" />
+
+            <TextView
+                android:id="@+id/ecg_rec_period"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="100.0dip"
+                android:text="00:00:31"
+                android:textColor="@color/text_cl" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="fill_parent">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:text="@string/l_ecg_rec_avg"
+                android:textColor="@color/text_cl"
+                android:textSize="16.0sp" />
+
+            <TextView
+                android:id="@+id/ecg_rec_avg_hr"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="100.0dip"
+                android:text="72"
+                android:textColor="@color/text_cl" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_toRightOf="@id/ecg_rec_avg_hr"
+                android:text="@string/l_ecg_rec_rate_unit"
+                android:textColor="@color/text_cl" />
+        </RelativeLayout>
+    </LinearLayout>
+</LinearLayout>

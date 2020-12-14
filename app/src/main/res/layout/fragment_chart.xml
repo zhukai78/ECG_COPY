@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical">
+
+    <com.hexin.ecg_hexin_bio.ecg.p023ui.SquareBaseOnWidthLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content">
+
+        <com.hexin.ecg_hexin_bio.ecg.p023ui.BarChart
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent" />
+    </com.hexin.ecg_hexin_bio.ecg.p023ui.SquareBaseOnWidthLayout>
+</LinearLayout>

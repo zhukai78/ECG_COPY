@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:background="@color/app_bg"
+    android:layout_width="wrap_content"
+    android:layout_height="fill_parent"
+  >
+    <RelativeLayout
+        android:id="@+id/ecg_rec_list_btn"
+        android:background="@drawable/rec_item_sel"
+        android:layout_width="fill_parent"
+        android:layout_height="55.0dip"
+        android:layout_marginTop="30.0dip">
+        <TextView
+            android:textSize="20.0sp"
+            android:textColor="@color/text_cl"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20.0dip"
+            android:text="@string/l_rec"
+            android:layout_centerVertical="true" />
+        <TextView
+            android:id="@+id/rec_align_note"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true" />
+        <View
+            android:id="@+id/rec_h_line"
+            android:background="@color/stroke_cl"
+            android:layout_width="1.0dip"
+            android:layout_height="25.0dip"
+            android:layout_marginRight="120.0dip"
+            android:layout_toLeftOf="@id/rec_align_note"
+            android:layout_centerVertical="true" />
+        <ImageView
+            android:id="@+id/rec_icon_img"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="85.0dip"
+            android:src="@drawable/rec_icon"
+            android:layout_toLeftOf="@id/rec_align_note"
+            android:layout_centerVertical="true" />
+        <TextView
+            android:textSize="18.0sp"
+            android:id="@+id/home_rec_num"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="55.0dip"
+            android:text="100"
+            android:layout_toLeftOf="@id/rec_align_note"
+            android:layout_centerVertical="true" />
+    </RelativeLayout>
+    <RelativeLayout
+        android:id="@+id/dev_status"
+        android:background="@drawable/rec_item_sel"
+        android:layout_width="fill_parent"
+        android:layout_height="55.0dip"
+        android:layout_marginTop="10.0dip">
+        <TextView
+            android:textSize="20.0sp"
+            android:textColor="@color/text_cl"
+            android:id="@+id/dev_bar_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20.0dip"
+            android:text="@string/l_scan_dev"
+            android:layout_centerVertical="true" />
+        <TextView
+            android:id="@+id/dev_align_note"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true" />
+        <View
+            android:id="@+id/dev_h_line"
+            android:background="@color/stroke_cl"
+            android:layout_width="1.0dip"
+            android:layout_height="25.0dip"
+            android:layout_marginRight="120.0dip"
+            android:layout_toLeftOf="@id/dev_align_note"
+            android:layout_centerVertical="true" />
+        <ImageView
+            android:id="@+id/dev_icon_img"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="85.0dip"
+            android:src="@drawable/dev_note"
+            android:layout_toLeftOf="@id/dev_align_note"
+            android:layout_centerVertical="true" />
+        <TextView
+            android:textSize="13.0sp"
+            android:id="@+id/home_dev_status"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="6.0dip"
+            android:text="@string/l_status_disconnect"
+            android:layout_toLeftOf="@id/dev_align_note"
+            android:layout_centerVertical="true" />
+    </RelativeLayout>
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="0.0dip"
+        android:layout_weight="2.0">
+        <ImageView
+            android:id="@+id/ecg_conn_btn"
+            android:visibility="invisible"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/scan_btn"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true" />
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true">
+            <ImageView
+                android:id="@+id/ecg_start"
+                android:visibility="visible"
+                android:layout_width="180.0sp"
+                android:layout_height="180.0sp"
+                android:src="@drawable/ecg_start_btn" />
+            <ImageView
+                android:id="@+id/step_start"
+                android:visibility="visible"
+                android:layout_width="120.0sp"
+                android:layout_height="120.0sp"
+                android:layout_marginLeft="127.0sp"
+                android:layout_marginTop="92.0sp"
+                android:src="@drawable/step_btn"
+                android:layout_alignLeft="@id/ecg_start" />
+        </RelativeLayout>
+    </RelativeLayout>
+</LinearLayout>

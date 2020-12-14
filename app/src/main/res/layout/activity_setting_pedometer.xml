@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@color/app_bg">
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="5.0dip"
+        android:background="@drawable/corners_bg"
+        android:orientation="vertical"
+        android:padding="5.0dip">
+
+        <TextView
+            android:id="@+id/setting_item1_text1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="5.0dip"
+            android:layout_marginLeft="10.0dip"
+            android:text="@string/Pedometer"
+            android:textColor="@color/actionbar_cl"
+            android:textSize="22.0sp" />
+
+        <View
+            android:layout_width="fill_parent"
+            android:layout_height="1.0dip"
+            android:background="@color/stroke_cl" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10.0dip"
+            android:text="@string/Walking_daily_target" />
+
+        <EditText
+            android:id="@+id/pedometer_target"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:hint=""
+            android:inputType="number"
+            android:maxLength="5" />
+    </LinearLayout>
+</RelativeLayout>

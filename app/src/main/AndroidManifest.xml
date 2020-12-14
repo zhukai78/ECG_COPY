@@ -1,0 +1,182 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.hopetruly.ecg">
+    <uses-permission android:name="android.permission.BLUETOOTH" />
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
+
+    <uses-feature
+        android:name="android.hardware.bluetooth_le"
+        android:required="true" />
+
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.READ_LOGS" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.SEND_SMS" />
+    <uses-permission android:name="android.permission.WRITE_SMS" />
+    <uses-permission android:name="android.permission.KILL_BACKGROUND_PROCESSES" />
+    <uses-permission android:name="android.permission.VIBRATE" />
+
+    <application
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:name=".ECGApplication"
+        android:theme="@style/AppTheme">
+    <activity
+        android:name="com.hopetruly.ecg.activity.SendActivity"
+        android:exported="false"
+        android:label="@string/title_activity_send" />
+    <service
+        android:name="com.hopetruly.ecg.services.MainService"
+        android:exported="false" />
+
+    <activity
+        android:name="com.hopetruly.ecg.activity.FileExploreActivity"
+        android:exported="false" />
+
+    <activity
+        android:name="com.hopetruly.ecg.activity.BeginActivity"
+        android:theme="@android:style/Theme.NoTitleBar.Fullscreen">
+        <intent-filter>
+            <action android:name="android.intent.action.MAIN" />
+            <category android:name="android.intent.category.LAUNCHER" />
+        </intent-filter>
+    </activity>
+    <activity
+        android:name="com.hopetruly.ecg.activity.ScanActivity"
+        android:exported="false"
+        android:label="@string/title_activity_scan"
+        android:screenOrientation="portrait" />
+    <activity
+        android:name="com.hopetruly.ecg.activity.HelpActivity"
+        android:exported="false"
+        android:label="@string/title_activity_help" />
+    <activity
+        android:name="com.hopetruly.ecg.activity.AboutActivity"
+        android:exported="false"
+        android:label="@string/title_activity_about"
+        android:screenOrientation="portrait" />
+    <activity
+        android:name="com.hopetruly.ecg.activity.EcgTypeSelectActivity"
+        android:configChanges="keyboardHidden"
+        android:exported="false"
+        android:label="@string/title_ecg_type_choose"
+        android:screenOrientation="landscape" />
+    <activity
+        android:name="com.hopetruly.ecg.activity.RealtimeECGDisplayActivity"
+        android:configChanges="keyboardHidden"
+        android:exported="false"
+        android:label="@string/app_name"
+        android:launchMode="singleTask"
+        android:screenOrientation="landscape" />
+    <activity
+        android:name="com.hopetruly.ecg.activity.EcgRecListActivity"
+        android:configChanges="keyboardHidden|orientation|screenSize"
+        android:exported="false"
+        android:label="@string/title_activity_history" />
+    <activity
+        android:name="com.hopetruly.ecg.activity.HistoryECGDisplayActivity"
+        android:exported="true"
+        android:label="@string/title_activity_show_record"
+        android:screenOrientation="landscape">
+        <intent-filter>
+            <action android:name="android.intent.action.VIEW" />
+
+            <category android:name="android.intent.category.DEFAULT" />
+            <category android:name="android.intent.category.BROWSABLE" />
+
+            <data android:scheme="file" />
+            <data android:mimeType="*/*" />
+            <data android:host="*" />
+            <data android:pathPattern=".*\\.hl7" />
+        </intent-filter>
+        <intent-filter>
+            <action android:name="android.intent.action.VIEW" />
+
+            <category android:name="android.intent.category.DEFAULT" />
+            <category android:name="android.intent.category.BROWSABLE" />
+
+            <data android:scheme="file" />
+            <data android:mimeType="*/*" />
+            <data android:host="*" />
+            <data android:pathPattern=".*\\.xml" />
+        </intent-filter>
+    </activity>
+
+    <service
+        android:name="com.hopetruly.ecg.services.FileService"
+        android:exported="false" />
+    <service
+        android:name="com.hopetruly.part.net.NetService"
+        android:exported="false" />
+
+    <activity
+        android:name="com.hopetruly.ecg.activity.LoginActivity"
+        android:exported="false"
+        android:label="@string/title_activity_login"
+        android:launchMode="singleTask"
+        android:windowSoftInputMode="adjustPan|stateHidden" />
+    <activity
+        android:name="com.hopetruly.ecg.activity.RegisterActivity"
+        android:exported="false"
+        android:label="@string/title_activity_register"
+        android:windowSoftInputMode="adjustPan|stateHidden" />
+    <activity
+        android:name="com.hopetruly.ecg.activity.PersonInfoRegisterActivity"
+        android:exported="false"
+        android:label="@string/title_activity_person_info_register"
+        android:windowSoftInputMode="adjustResize|stateHidden" />
+    <activity
+        android:name="com.hopetruly.ecg.activity.FwUpdateActivity"
+        android:exported="false"
+        android:label="@string/title_activity_FwUpdate"
+        android:screenOrientation="portrait" />
+    <activity
+        android:name="com.hopetruly.ecg.activity.FunChooseActivity"
+        android:configChanges="keyboardHidden|orientation|screenSize"
+        android:exported="false"
+        android:label="@string/title_activity_fun_choose"
+        android:screenOrientation="portrait" />
+
+    <activity
+        android:name="com.hopetruly.ecg.activity.StepRECActivity"
+        android:exported="false"
+        android:label="@string/title_activity_step_rec" />
+    <activity
+        android:name="com.hopetruly.ecg.activity.SettingPedometerActivity"
+        android:exported="false"
+        android:label="@string/title_activity_setting_pedometer" />
+    <activity
+        android:name="com.hopetruly.ecg.activity.SOSSMSActivity"
+        android:exported="false"
+        android:label="@string/l_sos_title"
+        android:windowSoftInputMode="adjustPan|stateHidden" />
+
+    <receiver
+        android:name="com.hopetruly.ecg.util.MyAlarmClockReceiver"
+        android:exported="false" />
+
+    <activity
+        android:name="com.hopetruly.ecg.activity.ErrorActivity"
+        android:exported="false"
+        android:label="@string/title_activity_error" />
+    <activity
+        android:name="com.hopetruly.ecg.activity.DeclareActivity"
+        android:exported="false"
+        android:launchMode="singleTask" />
+    <activity
+        android:name="com.hopetruly.ecg.activity.PersonInfoSettingActivity"
+        android:exported="false"
+        android:windowSoftInputMode="stateHidden" />
+    </application>
+</manifest>

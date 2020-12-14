@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@color/app_bg"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_margin="10.0dip"
+        android:background="@drawable/corners_bg"
+        android:orientation="vertical"
+        android:padding="5.0dip">
+
+        <TextView
+            android:id="@+id/setting_item1_text1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="5.0dip"
+            android:layout_marginLeft="10.0dip"
+            android:text="@string/title_activity_FwUpdate"
+            android:textColor="@color/actionbar_cl"
+            android:textSize="22.0sp" />
+
+        <View
+            android:layout_width="fill_parent"
+            android:layout_height="1.0dip"
+            android:background="@color/stroke_cl" />
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:gravity="left"
+            android:orientation="horizontal"
+            android:paddingTop="10.0dip"
+            android:paddingBottom="10.0dip">
+
+            <TextView
+                android:layout_width="0.0dip"
+                android:layout_height="fill_parent"
+                android:layout_gravity="center|left"
+                android:layout_weight="1.0"
+                android:text="@string/The_current_firmware" />
+
+            <TextView
+                android:id="@+id/tw_target"
+                android:layout_width="0.0dip"
+                android:layout_height="fill_parent"
+                android:layout_weight="1.5"
+                android:text="" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/file_LinearLayout"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:gravity="left"
+            android:orientation="horizontal"
+            android:paddingTop="10.0dip"
+            android:paddingBottom="10.0dip">
+
+            <TextView
+                android:layout_width="0.0dip"
+                android:layout_height="fill_parent"
+                android:layout_gravity="center|left"
+                android:layout_weight="1.0"
+                android:text="@string/The_new_firmware" />
+
+            <TextView
+                android:id="@+id/tw_file"
+                android:layout_width="0.0dip"
+                android:layout_height="fill_parent"
+                android:layout_weight="1.5"
+                android:gravity="left"
+                android:text="@string/No_image_selected" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:paddingTop="5.0dip"
+            android:paddingBottom="5.0dip">
+
+            <Button
+                android:id="@+id/btn_load_a"
+                style="?android:buttonStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="fill_parent"
+                android:layout_gravity="center"
+                android:layout_margin="2.0dip"
+                android:background="@drawable/btn_sel"
+                android:gravity="center"
+                android:onClick="onLoad"
+                android:padding="5.0dip"
+                android:text="@string/firmware_A" />
+
+            <Button
+                android:id="@+id/btn_load_b"
+                style="?android:buttonStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="fill_parent"
+                android:layout_gravity="center"
+                android:layout_margin="2.0dip"
+                android:background="@drawable/btn_sel"
+                android:onClick="onLoad"
+                android:padding="5.0dip"
+                android:text="@string/firmware_B" />
+
+            <Button
+                android:id="@+id/btn_load_c"
+                style="?android:buttonStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="fill_parent"
+                android:layout_gravity="center"
+                android:layout_margin="2.0dip"
+                android:background="@drawable/btn_sel"
+                android:onClick="onLoadCustom"
+                android:padding="5.0dip"
+                android:text="@string/custom_firmware" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/tw_info"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginBottom="5.0dip"
+            android:layout_weight="0.0"
+            android:gravity="center_horizontal"
+            android:text="@string/l_idle"
+            android:textSize="14.0sp" />
+
+        <ProgressBar
+            android:id="@+id/pb_progress"
+            style="@android:style/Widget.ProgressBar.Horizontal"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="5.0dip"
+            android:indeterminate="false"
+            android:max="100"
+            android:maxHeight="15.0dip"
+            android:minHeight="15.0dip"
+            android:progress="0" />
+
+        <TextView
+            android:id="@+id/tw_log"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:layout_weight="1.0"
+            android:lines="10"
+            android:padding="5.0dip" />
+
+        <Button
+            android:id="@+id/btn_start"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:layout_weight="0.0"
+            android:background="@drawable/btn_sel"
+            android:onClick="onStart"
+            android:text="@string/begin_updata_firmware" />
+    </LinearLayout>
+</LinearLayout>

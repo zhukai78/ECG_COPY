@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="程序出现点小故障,将要退出!!"
+        android:textColor="@android:color/black"
+        android:textSize="20.0sp" />
+
+    <EditText
+        android:id="@+id/err_desc"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:hint="为了让软件更好的为您服务,请写下导致软件出错的详细过程吧!" />
+
+    <Button
+        android:id="@+id/err_ok_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/ok" />
+
+    <TextView
+        android:id="@+id/err_info"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content" />
+</LinearLayout>

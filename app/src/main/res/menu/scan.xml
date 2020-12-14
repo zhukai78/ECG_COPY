@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu
+  xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:id="@+id/action_pb" android:visible="false" android:orderInCategory="1" android:checkable="false" android:showAsAction="always" android:actionLayout="@layout/actionbar_pb" />
+    <item android:id="@+id/action_onoff" android:orderInCategory="2" android:title="Scan" android:showAsAction="always" />
+    <item android:id="@+id/action_ble_onoff" android:visible="false" android:orderInCategory="2" android:title="on/off" android:showAsAction="always" />
+</menu>

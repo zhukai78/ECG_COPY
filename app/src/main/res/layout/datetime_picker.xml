@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical">
+
+    <DatePicker
+        android:id="@+id/date_picker"
+        android:layout_width="wrap_content"
+        android:layout_height="200.0dip"
+        android:layout_gravity="center_horizontal"
+        android:calendarViewShown="true"
+        android:endYear="2020"
+        android:spinnersShown="true"
+        android:startYear="1900" />
+</LinearLayout>

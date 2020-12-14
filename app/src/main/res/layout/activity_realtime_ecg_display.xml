@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent">
+
+    <com.warick.drawable.WarickSurfaceView
+        android:id="@+id/heart_rate_sv"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent" />
+
+    <TextView
+        android:id="@+id/ecg_values"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:visibility="gone" />
+
+    <LinearLayout
+        android:id="@+id/linearLayout1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10.0dip"
+        android:layout_marginTop="10.0dip"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/main_datatime"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="2014-05-01 00:00:00" />
+
+        <TextView
+            android:id="@+id/main_ecg_description"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/desription"
+            android:textSize="10.0dip" />
+
+        <TextView
+            android:id="@+id/ecg_scale_info"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="25mm/s, 50mm/mV"
+            android:textSize="10.0sp" />
+
+        <TextView
+            android:id="@+id/main_ecg_filter_status"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/ecg_filter_status_on"
+            android:textSize="10.0dip" />
+
+        <TextView
+            android:id="@+id/main_ecg_alarm_status"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/ecg_alarm_status_on"
+            android:textSize="10.0dip" />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/main_timer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="5.0dip"
+        android:text="00:00:00" />
+
+    <RelativeLayout
+        android:id="@+id/main_heart_rate_rl"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginTop="10.0dip"
+        android:layout_marginRight="10.0dip"
+        android:visibility="visible">
+
+        <ImageView
+            android:id="@+id/main_heartrate_iv"
+            android:layout_width="28.0dip"
+            android:layout_height="28.0dip"
+            android:src="@drawable/heartbeat" />
+
+        <TextView
+            android:id="@+id/main_heartrate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5.0dip"
+            android:layout_toRightOf="@id/main_heartrate_iv"
+            android:text="NaN"
+            android:textSize="24.0sp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@id/main_heartrate"
+            android:layout_toRightOf="@id/main_heartrate"
+            android:text="bpm" />
+    </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginLeft="10.0dip"
+        android:layout_marginBottom="10.0dip"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:layout_width="15.0dip"
+            android:layout_height="15.0dip"
+            android:src="@drawable/location" />
+
+        <TextView
+            android:id="@+id/main_location"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:layout_marginLeft="5.0dip"
+            android:text="@string/locating"
+            android:textSize="15.0sp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentBottom="true"
+        android:layout_margin="10.0dip"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/ecg_net_status"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right"
+            android:text="@string/network_state"
+            android:textSize="10.0sp" />
+
+        <TextView
+            android:id="@+id/ecg_blr_status"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right"
+            android:text="@string/BLE_state"
+            android:textSize="10.0sp" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/ecg_realtime_upload_status"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right"
+                android:text="@string/Real_time_upload"
+                android:textSize="10.0sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right"
+                android:text=" ; "
+                android:textSize="10.0sp" />
+
+            <TextView
+                android:id="@+id/ecg_auto_rec_status"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right"
+                android:text="@string/auto_save"
+                android:textSize="10.0sp" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/ecg_bt_disable_alarm"
+        android:layout_width="wrap_content"
+        android:layout_height="100.0dip"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="150.0dip"
+        android:alpha="0.8"
+        android:background="@drawable/corners_bg_yellow"
+        android:padding="10.0dip"
+        android:text="Disable HR Alarm" />
+</RelativeLayout>

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu
+  xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:id="@+id/user_name" android:visible="false" android:orderInCategory="1" android:title="测试画图" android:showAsAction="always" />
+    <item android:icon="@drawable/start_btn" android:id="@+id/action_ecg_start" android:visible="false" android:orderInCategory="2" android:title="@string/Start" android:showAsAction="always" />
+    <item android:icon="@drawable/stop_btn" android:id="@+id/action_ecg_stop" android:visible="false" android:orderInCategory="3" android:title="@string/Stop" android:showAsAction="always" />
+    <item android:icon="@drawable/btn_filter_on" android:id="@+id/action_ecg_filter_on" android:visible="true" android:orderInCategory="4" android:title="@string/l_filter" android:showAsAction="always" />
+    <item android:icon="@drawable/btn_filter_off" android:id="@+id/action_ecg_filter_off" android:visible="false" android:orderInCategory="4" android:title="@string/l_filter" android:showAsAction="always" />
+    <item android:icon="@drawable/btn_reverse" android:id="@+id/action_ecg_reverse" android:visible="true" android:orderInCategory="5" android:title="@string/l_reverse" android:showAsAction="always" />
+    <item android:icon="@drawable/btn_option" android:id="@+id/action_ecg_options" android:visible="true" android:orderInCategory="6" android:title="@string/menu_ptions" android:showAsAction="always" />
+    <item android:id="@+id/action_help" android:orderInCategory="8" android:title="@string/title_activity_help" android:showAsAction="never" />
+</menu>

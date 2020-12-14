@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu
+  xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:icon="@drawable/btn_cut" android:id="@+id/action_model_cut" android:visible="true" android:orderInCategory="10" android:title="@string/cut_model" android:showAsAction="always" />
+    <item android:icon="@drawable/btn_back" android:id="@+id/action_model_back" android:visible="false" android:orderInCategory="20" android:title="@string/rev_model" android:showAsAction="always" />
+    <item android:icon="@drawable/btn_filter_on" android:id="@+id/action_ecg_filter_on" android:visible="true" android:orderInCategory="30" android:title="@string/l_filter" android:showAsAction="always" />
+    <item android:icon="@drawable/btn_filter_off" android:id="@+id/action_ecg_filter_off" android:visible="false" android:orderInCategory="40" android:title="@string/l_filter" android:showAsAction="always" />
+    <item android:icon="@drawable/btn_reverse" android:id="@+id/action_ecg_reverse" android:visible="true" android:orderInCategory="50" android:title="@string/l_reverse" android:showAsAction="always" />
+    <item android:icon="@drawable/btn_edit_cmt" android:id="@+id/action_ecg_edit_cmt" android:visible="true" android:orderInCategory="60" android:title="@string/l_edit_cmt" android:showAsAction="always" />
+    <item android:icon="@drawable/btn_cut_start" android:id="@+id/action_cut_start" android:orderInCategory="70" android:title="@string/start" android:showAsAction="always" />
+    <item android:icon="@drawable/btn_cut_end" android:id="@+id/action_cut_end" android:orderInCategory="80" android:title="@string/end" android:showAsAction="always" />
+    <item android:icon="@drawable/btn_ok" android:id="@+id/action_cut" android:orderInCategory="90" android:title="@string/Cut" android:showAsAction="always" />
+    <item android:icon="@drawable/btn_save" android:id="@+id/action_save_cut" android:orderInCategory="100" android:title="@string/Save_cut" android:showAsAction="always" />
+    <item android:icon="@drawable/btn_cancel" android:id="@+id/action_cancel_cut" android:orderInCategory="110" android:title="@string/Cancel_cut" android:showAsAction="always" />
+    <item android:icon="@drawable/btn_option" android:id="@+id/action_menu_options" android:orderInCategory="120" android:title="@string/menu_ptions" android:showAsAction="always" />
+    <item android:icon="@drawable/btn_share" android:id="@+id/action_share" android:orderInCategory="130" android:title="@string/share_record" android:showAsAction="always" />
+</menu>

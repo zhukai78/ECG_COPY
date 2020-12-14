@@ -1,0 +1,291 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/app_bg">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:background="@drawable/corners_bg"
+        android:orientation="vertical"
+        android:padding="5dp">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="5dp">
+
+            <TextView
+                android:id="@+id/setting_item1_text1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/Personal_information"
+                android:textColor="@color/actionbar_cl"
+                android:textSize="18sp" />
+
+            <TextView
+                android:id="@+id/setting_item1_text2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/setting_item1_text1"
+                android:text="@string/rigister_dis"
+                android:textColor="@android:color/holo_red_light"
+                android:textSize="14sp"
+                android:visibility="visible" />
+        </RelativeLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_margin="5dp"
+            android:background="@color/stroke_cl" />
+
+        <TableLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="5dp">
+
+            <TableRow>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/first_name" />
+
+                <EditText
+                    android:id="@+id/setting_user_first_name"
+                    android:layout_weight="10"
+                    android:hint=""
+                    android:inputType="text"
+                    android:scrollHorizontally="true"
+                    android:singleLine="true" />
+            </TableRow>
+
+            <TableRow>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/last_name" />
+
+                <EditText
+                    android:id="@+id/setting_user_last_name"
+                    android:layout_weight="10"
+                    android:hint=""
+                    android:inputType="text"
+                    android:scrollHorizontally="true"
+                    android:singleLine="true" />
+            </TableRow>
+
+            <TableRow>
+
+                <TextView
+                    android:layout_weight="1"
+                    android:text="@string/birthdate" />
+
+                <EditText
+                    android:id="@+id/setting_user_date_of_brith"
+                    android:layout_weight="10"
+                    android:ems="10"
+                    android:hint=""
+                    android:inputType="text" />
+            </TableRow>
+
+            <TableRow>
+
+                <TextView
+                    android:layout_gravity="center_vertical"
+                    android:layout_weight="1"
+                    android:text="@string/sex" />
+
+                <RadioGroup
+                    android:id="@+id/setting_sex"
+                    android:layout_weight="10"
+                    android:orientation="horizontal">
+
+                    <RadioButton
+                        android:id="@+id/sex_men"
+                        android:checked="true"
+                        android:text="@string/men" />
+
+                    <RadioButton
+                        android:id="@+id/sex_women"
+                        android:text="@string/women" />
+                </RadioGroup>
+            </TableRow>
+
+            <TableRow>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/profession" />
+
+                <EditText
+                    android:id="@+id/setting_user_profession"
+                    android:layout_weight="10"
+                    android:hint=""
+                    android:inputType="text"
+                    android:scrollHorizontally="true"
+                    android:singleLine="true" />
+            </TableRow>
+
+            <TableRow>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/Phone" />
+
+                <EditText
+                    android:id="@+id/setting_user_phone"
+                    android:layout_weight="10"
+                    android:hint=""
+                    android:inputType="phone"
+                    android:scrollHorizontally="true"
+                    android:singleLine="true" />
+            </TableRow>
+
+            <TableRow>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/Email" />
+
+                <EditText
+                    android:id="@+id/setting_user_email"
+                    android:layout_weight="10"
+                    android:hint=""
+                    android:inputType="textEmailAddress"
+                    android:scrollHorizontally="true"
+                    android:singleLine="true" />
+            </TableRow>
+
+            <TableRow>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/Address" />
+
+                <EditText
+                    android:id="@+id/setting_user_addr"
+                    android:layout_weight="10"
+                    android:hint=""
+                    android:inputType="text"
+                    android:scrollHorizontally="true"
+                    android:singleLine="true" />
+            </TableRow>
+        </TableLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_margin="5dp"
+            android:background="@color/stroke_cl" />
+
+        <TableLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="5dp">
+
+            <TableRow>
+
+                <TextView android:text="@string/height" />
+
+                <EditText
+                    android:id="@+id/setting_user_h"
+                    android:layout_weight="2"
+                    android:digits="0123456789."
+                    android:hint=""
+                    android:inputType="numberDecimal" />
+
+                <TextView android:text="cm" />
+            </TableRow>
+
+            <TableRow>
+
+                <TextView android:text="@string/weight" />
+
+                <EditText
+                    android:id="@+id/setting_user_w"
+                    android:layout_weight="2"
+                    android:digits="0123456789."
+                    android:hint=""
+                    android:inputType="numberDecimal"
+                    android:singleLine="true" />
+
+                <TextView android:text="kg" />
+            </TableRow>
+
+            <TableRow>
+
+                <TextView
+                    android:layout_gravity="center_vertical"
+                    android:layout_weight="1"
+                    android:text="@string/smoker" />
+
+                <RadioGroup
+                    android:id="@+id/setting_smoker"
+                    android:layout_weight="10"
+                    android:orientation="horizontal">
+
+                    <RadioButton
+                        android:id="@+id/smoker_yes"
+                        android:text="@string/yes" />
+
+                    <RadioButton
+                        android:id="@+id/smoker_no"
+                        android:checked="true"
+                        android:text="@string/no" />
+                </RadioGroup>
+            </TableRow>
+        </TableLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:text="@string/medicine" />
+
+        <EditText
+            android:id="@+id/setting_user_medications"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:hint=""
+            android:inputType="text" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_margin="5dp"
+            android:background="@color/stroke_cl" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:text="@string/eme_phone" />
+
+        <EditText
+            android:id="@+id/setting_user_emergency_phoneNum"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:hint="@string/eme_phone_hint"
+            android:inputType="phone" />
+
+        <Button
+            android:id="@+id/register_person_info_commit"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:background="@drawable/btn_sel"
+            android:text="@string/submit" />
+    </LinearLayout>
+</ScrollView>
