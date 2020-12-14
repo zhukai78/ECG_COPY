@@ -18,36 +18,36 @@ import org.xml.sax.XMLReader;
 
 import java.util.Locale;
 
-public class AboutActivity extends C0721a {
+public class AboutActivity extends BaseActivity {
 
     /* renamed from: a */
-    TextView f2116a;
+    TextView about_rich_text;
 
     /* renamed from: com.hopetruly.ecg.activity.AboutActivity$a */
-    class C0570a extends ClickableSpan {
+    class MyClickableSpan extends ClickableSpan {
 
         /* renamed from: a */
-        String f2117a;
+        String spstr;
 
-        public C0570a(String str) {
-            this.f2117a = str;
+        public MyClickableSpan(String str) {
+            this.spstr = str;
         }
 
         public void onClick(View view) {
-            Toast.makeText(AboutActivity.this.getApplicationContext(), this.f2117a, Toast.LENGTH_SHORT).show();
+            Toast.makeText(AboutActivity.this.getApplicationContext(), this.spstr, Toast.LENGTH_SHORT).show();
         }
     }
 
     /* renamed from: com.hopetruly.ecg.activity.AboutActivity$b */
-    class C0571b implements Html.TagHandler {
+    class MTagHandler implements Html.TagHandler {
 
         /* renamed from: a */
-        int f2119a;
+        int editableLen;
 
         /* renamed from: b */
-        int f2120b;
+        int editableLen2;
 
-        C0571b() {
+        MTagHandler() {
         }
 
         public void handleTag(boolean z, String str, Editable editable, XMLReader xMLReader) {
@@ -55,11 +55,11 @@ public class AboutActivity extends C0721a {
                 return;
             }
             if (z) {
-                this.f2119a = editable.length();
+                this.editableLen = editable.length();
                 return;
             }
-            this.f2120b = editable.length();
-            editable.setSpan(new C0570a(editable.subSequence(this.f2119a, this.f2120b).toString()), this.f2119a, this.f2120b, 33);
+            this.editableLen2 = editable.length();
+            editable.setSpan(new MyClickableSpan(editable.subSequence(this.editableLen, this.editableLen2).toString()), this.editableLen, this.editableLen2, 33);
         }
     }
 
@@ -68,7 +68,7 @@ public class AboutActivity extends C0721a {
         super.onCreate(bundle);
         setContentView(R.layout.activity_about);
         getActionBar().setDisplayHomeAsUpEnabled(true);
-        this.f2116a = (TextView) findViewById(R.id.about_rich_text);
+        this.about_rich_text = (TextView) findViewById(R.id.about_rich_text);
         StringBuffer stringBuffer = new StringBuffer();
         stringBuffer.append("<p>");
         stringBuffer.append(getString(R.string.app_name));
@@ -90,8 +90,8 @@ public class AboutActivity extends C0721a {
         stringBuffer.append("WEBSITE:<a href='http://www.bitsun.com' target='_blank'>http://www.bitsun.com</a> <br />");
         stringBuffer.append("电话：<phone>+86 020-62880399</phone> <br />");
         stringBuffer.append("TEL: <phone>+86 020-62880399</phone> <br />");
-        this.f2116a.setText(Html.fromHtml(stringBuffer.toString(), (Html.ImageGetter) null, new C0571b()));
-        this.f2116a.setMovementMethod(LinkMovementMethod.getInstance());
+        this.about_rich_text.setText(Html.fromHtml(stringBuffer.toString(), (Html.ImageGetter) null, new MTagHandler()));
+        this.about_rich_text.setMovementMethod(LinkMovementMethod.getInstance());
     }
 
     public boolean onCreateOptionsMenu(Menu menu) {

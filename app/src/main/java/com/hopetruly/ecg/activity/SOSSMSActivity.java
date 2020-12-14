@@ -15,9 +15,9 @@ import android.widget.Toast;
 
 import com.hopetruly.ecg.ECGApplication;
 import com.hopetruly.ecg.R;
-import com.warick.p025a.C0801d;
+import com.warick.p025a.GpsManagerHelper;
 
-public class SOSSMSActivity extends C0721a {
+public class SOSSMSActivity extends BaseActivity {
 
     /* renamed from: a */
     ECGApplication f2525a;
@@ -89,7 +89,7 @@ public class SOSSMSActivity extends C0721a {
         this.f2528e[1] = (TextView) findViewById(R.id.sos_phone2);
         this.f2528e[2] = (TextView) findViewById(R.id.sos_phone3);
         this.f2528e[3] = (TextView) findViewById(R.id.sos_phone4);
-        String[] a = this.f2525a.f2091l.mo2678a();
+        String[] a = this.f2525a.appSosConf.mo2678a();
         this.f2528e[0].setText(a[0]);
         this.f2528e[1].setText(a[1]);
         this.f2528e[2].setText(a[2]);
@@ -98,7 +98,7 @@ public class SOSSMSActivity extends C0721a {
         this.f2529f[1] = (CheckBox) findViewById(R.id.sos_sel_phone2);
         this.f2529f[2] = (CheckBox) findViewById(R.id.sos_sel_phone3);
         this.f2529f[3] = (CheckBox) findViewById(R.id.sos_sel_phone4);
-        boolean[] b = this.f2525a.f2091l.mo2679b();
+        boolean[] b = this.f2525a.appSosConf.mo2679b();
         this.f2529f[0].setChecked(b[0]);
         this.f2529f[1].setChecked(b[1]);
         this.f2529f[2].setChecked(b[2]);
@@ -108,27 +108,27 @@ public class SOSSMSActivity extends C0721a {
         this.f2529f[2].setOnCheckedChangeListener(this.f2536m);
         this.f2529f[3].setOnCheckedChangeListener(this.f2536m);
         this.f2532i = (TextView) findViewById(R.id.sos_custom_content);
-        this.f2532i.setText(this.f2525a.f2091l.mo2680c());
+        this.f2532i.setText(this.f2525a.appSosConf.mo2680c());
         this.f2530g = (CheckBox) findViewById(R.id.setting_sms_alarm);
         this.f2530g.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             public void onCheckedChanged(CompoundButton compoundButton, boolean z) {
                 if (z) {
                     boolean unused = SOSSMSActivity.this.f2535l = true;
                     SOSSMSActivity.this.m2502b();
-                    SOSSMSActivity.this.f2525a.f2085f.mo2659i(1);
-                    C0801d.m2910a(SOSSMSActivity.this.getApplicationContext());
-                    C0801d.m2908a();
+                    SOSSMSActivity.this.f2525a.appECGConf.setECG_SMS_ALARM(1);
+                    GpsManagerHelper.initGpsManagerHelper(SOSSMSActivity.this.getApplicationContext());
+                    GpsManagerHelper.m2908a();
                 } else {
                     boolean unused2 = SOSSMSActivity.this.f2535l = false;
                     SOSSMSActivity.this.m2505c();
-                    SOSSMSActivity.this.f2525a.f2085f.mo2659i(0);
-                    C0801d.m2915d();
+                    SOSSMSActivity.this.f2525a.appECGConf.setECG_SMS_ALARM(0);
+                    GpsManagerHelper.removegps();
                 }
-                SOSSMSActivity.this.f2526c.putInt("ECG_SMS_ALARM", SOSSMSActivity.this.f2525a.f2085f.mo2660j());
+                SOSSMSActivity.this.f2526c.putInt("ECG_SMS_ALARM", SOSSMSActivity.this.f2525a.appECGConf.mo2660j());
                 SOSSMSActivity.this.f2526c.commit();
             }
         });
-        if (this.f2525a.f2085f.mo2660j() == 1) {
+        if (this.f2525a.appECGConf.mo2660j() == 1) {
             this.f2530g.setChecked(true);
         } else {
             this.f2530g.setChecked(false);
@@ -139,20 +139,20 @@ public class SOSSMSActivity extends C0721a {
         this.f2531h.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             public void onCheckedChanged(CompoundButton compoundButton, boolean z) {
                 if (z) {
-                    SOSSMSActivity.this.f2525a.f2085f.mo2661j(1);
+                    SOSSMSActivity.this.f2525a.appECGConf.setECG_ENABLE_MARK(1);
                     SOSSMSActivity.this.f2533j.setVisibility(0);
                     SOSSMSActivity.this.f2534k.setEnabled(true);
-                    SOSSMSActivity.this.f2534k.setText(String.valueOf(SOSSMSActivity.this.f2525a.f2085f.mo2666m()));
+                    SOSSMSActivity.this.f2534k.setText(String.valueOf(SOSSMSActivity.this.f2525a.appECGConf.mo2666m()));
                 } else {
-                    SOSSMSActivity.this.f2525a.f2085f.mo2661j(0);
+                    SOSSMSActivity.this.f2525a.appECGConf.setECG_ENABLE_MARK(0);
                     SOSSMSActivity.this.f2534k.setEnabled(false);
                     SOSSMSActivity.this.f2533j.setVisibility(8);
                 }
-                SOSSMSActivity.this.f2526c.putInt("ECG_ENABLE_MARK", SOSSMSActivity.this.f2525a.f2085f.mo2662k());
+                SOSSMSActivity.this.f2526c.putInt("ECG_ENABLE_MARK", SOSSMSActivity.this.f2525a.appECGConf.mo2662k());
                 SOSSMSActivity.this.f2526c.commit();
             }
         });
-        if (this.f2525a.f2085f.mo2662k() == 1) {
+        if (this.f2525a.appECGConf.mo2662k() == 1) {
             this.f2531h.setChecked(true);
             this.f2533j.setVisibility(0);
             return;
@@ -193,10 +193,10 @@ public class SOSSMSActivity extends C0721a {
     private void m2507d() {
         int i = 0;
         if (this.f2535l) {
-            this.f2525a.f2091l.mo2676a(this.f2528e[0].getText().toString(), 0);
-            this.f2525a.f2091l.mo2676a(this.f2528e[1].getText().toString(), 1);
-            this.f2525a.f2091l.mo2676a(this.f2528e[2].getText().toString(), 2);
-            this.f2525a.f2091l.mo2676a(this.f2528e[3].getText().toString(), 3);
+            this.f2525a.appSosConf.setPhones(this.f2528e[0].getText().toString(), 0);
+            this.f2525a.appSosConf.setPhones(this.f2528e[1].getText().toString(), 1);
+            this.f2525a.appSosConf.setPhones(this.f2528e[2].getText().toString(), 2);
+            this.f2525a.appSosConf.setPhones(this.f2528e[3].getText().toString(), 3);
             if (this.f2528e[0].getText().toString().length() == 0) {
                 this.f2529f[0].setChecked(false);
             }
@@ -209,12 +209,12 @@ public class SOSSMSActivity extends C0721a {
             if (this.f2528e[3].getText().toString().length() == 0) {
                 this.f2529f[3].setChecked(false);
             }
-            this.f2525a.f2091l.mo2677a(this.f2529f[0].isChecked(), 0);
-            this.f2525a.f2091l.mo2677a(this.f2529f[1].isChecked(), 1);
-            this.f2525a.f2091l.mo2677a(this.f2529f[2].isChecked(), 2);
-            this.f2525a.f2091l.mo2677a(this.f2529f[3].isChecked(), 3);
-            this.f2525a.f2091l.mo2675a(this.f2532i.getText().toString());
-            SharedPreferences.Editor edit = this.f2525a.f2092m.edit();
+            this.f2525a.appSosConf.setPhonesEnable(this.f2529f[0].isChecked(), 0);
+            this.f2525a.appSosConf.setPhonesEnable(this.f2529f[1].isChecked(), 1);
+            this.f2525a.appSosConf.setPhonesEnable(this.f2529f[2].isChecked(), 2);
+            this.f2525a.appSosConf.setPhonesEnable(this.f2529f[3].isChecked(), 3);
+            this.f2525a.appSosConf.setSOS_CUSTOM_CONTENT(this.f2532i.getText().toString());
+            SharedPreferences.Editor edit = this.f2525a.spSos_sms_conf.edit();
             edit.putString("SOS_PHONE0", this.f2528e[0].getText().toString());
             edit.putString("SOS_PHONE1", this.f2528e[1].getText().toString());
             edit.putString("SOS_PHONE2", this.f2528e[2].getText().toString());
@@ -236,16 +236,16 @@ public class SOSSMSActivity extends C0721a {
                 } else {
                     if (parseInt > 300) {
                         Toast.makeText(this, getString(R.string.p_mark_large), 0).show();
-                        this.f2525a.f2085f.mo2665l(300);
+                        this.f2525a.appECGConf.setECG_MARKING_PERIOD(300);
                     } else {
-                        this.f2525a.f2085f.mo2665l(parseInt);
+                        this.f2525a.appECGConf.setECG_MARKING_PERIOD(parseInt);
                     }
-                    this.f2526c.putInt("ECG_MARKING_PERIOD", this.f2525a.f2085f.mo2666m());
+                    this.f2526c.putInt("ECG_MARKING_PERIOD", this.f2525a.appECGConf.mo2666m());
                     this.f2526c.commit();
                 }
             }
             Toast.makeText(this, getString(i), 0).show();
-            this.f2526c.putInt("ECG_MARKING_PERIOD", this.f2525a.f2085f.mo2666m());
+            this.f2526c.putInt("ECG_MARKING_PERIOD", this.f2525a.appECGConf.mo2666m());
             this.f2526c.commit();
         }
     }
@@ -298,7 +298,7 @@ public class SOSSMSActivity extends C0721a {
     /* access modifiers changed from: protected */
     public void onStart() {
         this.f2525a = (ECGApplication) getApplication();
-        this.f2526c = this.f2525a.f2086g.edit();
+        this.f2526c = this.f2525a.spECG_conf.edit();
         m2499a();
         if (this.f2535l) {
             m2502b();

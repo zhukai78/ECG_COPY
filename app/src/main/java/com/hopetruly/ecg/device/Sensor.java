@@ -6,16 +6,16 @@ import android.util.Log;
 import java.util.UUID;
 
 public enum Sensor {
-    ACCELEROMETER(C0745a.f2777j, C0745a.f2778k, C0745a.f2779l) {
-        public C0747c convertACC(byte[] bArr) {
+    ACCELEROMETER(ECGUUIDS.f2777j, ECGUUIDS.f2778k, ECGUUIDS.f2779l) {
+        public DoubleUtils convertACC(byte[] bArr) {
             Integer valueOf = Integer.valueOf(bArr[0]);
             Integer valueOf2 = Integer.valueOf(bArr[1]);
             Integer valueOf3 = Integer.valueOf(bArr[2] * -1);
-            return new C0747c(((double) valueOf.intValue()) / 64.0d, ((double) valueOf2.intValue()) / 64.0d, ((double) valueOf3.intValue()) / 64.0d);
+            return new DoubleUtils(((double) valueOf.intValue()) / 64.0d, ((double) valueOf2.intValue()) / 64.0d, ((double) valueOf3.intValue()) / 64.0d);
         }
     },
-    ECG(C0745a.f2781n, C0745a.f2782o, C0745a.f2783p) {
-        public C0746b convertECG(byte[] bArr) {
+    ECG(ECGUUIDS.f2781n, ECGUUIDS.f2782o, ECGUUIDS.f2783p) {
+        public ConvertECG convertECG(byte[] bArr) {
             float[] fArr = new float[(bArr.length / 2)];
             int i = 0;
             String s = "";
@@ -26,15 +26,15 @@ public enum Sensor {
                 i++;
             }
             Log.d("Sensor", "the EcgValue is: " + s);
-            return new C0746b(fArr);
+            return new ConvertECG(fArr);
         }
     },
-    SIMPLE_KEYS(C0745a.f2785r, C0745a.f2786s, (UUID) null) {
+    SIMPLE_KEYS(ECGUUIDS.f2785r, ECGUUIDS.f2786s, (UUID) null) {
         public SimpleKeysStatus convertKeys(byte[] bArr) {
             return SimpleKeysStatus.values()[Integer.valueOf(bArr[0]).intValue() % 4];
         }
     },
-    BATTERY(C0745a.f2775h, C0745a.f2776i, (UUID) null) {
+    BATTERY(ECGUUIDS.f2775h, ECGUUIDS.f2776i, (UUID) null) {
         public int convertBAT(byte[] bArr) {
             return bArr[0];
         }
@@ -76,7 +76,7 @@ public enum Sensor {
         throw new RuntimeException("Programmer error, unable to find uuid.");
     }
 
-    public C0747c convertACC(byte[] bArr) {
+    public DoubleUtils convertACC(byte[] bArr) {
         throw new UnsupportedOperationException("Programmer error, the individual enum classes are supposed to override this method.");
     }
 
@@ -84,7 +84,7 @@ public enum Sensor {
         throw new UnsupportedOperationException("Programmer error, the individual enum classes are supposed to override this method.");
     }
 
-    public C0746b convertECG(byte[] bArr) {
+    public ConvertECG convertECG(byte[] bArr) {
         throw new UnsupportedOperationException("Programmer error, the individual enum classes are supposed to override this method.");
     }
 

@@ -18,125 +18,125 @@ import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import com.hopetruly.ecg.ECGApplication;
 import com.hopetruly.ecg.R;
 import com.hopetruly.ecg.services.MainService;
-import com.hopetruly.ecg.util.C0771g;
+import com.hopetruly.ecg.util.LogUtils;
 import com.hopetruly.part.net.NetService;
-import com.warick.p025a.C0801d;
+import com.warick.p025a.GpsManagerHelper;
 
 
-public class FunChooseActivity extends C0721a {
+public class FunChooseActivity extends BaseActivity {
 
     /* renamed from: a */
-    MainService f2215a;
+    MainService fcMainService;
 
     /* renamed from: c */
-    boolean f2216c = false;
+    boolean isdisconnectedBle = false;
 
     /* renamed from: d */
-    boolean f2217d = false;
+    boolean isexitApp = false;
 
     /* renamed from: e */
-    boolean f2218e = false;
+    boolean ispause = false;
 
     /* renamed from: f */
-    boolean f2219f = false;
+    boolean isGpsOpen = false;
 
     /* renamed from: g */
     boolean f2220g = false;
 
     /* renamed from: h */
-    ECGApplication f2221h;
+    ECGApplication fcECGApplication;
     /* access modifiers changed from: private */
 
     /* renamed from: i */
-    public NetService f2222i;
+    public NetService fcNetService;
 
     /* renamed from: j */
-    private RadioGroup f2223j = null;
+    private RadioGroup rg_nav = null;
 
     /* renamed from: k */
-    private AlertDialog f2224k = null;
+    private AlertDialog gpsAlertDialog = null;
     /* access modifiers changed from: private */
 
     /* renamed from: l */
-    public AlertDialog f2225l = null;
+    public AlertDialog powerlowDialog = null;
     /* access modifiers changed from: private */
 
     /* renamed from: m */
-    public C0723b f2226m = new C0723b();
+    public MainHomeFragment mainHomeFragment = new MainHomeFragment();
     /* access modifiers changed from: private */
 
     /* renamed from: n */
-    public StepFragment f2227n = new StepFragment();
+    public StepFragment stepFragment = new StepFragment();
     /* access modifiers changed from: private */
 
     /* renamed from: o */
-    public SettingFragment f2228o = new SettingFragment();
+    public SettingFragment settingFragment = new SettingFragment();
     /* access modifiers changed from: private */
 
     /* renamed from: p */
-    public C0730c f2229p = new C0730c();
+    public AboutEcgFragment aboutEcgFragment = new AboutEcgFragment();
 
     /* renamed from: q */
-    private ServiceConnection f2230q = new ServiceConnection() {
+    private ServiceConnection fcMainServiceConn = new ServiceConnection() {
         public void onServiceConnected(ComponentName componentName, IBinder iBinder) {
-            FunChooseActivity.this.f2215a = ((MainService.C0762a) iBinder).mo2756a();
-            FunChooseActivity.this.f2221h.f2094o = FunChooseActivity.this.f2215a;
+            FunChooseActivity.this.fcMainService = ((MainService.MainBinder) iBinder).getMainBinder();
+            FunChooseActivity.this.fcECGApplication.appMainService = FunChooseActivity.this.fcMainService;
         }
 
         public void onServiceDisconnected(ComponentName componentName) {
-            FunChooseActivity.this.f2215a = null;
+            FunChooseActivity.this.fcMainService = null;
         }
     };
 
     /* renamed from: r */
-    private ServiceConnection f2231r = new ServiceConnection() {
+    private ServiceConnection fcNetServiceConn = new ServiceConnection() {
         public void onServiceConnected(ComponentName componentName, IBinder iBinder) {
-            NetService unused = FunChooseActivity.this.f2222i = ((NetService.C0786c) iBinder).mo2852a();
+            NetService unused = FunChooseActivity.this.fcNetService = ((NetService.NetSerBinder) iBinder).getNetSerBinder();
         }
 
         public void onServiceDisconnected(ComponentName componentName) {
-            NetService unused = FunChooseActivity.this.f2222i = null;
+            NetService unused = FunChooseActivity.this.fcNetService = null;
         }
     };
 
     /* renamed from: s */
-    private BroadcastReceiver f2232s = new BroadcastReceiver() {
+    private BroadcastReceiver fcBroadcastReceiver = new BroadcastReceiver() {
         public void onReceive(Context context, Intent intent) {
             String action = intent.getAction();
             if (action.equals("com.hopetruly.ec.services.ACTION_GATT_DISCONNECTED")) {
-                C0771g.m2787d("FunChooseActivity", "wantExit:" + FunChooseActivity.this.f2217d + "  wantScan:" + FunChooseActivity.this.f2216c);
-                if (!FunChooseActivity.this.f2217d && !FunChooseActivity.this.f2216c) {
-                    FunChooseActivity.this.m2297g();
+                LogUtils.logE("FunChooseActivity", "wantExit:" + FunChooseActivity.this.isexitApp + "  wantScan:" + FunChooseActivity.this.isdisconnectedBle);
+                if (!FunChooseActivity.this.isexitApp && !FunChooseActivity.this.isdisconnectedBle) {
+                    FunChooseActivity.this.showDevice_disconnectedDialog();
                 }
-                if (FunChooseActivity.this.f2216c) {
-                    FunChooseActivity.this.f2216c = false;
+                if (FunChooseActivity.this.isdisconnectedBle) {
+                    FunChooseActivity.this.isdisconnectedBle = false;
                 }
             } else if (action.equals("com.hopetruly.ecg.services.MainService.POWER_LOW")) {
-                if (FunChooseActivity.this.f2225l != null) {
-                    FunChooseActivity.this.f2225l.dismiss();
+                if (FunChooseActivity.this.powerlowDialog != null) {
+                    FunChooseActivity.this.powerlowDialog.dismiss();
                 }
-                FunChooseActivity.this.mo2184d();
+                FunChooseActivity.this.showPowerlowDialog();
             }
         }
     };
 
     /* renamed from: t */
-    private RadioGroup.OnCheckedChangeListener f2233t = new RadioGroup.OnCheckedChangeListener() {
+    private RadioGroup.OnCheckedChangeListener rgCheckedChangeListener = new RadioGroup.OnCheckedChangeListener() {
         public void onCheckedChanged(RadioGroup radioGroup, int i) {
             Fragment fragment = new Fragment();
             FragmentTransaction beginTransaction = FunChooseActivity.this.getFragmentManager().beginTransaction();
             switch (i) {
                 case R.id.nav_about_ecg /*2131165369*/:
-                    fragment = f2229p;
+                    fragment = aboutEcgFragment;
                     break;
                 case R.id.nav_home /*2131165370*/:
-                    fragment = f2226m;
+                    fragment = mainHomeFragment;
                     break;
                 case R.id.nav_set /*2131165371*/:
-                    fragment = f2228o;
+                    fragment = settingFragment;
                     break;
                 case R.id.nav_step /*2131165372*/:
-                    fragment = f2227n;
+                    fragment = stepFragment;
                     break;
                 default:
                     beginTransaction.commit();
@@ -147,20 +147,20 @@ public class FunChooseActivity extends C0721a {
     };
 
     /* renamed from: f */
-    private void m2296f() {
+    private void showExitAlertDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle(getString(R.string.exit_title));
         builder.setMessage(getString(R.string.exit_msg));
         builder.setPositiveButton(getString(R.string.yes), new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialogInterface, int i) {
-                FunChooseActivity.this.f2217d = true;
+                FunChooseActivity.this.isexitApp = true;
                 FunChooseActivity.this.finish();
                 dialogInterface.dismiss();
             }
         });
         builder.setNegativeButton(getString(R.string.no), new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialogInterface, int i) {
-                FunChooseActivity.this.f2217d = false;
+                FunChooseActivity.this.isexitApp = false;
                 dialogInterface.dismiss();
             }
         });
@@ -171,8 +171,8 @@ public class FunChooseActivity extends C0721a {
 
     /* access modifiers changed from: private */
     /* renamed from: g */
-    public void m2297g() {
-        if (this.f2218e) {
+    public void showDevice_disconnectedDialog() {
+        if (this.ispause) {
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
             builder.setTitle(getResources().getString(R.string.Tip));
             builder.setMessage(getResources().getString(R.string.device_disconnected));
@@ -189,26 +189,26 @@ public class FunChooseActivity extends C0721a {
 
     /* renamed from: a */
     public boolean mo2181a() {
-        return this.f2215a != null && this.f2215a.mo2728b();
+        return this.fcMainService != null && this.fcMainService.isMBleConn();
     }
 
     /* renamed from: b */
     public int mo2182b() {
-        if (this.f2215a != null) {
-            return this.f2215a.mo2750u();
+        if (this.fcMainService != null) {
+            return this.fcMainService.mo2750u();
         }
         return 0;
     }
 
     /* renamed from: c */
-    public void mo2183c() {
+    public void showdisconnectedBleDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle(getResources().getString(R.string.Tip));
         builder.setMessage(getResources().getString(R.string.ble_will_disconnected));
         builder.setPositiveButton(getResources().getString(R.string.l_disconnect), new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialogInterface, int i) {
-                FunChooseActivity.this.f2216c = true;
-                FunChooseActivity.this.f2215a.mo2730d();
+                FunChooseActivity.this.isdisconnectedBle = true;
+                FunChooseActivity.this.fcMainService.disconnectMainBLE();
                 dialogInterface.dismiss();
             }
         });
@@ -223,11 +223,11 @@ public class FunChooseActivity extends C0721a {
     }
 
     /* renamed from: d */
-    public void mo2184d() {
+    public void showPowerlowDialog() {
         String str;
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle(getResources().getString(R.string.Tip));
-        int batteryLevel = this.f2221h.f2080a.getBatteryLevel();
+        int batteryLevel = this.fcECGApplication.appMachine.getBatteryLevel();
         if (batteryLevel == 0) {
             str = getResources().getString(R.string.no_power);
         } else if (batteryLevel <= 0 || batteryLevel >= 10) {
@@ -241,12 +241,12 @@ public class FunChooseActivity extends C0721a {
                 dialogInterface.dismiss();
             }
         });
-        this.f2225l = builder.create();
-        this.f2225l.show();
+        powerlowDialog = builder.create();
+        powerlowDialog.show();
     }
 
     /* renamed from: e */
-    public void mo2185e() {
+    public void showGpsAlertDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle(getResources().getString(R.string.d_open_gps_title));
         builder.setMessage(getResources().getString(R.string.d_open_gps_prompt));
@@ -261,75 +261,75 @@ public class FunChooseActivity extends C0721a {
         });
         builder.setNegativeButton(getResources().getString(R.string.no), new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialogInterface, int i) {
-                C0801d.m2915d();
-                FunChooseActivity.this.f2219f = true;
+                GpsManagerHelper.removegps();
+                FunChooseActivity.this.isGpsOpen = true;
                 if (FunChooseActivity.this.f2220g) {
-                    C0801d.m2910a(FunChooseActivity.this.getApplicationContext());
+                    GpsManagerHelper.initGpsManagerHelper(FunChooseActivity.this.getApplicationContext());
                 }
                 dialogInterface.dismiss();
             }
         });
-        this.f2224k = builder.create();
-        this.f2224k.setCanceledOnTouchOutside(false);
-        this.f2224k.setCancelable(false);
-        this.f2224k.show();
+        this.gpsAlertDialog = builder.create();
+        this.gpsAlertDialog.setCanceledOnTouchOutside(false);
+        this.gpsAlertDialog.setCancelable(false);
+        this.gpsAlertDialog.show();
     }
 
     public void onBackPressed() {
-        m2296f();
+        showExitAlertDialog();
     }
 
     /* access modifiers changed from: protected */
     public void onCreate(Bundle bundle) {
         super.onCreate(bundle);
         setContentView(R.layout.activity_fun_choose);
-        this.f2221h = (ECGApplication) getApplication();
+        this.fcECGApplication = (ECGApplication) getApplication();
         FragmentTransaction beginTransaction = getFragmentManager().beginTransaction();
-        beginTransaction.replace(R.id.id_content, this.f2226m);
+        beginTransaction.replace(R.id.id_content, this.mainHomeFragment);
         beginTransaction.commit();
-        C0734d.m2582a(findViewById(R.id.nav_home), 0.6f);
-        C0734d.m2582a(findViewById(R.id.nav_step), 0.6f);
-        C0734d.m2582a(findViewById(R.id.nav_about_ecg), 0.6f);
-        C0734d.m2582a(findViewById(R.id.nav_set), 0.6f);
-        this.f2223j = (RadioGroup) findViewById(R.id.nav);
-        this.f2223j.setOnCheckedChangeListener(this.f2233t);
+        TabChoice.selectRadioButton(findViewById(R.id.nav_home), 0.6f);
+        TabChoice.selectRadioButton(findViewById(R.id.nav_step), 0.6f);
+        TabChoice.selectRadioButton(findViewById(R.id.nav_about_ecg), 0.6f);
+        TabChoice.selectRadioButton(findViewById(R.id.nav_set), 0.6f);
+        this.rg_nav = (RadioGroup) findViewById(R.id.nav);
+        this.rg_nav.setOnCheckedChangeListener(rgCheckedChangeListener);
         Intent intent = new Intent(this, MainService.class);
         startService(intent);
-        bindService(intent, this.f2230q, Context.BIND_AUTO_CREATE);
-        bindService(new Intent(this, NetService.class), this.f2231r, 1);
+        bindService(intent, this.fcMainServiceConn, Context.BIND_AUTO_CREATE);
+        bindService(new Intent(this, NetService.class), this.fcNetServiceConn, 1);
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction("com.hopetruly.ec.services.ACTION_GATT_DISCONNECTED");
         intentFilter.addAction("com.hopetruly.ecg.services.MainService.POWER_LOW");
-        LocalBroadcastManager.getInstance(getApplicationContext()).registerReceiver(this.f2232s, intentFilter);
+        LocalBroadcastManager.getInstance(getApplicationContext()).registerReceiver(this.fcBroadcastReceiver, intentFilter);
     }
 
     /* access modifiers changed from: protected */
     public void onDestroy() {
-        C0771g.m2784a("FunChooseActivity", "onDestroy~~~~~");
-        if (this.f2215a != null) {
-            this.f2215a.mo2719a();
+        LogUtils.logI("FunChooseActivity", "onDestroy~~~~~");
+        if (this.fcMainService != null) {
+            this.fcMainService.mo2719a();
         }
-        unbindService(this.f2230q);
-        unbindService(this.f2231r);
-        LocalBroadcastManager.getInstance(getApplicationContext()).unregisterReceiver(this.f2232s);
+        unbindService(this.fcMainServiceConn);
+        unbindService(this.fcNetServiceConn);
+        LocalBroadcastManager.getInstance(getApplicationContext()).unregisterReceiver(this.fcBroadcastReceiver);
         super.onDestroy();
     }
 
     /* access modifiers changed from: protected */
     public void onPause() {
-        this.f2218e = false;
-        if (this.f2224k != null) {
-            this.f2224k.dismiss();
+        this.ispause = false;
+        if (this.gpsAlertDialog != null) {
+            this.gpsAlertDialog.dismiss();
         }
         super.onPause();
     }
 
     /* access modifiers changed from: protected */
     public void onResume() {
-        this.f2218e = true;
-        if (!this.f2219f) {
-            if (!C0801d.m2910a(getApplicationContext())) {
-                mo2185e();
+        this.ispause = true;
+        if (!this.isGpsOpen) {
+            if (!GpsManagerHelper.initGpsManagerHelper(getApplicationContext())) {
+                showGpsAlertDialog();
             } else {
                 this.f2220g = true;
             }

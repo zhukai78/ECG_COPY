@@ -26,12 +26,12 @@ import android.widget.Toast;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import com.hopetruly.ecg.ECGApplication;
 import com.hopetruly.ecg.R;
-import com.hopetruly.part.net.C0791b;
+import com.hopetruly.part.net.MyHttpHelper;
 import com.hopetruly.part.net.NetService;
 import org.json.JSONArray;
 import org.json.JSONException;
 
-public class EcgTypeSelectActivity extends C0721a implements View.OnClickListener {
+public class EcgTypeSelectActivity extends BaseActivity implements View.OnClickListener {
 
     /* renamed from: a */
     ECGApplication f2184a;
@@ -75,7 +75,7 @@ public class EcgTypeSelectActivity extends C0721a implements View.OnClickListene
     /* renamed from: j */
     private ServiceConnection f2192j = new ServiceConnection() {
         public void onServiceConnected(ComponentName componentName, IBinder iBinder) {
-            NetService unused = EcgTypeSelectActivity.this.f2187e = ((NetService.C0786c) iBinder).mo2852a();
+            NetService unused = EcgTypeSelectActivity.this.f2187e = ((NetService.NetSerBinder) iBinder).getNetSerBinder();
         }
 
         public void onServiceDisconnected(ComponentName componentName) {
@@ -120,7 +120,7 @@ public class EcgTypeSelectActivity extends C0721a implements View.OnClickListene
         this.f2188f.setOutsideTouchable(false);
         this.f2188f.setFocusable(true);
         this.f2189g = (EditText) inflate.findViewById(R.id.login_user_name);
-        this.f2189g.setText(((ECGApplication) getApplication()).f2081b.getName());
+        this.f2189g.setText(((ECGApplication) getApplication()).mUserInfo.getName());
         this.f2190h = (EditText) inflate.findViewById(R.id.login_user_pwd);
         this.f2190h.requestFocus();
         ((Button) inflate.findViewById(R.id.login_btn_login)).setOnClickListener(new View.OnClickListener() {
@@ -141,7 +141,7 @@ public class EcgTypeSelectActivity extends C0721a implements View.OnClickListene
         m2271a(getString(R.string.p_check_login));
         new Thread() {
             public void run() {
-                String a = C0791b.m2871a();
+                String a = MyHttpHelper.checkLogin();
                 if (a != null) {
                     Log.d("EcgTypeSelectActivity", a);
                     try {
@@ -234,7 +234,7 @@ public class EcgTypeSelectActivity extends C0721a implements View.OnClickListene
         this.f2186d.setOnClickListener(this);
         this.f2185c.setOnClickListener(this);
         this.f2184a = (ECGApplication) getApplication();
-        if (this.f2184a.f2085f.mo2648d() == 1) {
+        if (this.f2184a.appECGConf.mo2648d() == 1) {
             bindService(new Intent(this, NetService.class), this.f2192j, Context.BIND_AUTO_CREATE);
             IntentFilter intentFilter = new IntentFilter();
             intentFilter.addAction("com.holptruly.ecg.services.NetService.LOGIN_SUCCESSFUL");
@@ -248,7 +248,7 @@ public class EcgTypeSelectActivity extends C0721a implements View.OnClickListene
 
     /* access modifiers changed from: protected */
     public void onDestroy() {
-        if (this.f2184a.f2085f.mo2648d() == 1) {
+        if (this.f2184a.appECGConf.mo2648d() == 1) {
             unbindService(this.f2192j);
             LocalBroadcastManager.getInstance(getApplicationContext()).unregisterReceiver(this.f2191i);
         }

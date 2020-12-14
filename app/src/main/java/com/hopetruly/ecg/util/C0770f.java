@@ -81,8 +81,8 @@ public class C0770f {
         ECGApplication eCGApplication = (ECGApplication) context.getApplicationContext();
         File file = new File(str);
         ECGRecord eCGRecord = new ECGRecord();
-        eCGRecord.setUser(eCGApplication.f2081b);
-        eCGRecord.setMachine(eCGApplication.f2080a);
+        eCGRecord.setUser(eCGApplication.mUserInfo);
+        eCGRecord.setMachine(eCGApplication.appMachine);
         eCGRecord.setFileName(file.getName());
         eCGRecord.setFilePath(file.getPath());
         try {

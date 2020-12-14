@@ -15,22 +15,22 @@ import org.apache.http.params.HttpParams;
 import org.apache.http.params.HttpProtocolParams;
 
 /* renamed from: com.hopetruly.part.net.a */
-public class C0790a extends DefaultHttpClient {
+public class MyHttpClient extends DefaultHttpClient {
 
     /* renamed from: a */
-    private static C0790a f2986a;
+    private static MyHttpClient myHttpClient;
 
     /* renamed from: b */
     private int f2987b = 0;
 
-    public C0790a(ClientConnectionManager clientConnectionManager, HttpParams httpParams) {
+    public MyHttpClient(ClientConnectionManager clientConnectionManager, HttpParams httpParams) {
         super(clientConnectionManager, httpParams);
     }
 
     /* renamed from: a */
-    public static synchronized C0790a m2869a() {
-        synchronized (C0790a.class) {
-            if (f2986a == null) {
+    public static synchronized MyHttpClient initMyHttpClient() {
+        synchronized (MyHttpClient.class) {
+            if (myHttpClient == null) {
                 BasicHttpParams basicHttpParams = new BasicHttpParams();
                 HttpProtocolParams.setVersion(basicHttpParams, HttpVersion.HTTP_1_1);
                 HttpProtocolParams.setContentCharset(basicHttpParams, "UTF-8");
@@ -42,23 +42,23 @@ public class C0790a extends DefaultHttpClient {
                 SchemeRegistry schemeRegistry = new SchemeRegistry();
                 schemeRegistry.register(new Scheme("http", PlainSocketFactory.getSocketFactory(), 80));
                 schemeRegistry.register(new Scheme("https", SSLSocketFactory.getSocketFactory(), 443));
-                f2986a = new C0790a(new ThreadSafeClientConnManager(basicHttpParams, schemeRegistry), basicHttpParams);
-                C0790a aVar = f2986a;
+                myHttpClient = new MyHttpClient(new ThreadSafeClientConnManager(basicHttpParams, schemeRegistry), basicHttpParams);
+                MyHttpClient aVar = myHttpClient;
                 return aVar;
             }
-            HttpParams params = f2986a.getParams();
+            HttpParams params = myHttpClient.getParams();
             HttpConnectionParams.setSoTimeout(params, 4000);
-            f2986a.setParams(params);
-            C0790a aVar2 = f2986a;
+            myHttpClient.setParams(params);
+            MyHttpClient aVar2 = myHttpClient;
             return aVar2;
         }
     }
 
     /* renamed from: b */
-    public void mo2863b() {
-        if (f2986a != null) {
-            f2986a.getConnectionManager().shutdown();
-            f2986a = null;
+    public void closeHttpClient() {
+        if (myHttpClient != null) {
+            myHttpClient.getConnectionManager().shutdown();
+            myHttpClient = null;
         }
     }
 }

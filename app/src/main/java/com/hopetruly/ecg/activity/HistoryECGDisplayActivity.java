@@ -40,10 +40,10 @@ import com.hopetruly.ecg.algorithm.ECGAnaysis;
 import com.hopetruly.ecg.algorithm.HeartRateCounter3;
 import com.hopetruly.ecg.entity.ECGEntity;
 import com.hopetruly.ecg.entity.ECGRecord;
-import com.hopetruly.ecg.p022b.C0740b;
+import com.hopetruly.ecg.p022b.SqlManager;
 import com.hopetruly.ecg.services.MainService;
 import com.hopetruly.ecg.util.C0770f;
-import com.hopetruly.ecg.util.C0771g;
+import com.hopetruly.ecg.util.LogUtils;
 import com.hopetruly.ecg.util.C0772h;
 import com.hopetruly.ecg.util.C0775k;
 import com.hopetruly.part.net.NetService;
@@ -64,7 +64,7 @@ import java.util.Locale;
 
 import javax.xml.parsers.ParserConfigurationException;
 
-public class HistoryECGDisplayActivity extends C0721a {
+public class HistoryECGDisplayActivity extends BaseActivity {
     /* access modifiers changed from: private */
 
     /* renamed from: A */
@@ -346,10 +346,10 @@ public class HistoryECGDisplayActivity extends C0721a {
     /* renamed from: U */
     private ServiceConnection f2323U = new ServiceConnection() {
         public void onServiceConnected(ComponentName componentName, IBinder iBinder) {
-            if (iBinder instanceof NetService.C0786c) {
-                HistoryECGDisplayActivity.this.f2340p = ((NetService.C0786c) iBinder).mo2852a();
-            } else if (iBinder instanceof MainService.C0762a) {
-                HistoryECGDisplayActivity.this.f2341q = ((MainService.C0762a) iBinder).mo2756a();
+            if (iBinder instanceof NetService.NetSerBinder) {
+                HistoryECGDisplayActivity.this.f2340p = ((NetService.NetSerBinder) iBinder).getNetSerBinder();
+            } else if (iBinder instanceof MainService.MainBinder) {
+                HistoryECGDisplayActivity.this.f2341q = ((MainService.MainBinder) iBinder).getMainBinder();
             }
         }
 
@@ -471,7 +471,7 @@ public class HistoryECGDisplayActivity extends C0721a {
     MainService f2341q;
 
     /* renamed from: r */
-    C0740b f2342r;
+    SqlManager f2342r;
 
     /* renamed from: s */
     float[] f2343s;
@@ -602,7 +602,7 @@ public class HistoryECGDisplayActivity extends C0721a {
     /* renamed from: a */
     private float[] m2375a(float[] fArr, int i, int i2) {
         String str = f2303A;
-        C0771g.m2787d(str, getString(R.string.start) + ":" + i + getString(R.string.end) + ":" + i2);
+        LogUtils.logE(str, getString(R.string.start) + ":" + i + getString(R.string.end) + ":" + i2);
         if (i2 > i) {
             int i3 = i2;
             i2 = i;
@@ -890,7 +890,7 @@ public class HistoryECGDisplayActivity extends C0721a {
                             try {
                                 C0770f.m2780a(new File(HistoryECGDisplayActivity.this.f2347w.getFilePath()), "text", obj);
                                 HistoryECGDisplayActivity.this.f2347w.setDescription(obj);
-                                new C0740b(HistoryECGDisplayActivity.this.getApplicationContext()).mo2471b(HistoryECGDisplayActivity.this.f2347w);
+                                new SqlManager(HistoryECGDisplayActivity.this.getApplicationContext()).mo2471b(HistoryECGDisplayActivity.this.f2347w);
                             } catch (Exception e) {
                                 e.printStackTrace();
                             }
@@ -915,7 +915,7 @@ public class HistoryECGDisplayActivity extends C0721a {
         this.f2311I.setOutsideTouchable(false);
         this.f2311I.setFocusable(true);
         this.f2305C = (EditText) inflate4.findViewById(R.id.login_user_name);
-        this.f2305C.setText(((ECGApplication) getApplication()).f2081b.getName());
+        this.f2305C.setText(((ECGApplication) getApplication()).mUserInfo.getName());
         this.f2306D = (EditText) inflate4.findViewById(R.id.login_user_pwd);
         this.f2306D.requestFocus();
         ((Button) inflate4.findViewById(R.id.login_btn_login)).setOnClickListener(new View.OnClickListener() {
@@ -1031,7 +1031,7 @@ public class HistoryECGDisplayActivity extends C0721a {
         }
         getActionBar().setDisplayHomeAsUpEnabled(true);
         setTitle(getString(R.string.title_rev_model));
-        this.f2342r = new C0740b(getApplicationContext());
+        this.f2342r = new SqlManager(getApplicationContext());
         this.f2349y = new HeartRateCounter3();
         this.f2349y.init();
         this.f2345u = new C0772h();
@@ -1265,7 +1265,7 @@ public class HistoryECGDisplayActivity extends C0721a {
                 StringBuilder sb = new StringBuilder();
                 sb.append("xml:");
                 sb.append(this.f2347w.getFilePath());
-                C0771g.m2784a(str, sb.toString());
+                LogUtils.logI(str, sb.toString());
                 try {
                     ECGEntity a = C0770f.m2773a(this.f2347w.getFilePath());
                     a.setStartTime(new SimpleDateFormat("yyyyMMddHHmmss", Locale.CHINA).format(Long.valueOf(currentTimeMillis)));

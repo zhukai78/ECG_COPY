@@ -10,8 +10,8 @@ import android.widget.TextView;
 
 import com.hopetruly.ecg.R;
 import com.hopetruly.ecg.entity.ErrorInfo;
-import com.hopetruly.ecg.util.C0771g;
-import com.hopetruly.part.net.C0791b;
+import com.hopetruly.ecg.util.LogUtils;
+import com.hopetruly.part.net.MyHttpHelper;
 
 public class ErrorActivity extends Activity {
 
@@ -64,7 +64,7 @@ public class ErrorActivity extends Activity {
         }
         new Thread(new Runnable() {
             public void run() {
-                C0791b.m2878a(ErrorActivity.this.f2208e);
+                MyHttpHelper.get_error_report(ErrorActivity.this.f2208e);
             }
         }).start();
         finish();
@@ -73,7 +73,7 @@ public class ErrorActivity extends Activity {
     /* access modifiers changed from: protected */
     public void onCreate(Bundle bundle) {
         super.onCreate(bundle);
-        C0771g.m2784a(this.f2204a, "onCreate~~~");
+        LogUtils.logI(this.f2204a, "onCreate~~~");
         this.f2208e = (ErrorInfo) getIntent().getSerializableExtra("error");
         setContentView(R.layout.activity_error);
         m2283b();
@@ -81,7 +81,7 @@ public class ErrorActivity extends Activity {
 
     /* access modifiers changed from: protected */
     public void onDestroy() {
-        C0771g.m2784a(this.f2204a, "onDestroy~~~");
+        LogUtils.logI(this.f2204a, "onDestroy~~~");
         super.onDestroy();
     }
 }

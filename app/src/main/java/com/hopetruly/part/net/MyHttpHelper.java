@@ -1,9 +1,9 @@
 package com.hopetruly.part.net;
 
-import com.hopetruly.ecg.entity.C0753f;
+import com.hopetruly.ecg.entity.APPUploadFile;
 import com.hopetruly.ecg.entity.ErrorInfo;
 import com.hopetruly.ecg.entity.UserInfo;
-import com.hopetruly.ecg.util.C0771g;
+import com.hopetruly.ecg.util.LogUtils;
 import com.hopetruly.ecg.util.C0776l;
 
 import org.apache.http.HttpResponse;
@@ -30,41 +30,41 @@ import java.nio.charset.Charset;
 import java.util.ArrayList;
 
 /* renamed from: com.hopetruly.part.net.b */
-public class C0791b {
+public class MyHttpHelper {
 
     /* renamed from: a */
-    private static boolean f2988a = false;
+    private static boolean isHttpDebug = false;
 
     /* renamed from: a */
-    public static String m2871a() {
-        return m2876a("http://www.bitsun.com/cloud/usermanage/check_login.php", new String[0], new String[0]);
+    public static String checkLogin() {
+        return postMyUrl("http://www.bitsun.com/cloud/usermanage/check_login.php", new String[0], new String[0]);
     }
 
     /* renamed from: a */
-    public static String m2872a(UserInfo userInfo) {
-        return m2876a("http://www.bitsun.com/cloud/usermanage/user_info.php?type=modi", new String[]{"user_first_name", "user_last_name", "user_sex", "user_age", "user_birthday", "user_height", "user_weight", "user_profession", "user_email", "user_phone", "user_addr", "user_medications", "user_smoker"}, new String[]{userInfo.getFirstName(), userInfo.getLastName(), userInfo.getSex(), String.valueOf(userInfo.getAge()), userInfo.getBirthday(), userInfo.getHeight(), userInfo.getWeight(), userInfo.getProfession(), userInfo.getEmail(), userInfo.getPhone(), userInfo.getAddress(), userInfo.getMedications(), userInfo.getSmoker()});
+    public static String get_user_info(UserInfo userInfo) {
+        return postMyUrl("http://www.bitsun.com/cloud/usermanage/user_info.php?type=modi", new String[]{"user_first_name", "user_last_name", "user_sex", "user_age", "user_birthday", "user_height", "user_weight", "user_profession", "user_email", "user_phone", "user_addr", "user_medications", "user_smoker"}, new String[]{userInfo.getFirstName(), userInfo.getLastName(), userInfo.getSex(), String.valueOf(userInfo.getAge()), userInfo.getBirthday(), userInfo.getHeight(), userInfo.getWeight(), userInfo.getProfession(), userInfo.getEmail(), userInfo.getPhone(), userInfo.getAddress(), userInfo.getMedications(), userInfo.getSmoker()});
     }
 
     /* renamed from: a */
     public static String m2873a(String str) {
-        return m2876a("http://www.bitsun.com/cloud/apps/ecg/ecg_file_list.php", new String[]{"userId"}, new String[]{str});
+        return postMyUrl("http://www.bitsun.com/cloud/apps/ecg/ecg_file_list.php", new String[]{"userId"}, new String[]{str});
     }
 
     /* renamed from: a */
-    public static String m2874a(String str, String str2) {
+    public static String get_ecg_file_list(String str, String str2) {
         if (!str.equals("test") || !str2.equals("test")) {
-            f2988a = false;
-            return m2876a("http://www.bitsun.com/cloud/usermanage/login_ajax.php", new String[]{"user_name", "user_pwd"}, new String[]{str, str2});
+            isHttpDebug = false;
+            return postMyUrl("http://www.bitsun.com/cloud/usermanage/login_ajax.php", new String[]{"user_name", "user_pwd"}, new String[]{str, str2});
         }
-        f2988a = true;
+        isHttpDebug = true;
         return "[0, 2, [\"23603115785715725\"]]";
     }
 
     /* renamed from: a */
-    public static String m2875a(String str, String str2, String str3) {
+    public static String getMyUrl(String str, String str2, String str3) {
         try {
             HttpGet httpGet = new HttpGet(str);
-            HttpResponse execute = C0790a.m2869a().execute(httpGet);
+            HttpResponse execute = MyHttpClient.initMyHttpClient().execute(httpGet);
             if (execute.getStatusLine().getStatusCode() == 200) {
                 InputStream content = execute.getEntity().getContent();
                 if (content != null) {
@@ -92,7 +92,7 @@ public class C0791b {
                 }
                 return null;
             }
-            C0771g.m2784a("NetInterface", "Connection release..");
+            LogUtils.logI("NetInterface", "Connection release..");
             httpGet.abort();
             return null;
         } catch (ClientProtocolException e) {
@@ -111,7 +111,7 @@ public class C0791b {
     }
 
     /* renamed from: a */
-    public static String m2876a(String str, String[] strArr, String[] strArr2) {
+    public static String postMyUrl(String str, String[] strArr, String[] strArr2) {
         HttpPost httpPost = new HttpPost(str);
         if (strArr.length != strArr2.length) {
             throw new IllegalArgumentException("参数与值的数目不相等!");
@@ -124,14 +124,14 @@ public class C0791b {
         }
         try {
             httpPost.setEntity(new UrlEncodedFormEntity(arrayList, "utf-8"));
-            HttpResponse execute = C0790a.m2869a().execute(httpPost);
+            HttpResponse execute = MyHttpClient.initMyHttpClient().execute(httpPost);
             if (execute.getStatusLine().getStatusCode() == 200) {
-                for (Cookie cookie : C0790a.m2869a().getCookieStore().getCookies()) {
-                    C0771g.m2784a("NetInterface", "cookie name>>" + cookie.getName() + "\ncookie value>>" + cookie.getValue() + "\ncookie Domain>>" + cookie.getDomain());
+                for (Cookie cookie : MyHttpClient.initMyHttpClient().getCookieStore().getCookies()) {
+                    LogUtils.logI("NetInterface", "cookie name>>" + cookie.getName() + "\ncookie value>>" + cookie.getValue() + "\ncookie Domain>>" + cookie.getDomain());
                 }
                 return new String(C0776l.m2818a(execute.getEntity().getContent()), Charset.forName("UTF-8"));
             }
-            C0771g.m2784a("NetInterface", "Connection release..");
+            LogUtils.logI("NetInterface", "Connection release..");
             httpPost.abort();
             return null;
         } catch (UnsupportedEncodingException e) {
@@ -142,7 +142,7 @@ public class C0791b {
             return null;
         } catch (SocketTimeoutException e3) {
             e3.printStackTrace();
-            C0771g.m2786c("NetInterface", "socket time out");
+            LogUtils.logW("NetInterface", "socket time out");
             return null;
         } catch (IOException e4) {
             e4.printStackTrace();
@@ -154,7 +154,7 @@ public class C0791b {
     }
 
     /* renamed from: a */
-    public static String m2877a(String str, String[] strArr, String[] strArr2, String[] strArr3, File[] fileArr) throws IOException, UnsupportedEncodingException {
+    public static String httpPostUrl(String str, String[] strArr, String[] strArr2, String[] strArr3, File[] fileArr) throws IOException, UnsupportedEncodingException {
         HttpPost httpPost = new HttpPost(str);
         boolean z = true;
         boolean z2 = strArr.length != strArr2.length;
@@ -186,7 +186,7 @@ public class C0791b {
             }
         }
         httpPost.setEntity(multipartEntity);
-        C0790a a = C0790a.m2869a();
+        MyHttpClient a = MyHttpClient.initMyHttpClient();
         HttpParams params = a.getParams();
         HttpConnectionParams.setSoTimeout(params, 360000);
         a.setParams(params);
@@ -194,14 +194,14 @@ public class C0791b {
         if (execute.getStatusLine().getStatusCode() == 200) {
             return new String(C0776l.m2818a(execute.getEntity().getContent()), Charset.forName("UTF-8"));
         }
-        C0771g.m2784a("NetInterface", "Connection release..");
+        LogUtils.logI("NetInterface", "Connection release..");
         httpPost.abort();
         return null;
     }
 
     /* renamed from: a */
-    public static boolean m2878a(ErrorInfo errorInfo) {
-        String a = m2876a("http://www.bitsun.com/cloud/apps/error_report/rec_error_report.php", new String[]{"soft_version", "soft_name", "soft_id", "phone_brand", "phone_model", "phone_cpu_abi", "system_ver", "firmware_ver", "opt_dec", "error_info", "report_time"}, new String[]{errorInfo.getVersionName(), "ECG Air", "1", errorInfo.getManufacturer(), errorInfo.getModel(), errorInfo.getCPU_ABI(), errorInfo.getAndroidVer(), errorInfo.getFirmwareVer(), errorInfo.getOpDesc(), errorInfo.getErrorInfo(), errorInfo.getTime()});
+    public static boolean get_error_report(ErrorInfo errorInfo) {
+        String a = postMyUrl("http://www.bitsun.com/cloud/apps/error_report/rec_error_report.php", new String[]{"soft_version", "soft_name", "soft_id", "phone_brand", "phone_model", "phone_cpu_abi", "system_ver", "firmware_ver", "opt_dec", "error_info", "report_time"}, new String[]{errorInfo.getVersionName(), "ECG Air", "1", errorInfo.getManufacturer(), errorInfo.getModel(), errorInfo.getCPU_ABI(), errorInfo.getAndroidVer(), errorInfo.getFirmwareVer(), errorInfo.getOpDesc(), errorInfo.getErrorInfo(), errorInfo.getTime()});
         if (a == null) {
             return false;
         }
@@ -214,18 +214,18 @@ public class C0791b {
     }
 
     /* renamed from: b */
-    public static String m2879b() {
-        C0771g.m2787d("NetInterface", "testFlag:" + f2988a);
-        return f2988a ? m2884d() : m2876a("http://www.bitsun.com/cloud/usermanage/user_info.php?type=query", new String[0], new String[0]);
+    public static String get_q_user_info() {
+        LogUtils.logE("NetInterface", "testFlag:" + isHttpDebug);
+        return isHttpDebug ? getTestUser() : postMyUrl("http://www.bitsun.com/cloud/usermanage/user_info.php?type=query", new String[0], new String[0]);
     }
 
     /* renamed from: b */
-    public static String m2880b(String str, String str2) {
-        return m2876a("http://www.bitsun.com/cloud/usermanage/register_ajax.php", new String[]{"user_name", "user_pwd", "user_re_pwd"}, new String[]{str, str2, str2});
+    public static String register_ajax(String str, String str2) {
+        return postMyUrl("http://www.bitsun.com/cloud/usermanage/register_ajax.php", new String[]{"user_name", "user_pwd", "user_re_pwd"}, new String[]{str, str2, str2});
     }
 
     /* renamed from: b */
-    public static String m2881b(String str, String str2, String str3) throws IOException {
+    public static String upload_file(String str, String str2, String str3) throws IOException {
         String[] strArr = new String[2];
         String[] strArr2 = new String[2];
         if (str3 != null) {
@@ -237,13 +237,13 @@ public class C0791b {
             strArr[0] = "fileType";
             strArr2[0] = str;
         }
-        return m2877a("http://www.bitsun.com/cloud/upload/upload_file.php", strArr, strArr2, new String[]{"file"}, new File[]{new File(str2)});
+        return httpPostUrl("http://www.bitsun.com/cloud/upload/upload_file.php", strArr, strArr2, new String[]{"file"}, new File[]{new File(str2)});
     }
 
     /* renamed from: c */
-    public static C0753f m2882c() {
-        String a = m2876a("http://www.bitsun.com/cloud/downloads/check_update.php?soft_id=ecg", new String[0], new String[0]);
-        C0753f fVar = null;
+    public static APPUploadFile check_update() {
+        String a = postMyUrl("http://www.bitsun.com/cloud/downloads/check_update.php?soft_id=ecg", new String[0], new String[0]);
+        APPUploadFile fVar = null;
         if (a == null) {
             return null;
         }
@@ -251,7 +251,7 @@ public class C0791b {
             JSONArray jSONArray = new JSONArray(a);
             if (jSONArray.getInt(0) == 0) {
                 JSONArray jSONArray2 = jSONArray.getJSONArray(2);
-                C0753f fVar2 = new C0753f();
+                APPUploadFile fVar2 = new APPUploadFile();
                 try {
                     fVar2.mo2695a(jSONArray2.getString(0));
                     fVar2.mo2697b(jSONArray2.getString(1));
@@ -271,12 +271,12 @@ public class C0791b {
     }
 
     /* renamed from: c */
-    public static String m2883c(String str, String str2) {
-        return m2876a("http://www.bitsun.com/cloud/upload/mark_ecg_air_ids.php", new String[]{"machineId", "userName"}, new String[]{str, str2});
+    public static String mark_ecg_air_ids(String str, String str2) {
+        return postMyUrl("http://www.bitsun.com/cloud/upload/mark_ecg_air_ids.php", new String[]{"machineId", "userName"}, new String[]{str, str2});
     }
 
     /* renamed from: d */
-    private static String m2884d() {
+    private static String getTestUser() {
         return "[0,3,{\"user_id\": \"23603115785715725\", \"user_first_name\": \"Test\",\"user_last_name\": \"Warick\",\"user_sex\": \"M\",\"user_age\": \"30\",\"user_birthday\": \"1986-2-2\",\"user_height\": \"180\",\"user_weight\": \"100\",\"user_profession\": \"Analyst\",\"user_email\": \"waricksale@163.com\",\"user_phone\": \"10000\",\"user_addr\": \"Room 208, Building C2, No.182 of Kexue Avenue,Science Town of Luoguang District,Guangzhou, Guangdong, China\"}]";
     }
 }

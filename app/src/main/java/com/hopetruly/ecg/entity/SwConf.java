@@ -1,37 +1,37 @@
 package com.hopetruly.ecg.entity;
 
 /* renamed from: com.hopetruly.ecg.entity.e */
-public class C0752e {
+public class SwConf {
 
     /* renamed from: a */
     public static final String f2826a = null;
 
     /* renamed from: b */
-    private int f2827b = 0;
+    private int auto_login = 0;
 
     /* renamed from: c */
     private int f2828c = 0;
 
     /* renamed from: d */
-    private int f2829d = 1;
+    private int agree_declare = 1;
 
     /* renamed from: e */
-    private int f2830e = 0;
+    private int agree_flag = 0;
 
     /* renamed from: f */
-    private int f2831f = 0;
+    private int device_id_upload = 0;
 
     /* renamed from: g */
     private String f2832g;
 
     /* renamed from: a */
-    public int mo2681a() {
-        return this.f2827b;
+    public int getAuto_login() {
+        return this.auto_login;
     }
 
     /* renamed from: a */
-    public void mo2682a(int i) {
-        this.f2827b = i;
+    public void setSW_AUTO_LOGIN(int i) {
+        this.auto_login = i;
     }
 
     /* renamed from: a */
@@ -45,28 +45,28 @@ public class C0752e {
     }
 
     /* renamed from: b */
-    public void mo2685b(int i) {
+    public void setSW_SAVE_ACCOUNT_AND_PASSWORD(int i) {
         this.f2828c = i;
     }
 
     /* renamed from: c */
-    public int mo2686c() {
-        return this.f2829d;
+    public int getAgree_declare() {
+        return this.agree_declare;
     }
 
     /* renamed from: c */
-    public void mo2687c(int i) {
-        this.f2829d = i;
+    public void setAgree_declare(int i) {
+        this.agree_declare = i;
     }
 
     /* renamed from: d */
-    public int mo2688d() {
-        return this.f2830e;
+    public int getAgree_flag() {
+        return this.agree_flag;
     }
 
     /* renamed from: d */
-    public void mo2689d(int i) {
-        this.f2830e = i;
+    public void setAgree_flag(int i) {
+        this.agree_flag = i;
     }
 
     /* renamed from: e */
@@ -75,13 +75,13 @@ public class C0752e {
     }
 
     /* renamed from: e */
-    public void mo2691e(int i) {
-        this.f2831f = i;
+    public void setDevice_id_upload(int i) {
+        this.device_id_upload = i;
     }
 
     /* renamed from: f */
-    public int mo2692f() {
-        return this.f2831f;
+    public int getDevice_id_upload() {
+        return this.device_id_upload;
     }
 
     /* renamed from: g */

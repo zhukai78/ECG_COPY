@@ -15,14 +15,14 @@ import android.widget.Toast;
 
 import com.hopetruly.ecg.ECGApplication;
 import com.hopetruly.ecg.R;
-import com.hopetruly.part.net.C0791b;
+import com.hopetruly.part.net.MyHttpHelper;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 
 //import com.hexin.ecg_hexin_bio.baidu.location.BDLocationStatusCodes;
 
-public class RegisterActivity extends C0721a {
+public class RegisterActivity extends BaseActivity {
 
     /* renamed from: a */
     final String f2512a = "RegisterActivity";
@@ -94,7 +94,7 @@ public class RegisterActivity extends C0721a {
             if (isCancelled()) {
                 return null;
             }
-            return C0791b.m2880b(strArr[0], strArr[1]);
+            return MyHttpHelper.register_ajax(strArr[0], strArr[1]);
         }
 
         /* access modifiers changed from: protected */

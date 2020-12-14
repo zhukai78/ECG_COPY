@@ -20,7 +20,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class FileExploreActivity extends C0721a implements AdapterView.OnItemClickListener {
+public class FileExploreActivity extends BaseActivity implements AdapterView.OnItemClickListener {
 
     /* renamed from: a */
     String f2211a = "FileExplore";

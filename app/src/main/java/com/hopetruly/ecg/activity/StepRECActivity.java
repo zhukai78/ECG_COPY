@@ -19,12 +19,12 @@ import android.widget.Toast;
 import com.hopetruly.ecg.ECGApplication;
 import com.hopetruly.ecg.R;
 import com.hopetruly.ecg.entity.PedometerRecord;
-import com.hopetruly.ecg.p022b.C0740b;
+import com.hopetruly.ecg.p022b.SqlManager;
 
 import java.util.ArrayList;
 import java.util.Calendar;
 
-public class StepRECActivity extends C0721a {
+public class StepRECActivity extends BaseActivity {
 
     /* renamed from: a */
     final String f2666a = "StepRECActivity";
@@ -45,7 +45,7 @@ public class StepRECActivity extends C0721a {
     ECGApplication f2671g;
 
     /* renamed from: h */
-    C0740b f2672h;
+    SqlManager f2672h;
 
     /* renamed from: i */
     C0718a f2673i;
@@ -176,7 +176,7 @@ public class StepRECActivity extends C0721a {
         this.f2667c.setAdapter(this.f2668d);
         this.f2667c.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long j) {
-                boolean unused = StepRECActivity.this.f2674j = StepRECActivity.this.f2671g.f2094o.mo2741o();
+                boolean unused = StepRECActivity.this.f2674j = StepRECActivity.this.f2671g.appMainService.mo2741o();
                 if (StepRECActivity.this.f2674j) {
                     StepRECActivity.this.m2561b();
                     return false;
@@ -185,7 +185,7 @@ public class StepRECActivity extends C0721a {
                 return false;
             }
         });
-        m2558a(this.f2671g.f2081b.getId());
+        m2558a(this.f2671g.mUserInfo.getId());
     }
 
     /* access modifiers changed from: private */
@@ -239,7 +239,7 @@ public class StepRECActivity extends C0721a {
         getActionBar().setDisplayHomeAsUpEnabled(true);
         this.f2671g = (ECGApplication) getApplication();
         this.f2670f = Calendar.getInstance();
-        this.f2672h = new C0740b(getApplicationContext());
+        this.f2672h = new SqlManager(getApplicationContext());
         m2555a();
     }
 

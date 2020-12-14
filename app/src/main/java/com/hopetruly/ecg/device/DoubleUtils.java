@@ -1,7 +1,7 @@
 package com.hopetruly.ecg.device;
 
 /* renamed from: com.hopetruly.ecg.device.c */
-public class C0747c {
+public class DoubleUtils {
 
     /* renamed from: a */
     public double f2796a;
@@ -12,7 +12,7 @@ public class C0747c {
     /* renamed from: c */
     public double f2798c;
 
-    public C0747c(double d, double d2, double d3) {
+    public DoubleUtils(double d, double d2, double d3) {
         this.f2796a = d;
         this.f2797b = d2;
         this.f2798c = d3;
@@ -25,7 +25,7 @@ public class C0747c {
         if (obj == null || getClass() != obj.getClass()) {
             return false;
         }
-        C0747c cVar = (C0747c) obj;
+        DoubleUtils cVar = (DoubleUtils) obj;
         return Double.doubleToLongBits(this.f2796a) == Double.doubleToLongBits(cVar.f2796a) && Double.doubleToLongBits(this.f2797b) == Double.doubleToLongBits(cVar.f2797b) && Double.doubleToLongBits(this.f2798c) == Double.doubleToLongBits(cVar.f2798c);
     }
 

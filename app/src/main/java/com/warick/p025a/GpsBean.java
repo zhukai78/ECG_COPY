@@ -1,7 +1,7 @@
 package com.warick.p025a;
 
 /* renamed from: com.warick.a.c */
-public class C0800c {
+public class GpsBean {
 
     /* renamed from: a */
     private double f3003a = 0.0d;

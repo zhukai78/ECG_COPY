@@ -34,14 +34,14 @@ import com.hopetruly.ecg.ECGApplication;
 import com.hopetruly.ecg.R;
 import com.hopetruly.ecg.entity.Machine;
 import com.hopetruly.ecg.services.MainService;
-import com.hopetruly.ecg.util.C0771g;
+import com.hopetruly.ecg.util.LogUtils;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Timer;
 import java.util.TimerTask;
 
-public class ScanActivity extends C0721a implements AdapterView.OnItemClickListener {
+public class ScanActivity extends BaseActivity implements AdapterView.OnItemClickListener {
 
     /* renamed from: a */
     String f2540a = "ScanActivity";
@@ -112,7 +112,7 @@ public class ScanActivity extends C0721a implements AdapterView.OnItemClickListe
     /* renamed from: w */
     private ServiceConnection f2561w = new ServiceConnection() {
         public void onServiceConnected(ComponentName componentName, IBinder iBinder) {
-            ScanActivity.this.f2547i = ((MainService.C0762a) iBinder).mo2756a();
+            ScanActivity.this.f2547i = ((MainService.MainBinder) iBinder).getMainBinder();
             ScanActivity.this.f2546h = true;
             boolean unused = ScanActivity.this.m2511a();
         }
@@ -200,9 +200,9 @@ public class ScanActivity extends C0721a implements AdapterView.OnItemClickListe
                     ScanActivity.this.f2551m = false;
                     ScanActivity.this.m2525e();
                     f2555q = false;
-                    Log.d("ScanActivity", "onReceive: f2548j.f2080a.getFwRev(): " + f2548j.f2080a.getFwRev());
-                    Log.d("ScanActivity", "onReceive: f2548j.f2083d.mo2693g(): " + f2548j.f2083d.mo2693g());
-                    if (f2548j.f2080a.getFwRev().equalsIgnoreCase(f2548j.f2083d.mo2693g())) {
+                    Log.d("ScanActivity", "onReceive: f2548j.appMachine.getFwRev(): " + f2548j.appMachine.getFwRev());
+                    Log.d("ScanActivity", "onReceive: f2548j.mSwConf.mo2693g(): " + f2548j.mSwConf.mo2693g());
+                    if (f2548j.appMachine.getFwRev().equalsIgnoreCase(f2548j.mSwConf.mo2693g())) {
                         ScanActivity.this.finish();
                         return;
                     }
@@ -212,7 +212,7 @@ public class ScanActivity extends C0721a implements AdapterView.OnItemClickListe
                 } else if (action.equals("android.bluetooth.adapter.action.STATE_CHANGED")) {
                     int intExtra = intent.getIntExtra("android.bluetooth.adapter.extra.STATE", Integer.MIN_VALUE);
                     String str3 = ScanActivity.this.f2540a;
-                    C0771g.m2787d(str3, "state:" + intExtra);
+                    LogUtils.logE(str3, "state:" + intExtra);
                     if (intExtra == 13) {
                         ScanActivity.this.f2543e = false;
                         return;
@@ -270,7 +270,7 @@ public class ScanActivity extends C0721a implements AdapterView.OnItemClickListe
             if (ScanActivity.this.f2552n != null) {
                 ScanActivity.this.f2552n.cancel();
             }
-            ScanActivity.this.f2547i.mo2730d();
+            ScanActivity.this.f2547i.disconnectMainBLE();
             boolean unused = ScanActivity.this.f2555q = false;
         }
     };
@@ -481,7 +481,7 @@ public class ScanActivity extends C0721a implements AdapterView.OnItemClickListe
         getActionBar().setDisplayHomeAsUpEnabled(true);
         setContentView(R.layout.activity_scan);
         this.f2548j = (ECGApplication) getApplication();
-        this.f2557s = this.f2548j.f2084e.edit();
+        this.f2557s = this.f2548j.spSw_conf.edit();
         ListView listView = (ListView) findViewById(R.id.scan_device_lv);
         this.f2542d = (ProgressBar) findViewById(R.id.search_device_pb);
         listView.setAdapter(this.f2563y);
@@ -547,7 +547,7 @@ public class ScanActivity extends C0721a implements AdapterView.OnItemClickListe
             this.f2549k = new Machine();
             this.f2549k.setName((String) hashMap.get("name"));
             this.f2549k.setMacAddress((String) hashMap.get("address"));
-            this.f2548j.f2080a = this.f2549k;
+            this.f2548j.appMachine = this.f2549k;
             this.f2547i.mo2723a((String) hashMap.get("address"));
             this.f2550l = 0;
             m2524d();
@@ -555,7 +555,7 @@ public class ScanActivity extends C0721a implements AdapterView.OnItemClickListe
             this.f2553o = new TimerTask() {
                 public void run() {
                     ScanActivity.this.f2551m = true;
-                    ScanActivity.this.f2548j.f2080a = null;
+                    ScanActivity.this.f2548j.appMachine = null;
                     ScanActivity.this.m2525e();
                     boolean unused = ScanActivity.this.f2555q = false;
                     ScanActivity.this.m2521c();

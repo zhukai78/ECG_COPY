@@ -28,10 +28,10 @@ import java.util.Iterator;
 import java.util.Locale;
 
 /* renamed from: com.hopetruly.ecg.util.d */
-public class C0768d implements Thread.UncaughtExceptionHandler {
+public class EcgUncaughtExceptionHandler implements Thread.UncaughtExceptionHandler {
 
     /* renamed from: d */
-    private static C0768d f2903d;
+    private static EcgUncaughtExceptionHandler mEcgUncaughtExceptionHandler;
 
     /* renamed from: a */
     Context f2904a;
@@ -54,15 +54,15 @@ public class C0768d implements Thread.UncaughtExceptionHandler {
     /* renamed from: h */
     private String f2910h = null;
 
-    private C0768d() {
+    private EcgUncaughtExceptionHandler() {
     }
 
     /* renamed from: a */
-    public static C0768d m2762a() {
-        if (f2903d == null) {
-            f2903d = new C0768d();
+    public static EcgUncaughtExceptionHandler init() {
+        if (mEcgUncaughtExceptionHandler == null) {
+            mEcgUncaughtExceptionHandler = new EcgUncaughtExceptionHandler();
         }
-        return f2903d;
+        return mEcgUncaughtExceptionHandler;
     }
 
     /* renamed from: a */
@@ -119,7 +119,7 @@ public class C0768d implements Thread.UncaughtExceptionHandler {
     }
 
     /* renamed from: a */
-    public void mo2769a(Activity activity) {
+    public void addActivity(Activity activity) {
         this.f2905b.add(activity);
     }
 
@@ -129,7 +129,7 @@ public class C0768d implements Thread.UncaughtExceptionHandler {
     }
 
     /* renamed from: a */
-    public void mo2771a(Context context) {
+    public void ready(Context context) {
         this.f2904a = context;
         this.f2907e = Thread.getDefaultUncaughtExceptionHandler();
         Thread.setDefaultUncaughtExceptionHandler(this);
@@ -154,7 +154,7 @@ public class C0768d implements Thread.UncaughtExceptionHandler {
     }
 
     /* renamed from: b */
-    public void mo2773b(Activity activity) {
+    public void removeActivity(Activity activity) {
         this.f2905b.remove(activity);
     }
 

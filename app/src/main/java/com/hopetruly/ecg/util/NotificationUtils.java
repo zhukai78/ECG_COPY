@@ -10,12 +10,12 @@ import com.hopetruly.ecg.R;
 
 
 /* renamed from: com.hopetruly.ecg.util.j */
-public class C0774j {
+public class NotificationUtils {
 
     /* renamed from: a */
     Context f2922a;
 
-    public C0774j(Context context) {
+    public NotificationUtils(Context context) {
         this.f2922a = context;
     }
 
@@ -29,7 +29,7 @@ public class C0774j {
     }
 
     /* renamed from: a */
-    public void mo2790a(String str, String str2) {
+    public void toBatteryNotify(String str, String str2) {
         ((NotificationManager) this.f2922a.getSystemService(Context.NOTIFICATION_SERVICE)).notify(100, m2803b(str, str2));
     }
 }

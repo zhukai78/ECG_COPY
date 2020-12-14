@@ -13,7 +13,7 @@ import android.util.Log;
 import java.util.Iterator;
 
 /* renamed from: com.warick.a.b */
-public class C0795b {
+public class GpsManager {
     /* access modifiers changed from: private */
 
     /* renamed from: a */
@@ -25,7 +25,7 @@ public class C0795b {
     /* access modifiers changed from: private */
 
     /* renamed from: c */
-    public C0799a f2996c = null;
+    public OnLocationChange f2996c = null;
 
     /* renamed from: d */
     private GpsStatus.Listener f2997d = new GpsStatus.Listener() {
@@ -34,20 +34,20 @@ public class C0795b {
             String str2;
             switch (i) {
                 case 1:
-                    str = C0795b.f2994a;
+                    str = GpsManager.f2994a;
                     str2 = "定位启动";
                     break;
                 case 2:
-                    str = C0795b.f2994a;
+                    str = GpsManager.f2994a;
                     str2 = "定位结束";
                     break;
                 case 3:
-                    str = C0795b.f2994a;
+                    str = GpsManager.f2994a;
                     str2 = "第一次定位";
                     break;
                 case 4:
 //                    Log.i(C0795b.f2994a, "卫星状态改变");
-                    GpsStatus gpsStatus = C0795b.this.f2995b.getGpsStatus((GpsStatus) null);
+                    GpsStatus gpsStatus = GpsManager.this.f2995b.getGpsStatus((GpsStatus) null);
                     int maxSatellites = gpsStatus.getMaxSatellites();
                     Iterator<GpsSatellite> it = gpsStatus.getSatellites().iterator();
                     int i2 = 0;
@@ -55,7 +55,7 @@ public class C0795b {
                         GpsSatellite next = it.next();
                         i2++;
                     }
-                    str = C0795b.f2994a;
+                    str = GpsManager.f2994a;
                     str2 = "搜索到：" + i2 + "颗卫星";
                     break;
                 default:
@@ -69,22 +69,22 @@ public class C0795b {
     /* renamed from: e */
     public LocationListener f2998e = new LocationListener() {
         public void onLocationChanged(Location location) {
-            if (C0795b.this.f2996c != null && location != null) {
-                Log.i(C0795b.f2994a, "位置变更");
-                C0795b.this.f2996c.mo2880a(location.getLongitude(), location.getLatitude());
+            if (GpsManager.this.f2996c != null && location != null) {
+                Log.i(GpsManager.f2994a, "位置变更");
+                GpsManager.this.f2996c.onLastKnownLocation(location.getLongitude(), location.getLatitude());
             }
         }
 
         public void onProviderDisabled(String str) {
-            Log.i(C0795b.f2994a, "GPS禁用时触发");
+            Log.i(GpsManager.f2994a, "GPS禁用时触发");
         }
 
         public void onProviderEnabled(String str) {
-            Log.i(C0795b.f2994a, "GPS开启时触发");
-            C0795b.this.f2995b.requestLocationUpdates(str, 10000, 1.0f, C0795b.this.f2998e);
-            Location lastKnownLocation = C0795b.this.f2995b.getLastKnownLocation(str);
+            Log.i(GpsManager.f2994a, "GPS开启时触发");
+            GpsManager.this.f2995b.requestLocationUpdates(str, 10000, 1.0f, GpsManager.this.f2998e);
+            Location lastKnownLocation = GpsManager.this.f2995b.getLastKnownLocation(str);
             if (lastKnownLocation != null) {
-                C0795b.this.f2996c.mo2880a(lastKnownLocation.getLongitude(), lastKnownLocation.getLatitude());
+                GpsManager.this.f2996c.onLastKnownLocation(lastKnownLocation.getLongitude(), lastKnownLocation.getLatitude());
             }
         }
 
@@ -93,15 +93,15 @@ public class C0795b {
             String str3;
             switch (i) {
                 case 0:
-                    str3 = C0795b.f2994a;
+                    str3 = GpsManager.f2994a;
                     str2 = "当前GPS状态为服务区外状态";
                     break;
                 case 1:
-                    str3 = C0795b.f2994a;
+                    str3 = GpsManager.f2994a;
                     str2 = "当前GPS状态为暂停服务状态";
                     break;
                 case 2:
-                    str3 = C0795b.f2994a;
+                    str3 = GpsManager.f2994a;
                     str2 = "当前GPS状态为可见状态";
                     break;
                 default:
@@ -114,21 +114,21 @@ public class C0795b {
     /* renamed from: f */
     private LocationListener f2999f = new LocationListener() {
         public void onLocationChanged(Location location) {
-            if (C0795b.this.f2996c != null && location != null) {
-                Log.i(C0795b.f2994a, "位置变更");
-                C0795b.this.f2996c.mo2881b(location.getLongitude(), location.getLatitude());
+            if (GpsManager.this.f2996c != null && location != null) {
+                Log.i(GpsManager.f2994a, "位置变更");
+                GpsManager.this.f2996c.onNowKnownLocation(location.getLongitude(), location.getLatitude());
             }
         }
 
         public void onProviderDisabled(String str) {
-            Log.i(C0795b.f2994a, "GPS禁用时触发");
+            Log.i(GpsManager.f2994a, "GPS禁用时触发");
         }
 
         public void onProviderEnabled(String str) {
-            Log.i(C0795b.f2994a, "GPS开启时触发");
-            Location lastKnownLocation = C0795b.this.f2995b.getLastKnownLocation(str);
+            Log.i(GpsManager.f2994a, "GPS开启时触发");
+            Location lastKnownLocation = GpsManager.this.f2995b.getLastKnownLocation(str);
             if (lastKnownLocation != null) {
-                C0795b.this.f2996c.mo2880a(lastKnownLocation.getLongitude(), lastKnownLocation.getLatitude());
+                GpsManager.this.f2996c.onLastKnownLocation(lastKnownLocation.getLongitude(), lastKnownLocation.getLatitude());
             }
         }
 
@@ -137,15 +137,15 @@ public class C0795b {
             String str3;
             switch (i) {
                 case 0:
-                    str3 = C0795b.f2994a;
+                    str3 = GpsManager.f2994a;
                     str2 = "当前GPS状态为服务区外状态";
                     break;
                 case 1:
-                    str3 = C0795b.f2994a;
+                    str3 = GpsManager.f2994a;
                     str2 = "当前GPS状态为暂停服务状态";
                     break;
                 case 2:
-                    str3 = C0795b.f2994a;
+                    str3 = GpsManager.f2994a;
                     str2 = "当前GPS状态为可见状态";
                     break;
                 default:
@@ -156,15 +156,15 @@ public class C0795b {
     };
 
     /* renamed from: com.warick.a.b$a */
-    public interface C0799a {
+    public interface OnLocationChange {
         /* renamed from: a */
-        void mo2880a(double d, double d2);
+        void onLastKnownLocation(double d, double d2);
 
         /* renamed from: b */
-        void mo2881b(double d, double d2);
+        void onNowKnownLocation(double d, double d2);
     }
 
-    public C0795b(Context context) {
+    public GpsManager(Context context) {
         this.f2995b = (LocationManager) context.getSystemService("location");
     }
 
@@ -188,7 +188,7 @@ public class C0795b {
     }
 
     /* renamed from: a */
-    public void mo2869a(C0799a aVar) {
+    public void setOnLocationChange(OnLocationChange aVar) {
         if (this.f2996c == null && this.f2995b != null) {
             this.f2996c = aVar;
             this.f2995b.addGpsStatusListener(this.f2997d);
@@ -198,7 +198,7 @@ public class C0795b {
             String bestProvider = this.f2995b.getBestProvider(m2896d(), true);
             Location lastKnownLocation = this.f2995b.getLastKnownLocation(bestProvider);
             if (!(lastKnownLocation == null || this.f2996c == null)) {
-                this.f2996c.mo2880a(lastKnownLocation.getLongitude(), lastKnownLocation.getLatitude());
+                this.f2996c.onLastKnownLocation(lastKnownLocation.getLongitude(), lastKnownLocation.getLatitude());
             }
             this.f2995b.requestLocationUpdates(bestProvider, 10000, 1.0f, this.f2998e);
         }

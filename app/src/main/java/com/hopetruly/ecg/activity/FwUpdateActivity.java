@@ -31,12 +31,12 @@ import android.widget.Toast;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import com.hopetruly.ecg.R;
-import com.hopetruly.ecg.device.C0745a;
+import com.hopetruly.ecg.device.ECGUUIDS;
 import com.hopetruly.ecg.services.MainService;
 import com.hopetruly.ecg.util.C0767c;
-import com.hopetruly.ecg.util.C0771g;
+import com.hopetruly.ecg.util.LogUtils;
 import com.hopetruly.part.net.NetService;
-import com.hopetruly.part.p024a.C0777a;
+import com.hopetruly.part.p024a.BleHelper;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -46,7 +46,7 @@ import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
-public class FwUpdateActivity extends C0721a {
+public class FwUpdateActivity extends BaseActivity {
     /* access modifiers changed from: private */
 
     /* renamed from: a */
@@ -90,7 +90,7 @@ public class FwUpdateActivity extends C0721a {
     /* renamed from: J */
     private ServiceConnection f2257J = new ServiceConnection() {
         public void onServiceConnected(ComponentName componentName, IBinder iBinder) {
-            NetService unused = FwUpdateActivity.this.f2279w = ((NetService.C0786c) iBinder).mo2852a();
+            NetService unused = FwUpdateActivity.this.f2279w = ((NetService.NetSerBinder) iBinder).getNetSerBinder();
         }
 
         public void onServiceDisconnected(ComponentName componentName) {
@@ -101,14 +101,14 @@ public class FwUpdateActivity extends C0721a {
     /* renamed from: K */
     private ServiceConnection f2258K = new ServiceConnection() {
         public void onServiceConnected(ComponentName componentName, IBinder iBinder) {
-            MainService unused = FwUpdateActivity.this.f2278v = ((MainService.C0762a) iBinder).mo2756a();
-            if (!FwUpdateActivity.this.f2278v.mo2728b()) {
+            MainService unused = FwUpdateActivity.this.f2278v = ((MainService.MainBinder) iBinder).getMainBinder();
+            if (!FwUpdateActivity.this.f2278v.isMBleConn()) {
                 FwUpdateActivity.this.m2346o();
                 return;
             }
-            C0777a unused2 = FwUpdateActivity.this.f2277u = FwUpdateActivity.this.f2278v.mo2733g();
-            BluetoothGattService unused3 = FwUpdateActivity.this.f2270n = FwUpdateActivity.this.f2277u.mo2796a(C0745a.f2787t);
-            BluetoothGattService unused4 = FwUpdateActivity.this.f2271o = FwUpdateActivity.this.f2277u.mo2796a(C0745a.f2790w);
+            BleHelper unused2 = FwUpdateActivity.this.f2277u = FwUpdateActivity.this.f2278v.mo2733g();
+            BluetoothGattService unused3 = FwUpdateActivity.this.f2270n = FwUpdateActivity.this.f2277u.mo2796a(ECGUUIDS.f2787t);
+            BluetoothGattService unused4 = FwUpdateActivity.this.f2271o = FwUpdateActivity.this.f2277u.mo2796a(ECGUUIDS.f2790w);
             if ((FwUpdateActivity.this.f2270n == null) || (FwUpdateActivity.this.f2271o == null)) {
                 FwUpdateActivity.this.m2343n();
                 boolean unused5 = FwUpdateActivity.this.f2252E = false;
@@ -158,11 +158,11 @@ public class FwUpdateActivity extends C0721a {
                         e.printStackTrace();
                     }
                     if (FwUpdateActivity.this.f2254G) {
-                        SharedPreferences.Editor edit = FwUpdateActivity.this.f2690b.f2084e.edit();
-                        FwUpdateActivity.this.f2690b.f2083d.mo2683a(FwUpdateActivity.this.f2690b.f2080a.getId());
-                        edit.putString("DEVICE_ID", FwUpdateActivity.this.f2690b.f2083d.mo2690e());
+                        SharedPreferences.Editor edit = FwUpdateActivity.this.ecgApplication.spSw_conf.edit();
+                        FwUpdateActivity.this.ecgApplication.mSwConf.mo2683a(FwUpdateActivity.this.ecgApplication.appMachine.getId());
+                        edit.putString("DEVICE_ID", FwUpdateActivity.this.ecgApplication.mSwConf.mo2690e());
                         edit.commit();
-                        edit.putString("MacAddress", FwUpdateActivity.this.f2690b.f2080a.getMacAddress());
+                        edit.putString("MacAddress", FwUpdateActivity.this.ecgApplication.appMachine.getMacAddress());
                         edit.commit();
                     }
                 }
@@ -244,7 +244,7 @@ public class FwUpdateActivity extends C0721a {
     /* access modifiers changed from: private */
 
     /* renamed from: u */
-    public C0777a f2277u;
+    public BleHelper f2277u;
     /* access modifiers changed from: private */
 
     /* renamed from: v */
@@ -345,7 +345,7 @@ public class FwUpdateActivity extends C0721a {
     /* renamed from: a */
     public void m2310a(TextView textView, C0621a aVar) {
         String str = f2246a;
-        C0771g.m2787d(str, "h.len>>" + aVar.f2291b);
+        LogUtils.logE(str, "h.len>>" + aVar.f2291b);
         textView.setText(Html.fromHtml(String.format("%s %c %s %d %s %d", new Object[]{getString(R.string.l_type), aVar.f2292c, getString(R.string.l_version), Integer.valueOf(aVar.f2290a >> 1), getString(R.string.l_size), Integer.valueOf(aVar.f2291b * 4)})));
     }
 
@@ -440,9 +440,9 @@ public class FwUpdateActivity extends C0721a {
         if (this.f2250C.f2296b == this.f2250C.f2297c) {
             this.f2263g.setText(getString(R.string.l_fw_update_ok));
             if (this.f2254G && mo2203a().booleanValue()) {
-                SharedPreferences.Editor edit = this.f2690b.f2084e.edit();
-                this.f2690b.f2083d.mo2691e(1);
-                edit.putInt("DEVICE_ID_UPLOAD", this.f2690b.f2083d.mo2692f());
+                SharedPreferences.Editor edit = this.ecgApplication.spSw_conf.edit();
+                this.ecgApplication.mSwConf.setDevice_id_upload(1);
+                edit.putInt("DEVICE_ID_UPLOAD", this.ecgApplication.mSwConf.getDevice_id_upload());
                 edit.commit();
             }
             this.f2254G = false;
@@ -606,7 +606,7 @@ public class FwUpdateActivity extends C0721a {
     /* access modifiers changed from: protected */
     /* renamed from: a */
     public Boolean mo2203a() {
-        return Boolean.valueOf(this.f2279w.mo2826b() != -1);
+        return Boolean.valueOf(this.f2279w.getNetInfoType() != -1);
     }
 
     /* access modifiers changed from: protected */
@@ -641,8 +641,8 @@ public class FwUpdateActivity extends C0721a {
             Toast.makeText(this, getResources().getString(R.string.Device_is_programming), Toast.LENGTH_LONG).show();
         } else if (!this.f2254G) {
             super.onBackPressed();
-        } else if (this.f2278v.mo2728b()) {
-            this.f2278v.mo2730d();
+        } else if (this.f2278v.isMBleConn()) {
+            this.f2278v.disconnectMainBLE();
         }
     }
 

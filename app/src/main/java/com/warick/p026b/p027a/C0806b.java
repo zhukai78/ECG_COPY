@@ -1,8 +1,8 @@
 package com.warick.p026b.p027a;
 
 import com.hopetruly.ecg.ECGApplication;
-import com.warick.p025a.C0800c;
-import com.warick.p025a.C0801d;
+import com.warick.p025a.GpsBean;
+import com.warick.p025a.GpsManagerHelper;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -13,11 +13,11 @@ public class C0806b {
     /* renamed from: a */
     public static void m2927a(ECGApplication eCGApplication) {
         String str;
-        if (C0801d.m2916e() != null) {
+        if (GpsManagerHelper.mGpsManagerHelper() != null) {
             StringBuffer stringBuffer = new StringBuffer();
-            stringBuffer.append(eCGApplication.f2091l.mo2680c());
+            stringBuffer.append(eCGApplication.appSosConf.mo2680c());
             stringBuffer.append(" [ECG Air info:");
-            C0800c g = C0801d.m2916e().mo2890g();
+            GpsBean g = GpsManagerHelper.mGpsManagerHelper().getGpsBean();
             stringBuffer.append(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.CHINA).format(new Date(System.currentTimeMillis())));
             if (g == null) {
                 str = "(No GPS location information)]";
@@ -27,12 +27,12 @@ public class C0806b {
                 stringBuffer.append(", latitude:");
                 stringBuffer.append(g.mo2885b());
                 stringBuffer.append(", address:");
-                stringBuffer.append(C0801d.m2916e().mo2889f());
+                stringBuffer.append(GpsManagerHelper.mGpsManagerHelper().mo2889f());
                 str = ")]";
             }
             stringBuffer.append(str);
-            boolean[] b = eCGApplication.f2091l.mo2679b();
-            String[] a = eCGApplication.f2091l.mo2678a();
+            boolean[] b = eCGApplication.appSosConf.mo2679b();
+            String[] a = eCGApplication.appSosConf.mo2678a();
             int i = 0;
             for (boolean z : b) {
                 if (z) {

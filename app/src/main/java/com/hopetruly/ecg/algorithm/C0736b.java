@@ -58,7 +58,7 @@ public class C0736b {
     /* renamed from: k */
     private void m2587k() {
         if (!this.f2742k) {
-            switch (this.f2734a.f2085f.mo2656h()) {
+            switch (this.f2734a.appECGConf.mo2656h()) {
                 case 0:
                     C0766b.m2755a(this.f2737f, 1, 100);
                     break;
@@ -80,7 +80,7 @@ public class C0736b {
     /* renamed from: a */
     public void mo2449a() {
         if (this.f2742k) {
-            switch (this.f2734a.f2085f.mo2656h()) {
+            switch (this.f2734a.appECGConf.mo2656h()) {
                 case 0:
                     C0766b.m2754a();
                     break;
@@ -109,7 +109,7 @@ public class C0736b {
             } else {
                 this.f2741j = date.getTime();
             }
-            if (this.f2740i != 0 && this.f2741j != 0 && this.f2741j - this.f2740i >= ((long) (this.f2734a.f2085f.mo2664l() * 1000))) {
+            if (this.f2740i != 0 && this.f2741j != 0 && this.f2741j - this.f2740i >= ((long) (this.f2734a.appECGConf.mo2664l() * 1000))) {
                 this.f2740i = 0;
                 this.f2741j = 0;
                 m2587k();
@@ -124,7 +124,7 @@ public class C0736b {
 
     /* renamed from: b */
     public boolean mo2451b() {
-        return this.f2734a.f2085f.mo2655g();
+        return this.f2734a.appECGConf.mo2655g();
     }
 
     /* renamed from: c */
@@ -163,16 +163,16 @@ public class C0736b {
 
     /* renamed from: h */
     public boolean mo2457h() {
-        if (!this.f2734a.f2085f.mo2655g() || this.f2743l) {
+        if (!this.f2734a.appECGConf.mo2655g() || this.f2743l) {
             return false;
         }
         int i = 0;
         int i2 = 0;
         for (int i3 = 0; i3 < f2732c; i3++) {
-            if (this.f2739h[i3] > this.f2734a.f2085f.mo2650e()) {
+            if (this.f2739h[i3] > this.f2734a.appECGConf.mo2650e()) {
                 i++;
             }
-            if (this.f2739h[i3] < this.f2734a.f2085f.mo2652f()) {
+            if (this.f2739h[i3] < this.f2734a.appECGConf.mo2652f()) {
                 i2++;
             }
         }

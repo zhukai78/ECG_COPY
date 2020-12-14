@@ -9,7 +9,7 @@ import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import com.warick.jni.filter.Fir;
 
 /* renamed from: com.hopetruly.ecg.algorithm.c */
-public class C0737c {
+public class StepCounter {
 
     /* renamed from: a */
     Context f2744a;
@@ -41,7 +41,7 @@ public class C0737c {
     /* renamed from: j */
     private long f2753j = 0;
 
-    public C0737c(Context context, int i, int i2) {
+    public StepCounter(Context context, int i, int i2) {
         this.f2744a = context;
         if (i > 0) {
             this.f2745b = i;

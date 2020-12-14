@@ -1,7 +1,7 @@
 package com.hopetruly.ecg.entity;
 
 /* renamed from: com.hopetruly.ecg.entity.a */
-public class C0748a {
+public class ECGConf {
 
     /* renamed from: a */
     public static final String f2802a = null;
@@ -51,12 +51,12 @@ public class C0748a {
     }
 
     /* renamed from: a */
-    public void mo2642a(int i) {
+    public void setECG_MESURE_TIME(int i) {
         this.f2803b = i;
     }
 
     /* renamed from: a */
-    public void mo2643a(boolean z) {
+    public void setECG_ALARM_ENABLE(boolean z) {
         this.f2811j = z;
     }
 
@@ -66,7 +66,7 @@ public class C0748a {
     }
 
     /* renamed from: b */
-    public void mo2645b(int i) {
+    public void setECG_AUTO_SAVE(int i) {
         this.f2805d = i;
     }
 
@@ -76,7 +76,7 @@ public class C0748a {
     }
 
     /* renamed from: c */
-    public void mo2647c(int i) {
+    public void setECG_AUTO_UPLOAD(int i) {
         this.f2806e = i;
     }
 
@@ -86,7 +86,7 @@ public class C0748a {
     }
 
     /* renamed from: d */
-    public void mo2649d(int i) {
+    public void setECG_REALTIME_UPLOAD(int i) {
         this.f2810i = i;
     }
 
@@ -96,7 +96,7 @@ public class C0748a {
     }
 
     /* renamed from: e */
-    public void mo2651e(int i) {
+    public void setECG_ALARM_RATE_MAX(int i) {
         this.f2812k = i;
     }
 
@@ -106,12 +106,12 @@ public class C0748a {
     }
 
     /* renamed from: f */
-    public void mo2653f(int i) {
+    public void setECG_ALARM_RATE_MIN(int i) {
         this.f2813l = i;
     }
 
     /* renamed from: g */
-    public void mo2654g(int i) {
+    public void setECG_ALARM_TYPE(int i) {
         this.f2814m = i;
     }
 
@@ -126,7 +126,7 @@ public class C0748a {
     }
 
     /* renamed from: h */
-    public void mo2657h(int i) {
+    public void setECG_WAVEFORM_ANALYSIS(int i) {
         this.f2807f = i;
     }
 
@@ -136,7 +136,7 @@ public class C0748a {
     }
 
     /* renamed from: i */
-    public void mo2659i(int i) {
+    public void setECG_SMS_ALARM(int i) {
         this.f2808g = i;
     }
 
@@ -146,7 +146,7 @@ public class C0748a {
     }
 
     /* renamed from: j */
-    public void mo2661j(int i) {
+    public void setECG_ENABLE_MARK(int i) {
         this.f2809h = i;
     }
 
@@ -156,7 +156,7 @@ public class C0748a {
     }
 
     /* renamed from: k */
-    public void mo2663k(int i) {
+    public void setECG_ALARM_DELAY(int i) {
         this.f2804c = i;
     }
 
@@ -166,7 +166,7 @@ public class C0748a {
     }
 
     /* renamed from: l */
-    public void mo2665l(int i) {
+    public void setECG_MARKING_PERIOD(int i) {
         this.f2815n = i;
     }
 

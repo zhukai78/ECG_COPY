@@ -14,7 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /* renamed from: com.hopetruly.ecg.b.b */
-public class C0740b {
+public class SqlManager {
 
     /* renamed from: a */
     C0739a f2766a;
@@ -22,7 +22,7 @@ public class C0740b {
     /* renamed from: b */
     private SQLiteDatabase f2767b = null;
 
-    public C0740b(Context context) {
+    public SqlManager(Context context) {
         this.f2766a = C0739a.m2607a(context);
     }
 

@@ -21,25 +21,25 @@ import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import com.hopetruly.ecg.ECGApplication;
 import com.hopetruly.ecg.R;
 import com.hopetruly.ecg.device.Sensor;
-import com.hopetruly.ecg.p022b.C0740b;
+import com.hopetruly.ecg.p022b.SqlManager;
 
 
 /* renamed from: com.hopetruly.ecg.activity.b */
-public class C0723b extends Fragment {
+public class MainHomeFragment extends Fragment {
     /* access modifiers changed from: private */
 
     /* renamed from: a */
-    public static final String f2692a = "b";
+    public static final String TAG = "b";
     /* access modifiers changed from: private */
 
     /* renamed from: b */
     public Resources f2693b;
 
     /* renamed from: c */
-    private RelativeLayout f2694c;
+    private RelativeLayout rl_ecg_rec_list_btn;
 
     /* renamed from: d */
-    private RelativeLayout f2695d;
+    private RelativeLayout rl_dev_status;
     /* access modifiers changed from: private */
 
     /* renamed from: e */
@@ -58,15 +58,15 @@ public class C0723b extends Fragment {
     /* access modifiers changed from: private */
 
     /* renamed from: i */
-    public TextView f2700i;
+    public TextView tv_dev_bar_title;
     /* access modifiers changed from: private */
 
     /* renamed from: j */
-    public TextView f2701j;
+    public TextView tv_home_dev_status;
     /* access modifiers changed from: private */
 
     /* renamed from: k */
-    public ImageView f2702k;
+    public ImageView iv_dev_icon_img;
 
     /* renamed from: l */
     private boolean f2703l = true;
@@ -80,14 +80,14 @@ public class C0723b extends Fragment {
         public void onReceive(Context context, Intent intent) {
             String action = intent.getAction();
             if (action.equals("com.hopetruly.ec.services.ACTION_GATT_DISCONNECTED")) {
-                C0723b.this.f2700i.setText(C0723b.this.f2693b.getString(R.string.l_scan_dev));
-                C0723b.this.f2701j.setText(C0723b.this.f2693b.getString(R.string.l_status_disconnect));
-                C0723b.this.f2702k.setImageResource(R.drawable.dev_note);
-                C0723b.this.f2698g.setVisibility(View.VISIBLE);
-                C0723b.this.f2696e.setVisibility(View.GONE);
-                C0723b.this.f2697f.setVisibility(View.GONE);
+                MainHomeFragment.this.tv_dev_bar_title.setText(MainHomeFragment.this.f2693b.getString(R.string.l_scan_dev));
+                MainHomeFragment.this.tv_home_dev_status.setText(MainHomeFragment.this.f2693b.getString(R.string.l_status_disconnect));
+                MainHomeFragment.this.iv_dev_icon_img.setImageResource(R.drawable.dev_note);
+                MainHomeFragment.this.f2698g.setVisibility(View.VISIBLE);
+                MainHomeFragment.this.f2696e.setVisibility(View.GONE);
+                MainHomeFragment.this.f2697f.setVisibility(View.GONE);
             } else if (action.equals("com.hopetruly.ec.services.ACTION_GATT_DATA_NOTIFY") && intent.getStringExtra("com.hopetruly.ec.services.EXTRA_UUID").equals(Sensor.BATTERY.getData().toString())) {
-                C0723b.this.m2567a(Sensor.BATTERY.convertBAT(intent.getByteArrayExtra("com.hopetruly.ec.services.EXTRA_DATA")));
+                MainHomeFragment.this.m2567a(Sensor.BATTERY.convertBAT(intent.getByteArrayExtra("com.hopetruly.ec.services.EXTRA_DATA")));
             }
         }
     };
@@ -98,22 +98,22 @@ public class C0723b extends Fragment {
         ImageView imageView;
         int i2;
         if (i > 80) {
-            imageView = this.f2702k;
+            imageView = this.iv_dev_icon_img;
             i2 = R.drawable.icon_power_1;
         } else if (i > 60) {
-            imageView = this.f2702k;
+            imageView = this.iv_dev_icon_img;
             i2 = R.drawable.icon_power_2;
         } else if (i > 40) {
-            imageView = this.f2702k;
+            imageView = this.iv_dev_icon_img;
             i2 = R.drawable.icon_power_3;
         } else if (i > 20) {
-            imageView = this.f2702k;
+            imageView = this.iv_dev_icon_img;
             i2 = R.drawable.icon_power_4;
         } else if (i > 0) {
-            imageView = this.f2702k;
+            imageView = this.iv_dev_icon_img;
             i2 = R.drawable.icon_power_5;
         } else {
-            imageView = this.f2702k;
+            imageView = this.iv_dev_icon_img;
             i2 = R.drawable.icon_power_6;
         }
         imageView.setImageResource(i2);
@@ -124,7 +124,7 @@ public class C0723b extends Fragment {
     }
 
     public void onDestroy() {
-        Log.d(f2692a, "onDestroy");
+        Log.d(TAG, "onDestroy");
         if (!this.f2703l) {
             this.f2703l = true;
             LocalBroadcastManager.getInstance(getActivity().getApplicationContext()).unregisterReceiver(this.f2705n);
@@ -133,66 +133,66 @@ public class C0723b extends Fragment {
     }
 
     public void onStart() {
-        Log.d(f2692a, "onStart");
+        Log.d(TAG, "onStart");
         this.f2703l = false;
         this.f2704m = (FunChooseActivity) getActivity();
-        int d = new C0740b(getActivity()).mo2476d(((ECGApplication) getActivity().getApplication()).f2081b.getId());
+        int d = new SqlManager(getActivity()).mo2476d(((ECGApplication) getActivity().getApplication()).mUserInfo.getId());
         this.f2699h = (TextView) getView().findViewById(R.id.home_rec_num);
         this.f2699h.setText(String.valueOf(d));
-        this.f2694c = (RelativeLayout) getView().findViewById(R.id.ecg_rec_list_btn);
-        this.f2694c.setOnClickListener(new View.OnClickListener() {
+        this.rl_ecg_rec_list_btn = (RelativeLayout) getView().findViewById(R.id.ecg_rec_list_btn);
+        this.rl_ecg_rec_list_btn.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
-                C0723b.this.f2704m.startActivity(new Intent(C0723b.this.f2704m, EcgRecListActivity.class));
+                MainHomeFragment.this.f2704m.startActivity(new Intent(MainHomeFragment.this.f2704m, EcgRecListActivity.class));
             }
         });
         this.f2693b = getView().getResources();
-        this.f2700i = (TextView) getView().findViewById(R.id.dev_bar_title);
-        this.f2701j = (TextView) getView().findViewById(R.id.home_dev_status);
-        this.f2702k = (ImageView) getView().findViewById(R.id.dev_icon_img);
+        this.tv_dev_bar_title = (TextView) getView().findViewById(R.id.dev_bar_title);
+        this.tv_home_dev_status = (TextView) getView().findViewById(R.id.home_dev_status);
+        this.iv_dev_icon_img = (ImageView) getView().findViewById(R.id.dev_icon_img);
         if (this.f2704m.mo2181a()) {
-            this.f2700i.setText(this.f2693b.getString(R.string.l_close_dev));
-            this.f2701j.setText(this.f2693b.getString(R.string.l_status_connected));
+            this.tv_dev_bar_title.setText(this.f2693b.getString(R.string.l_close_dev));
+            this.tv_home_dev_status.setText(this.f2693b.getString(R.string.l_status_connected));
             m2567a(this.f2704m.mo2182b());
         } else {
-            this.f2700i.setText(this.f2693b.getString(R.string.l_scan_dev));
-            this.f2701j.setText(this.f2693b.getString(R.string.l_status_disconnect));
-            this.f2702k.setImageResource(R.drawable.dev_note);
+            this.tv_dev_bar_title.setText(this.f2693b.getString(R.string.l_scan_dev));
+            this.tv_home_dev_status.setText(this.f2693b.getString(R.string.l_status_disconnect));
+            this.iv_dev_icon_img.setImageResource(R.drawable.dev_note);
         }
-        this.f2695d = (RelativeLayout) getView().findViewById(R.id.dev_status);
-        this.f2695d.setOnClickListener(new View.OnClickListener() {
+        this.rl_dev_status = (RelativeLayout) getView().findViewById(R.id.dev_status);
+        this.rl_dev_status.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
-                if (C0723b.this.f2704m.mo2181a()) {
-                    C0723b.this.f2704m.mo2183c();
+                if (MainHomeFragment.this.f2704m.mo2181a()) {
+                    MainHomeFragment.this.f2704m.showdisconnectedBleDialog();
                     return;
                 }
-                C0723b.this.f2704m.startActivity(new Intent(C0723b.this.f2704m, ScanActivity.class));
+                MainHomeFragment.this.f2704m.startActivity(new Intent(MainHomeFragment.this.f2704m, ScanActivity.class));
             }
         });
         this.f2698g = (ImageView) getView().findViewById(R.id.ecg_conn_btn);
         this.f2698g.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
-                if (!C0723b.this.f2704m.mo2181a()) {
-                    C0723b.this.startActivity(new Intent(C0723b.this.f2704m, ScanActivity.class));
+                if (!MainHomeFragment.this.f2704m.mo2181a()) {
+                    MainHomeFragment.this.startActivity(new Intent(MainHomeFragment.this.f2704m, ScanActivity.class));
                 }
             }
         });
         this.f2696e = (ImageView) getView().findViewById(R.id.ecg_start);
         this.f2696e.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
-                if (C0723b.this.f2704m.mo2181a()) {
-                    if (C0723b.this.f2704m.f2221h != null && C0723b.this.f2704m.f2221h.f2094o != null && C0723b.this.f2704m.f2221h.f2094o.mo2741o() && !C0723b.this.f2704m.f2221h.f2094o.mo2739m()) {
-                        Log.e(C0723b.f2692a, "stopStep failed..");
+                if (MainHomeFragment.this.f2704m.mo2181a()) {
+                    if (MainHomeFragment.this.f2704m.fcECGApplication != null && MainHomeFragment.this.f2704m.fcECGApplication.appMainService != null && MainHomeFragment.this.f2704m.fcECGApplication.appMainService.mo2741o() && !MainHomeFragment.this.f2704m.fcECGApplication.appMainService.mo2739m()) {
+                        Log.e(MainHomeFragment.TAG, "stopStep failed..");
                     }
-                    C0723b.this.f2704m.startActivity(new Intent(C0723b.this.f2704m, EcgTypeSelectActivity.class));
+                    MainHomeFragment.this.f2704m.startActivity(new Intent(MainHomeFragment.this.f2704m, EcgTypeSelectActivity.class));
                 }
             }
         });
         this.f2697f = (ImageView) getView().findViewById(R.id.step_start);
         this.f2697f.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
-                if (C0723b.this.f2704m.mo2181a()) {
-                    C0723b.this.f2704m.f2221h.f2087h.mo2673b(1);
-                    ((RadioButton) C0723b.this.f2704m.findViewById(R.id.nav_step)).setChecked(true);
+                if (MainHomeFragment.this.f2704m.mo2181a()) {
+                    MainHomeFragment.this.f2704m.fcECGApplication.appPedometerConf.mo2673b(1);
+                    ((RadioButton) MainHomeFragment.this.f2704m.findViewById(R.id.nav_step)).setChecked(true);
                 }
             }
         });

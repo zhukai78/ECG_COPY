@@ -18,7 +18,7 @@ import com.hopetruly.ecg.entity.ECGRecord;
 import com.hopetruly.ecg.p021a.C0566a;
 import com.hopetruly.ecg.p021a.C0569b;
 import com.hopetruly.ecg.util.C0770f;
-import com.hopetruly.ecg.util.C0771g;
+import com.hopetruly.ecg.util.LogUtils;
 
 import java.io.File;
 import java.io.UnsupportedEncodingException;
@@ -37,7 +37,7 @@ public class FileService extends Service {
     C0569b f2836b;
 
     /* renamed from: c */
-    private final IBinder f2837c = new C0755a();
+    private final IBinder f2837c = new FileServiceBinder();
 
     /* renamed from: d */
     private C0756b f2838d;
@@ -46,12 +46,12 @@ public class FileService extends Service {
     private C0757c f2839e;
 
     /* renamed from: com.hopetruly.ecg.services.FileService$a */
-    public class C0755a extends Binder {
-        public C0755a() {
+    public class FileServiceBinder extends Binder {
+        public FileServiceBinder() {
         }
 
         /* renamed from: a */
-        public FileService mo2708a() {
+        public FileService getFileService() {
             return FileService.this;
         }
     }
@@ -192,7 +192,7 @@ public class FileService extends Service {
                         }
                     } else {
                         while (FileService.this.f2836b.mo2102a() == null) {
-                            C0771g.m2787d("FileService", "fileCache not complete wait");
+                            LogUtils.logE("FileService", "fileCache not complete wait");
                             Thread.sleep(500);
                         }
                         C0770f.m2778a(FileService.this.getApplicationContext(), stringBuffer2, FileService.this.f2836b.mo2102a(), eCGRecord.getEcgEntity());

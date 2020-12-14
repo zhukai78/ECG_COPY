@@ -6,7 +6,7 @@ import android.view.MenuItem;
 
 import com.hopetruly.ecg.R;
 
-public class HelpActivity extends C0721a {
+public class HelpActivity extends BaseActivity {
     /* access modifiers changed from: protected */
     public void onCreate(Bundle bundle) {
         super.onCreate(bundle);

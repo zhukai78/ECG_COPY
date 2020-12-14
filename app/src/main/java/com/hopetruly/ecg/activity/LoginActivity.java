@@ -20,81 +20,81 @@ import android.widget.Toast;
 import com.hopetruly.ecg.ECGApplication;
 import com.hopetruly.ecg.R;
 import com.hopetruly.ecg.entity.UserInfo;
-import com.hopetruly.ecg.util.C0771g;
-import com.hopetruly.part.net.C0791b;
+import com.hopetruly.ecg.util.LogUtils;
+import com.hopetruly.part.net.MyHttpHelper;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class LoginActivity extends C0721a {
+public class LoginActivity extends BaseActivity {
 
     /* renamed from: a */
-    final String f2370a = "LoginActivity";
+    final String TAG = "LoginActivity";
 
     /* renamed from: c */
-    C0648b f2371c;
+    LoginmAsyncTask mLoginmAsyncTask;
 
     /* renamed from: d */
-    C0647a f2372d;
+    Get_q_user_infoAsyntask mGet_q_user_infoAsyntask;
 
     /* renamed from: e */
-    ProgressDialog f2373e;
+    ProgressDialog login_loginDialog;
 
     /* renamed from: f */
     private final int f2374f = 1;
     /* access modifiers changed from: private */
 
     /* renamed from: g */
-    public EditText f2375g;
+    public EditText edt_user_name;
     /* access modifiers changed from: private */
 
     /* renamed from: h */
-    public EditText f2376h;
+    public EditText edt_user_pwd;
 
     /* renamed from: i */
-    private TextView f2377i;
+    private TextView tv_register;
     /* access modifiers changed from: private */
 
     /* renamed from: j */
-    public RelativeLayout f2378j;
+    public RelativeLayout rv_login_btn_div;
     /* access modifiers changed from: private */
 
     /* renamed from: k */
-    public ECGApplication f2379k;
+    public ECGApplication loginEcgApp;
     /* access modifiers changed from: private */
 
     /* renamed from: l */
-    public String f2380l;
+    public String muserName;
     /* access modifiers changed from: private */
 
     /* renamed from: m */
-    public String f2381m;
+    public String muserPassword;
     /* access modifiers changed from: private */
 
     /* renamed from: n */
-    public SharedPreferences.Editor f2382n;
+    public SharedPreferences.Editor loginEditor;
 
     /* renamed from: o */
-    private View.OnClickListener f2383o = new View.OnClickListener() {
+    private View.OnClickListener loginOnClickListener = new View.OnClickListener() {
         public void onClick(View view) {
             Context applicationContext;
             LoginActivity loginActivity;
             int i;
             int id = view.getId();
             if (id == R.id.login_btn_div) {
-                String unused = LoginActivity.this.f2380l = LoginActivity.this.f2375g.getText().toString();
-                String unused2 = LoginActivity.this.f2381m = LoginActivity.this.f2376h.getText().toString();
-                String unused3 = LoginActivity.this.f2380l = LoginActivity.this.f2380l.trim();
-                String unused4 = LoginActivity.this.f2381m = LoginActivity.this.f2381m.trim();
+                String unused = LoginActivity.this.muserName = LoginActivity.this.edt_user_name.getText().toString();
+                String unused2 = LoginActivity.this.muserPassword = LoginActivity.this.edt_user_pwd.getText().toString();
+                String unused3 = LoginActivity.this.muserName = LoginActivity.this.muserName.trim();
+                String unused4 = LoginActivity.this.muserPassword = LoginActivity.this.muserPassword.trim();
                 boolean z = true;
-                if ((LoginActivity.this.f2380l == null) || (LoginActivity.this.f2380l.length() < 1)) {
+                if ((LoginActivity.this.muserName == null) || (LoginActivity.this.muserName.length() < 1)) {
                     applicationContext = LoginActivity.this.getApplicationContext();
                     loginActivity = LoginActivity.this;
                     i = R.string.p_no_username;
                 } else {
-                    boolean z2 = LoginActivity.this.f2381m == null;
-                    if (LoginActivity.this.f2381m.length() >= 1) {
+                    boolean z2 = LoginActivity.this.muserPassword == null;
+                    if (LoginActivity.this.muserPassword.length() >= 1) {
                         z = false;
                     }
                     if (z2 || z) {
@@ -102,10 +102,10 @@ public class LoginActivity extends C0721a {
                         loginActivity = LoginActivity.this;
                         i = R.string.p_no_pwd;
                     } else {
-                        String string = LoginActivity.this.f2379k.f2082c.getString("userName", (String) null);
-                        String string2 = LoginActivity.this.f2379k.f2082c.getString("userPassword", (String) null);
-                        if (string == null || string2 == null || ((string.equals(LoginActivity.this.f2380l) && string2.equals(LoginActivity.this.f2381m)) || LoginActivity.this.f2379k.f2083d.mo2688d() != 0)) {
-                            LoginActivity.this.m2404a(LoginActivity.this.f2380l, LoginActivity.this.f2381m);
+                        String string = LoginActivity.this.loginEcgApp.spPerson_info.getString("userName", (String) null);
+                        String string2 = LoginActivity.this.loginEcgApp.spPerson_info.getString("userPassword", (String) null);
+                        if (string == null || string2 == null || ((string.equals(LoginActivity.this.muserName) && string2.equals(LoginActivity.this.muserPassword)) || LoginActivity.this.loginEcgApp.mSwConf.getAgree_flag() != 0)) {
+                            LoginActivity.this.put_in_login(LoginActivity.this.muserName, LoginActivity.this.muserPassword);
                             return;
                         } else {
                             LoginActivity.this.m2411d();
@@ -121,8 +121,8 @@ public class LoginActivity extends C0721a {
     };
 
     /* renamed from: com.hopetruly.ecg.activity.LoginActivity$a */
-    class C0647a extends AsyncTask<Void, Void, String> {
-        C0647a() {
+    class Get_q_user_infoAsyntask extends AsyncTask<Void, Void, String> {
+        Get_q_user_infoAsyntask() {
         }
 
         /* access modifiers changed from: protected */
@@ -131,49 +131,49 @@ public class LoginActivity extends C0721a {
             if (isCancelled()) {
                 return null;
             }
-            return C0791b.m2879b();
+            return MyHttpHelper.get_q_user_info();
         }
 
         /* access modifiers changed from: protected */
         /* renamed from: a */
         public void onPostExecute(String str) {
             if (!isCancelled()) {
-                LoginActivity.this.m2415f();
+                LoginActivity.this.dismissLogin_loginDialog();
                 if (str != null) {
-                    C0771g.m2784a("LoginActivity", str);
+                    LogUtils.logI("LoginActivity", str);
                     try {
                         JSONArray jSONArray = new JSONArray(str);
                         if (jSONArray.getInt(0) == 0) {
                             JSONObject jSONObject = jSONArray.getJSONObject(2);
-                            LoginActivity.this.f2379k.f2081b.setId(jSONObject.getString("user_id"));
-                            LoginActivity.this.f2379k.f2081b.setFirstName(jSONObject.getString("user_first_name"));
-                            LoginActivity.this.f2379k.f2081b.setLastName(jSONObject.getString("user_last_name"));
-                            LoginActivity.this.f2379k.f2081b.setAge(jSONObject.getInt("user_age"));
-                            LoginActivity.this.f2379k.f2081b.setSex(jSONObject.getString("user_sex"));
-                            LoginActivity.this.f2379k.f2081b.setBirthday(jSONObject.getString("user_birthday"));
-                            LoginActivity.this.f2379k.f2081b.setHeight(jSONObject.getString("user_height"));
-                            LoginActivity.this.f2379k.f2081b.setWeight(jSONObject.getString("user_weight"));
-                            LoginActivity.this.f2379k.f2081b.setProfession(jSONObject.getString("user_profession"));
-                            LoginActivity.this.f2379k.f2081b.setEmail(jSONObject.getString("user_email"));
-                            LoginActivity.this.f2379k.f2081b.setPhone(jSONObject.getString("user_phone"));
-                            LoginActivity.this.f2379k.f2081b.setAddress(jSONObject.getString("user_addr"));
-                            SharedPreferences.Editor edit = LoginActivity.this.f2379k.f2082c.edit();
-                            edit.putString("userId", LoginActivity.this.f2379k.f2081b.getId());
-                            edit.putString("birthday", LoginActivity.this.f2379k.f2081b.getBirthday());
-                            edit.putInt("age", LoginActivity.this.f2379k.f2081b.getAge());
-                            edit.putString("height", LoginActivity.this.f2379k.f2081b.getHeight());
-                            edit.putString("weight", LoginActivity.this.f2379k.f2081b.getWeight());
-                            edit.putString("medications", LoginActivity.this.f2379k.f2081b.getMedications());
-                            edit.putString("sex", LoginActivity.this.f2379k.f2081b.getSex());
-                            edit.putString("smoker", LoginActivity.this.f2379k.f2081b.getSmoker());
-                            edit.putString("profession", LoginActivity.this.f2379k.f2081b.getProfession());
-                            edit.putString("email", LoginActivity.this.f2379k.f2081b.getEmail());
-                            edit.putString("phone", LoginActivity.this.f2379k.f2081b.getPhone());
-                            edit.putString("address", LoginActivity.this.f2379k.f2081b.getAddress());
-                            edit.putString("firstName", LoginActivity.this.f2379k.f2081b.getFirstName());
-                            edit.putString("lastName", LoginActivity.this.f2379k.f2081b.getLastName());
+                            LoginActivity.this.loginEcgApp.mUserInfo.setId(jSONObject.getString("user_id"));
+                            LoginActivity.this.loginEcgApp.mUserInfo.setFirstName(jSONObject.getString("user_first_name"));
+                            LoginActivity.this.loginEcgApp.mUserInfo.setLastName(jSONObject.getString("user_last_name"));
+                            LoginActivity.this.loginEcgApp.mUserInfo.setAge(jSONObject.getInt("user_age"));
+                            LoginActivity.this.loginEcgApp.mUserInfo.setSex(jSONObject.getString("user_sex"));
+                            LoginActivity.this.loginEcgApp.mUserInfo.setBirthday(jSONObject.getString("user_birthday"));
+                            LoginActivity.this.loginEcgApp.mUserInfo.setHeight(jSONObject.getString("user_height"));
+                            LoginActivity.this.loginEcgApp.mUserInfo.setWeight(jSONObject.getString("user_weight"));
+                            LoginActivity.this.loginEcgApp.mUserInfo.setProfession(jSONObject.getString("user_profession"));
+                            LoginActivity.this.loginEcgApp.mUserInfo.setEmail(jSONObject.getString("user_email"));
+                            LoginActivity.this.loginEcgApp.mUserInfo.setPhone(jSONObject.getString("user_phone"));
+                            LoginActivity.this.loginEcgApp.mUserInfo.setAddress(jSONObject.getString("user_addr"));
+                            SharedPreferences.Editor edit = LoginActivity.this.loginEcgApp.spPerson_info.edit();
+                            edit.putString("userId", LoginActivity.this.loginEcgApp.mUserInfo.getId());
+                            edit.putString("birthday", LoginActivity.this.loginEcgApp.mUserInfo.getBirthday());
+                            edit.putInt("age", LoginActivity.this.loginEcgApp.mUserInfo.getAge());
+                            edit.putString("height", LoginActivity.this.loginEcgApp.mUserInfo.getHeight());
+                            edit.putString("weight", LoginActivity.this.loginEcgApp.mUserInfo.getWeight());
+                            edit.putString("medications", LoginActivity.this.loginEcgApp.mUserInfo.getMedications());
+                            edit.putString("sex", LoginActivity.this.loginEcgApp.mUserInfo.getSex());
+                            edit.putString("smoker", LoginActivity.this.loginEcgApp.mUserInfo.getSmoker());
+                            edit.putString("profession", LoginActivity.this.loginEcgApp.mUserInfo.getProfession());
+                            edit.putString("email", LoginActivity.this.loginEcgApp.mUserInfo.getEmail());
+                            edit.putString("phone", LoginActivity.this.loginEcgApp.mUserInfo.getPhone());
+                            edit.putString("address", LoginActivity.this.loginEcgApp.mUserInfo.getAddress());
+                            edit.putString("firstName", LoginActivity.this.loginEcgApp.mUserInfo.getFirstName());
+                            edit.putString("lastName", LoginActivity.this.loginEcgApp.mUserInfo.getLastName());
                             edit.commit();
-                            LoginActivity.this.m2416g();
+                            LoginActivity.this.startToMain();
                             return;
                         }
                         int i = jSONArray.getInt(2);
@@ -195,13 +195,13 @@ public class LoginActivity extends C0721a {
 
         /* access modifiers changed from: protected */
         public void onPreExecute() {
-            LoginActivity.this.f2373e.setMessage(LoginActivity.this.getResources().getString(R.string.get_user_info));
+            LoginActivity.this.login_loginDialog.setMessage(LoginActivity.this.getResources().getString(R.string.get_user_info));
         }
     }
 
     /* renamed from: com.hopetruly.ecg.activity.LoginActivity$b */
-    class C0648b extends AsyncTask<String, Void, String> {
-        C0648b() {
+    class LoginmAsyncTask extends AsyncTask<String, Void, String> {
+        LoginmAsyncTask() {
         }
 
         /* access modifiers changed from: protected */
@@ -210,7 +210,7 @@ public class LoginActivity extends C0721a {
             if (isCancelled()) {
                 return null;
             }
-            return C0791b.m2874a(strArr[0], strArr[1]);
+            return MyHttpHelper.get_ecg_file_list(strArr[0], strArr[1]);
         }
 
         /* access modifiers changed from: protected */
@@ -218,7 +218,7 @@ public class LoginActivity extends C0721a {
         public void onPostExecute(String str) {
             Toast makeText;
             if (!isCancelled()) {
-                LoginActivity.this.f2373e.setMessage(LoginActivity.this.getResources().getString(R.string.login_authe_success));
+                LoginActivity.this.login_loginDialog.setMessage(LoginActivity.this.getResources().getString(R.string.login_authe_success));
                 if (str != null) {
                     Log.i("LoginActivity", "result>>" + str);
                     try {
@@ -226,29 +226,29 @@ public class LoginActivity extends C0721a {
                         int i = jSONArray.getInt(0);
                         if (i == 0) {
                             Toast.makeText(LoginActivity.this.getApplicationContext(), LoginActivity.this.getString(R.string.p_login_success), 0).show();
-                            if (LoginActivity.this.f2379k.f2083d.mo2688d() == 1) {
-                                LoginActivity.this.f2379k.f2083d.mo2689d(0);
-                                LoginActivity.this.f2382n.putInt("SW_AGREE_FLAG", LoginActivity.this.f2379k.f2083d.mo2688d());
-                                LoginActivity.this.f2382n.commit();
+                            if (LoginActivity.this.loginEcgApp.mSwConf.getAgree_flag() == 1) {
+                                LoginActivity.this.loginEcgApp.mSwConf.setAgree_flag(0);
+                                LoginActivity.this.loginEditor.putInt("SW_AGREE_FLAG", LoginActivity.this.loginEcgApp.mSwConf.getAgree_flag());
+                                LoginActivity.this.loginEditor.commit();
                             }
                             String string = jSONArray.getString(2);
                             if (string != null) {
                                 Log.e("LoginActivity", "Id:" + string);
-                                LoginActivity.this.f2379k.f2081b.setId(string);
+                                LoginActivity.this.loginEcgApp.mUserInfo.setId(string);
                             }
-                            SharedPreferences.Editor edit = LoginActivity.this.f2379k.f2082c.edit();
-                            edit.putString("userId", LoginActivity.this.f2379k.f2081b.getId());
-                            edit.putString("userName", LoginActivity.this.f2380l);
-                            edit.putString("userPassword", LoginActivity.this.f2381m);
+                            SharedPreferences.Editor edit = LoginActivity.this.loginEcgApp.spPerson_info.edit();
+                            edit.putString("userId", LoginActivity.this.loginEcgApp.mUserInfo.getId());
+                            edit.putString("userName", LoginActivity.this.muserName);
+                            edit.putString("userPassword", LoginActivity.this.muserPassword);
                             edit.commit();
-                            LoginActivity.this.f2379k.f2083d.mo2685b(1);
-                            LoginActivity.this.f2379k.f2083d.mo2682a(1);
-                            LoginActivity.this.f2382n.putInt("SW_SAVE_ACCOUNT_AND_PASSWORD", LoginActivity.this.f2379k.f2083d.mo2684b());
-                            LoginActivity.this.f2382n.putInt("SW_AUTO_LOGIN", LoginActivity.this.f2379k.f2083d.mo2681a());
-                            LoginActivity.this.f2382n.commit();
-                            LoginActivity.this.m2409c();
-                            LoginActivity.this.f2379k.f2081b.setUserName(LoginActivity.this.f2380l);
-                            LoginActivity.this.f2379k.f2081b.setName(LoginActivity.this.f2380l);
+                            LoginActivity.this.loginEcgApp.mSwConf.setSW_SAVE_ACCOUNT_AND_PASSWORD(1);
+                            LoginActivity.this.loginEcgApp.mSwConf.setSW_AUTO_LOGIN(1);
+                            LoginActivity.this.loginEditor.putInt("SW_SAVE_ACCOUNT_AND_PASSWORD", LoginActivity.this.loginEcgApp.mSwConf.mo2684b());
+                            LoginActivity.this.loginEditor.putInt("SW_AUTO_LOGIN", LoginActivity.this.loginEcgApp.mSwConf.getAuto_login());
+                            LoginActivity.this.loginEditor.commit();
+                            LoginActivity.this.startmGet_q_user_info();
+                            LoginActivity.this.loginEcgApp.mUserInfo.setUserName(LoginActivity.this.muserName);
+                            LoginActivity.this.loginEcgApp.mUserInfo.setName(LoginActivity.this.muserName);
                             return;
                         }
                         int i2 = jSONArray.getInt(2);
@@ -261,31 +261,31 @@ public class LoginActivity extends C0721a {
                             makeText = Toast.makeText(LoginActivity.this.getApplicationContext(), LoginActivity.this.getString(R.string.p_pwd_err), 0);
                         }
                         makeText.show();
-                        LoginActivity.this.m2415f();
+                        LoginActivity.this.dismissLogin_loginDialog();
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
                 } else {
-                    LoginActivity.this.f2379k.f2083d.mo2689d(1);
+                    LoginActivity.this.loginEcgApp.mSwConf.setAgree_flag(1);
                     Toast.makeText(LoginActivity.this.getApplicationContext(), LoginActivity.this.getResources().getString(R.string.net_error), 0).show();
-                    LoginActivity.this.m2415f();
+                    LoginActivity.this.dismissLogin_loginDialog();
                 }
             }
         }
 
         /* access modifiers changed from: protected */
         public void onPreExecute() {
-            LoginActivity.this.m2413e();
+            LoginActivity.this.showLogin_loginDialog();
         }
     }
 
     /* access modifiers changed from: private */
     /* renamed from: a */
-    public void m2404a(String str, String str2) {
+    public void put_in_login(String str, String str2) {
         if (str != null && str2 != null) {
-            if (this.f2371c == null || this.f2371c.getStatus() != AsyncTask.Status.RUNNING) {
-                this.f2371c = new C0648b();
-                this.f2371c.execute(new String[]{str, str2});
+            if (this.mLoginmAsyncTask == null || this.mLoginmAsyncTask.getStatus() != AsyncTask.Status.RUNNING) {
+                this.mLoginmAsyncTask = new LoginmAsyncTask();
+                this.mLoginmAsyncTask.execute(new String[]{str, str2});
                 return;
             }
             Toast.makeText(getApplicationContext(), getString(R.string.p_in_login), 0).show();
@@ -293,36 +293,36 @@ public class LoginActivity extends C0721a {
     }
 
     /* renamed from: b */
-    private void m2407b() {
-        this.f2375g = (EditText) findViewById(R.id.user_name);
-        this.f2376h = (EditText) findViewById(R.id.user_pwd);
-        this.f2376h.setOnKeyListener(new View.OnKeyListener() {
+    private void initView() {
+        this.edt_user_name = (EditText) findViewById(R.id.user_name);
+        this.edt_user_pwd = (EditText) findViewById(R.id.user_pwd);
+        this.edt_user_pwd.setOnKeyListener(new View.OnKeyListener() {
             public boolean onKey(View view, int i, KeyEvent keyEvent) {
                 if (i == 66) {
-                    return LoginActivity.this.f2378j.performClick();
+                    return LoginActivity.this.rv_login_btn_div.performClick();
                 }
                 return false;
             }
         });
-        this.f2377i = (TextView) findViewById(R.id.register);
-        this.f2377i.setOnClickListener(this.f2383o);
-        this.f2378j = (RelativeLayout) findViewById(R.id.login_btn_div);
-        this.f2378j.setOnClickListener(this.f2383o);
-        if (this.f2379k.f2083d.mo2681a() == 1) {
-            this.f2380l = this.f2379k.f2081b.getName();
-            this.f2381m = this.f2379k.f2081b.getPassword();
-            this.f2375g.setText(this.f2380l);
-            this.f2376h.setText(this.f2381m);
-            m2404a(this.f2380l, this.f2381m);
+        this.tv_register = (TextView) findViewById(R.id.register);
+        this.tv_register.setOnClickListener(this.loginOnClickListener);
+        this.rv_login_btn_div = (RelativeLayout) findViewById(R.id.login_btn_div);
+        this.rv_login_btn_div.setOnClickListener(this.loginOnClickListener);
+        if (this.loginEcgApp.mSwConf.getAuto_login() == 1) {
+            this.muserName = this.loginEcgApp.mUserInfo.getName();
+            this.muserPassword = this.loginEcgApp.mUserInfo.getPassword();
+            this.edt_user_name.setText(this.muserName);
+            this.edt_user_pwd.setText(this.muserPassword);
+            put_in_login(this.muserName, this.muserPassword);
         }
     }
 
     /* access modifiers changed from: private */
     /* renamed from: c */
-    public void m2409c() {
-        if (this.f2372d == null || this.f2372d.getStatus() != AsyncTask.Status.RUNNING) {
-            this.f2372d = new C0647a();
-            this.f2372d.execute(new Void[0]);
+    public void startmGet_q_user_info() {
+        if (this.mGet_q_user_infoAsyntask == null || this.mGet_q_user_infoAsyntask.getStatus() != AsyncTask.Status.RUNNING) {
+            this.mGet_q_user_infoAsyntask = new Get_q_user_infoAsyntask();
+            this.mGet_q_user_infoAsyntask.execute(new Void[0]);
             return;
         }
         Toast.makeText(getApplicationContext(), getString(R.string.p_wait), 0).show();
@@ -336,34 +336,34 @@ public class LoginActivity extends C0721a {
 
     /* access modifiers changed from: private */
     /* renamed from: e */
-    public void m2413e() {
-        if (this.f2373e == null) {
-            this.f2373e = new ProgressDialog(this);
+    public void showLogin_loginDialog() {
+        if (this.login_loginDialog == null) {
+            this.login_loginDialog = new ProgressDialog(this);
         }
-        this.f2373e.setMessage(getResources().getString(R.string.p_login_login));
-        if (!this.f2373e.isShowing()) {
-            this.f2373e.show();
+        this.login_loginDialog.setMessage(getResources().getString(R.string.p_login_login));
+        if (!this.login_loginDialog.isShowing()) {
+            this.login_loginDialog.show();
         }
-        this.f2373e.setCanceledOnTouchOutside(false);
+        this.login_loginDialog.setCanceledOnTouchOutside(false);
     }
 
     /* access modifiers changed from: private */
     /* renamed from: f */
-    public void m2415f() {
-        if (this.f2373e != null && this.f2373e.isShowing()) {
-            this.f2373e.dismiss();
+    public void dismissLogin_loginDialog() {
+        if (this.login_loginDialog != null && this.login_loginDialog.isShowing()) {
+            this.login_loginDialog.dismiss();
         }
     }
 
     /* access modifiers changed from: private */
     /* renamed from: g */
-    public void m2416g() {
+    public void startToMain() {
         startActivity(new Intent(this, FunChooseActivity.class));
         finish();
     }
 
     /* renamed from: a */
-    public void mo2253a() {
+    public void showLogin_tipDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle(getResources().getString(R.string.Tip));
         builder.setMessage(getResources().getString(R.string.p_login_tip));
@@ -384,27 +384,27 @@ public class LoginActivity extends C0721a {
             if (i2 == 1000) {
                 String stringExtra = intent.getStringExtra("name");
                 String stringExtra2 = intent.getStringExtra("pwd");
-                this.f2375g.setText(stringExtra);
-                this.f2376h.setText(stringExtra2);
+                this.edt_user_name.setText(stringExtra);
+                this.edt_user_pwd.setText(stringExtra2);
             } else if (i2 == 1001) {
                 Toast.makeText(getApplicationContext(), getResources().getString(R.string.p_login_no_reg), 0).show();
             }
         } else if (i == 80002) {
             if (i2 == -1) {
-                m2416g();
+                startToMain();
             }
         } else if (i != 1) {
         } else {
             if (i2 == -1) {
-                m2404a(this.f2380l, this.f2381m);
+                put_in_login(this.muserName, this.muserPassword);
             } else if (i2 == 0) {
-                this.f2379k.f2083d.mo2682a(0);
-                this.f2382n.putInt("SW_AUTO_LOGIN", this.f2379k.f2083d.mo2681a());
-                this.f2379k.f2083d.mo2689d(0);
-                this.f2382n.putInt("SW_AGREE_FLAG", this.f2379k.f2083d.mo2688d());
-                this.f2379k.f2083d.mo2687c(0);
-                this.f2382n.putInt("SW_AGREE_DECLARE", this.f2379k.f2083d.mo2686c());
-                this.f2382n.commit();
+                this.loginEcgApp.mSwConf.setSW_AUTO_LOGIN(0);
+                this.loginEditor.putInt("SW_AUTO_LOGIN", this.loginEcgApp.mSwConf.getAuto_login());
+                this.loginEcgApp.mSwConf.setAgree_flag(0);
+                this.loginEditor.putInt("SW_AGREE_FLAG", this.loginEcgApp.mSwConf.getAgree_flag());
+                this.loginEcgApp.mSwConf.setAgree_declare(0);
+                this.loginEditor.putInt("SW_AGREE_DECLARE", this.loginEcgApp.mSwConf.getAgree_declare());
+                this.loginEditor.commit();
                 finish();
             }
         }
@@ -414,9 +414,9 @@ public class LoginActivity extends C0721a {
     public void onCreate(Bundle bundle) {
         super.onCreate(bundle);
         setContentView(R.layout.activity_login);
-        this.f2379k = (ECGApplication) getApplication();
-        this.f2382n = this.f2379k.f2084e.edit();
-        m2407b();
+        this.loginEcgApp = (ECGApplication) getApplication();
+        this.loginEditor = this.loginEcgApp.spSw_conf.edit();
+        initView();
     }
 
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -426,19 +426,19 @@ public class LoginActivity extends C0721a {
 
     /* access modifiers changed from: protected */
     public void onDestroy() {
-        m2415f();
-        if (this.f2371c != null && this.f2371c.getStatus() == AsyncTask.Status.RUNNING) {
-            this.f2371c.cancel(true);
-            this.f2371c = null;
+        dismissLogin_loginDialog();
+        if (this.mLoginmAsyncTask != null && this.mLoginmAsyncTask.getStatus() == AsyncTask.Status.RUNNING) {
+            this.mLoginmAsyncTask.cancel(true);
+            this.mLoginmAsyncTask = null;
         }
         super.onDestroy();
     }
 
     /* access modifiers changed from: protected */
     public void onStart() {
-        Log.d("LoginActivity", "OnStart " + this.f2379k.f2081b.getName());
-        if (this.f2379k.f2081b.getName() == UserInfo.EMPTY) {
-            mo2253a();
+        Log.d("LoginActivity", "OnStart " + this.loginEcgApp.mUserInfo.getName());
+        if (this.loginEcgApp.mUserInfo.getName() == UserInfo.EMPTY) {
+            showLogin_tipDialog();
         }
         super.onStart();
     }

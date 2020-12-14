@@ -32,73 +32,73 @@ public class BeginActivity extends Activity {
     ECGApplication mApplication;
 
     /* renamed from: c */
-    TextView f2124c;
+    TextView tv_begin_status;
 
     /* renamed from: d */
     private final int f2125d = 1;
 
     /* renamed from: e */
-    private boolean f2126e = true;
+    private boolean isHaveUser = true;
 
     /* renamed from: f */
-    private SharedPreferences.Editor f2127f;
+    private SharedPreferences.Editor spSw_conf;
 
     /* renamed from: b */
-    private void m2236b() {
+    private void scheduleToSplah() {
         new Timer().schedule(new TimerTask() {
             public void run() {
                 Looper.prepare();
-                BeginActivity.this.m2238d();
+                BeginActivity.this.isLogin();
                 Looper.loop();
             }
         }, 1000);
     }
 
     /* renamed from: c */
-    private void m2237c() {
-        if (mApplication.f2081b.getName() == UserInfo.EMPTY || mApplication.f2081b.getId() == UserInfo.EMPTY) {
-            this.f2126e = false;
+    private void checkUser() {
+        if (mApplication.mUserInfo.getName() == UserInfo.EMPTY || mApplication.mUserInfo.getId() == UserInfo.EMPTY) {
+            this.isHaveUser = false;
         }
     }
 
     /* access modifiers changed from: private */
     /* renamed from: d */
-    public void m2238d() {
-        if (!this.f2126e || mApplication.f2083d.mo2686c() != 1) {
-            m2241g();
+    public void isLogin() {
+        if (!this.isHaveUser || mApplication.mSwConf.getAgree_declare() != 1) {
+            startDeclareActivity();
         } else {
-            m2240f();
+            startFunChooseActivity();
         }
     }
 
     /* renamed from: e */
-    private void m2239e() {
+    private void startLoginActivity() {
         startActivity(new Intent(this, LoginActivity.class));
         finish();
     }
 
     /* renamed from: f */
-    private void m2240f() {
+    private void startFunChooseActivity() {
         startActivity(new Intent(this, FunChooseActivity.class));
         finish();
     }
 
     /* renamed from: g */
-    private void m2241g() {
+    private void startDeclareActivity() {
         startActivityForResult(new Intent(this, DeclareActivity.class), 1);
     }
 
     /* renamed from: a */
-    public void mo2115a() {
+    public void getx509CertificateUserInfo() {
         try {
-            mo2116a(getPackageManager().getPackageInfo(getPackageName(), PackageManager.GET_SIGNATURES).signatures[0].toByteArray());
+            getx509Certificate(getPackageManager().getPackageInfo(getPackageName(), PackageManager.GET_SIGNATURES).signatures[0].toByteArray());
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
     /* renamed from: a */
-    public void mo2116a(byte[] bArr) {
+    public void getx509Certificate(byte[] bArr) {
         try {
             X509Certificate x509Certificate = (X509Certificate) CertificateFactory.getInstance("X.509").generateCertificate(new ByteArrayInputStream(bArr));
             String obj = x509Certificate.getPublicKey().toString();
@@ -117,16 +117,16 @@ public class BeginActivity extends Activity {
             return;
         }
         if (i2 == -1) {
-            mApplication.f2083d.mo2689d(1);
-            this.f2127f.putInt("SW_AGREE_FLAG", mApplication.f2083d.mo2688d());
-            mApplication.f2083d.mo2687c(1);
-            this.f2127f.putInt("SW_AGREE_DECLARE", mApplication.f2083d.mo2686c());
-            this.f2127f.commit();
-            m2239e();
+            mApplication.mSwConf.setAgree_flag(1);
+            this.spSw_conf.putInt("SW_AGREE_FLAG", mApplication.mSwConf.getAgree_flag());
+            mApplication.mSwConf.setAgree_declare(1);
+            this.spSw_conf.putInt("SW_AGREE_DECLARE", mApplication.mSwConf.getAgree_declare());
+            this.spSw_conf.commit();
+            startLoginActivity();
         } else if (i2 == 0) {
-            mApplication.f2083d.mo2687c(0);
-            this.f2127f.putInt("SW_AGREE_DECLARE", mApplication.f2083d.mo2686c());
-            this.f2127f.commit();
+            mApplication.mSwConf.setAgree_declare(0);
+            this.spSw_conf.putInt("SW_AGREE_DECLARE", mApplication.mSwConf.getAgree_declare());
+            this.spSw_conf.commit();
             finish();
         }
     }
@@ -135,11 +135,11 @@ public class BeginActivity extends Activity {
     public void onCreate(Bundle bundle) {
         super.onCreate(bundle);
         setContentView(R.layout.activity_begin);
-        this.f2124c = (TextView) findViewById(R.id.begin_status);
+        this.tv_begin_status = (TextView) findViewById(R.id.begin_status);
         mApplication = (ECGApplication) getApplication();
-        f2127f = mApplication.f2084e.edit();
-        mo2115a();
-        m2237c();
+        spSw_conf = mApplication.spSw_conf.edit();
+        getx509CertificateUserInfo();
+        checkUser();
     }
 
     public void onRequestPermissionsResult(int i, String[] strArr, int[] iArr) {
@@ -152,7 +152,7 @@ public class BeginActivity extends Activity {
                     return;
                 }
             }
-            m2236b();
+            scheduleToSplah();
         }
     }
 
@@ -169,7 +169,7 @@ public class BeginActivity extends Activity {
         if (!arrayList.isEmpty()) {
             ActivityCompat.requestPermissions(this, (String[]) arrayList.toArray(new String[arrayList.size()]), 1);
         } else {
-            m2236b();
+            scheduleToSplah();
         }
         super.onResume();
     }

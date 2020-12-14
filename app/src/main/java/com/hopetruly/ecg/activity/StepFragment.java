@@ -20,7 +20,7 @@ import com.hopetruly.ecg.ECGApplication;
 import com.hopetruly.ecg.R;
 import com.hopetruly.ecg.device.Sensor;
 import com.hopetruly.ecg.entity.PedometerRecord;
-import com.hopetruly.ecg.p022b.C0740b;
+import com.hopetruly.ecg.p022b.SqlManager;
 
 import java.util.Calendar;
 
@@ -84,8 +84,8 @@ public class StepFragment extends Fragment {
                     StepFragment.this.m2548a(intent.getByteArrayExtra("com.hopetruly.ec.services.EXTRA_DATA"));
                 }
             } else if (action.equals("com.hopetruly.ecg.services.MainService.REFRESH_STEP")) {
-                if (StepFragment.this.f2653g != null || StepFragment.this.f2653g.f2094o != null) {
-                    StepFragment.this.f2654h = StepFragment.this.f2653g.f2094o.mo2745p();
+                if (StepFragment.this.f2653g != null || StepFragment.this.f2653g.appMainService != null) {
+                    StepFragment.this.f2654h = StepFragment.this.f2653g.appMainService.mo2745p();
                     if (StepFragment.this.f2654h != null) {
                         StepFragment.this.f2648b.setText(String.valueOf(StepFragment.this.f2654h.getCurStep()));
                         StepFragment.this.f2652f.setText(String.valueOf(StepFragment.this.f2654h.getCount() + StepFragment.this.f2654h.getCurStep()));
@@ -96,8 +96,8 @@ public class StepFragment extends Fragment {
                     }
                 }
             } else if (action.equals("com.hopetruly.ecg.services.MainService.REFRESH_CAL")) {
-                if (StepFragment.this.f2653g != null || StepFragment.this.f2653g.f2094o != null) {
-                    StepFragment.this.f2654h = StepFragment.this.f2653g.f2094o.mo2745p();
+                if (StepFragment.this.f2653g != null || StepFragment.this.f2653g.appMainService != null) {
+                    StepFragment.this.f2654h = StepFragment.this.f2653g.appMainService.mo2745p();
                     if (StepFragment.this.f2654h != null) {
                         StepFragment.this.f2649c.setText(String.valueOf((int) StepFragment.this.f2654h.getCal()));
                     }
@@ -124,7 +124,7 @@ public class StepFragment extends Fragment {
         long b = 0;
         this.f2661o = (FunChooseActivity) getActivity();
         Calendar instance = Calendar.getInstance();
-        this.f2654h = new C0740b(getActivity().getApplicationContext()).mo2466a(this.f2653g.f2081b.getId(), instance.get(1), instance.get(2) + 1, instance.get(5));
+        this.f2654h = new SqlManager(getActivity().getApplicationContext()).mo2466a(this.f2653g.mUserInfo.getId(), instance.get(1), instance.get(2) + 1, instance.get(5));
         this.f2648b = (TextView) getView().findViewById(R.id.step_step);
         this.f2649c = (TextView) getView().findViewById(R.id.step_calories);
         this.f2651e = (TextView) getView().findViewById(R.id.step_complete);
@@ -139,8 +139,8 @@ public class StepFragment extends Fragment {
                 textView2 = this.f2650d;
                 b = this.f2654h.getTarget();
             }
-            this.f2660n = this.f2653g.f2094o.mo2728b();
-            this.f2658l = this.f2653g.f2094o.mo2741o();
+            this.f2660n = this.f2653g.appMainService.isMBleConn();
+            this.f2658l = this.f2653g.appMainService.mo2741o();
             this.f2657k = (TextView) getView().findViewById(R.id.step_start_l);
             this.f2655i = (RelativeLayout) getView().findViewById(R.id.step_start);
             if (!this.f2660n) {
@@ -159,12 +159,12 @@ public class StepFragment extends Fragment {
                     if (!StepFragment.this.f2660n) {
                         StepFragment.this.f2661o.startActivity(new Intent(StepFragment.this.f2661o, ScanActivity.class));
                     } else if (StepFragment.this.f2658l) {
-                        if (StepFragment.this.f2653g.f2094o.mo2739m()) {
+                        if (StepFragment.this.f2653g.appMainService.mo2739m()) {
                             boolean unused = StepFragment.this.f2658l = false;
                             StepFragment.this.f2657k.setText(StepFragment.this.getString(R.string.l_step_start));
-                            StepFragment.this.f2653g.f2087h.mo2673b(0);
+                            StepFragment.this.f2653g.appPedometerConf.mo2673b(0);
                         }
-                    } else if (StepFragment.this.f2653g.f2094o.mo2738l()) {
+                    } else if (StepFragment.this.f2653g.appMainService.mo2738l()) {
                         StepFragment.this.f2648b.setText("0");
                         boolean unused2 = StepFragment.this.f2658l = true;
                         StepFragment.this.f2657k.setText(StepFragment.this.getString(R.string.l_step_stop));
@@ -182,12 +182,12 @@ public class StepFragment extends Fragment {
         this.f2648b.setText("0");
         this.f2651e.setText("0");
         this.f2649c.setText("0");
-        if (this.f2653g.f2087h.mo2672b() > 0) {
+        if (this.f2653g.appPedometerConf.mo2672b() > 0) {
             textView2 = this.f2650d;
-            b = this.f2653g.f2087h.mo2672b();
+            b = this.f2653g.appPedometerConf.mo2672b();
         }
-        this.f2660n = this.f2653g.f2094o.mo2728b();
-        this.f2658l = this.f2653g.f2094o.mo2741o();
+        this.f2660n = this.f2653g.appMainService.isMBleConn();
+        this.f2658l = this.f2653g.appMainService.mo2741o();
         this.f2657k = (TextView) getView().findViewById(R.id.step_start_l);
         this.f2655i = (RelativeLayout) getView().findViewById(R.id.step_start);
         if (!this.f2660n) {
@@ -199,12 +199,12 @@ public class StepFragment extends Fragment {
                 if (!StepFragment.this.f2660n) {
                     StepFragment.this.f2661o.startActivity(new Intent(StepFragment.this.f2661o, ScanActivity.class));
                 } else if (StepFragment.this.f2658l) {
-                    if (StepFragment.this.f2653g.f2094o.mo2739m()) {
+                    if (StepFragment.this.f2653g.appMainService.mo2739m()) {
                         boolean unused = StepFragment.this.f2658l = false;
                         StepFragment.this.f2657k.setText(StepFragment.this.getString(R.string.l_step_start));
-                        StepFragment.this.f2653g.f2087h.mo2673b(0);
+                        StepFragment.this.f2653g.appPedometerConf.mo2673b(0);
                     }
-                } else if (StepFragment.this.f2653g.f2094o.mo2738l()) {
+                } else if (StepFragment.this.f2653g.appMainService.mo2738l()) {
                     StepFragment.this.f2648b.setText("0");
                     boolean unused2 = StepFragment.this.f2658l = true;
                     StepFragment.this.f2657k.setText(StepFragment.this.getString(R.string.l_step_stop));
@@ -218,8 +218,8 @@ public class StepFragment extends Fragment {
             }
         });
         f2650d.setText(String.valueOf(b));
-        this.f2660n = this.f2653g.f2094o.mo2728b();
-        this.f2658l = this.f2653g.f2094o.mo2741o();
+        this.f2660n = this.f2653g.appMainService.isMBleConn();
+        this.f2658l = this.f2653g.appMainService.mo2741o();
         this.f2657k = (TextView) getView().findViewById(R.id.step_start_l);
         this.f2655i = (RelativeLayout) getView().findViewById(R.id.step_start);
         if (!this.f2660n) {
@@ -231,12 +231,12 @@ public class StepFragment extends Fragment {
                 if (!StepFragment.this.f2660n) {
                     StepFragment.this.f2661o.startActivity(new Intent(StepFragment.this.f2661o, ScanActivity.class));
                 } else if (StepFragment.this.f2658l) {
-                    if (StepFragment.this.f2653g.f2094o.mo2739m()) {
+                    if (StepFragment.this.f2653g.appMainService.mo2739m()) {
                         boolean unused = StepFragment.this.f2658l = false;
                         StepFragment.this.f2657k.setText(StepFragment.this.getString(R.string.l_step_start));
-                        StepFragment.this.f2653g.f2087h.mo2673b(0);
+                        StepFragment.this.f2653g.appPedometerConf.mo2673b(0);
                     }
-                } else if (StepFragment.this.f2653g.f2094o.mo2738l()) {
+                } else if (StepFragment.this.f2653g.appMainService.mo2738l()) {
                     StepFragment.this.f2648b.setText("0");
                     boolean unused2 = StepFragment.this.f2658l = true;
                     StepFragment.this.f2657k.setText(StepFragment.this.getString(R.string.l_step_stop));
@@ -307,11 +307,11 @@ public class StepFragment extends Fragment {
         super.onStart();
         this.f2659m = false;
         this.f2653g = (ECGApplication) getActivity().getApplication();
-        if (this.f2653g != null && this.f2653g.f2094o != null) {
+        if (this.f2653g != null && this.f2653g.appMainService != null) {
             m2546a();
-            if (this.f2653g.f2087h.mo2674c() == 1) {
-                this.f2653g.f2087h.mo2673b(0);
-                if (!this.f2658l && this.f2653g.f2094o.mo2738l()) {
+            if (this.f2653g.appPedometerConf.mo2674c() == 1) {
+                this.f2653g.appPedometerConf.mo2673b(0);
+                if (!this.f2658l && this.f2653g.appMainService.mo2738l()) {
                     this.f2648b.setText("0");
                     this.f2658l = true;
                     this.f2657k.setText(getString(R.string.l_step_stop));

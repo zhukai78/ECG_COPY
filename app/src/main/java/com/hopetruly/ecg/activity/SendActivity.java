@@ -18,7 +18,7 @@ import com.hopetruly.ecg.R;
 
 import java.io.File;
 
-public class SendActivity extends C0721a {
+public class SendActivity extends BaseActivity {
 
     /* renamed from: a */
     Button f2576a;

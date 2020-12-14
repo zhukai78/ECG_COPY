@@ -17,68 +17,68 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.hopetruly.ecg.R;
-import com.hopetruly.ecg.util.C0771g;
+import com.hopetruly.ecg.util.LogUtils;
 
 import java.util.Locale;
 
 /* renamed from: com.hopetruly.ecg.activity.c */
-public class C0730c extends Fragment {
+public class AboutEcgFragment extends Fragment {
 
     /* renamed from: a */
     final String f2712a = "EcgKnowledgeActivity";
     /* access modifiers changed from: private */
 
     /* renamed from: b */
-    public WebView f2713b;
+    public WebView abp_ecg_webView1;
     /* access modifiers changed from: private */
 
     /* renamed from: c */
-    public TextView f2714c;
+    public TextView tv_tips_text;
     /* access modifiers changed from: private */
 
     /* renamed from: d */
-    public ProgressBar f2715d;
+    public ProgressBar pb_progressBar_loading;
     /* access modifiers changed from: private */
 
     /* renamed from: e */
-    public boolean f2716e = true;
+    public boolean isAbpUrlConn = true;
 
     /* renamed from: a */
-    private void m2577a() {
+    private void initView() {
         WebView webView;
         String str = "";
-        this.f2714c = (TextView) getView().findViewById(R.id.tips_text);
-        this.f2714c.setVisibility(View.INVISIBLE);
-        this.f2715d = (ProgressBar) getView().findViewById(R.id.progressBar_loading);
-        this.f2713b = (WebView) getView().findViewById(R.id.webView1);
-        this.f2713b.getSettings().setUseWideViewPort(true);
-        this.f2713b.getSettings().setLoadWithOverviewMode(true);
-        this.f2713b.getSettings().setCacheMode(WebSettings.LOAD_NO_CACHE);
-        this.f2713b.setOnKeyListener(new View.OnKeyListener() {
+        this.tv_tips_text = (TextView) getView().findViewById(R.id.tips_text);
+        this.tv_tips_text.setVisibility(View.INVISIBLE);
+        this.pb_progressBar_loading = (ProgressBar) getView().findViewById(R.id.progressBar_loading);
+        this.abp_ecg_webView1 = (WebView) getView().findViewById(R.id.webView1);
+        this.abp_ecg_webView1.getSettings().setUseWideViewPort(true);
+        this.abp_ecg_webView1.getSettings().setLoadWithOverviewMode(true);
+        this.abp_ecg_webView1.getSettings().setCacheMode(WebSettings.LOAD_NO_CACHE);
+        this.abp_ecg_webView1.setOnKeyListener(new View.OnKeyListener() {
             public boolean onKey(View view, int i, KeyEvent keyEvent) {
-                if (keyEvent.getAction() != 0 || i != 4 || !C0730c.this.f2713b.canGoBack()) {
+                if (keyEvent.getAction() != 0 || i != 4 || !AboutEcgFragment.this.abp_ecg_webView1.canGoBack()) {
                     return false;
                 }
-                C0730c.this.f2713b.goBack();
+                AboutEcgFragment.this.abp_ecg_webView1.goBack();
                 return true;
             }
         });
         Locale locale = Locale.getDefault();
         if (locale.getLanguage().equals("zh")) {
-            webView = this.f2713b;
+            webView = this.abp_ecg_webView1;
             str = "http://www.bitsun.com/ecg_knows/ch/ecg.html";
         } else {
             if (locale.getLanguage().equals("en")) {
-                webView = this.f2713b;
+                webView = this.abp_ecg_webView1;
                 str = "http://www.bitsun.com/ecg_knows/en/ecg.html";
             }
-            this.f2713b.setWebViewClient(new WebViewClient() {
+            this.abp_ecg_webView1.setWebViewClient(new WebViewClient() {
                 public void onReceivedError(WebView webView, int i, String str, String str2) {
                     super.onReceivedError(webView, i, str, str2);
-                    C0730c.this.f2713b.findViewById(R.id.webView1).setVisibility(View.GONE);
-                    C0730c.this.f2714c.setVisibility(View.VISIBLE);
-                    C0730c.this.f2715d.findViewById(R.id.progressBar_loading).setVisibility(View.GONE);
-                    boolean unused = C0730c.this.f2716e = false;
+                    AboutEcgFragment.this.abp_ecg_webView1.findViewById(R.id.webView1).setVisibility(View.GONE);
+                    AboutEcgFragment.this.tv_tips_text.setVisibility(View.VISIBLE);
+                    AboutEcgFragment.this.pb_progressBar_loading.findViewById(R.id.progressBar_loading).setVisibility(View.GONE);
+                    boolean unused = AboutEcgFragment.this.isAbpUrlConn = false;
                 }
 
                 public boolean shouldOverrideUrlLoading(WebView webView, String str) {
@@ -86,28 +86,28 @@ public class C0730c extends Fragment {
                     return true;
                 }
             });
-            this.f2713b.setWebChromeClient(new WebChromeClient() {
+            this.abp_ecg_webView1.setWebChromeClient(new WebChromeClient() {
                 public void onProgressChanged(WebView webView, int i) {
                     if (i == 100) {
-                        C0730c.this.f2715d.setVisibility(View.INVISIBLE);
-                        if (C0730c.this.f2716e) {
-                            C0730c.this.f2713b.findViewById(R.id.webView1).setVisibility(View.VISIBLE);
+                        AboutEcgFragment.this.pb_progressBar_loading.setVisibility(View.INVISIBLE);
+                        if (AboutEcgFragment.this.isAbpUrlConn) {
+                            AboutEcgFragment.this.abp_ecg_webView1.findViewById(R.id.webView1).setVisibility(View.VISIBLE);
                             return;
                         }
                         return;
                     }
-                    C0730c.this.f2715d.setVisibility(View.VISIBLE);
+                    AboutEcgFragment.this.pb_progressBar_loading.setVisibility(View.VISIBLE);
                 }
             });
         }
-        f2713b.loadUrl(str);
-        this.f2713b.setWebViewClient(new WebViewClient() {
+        abp_ecg_webView1.loadUrl(str);
+        this.abp_ecg_webView1.setWebViewClient(new WebViewClient() {
             public void onReceivedError(WebView webView, int i, String str, String str2) {
                 super.onReceivedError(webView, i, str, str2);
-                C0730c.this.f2713b.findViewById(R.id.webView1).setVisibility(View.GONE);
-                C0730c.this.f2714c.setVisibility(View.VISIBLE);
-                C0730c.this.f2715d.findViewById(R.id.progressBar_loading).setVisibility(View.GONE);
-                boolean unused = C0730c.this.f2716e = false;
+                AboutEcgFragment.this.abp_ecg_webView1.findViewById(R.id.webView1).setVisibility(View.GONE);
+                AboutEcgFragment.this.tv_tips_text.setVisibility(View.VISIBLE);
+                AboutEcgFragment.this.pb_progressBar_loading.findViewById(R.id.progressBar_loading).setVisibility(View.GONE);
+                boolean unused = AboutEcgFragment.this.isAbpUrlConn = false;
             }
 
             public boolean shouldOverrideUrlLoading(WebView webView, String str) {
@@ -115,17 +115,17 @@ public class C0730c extends Fragment {
                 return true;
             }
         });
-        this.f2713b.setWebChromeClient(new WebChromeClient() {
+        this.abp_ecg_webView1.setWebChromeClient(new WebChromeClient() {
             public void onProgressChanged(WebView webView, int i) {
                 if (i == 100) {
-                    C0730c.this.f2715d.setVisibility(View.INVISIBLE);
-                    if (C0730c.this.f2716e) {
-                        C0730c.this.f2713b.findViewById(R.id.webView1).setVisibility(View.VISIBLE);
+                    AboutEcgFragment.this.pb_progressBar_loading.setVisibility(View.INVISIBLE);
+                    if (AboutEcgFragment.this.isAbpUrlConn) {
+                        AboutEcgFragment.this.abp_ecg_webView1.findViewById(R.id.webView1).setVisibility(View.VISIBLE);
                         return;
                     }
                     return;
                 }
-                C0730c.this.f2715d.setVisibility(View.VISIBLE);
+                AboutEcgFragment.this.pb_progressBar_loading.setVisibility(View.VISIBLE);
             }
         });
     }
@@ -145,7 +145,7 @@ public class C0730c extends Fragment {
     }
 
     public void onDestroy() {
-        C0771g.m2787d("EcgKnowledgeActivity", "onDestory~~");
+        LogUtils.logE("EcgKnowledgeActivity", "onDestory~~");
         super.onDestroy();
     }
 
@@ -153,15 +153,15 @@ public class C0730c extends Fragment {
         if (menuItem.getItemId() != R.id.action_reflash) {
             return super.onOptionsItemSelected(menuItem);
         }
-        this.f2714c.setVisibility(View.INVISIBLE);
-        this.f2713b.reload();
-        this.f2716e = true;
+        this.tv_tips_text.setVisibility(View.INVISIBLE);
+        this.abp_ecg_webView1.reload();
+        this.isAbpUrlConn = true;
         return true;
     }
 
     public void onStart() {
-        C0771g.m2787d("EcgKnowledgeActivity", "onStart~~");
-        m2577a();
+        LogUtils.logE("EcgKnowledgeActivity", "onStart~~");
+        initView();
         super.onStart();
     }
 }

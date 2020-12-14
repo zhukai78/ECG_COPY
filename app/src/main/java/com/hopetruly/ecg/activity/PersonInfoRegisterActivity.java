@@ -25,14 +25,14 @@ import android.widget.Toast;
 import com.hopetruly.ecg.ECGApplication;
 import com.hopetruly.ecg.R;
 import com.hopetruly.ecg.entity.UserInfo;
-import com.hopetruly.part.net.C0791b;
+import com.hopetruly.part.net.MyHttpHelper;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 
 import java.util.Calendar;
 
-public class PersonInfoRegisterActivity extends C0721a {
+public class PersonInfoRegisterActivity extends BaseActivity {
 
     /* renamed from: A */
     private RadioGroup.OnCheckedChangeListener f2389A = new RadioGroup.OnCheckedChangeListener() {
@@ -44,10 +44,10 @@ public class PersonInfoRegisterActivity extends C0721a {
             switch (radioGroup.getId()) {
                 case R.id.setting_sex /*2131165447*/:
                     if (i == PersonInfoRegisterActivity.this.f2405p.getId()) {
-                        userInfo = PersonInfoRegisterActivity.this.f2413x.f2081b;
+                        userInfo = PersonInfoRegisterActivity.this.f2413x.mUserInfo;
                         str = "M";
                     } else if (i == PersonInfoRegisterActivity.this.f2406q.getId()) {
-                        userInfo = PersonInfoRegisterActivity.this.f2413x.f2081b;
+                        userInfo = PersonInfoRegisterActivity.this.f2413x.mUserInfo;
                         str = "G";
                     } else {
                         return;
@@ -56,10 +56,10 @@ public class PersonInfoRegisterActivity extends C0721a {
                     return;
                 case R.id.setting_smoker /*2131165448*/:
                     if (i == PersonInfoRegisterActivity.this.f2407r.getId()) {
-                        userInfo2 = PersonInfoRegisterActivity.this.f2413x.f2081b;
+                        userInfo2 = PersonInfoRegisterActivity.this.f2413x.mUserInfo;
                         str2 = "yes";
                     } else if (i == PersonInfoRegisterActivity.this.f2408s.getId()) {
-                        userInfo2 = PersonInfoRegisterActivity.this.f2413x.f2081b;
+                        userInfo2 = PersonInfoRegisterActivity.this.f2413x.mUserInfo;
                         str2 = "no";
                     } else {
                         return;
@@ -158,9 +158,9 @@ public class PersonInfoRegisterActivity extends C0721a {
             new DatePickerDialog(PersonInfoRegisterActivity.this, new DatePickerDialog.OnDateSetListener() {
                 public void onDateSet(DatePicker datePicker, int i, int i2, int i3) {
                     String str = i + "-" + i2 + "-" + i3;
-                    PersonInfoRegisterActivity.this.f2413x.f2081b.setAge(PersonInfoRegisterActivity.this.f2410u - i);
-                    PersonInfoRegisterActivity.this.f2413x.f2081b.setBirthday(str);
-                    PersonInfoRegisterActivity.this.f2394e.setText(str + "(" + PersonInfoRegisterActivity.this.f2413x.f2081b.getAge() + " age)");
+                    PersonInfoRegisterActivity.this.f2413x.mUserInfo.setAge(PersonInfoRegisterActivity.this.f2410u - i);
+                    PersonInfoRegisterActivity.this.f2413x.mUserInfo.setBirthday(str);
+                    PersonInfoRegisterActivity.this.f2394e.setText(str + "(" + PersonInfoRegisterActivity.this.f2413x.mUserInfo.getAge() + " age)");
                     Toast.makeText(PersonInfoRegisterActivity.this, str, 1).show();
                 }
             }, PersonInfoRegisterActivity.this.f2410u, PersonInfoRegisterActivity.this.f2411v, PersonInfoRegisterActivity.this.f2412w).show();
@@ -180,11 +180,11 @@ public class PersonInfoRegisterActivity extends C0721a {
                 return null;
             }
             try {
-                String a = C0791b.m2872a(userInfoArr[0]);
+                String a = MyHttpHelper.get_user_info(userInfoArr[0]);
                 if (a == null || new JSONArray(a).getInt(0) != 0) {
                     return null;
                 }
-                return C0791b.m2879b();
+                return MyHttpHelper.get_q_user_info();
             } catch (Exception e) {
                 e.printStackTrace();
                 return null;
@@ -205,20 +205,20 @@ public class PersonInfoRegisterActivity extends C0721a {
                         int i = jSONArray.getInt(0);
                         if (i == 0) {
                             SharedPreferences.Editor edit = PersonInfoRegisterActivity.this.getApplicationContext().getSharedPreferences("user_conf", 0).edit();
-                            edit.putString("userId", PersonInfoRegisterActivity.this.f2413x.f2081b.getId());
-                            edit.putString("birthday", PersonInfoRegisterActivity.this.f2413x.f2081b.getBirthday());
-                            edit.putInt("age", PersonInfoRegisterActivity.this.f2413x.f2081b.getAge());
-                            edit.putString("height", PersonInfoRegisterActivity.this.f2413x.f2081b.getHeight());
-                            edit.putString("weight", PersonInfoRegisterActivity.this.f2413x.f2081b.getWeight());
-                            edit.putString("medications", PersonInfoRegisterActivity.this.f2413x.f2081b.getMedications());
-                            edit.putString("sex", PersonInfoRegisterActivity.this.f2413x.f2081b.getSex());
-                            edit.putString("smoker", PersonInfoRegisterActivity.this.f2413x.f2081b.getSmoker());
-                            edit.putString("profession", PersonInfoRegisterActivity.this.f2413x.f2081b.getProfession());
-                            edit.putString("email", PersonInfoRegisterActivity.this.f2413x.f2081b.getEmail());
-                            edit.putString("phone", PersonInfoRegisterActivity.this.f2413x.f2081b.getPhone());
-                            edit.putString("address", PersonInfoRegisterActivity.this.f2413x.f2081b.getAddress());
-                            edit.putString("firstName", PersonInfoRegisterActivity.this.f2413x.f2081b.getFirstName());
-                            edit.putString("lastName", PersonInfoRegisterActivity.this.f2413x.f2081b.getLastName());
+                            edit.putString("userId", PersonInfoRegisterActivity.this.f2413x.mUserInfo.getId());
+                            edit.putString("birthday", PersonInfoRegisterActivity.this.f2413x.mUserInfo.getBirthday());
+                            edit.putInt("age", PersonInfoRegisterActivity.this.f2413x.mUserInfo.getAge());
+                            edit.putString("height", PersonInfoRegisterActivity.this.f2413x.mUserInfo.getHeight());
+                            edit.putString("weight", PersonInfoRegisterActivity.this.f2413x.mUserInfo.getWeight());
+                            edit.putString("medications", PersonInfoRegisterActivity.this.f2413x.mUserInfo.getMedications());
+                            edit.putString("sex", PersonInfoRegisterActivity.this.f2413x.mUserInfo.getSex());
+                            edit.putString("smoker", PersonInfoRegisterActivity.this.f2413x.mUserInfo.getSmoker());
+                            edit.putString("profession", PersonInfoRegisterActivity.this.f2413x.mUserInfo.getProfession());
+                            edit.putString("email", PersonInfoRegisterActivity.this.f2413x.mUserInfo.getEmail());
+                            edit.putString("phone", PersonInfoRegisterActivity.this.f2413x.mUserInfo.getPhone());
+                            edit.putString("address", PersonInfoRegisterActivity.this.f2413x.mUserInfo.getAddress());
+                            edit.putString("firstName", PersonInfoRegisterActivity.this.f2413x.mUserInfo.getFirstName());
+                            edit.putString("lastName", PersonInfoRegisterActivity.this.f2413x.mUserInfo.getLastName());
                             edit.commit();
                             PersonInfoRegisterActivity.this.setResult(-1, new Intent());
                             PersonInfoRegisterActivity.this.finish();
@@ -294,13 +294,13 @@ public class PersonInfoRegisterActivity extends C0721a {
         this.f2403n.setOnCheckedChangeListener(this.f2389A);
         this.f2405p = (RadioButton) findViewById(R.id.sex_men);
         this.f2406q = (RadioButton) findViewById(R.id.sex_women);
-        (this.f2413x.f2081b.getSex().equals("M") ? this.f2405p : this.f2406q).setChecked(true);
+        (this.f2413x.mUserInfo.getSex().equals("M") ? this.f2405p : this.f2406q).setChecked(true);
         this.f2404o = (RadioGroup) findViewById(R.id.setting_smoker);
         this.f2404o.setOnCheckedChangeListener(this.f2389A);
         this.f2407r = (RadioButton) findViewById(R.id.smoker_yes);
         this.f2408s = (RadioButton) findViewById(R.id.smoker_no);
         this.f2408s.setChecked(true);
-        this.f2413x.f2081b.setSmoker("no");
+        this.f2413x.mUserInfo.setSmoker("no");
         this.f2409t = (Button) findViewById(R.id.register_person_info_commit);
         this.f2409t.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
@@ -311,31 +311,31 @@ public class PersonInfoRegisterActivity extends C0721a {
 
     /* renamed from: c */
     private void m2433c() {
-        this.f2413x.f2081b.setFirstName("");
-        this.f2413x.f2081b.setLastName("");
-        this.f2413x.f2081b.setAge(0);
-        this.f2413x.f2081b.setSex("");
-        this.f2413x.f2081b.setBirthday("");
-        this.f2413x.f2081b.setHeight("");
-        this.f2413x.f2081b.setWeight("");
-        this.f2413x.f2081b.setProfession("");
-        this.f2413x.f2081b.setEmail("");
-        this.f2413x.f2081b.setPhone("");
-        this.f2413x.f2081b.setAddress("");
-        SharedPreferences.Editor edit = this.f2413x.f2082c.edit();
-        edit.putString("birthday", this.f2413x.f2081b.getBirthday());
-        edit.putInt("age", this.f2413x.f2081b.getAge());
-        edit.putString("height", this.f2413x.f2081b.getHeight());
-        edit.putString("weight", this.f2413x.f2081b.getWeight());
-        edit.putString("medications", this.f2413x.f2081b.getMedications());
-        edit.putString("sex", this.f2413x.f2081b.getSex());
-        edit.putString("smoker", this.f2413x.f2081b.getSmoker());
-        edit.putString("profession", this.f2413x.f2081b.getProfession());
-        edit.putString("email", this.f2413x.f2081b.getEmail());
-        edit.putString("phone", this.f2413x.f2081b.getPhone());
-        edit.putString("address", this.f2413x.f2081b.getAddress());
-        edit.putString("firstName", this.f2413x.f2081b.getFirstName());
-        edit.putString("lastName", this.f2413x.f2081b.getLastName());
+        this.f2413x.mUserInfo.setFirstName("");
+        this.f2413x.mUserInfo.setLastName("");
+        this.f2413x.mUserInfo.setAge(0);
+        this.f2413x.mUserInfo.setSex("");
+        this.f2413x.mUserInfo.setBirthday("");
+        this.f2413x.mUserInfo.setHeight("");
+        this.f2413x.mUserInfo.setWeight("");
+        this.f2413x.mUserInfo.setProfession("");
+        this.f2413x.mUserInfo.setEmail("");
+        this.f2413x.mUserInfo.setPhone("");
+        this.f2413x.mUserInfo.setAddress("");
+        SharedPreferences.Editor edit = this.f2413x.spPerson_info.edit();
+        edit.putString("birthday", this.f2413x.mUserInfo.getBirthday());
+        edit.putInt("age", this.f2413x.mUserInfo.getAge());
+        edit.putString("height", this.f2413x.mUserInfo.getHeight());
+        edit.putString("weight", this.f2413x.mUserInfo.getWeight());
+        edit.putString("medications", this.f2413x.mUserInfo.getMedications());
+        edit.putString("sex", this.f2413x.mUserInfo.getSex());
+        edit.putString("smoker", this.f2413x.mUserInfo.getSmoker());
+        edit.putString("profession", this.f2413x.mUserInfo.getProfession());
+        edit.putString("email", this.f2413x.mUserInfo.getEmail());
+        edit.putString("phone", this.f2413x.mUserInfo.getPhone());
+        edit.putString("address", this.f2413x.mUserInfo.getAddress());
+        edit.putString("firstName", this.f2413x.mUserInfo.getFirstName());
+        edit.putString("lastName", this.f2413x.mUserInfo.getLastName());
         edit.commit();
     }
 
@@ -368,16 +368,16 @@ public class PersonInfoRegisterActivity extends C0721a {
             Toast.makeText(getApplicationContext(), getResources().getString(R.string.not_enter_f_name), 0).show();
             return;
         }
-        this.f2413x.f2081b.setFirstName(obj);
+        this.f2413x.mUserInfo.setFirstName(obj);
         String obj2 = this.f2393d.getText().toString();
         if (obj2 == null || obj2.length() <= 0) {
             Toast.makeText(getApplicationContext(), getResources().getString(R.string.not_enter_l_name), 0).show();
             return;
         }
-        this.f2413x.f2081b.setLastName(obj2);
-        if (this.f2413x.f2081b.getBirthday() == null) {
+        this.f2413x.mUserInfo.setLastName(obj2);
+        if (this.f2413x.mUserInfo.getBirthday() == null) {
             Toast.makeText(getApplicationContext(), getResources().getString(R.string.not_select_date), 0).show();
-        } else if (this.f2413x.f2081b.getSex() == null) {
+        } else if (this.f2413x.mUserInfo.getSex() == null) {
             Toast.makeText(getApplicationContext(), getResources().getString(R.string.not_select_sex), 0).show();
         } else {
             String obj3 = this.f2398i.getText().toString();
@@ -385,42 +385,42 @@ public class PersonInfoRegisterActivity extends C0721a {
                 Toast.makeText(getApplicationContext(), getResources().getString(R.string.not_enter_phone), 0).show();
                 return;
             }
-            this.f2413x.f2081b.setPhone(obj3);
+            this.f2413x.mUserInfo.setPhone(obj3);
             String obj4 = this.f2399j.getText().toString();
             if (obj4 == null || obj4.length() <= 0) {
                 Toast.makeText(getApplicationContext(), getResources().getString(R.string.not_enter_email), 0).show();
                 return;
             }
-            this.f2413x.f2081b.setEmail(obj4);
+            this.f2413x.mUserInfo.setEmail(obj4);
             String obj5 = this.f2400k.getText().toString();
             if (obj5 == null || obj5.length() <= 0) {
                 Toast.makeText(getApplicationContext(), getResources().getString(R.string.not_enter_profression), 0).show();
                 return;
             }
-            this.f2413x.f2081b.setProfession(obj5);
+            this.f2413x.mUserInfo.setProfession(obj5);
             String obj6 = this.f2401l.getText().toString();
             if (obj6 == null || obj6.length() <= 0) {
                 Toast.makeText(getApplicationContext(), getResources().getString(R.string.not_enter_address), 0).show();
                 return;
             }
-            this.f2413x.f2081b.setAddress(obj6);
+            this.f2413x.mUserInfo.setAddress(obj6);
             String obj7 = this.f2395f.getText().toString();
             if (obj7 == null || obj7.length() <= 0) {
                 Toast.makeText(getApplicationContext(), getResources().getString(R.string.not_enter_height), 0).show();
                 return;
             }
-            this.f2413x.f2081b.setHeight(obj7);
+            this.f2413x.mUserInfo.setHeight(obj7);
             String obj8 = this.f2396g.getText().toString();
             if (obj8 == null || obj8.length() <= 0) {
                 Toast.makeText(getApplicationContext(), getResources().getString(R.string.not_enter_weight), 0).show();
                 return;
             }
-            this.f2413x.f2081b.setWeight(obj8);
+            this.f2413x.mUserInfo.setWeight(obj8);
             String obj9 = this.f2402m.getText().toString();
             if (obj9 != null && obj9.length() > 0) {
-                this.f2413x.f2081b.setEmePhone(obj9);
+                this.f2413x.mUserInfo.setEmePhone(obj9);
             }
-            m2430a(this.f2413x.f2081b);
+            m2430a(this.f2413x.mUserInfo);
         }
     }
 

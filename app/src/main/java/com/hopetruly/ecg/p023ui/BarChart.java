@@ -9,7 +9,7 @@ import android.util.AttributeSet;
 import android.view.View;
 
 import com.hopetruly.ecg.util.C0769e;
-import com.hopetruly.ecg.util.C0771g;
+import com.hopetruly.ecg.util.LogUtils;
 
 import java.text.DecimalFormat;
 
@@ -135,7 +135,7 @@ public class BarChart extends View {
         super.onDraw(canvas);
         int height = getHeight();
         int width = getWidth();
-        C0771g.m2787d("BarChart", "height:" + height + "   width:" + width);
+        LogUtils.logE("BarChart", "height:" + height + "   width:" + width);
         Paint paint = this.f2886g;
         StringBuilder sb = new StringBuilder();
         sb.append(this.f2888i);

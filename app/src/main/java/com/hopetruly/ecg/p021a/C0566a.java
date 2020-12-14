@@ -7,7 +7,7 @@ import android.os.Looper;
 import android.os.Message;
 import android.util.Log;
 
-import com.hopetruly.ecg.util.C0771g;
+import com.hopetruly.ecg.util.LogUtils;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -87,7 +87,7 @@ public class C0566a implements C0569b {
                     switch (message.what) {
                         case 0:
                             if (C0566a.this.f2100e == null) {
-                                C0771g.m2787d("FileCache", "未有设置缓存文件的位置? SetCacheFile()");
+                                LogUtils.logE("FileCache", "未有设置缓存文件的位置? SetCacheFile()");
                                 return;
                             }
                             int unused = C0566a.this.f2108m = 0;
@@ -100,7 +100,7 @@ public class C0566a implements C0569b {
                                     FileWriter fileWriter = new FileWriter(C0566a.this.f2100e, false);
                                     fileWriter.write("");
                                     fileWriter.close();
-                                    C0771g.m2787d("FileCache", "OPEN_CACHE_FILE >> clear file ");
+                                    LogUtils.logE("FileCache", "OPEN_CACHE_FILE >> clear file ");
                                 }
                                 boolean unused4 = C0566a.this.f2102g = true;
                                 return;
@@ -112,7 +112,7 @@ public class C0566a implements C0569b {
                             if (C0566a.this.f2102g) {
                                 C0566a.this.m2222e();
                                 boolean unused5 = C0566a.this.f2102g = false;
-                                C0771g.m2787d("FileCache", "CLOSE_CACHE_FILE >> CanWrite = false; ");
+                                LogUtils.logE("FileCache", "CLOSE_CACHE_FILE >> CanWrite = false; ");
                             } else {
                                 Log.e("FileCache", "文件缓存还不能写入，检查是否OpenFileCache");
                             }
@@ -230,7 +230,7 @@ public class C0566a implements C0569b {
                 }
             }
         } else {
-            C0771g.m2787d("FileCache", "没有sd卡！");
+            LogUtils.logE("FileCache", "没有sd卡！");
         }
     }
 

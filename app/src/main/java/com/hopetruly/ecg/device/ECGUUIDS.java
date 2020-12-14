@@ -3,13 +3,13 @@ package com.hopetruly.ecg.device;
 import java.util.UUID;
 
 /* renamed from: com.hopetruly.ecg.device.a */
-public class C0745a {
+public class ECGUUIDS {
 
     /* renamed from: a */
-    public static final UUID f2768a = UUID.fromString("0783b03e-8535-b5a0-7140-a304d2495cb7");
+    public static final UUID CHAR_DEVICE_INFO_UUID = UUID.fromString("0783b03e-8535-b5a0-7140-a304d2495cb7");
 
     /* renamed from: b */
-    public static final UUID f2769b = UUID.fromString("0783b03e-8535-b5a0-7140-a304d2495cba");
+    public static final UUID SERV_UUID = UUID.fromString("0783b03e-8535-b5a0-7140-a304d2495cba");
 
     /* renamed from: c */
     public static final UUID f2770c = UUID.fromString("00002A24-0000-1000-8000-00805F9B34FB");

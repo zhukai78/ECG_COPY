@@ -7,7 +7,7 @@ import android.util.Log;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 /* renamed from: com.hopetruly.ecg.algorithm.a */
-public class C0735a {
+public class FallDownAlgorithm {
 
     /* renamed from: a */
     int f2721a = 0;
@@ -42,7 +42,7 @@ public class C0735a {
     /* renamed from: k */
     private boolean f2731k = false;
 
-    public C0735a(Context context) {
+    public FallDownAlgorithm(Context context) {
         this.f2725e = context;
     }
 

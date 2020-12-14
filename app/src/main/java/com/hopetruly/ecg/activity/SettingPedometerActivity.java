@@ -11,9 +11,9 @@ import android.widget.EditText;
 import com.hopetruly.ecg.ECGApplication;
 import com.hopetruly.ecg.R;
 import com.hopetruly.ecg.entity.PedometerRecord;
-import com.hopetruly.ecg.p022b.C0740b;
+import com.hopetruly.ecg.p022b.SqlManager;
 
-public class SettingPedometerActivity extends C0721a {
+public class SettingPedometerActivity extends BaseActivity {
 
     /* renamed from: a */
     EditText f2644a;
@@ -27,7 +27,7 @@ public class SettingPedometerActivity extends C0721a {
     /* renamed from: a */
     private void m2545a() {
         this.f2644a = (EditText) findViewById(R.id.pedometer_target);
-        this.f2644a.setText(String.valueOf(this.f2645c.f2087h.mo2672b()));
+        this.f2644a.setText(String.valueOf(this.f2645c.appPedometerConf.mo2672b()));
     }
 
     /* access modifiers changed from: protected */
@@ -57,14 +57,14 @@ public class SettingPedometerActivity extends C0721a {
         } else if (itemId == R.id.action_save) {
             String obj = this.f2644a.getText().toString();
             if (!TextUtils.isEmpty(obj)) {
-                this.f2645c.f2087h.mo2671a(Long.valueOf(obj).longValue());
-                SharedPreferences.Editor edit = this.f2645c.f2088i.edit();
+                this.f2645c.appPedometerConf.setSTEP_TARGET(Long.valueOf(obj).longValue());
+                SharedPreferences.Editor edit = this.f2645c.spPedometer_onf.edit();
                 edit.putLong("STEP_TARGET", Long.valueOf(obj).longValue());
                 edit.commit();
-                PedometerRecord q = this.f2645c.f2094o.mo2746q();
+                PedometerRecord q = this.f2645c.appMainService.mo2746q();
                 if (q != null) {
-                    q.setTarget(this.f2645c.f2087h.mo2672b());
-                    new C0740b(getApplicationContext()).mo2474c(q);
+                    q.setTarget(this.f2645c.appPedometerConf.mo2672b());
+                    new SqlManager(getApplicationContext()).mo2474c(q);
                 }
                 setResult(-1);
                 if (getWindow().getAttributes().softInputMode == 0) {

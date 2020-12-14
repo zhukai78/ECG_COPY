@@ -1,7 +1,7 @@
 package com.hopetruly.ecg.entity;
 
 /* renamed from: com.hopetruly.ecg.entity.c */
-public class C0750c {
+public class PedometerConf {
 
     /* renamed from: a */
     public static final String f2818a = null;
@@ -21,12 +21,12 @@ public class C0750c {
     }
 
     /* renamed from: a */
-    public void mo2670a(int i) {
+    public void setSTEP_ENABLE_STEP(int i) {
         this.f2819b = i;
     }
 
     /* renamed from: a */
-    public void mo2671a(long j) {
+    public void setSTEP_TARGET(long j) {
         this.f2821d = j;
     }
 

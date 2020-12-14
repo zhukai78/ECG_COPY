@@ -29,16 +29,17 @@ import android.widget.RadioGroup;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import com.hopetruly.ecg.ECGApplication;
 import com.hopetruly.ecg.R;
 import com.hopetruly.ecg.algorithm.C0736b;
 import com.hopetruly.ecg.algorithm.HeartRateCounter3;
-import com.hopetruly.ecg.device.C0746b;
+import com.hopetruly.ecg.device.ConvertECG;
 import com.hopetruly.ecg.device.Sensor;
 import com.hopetruly.ecg.entity.ECGRecord;
-import com.hopetruly.ecg.p022b.C0740b;
+import com.hopetruly.ecg.p022b.SqlManager;
 import com.hopetruly.ecg.p023ui.C0764a;
 import com.hopetruly.ecg.services.MainService;
 import com.hopetruly.ecg.util.C0770f;
@@ -47,74 +48,73 @@ import com.warick.drawable.p028a.C0813b;
 import com.warick.drawable.p028a.C0814c;
 
 import java.io.File;
-import java.util.ArrayList;
 import java.util.Arrays;
 
-public class RealtimeECGDisplayActivity extends C0721a {
+public class RealtimeECGDisplayActivity extends BaseActivity {
 
     /* renamed from: z */
-    private static final String f2461z = "RealtimeECGDisplayActivity";
+    private static final String TAG = "RealtimeECGDisplayActivity";
     /* access modifiers changed from: private */
 
     /* renamed from: A */
-    public TextView f2462A;
+    public TextView tv_ecg_filter_status;
     /* access modifiers changed from: private */
 
     /* renamed from: B */
-    public TextView f2463B;
+    public TextView tv_ecg_alarm_status;
     /* access modifiers changed from: private */
 
     /* renamed from: C */
-    public Button f2464C;
+    public Button btn_ecg_bt_disable_alarm;
 
     /* renamed from: D */
-    private Switch f2465D;
+    private Switch switch_filter;
     /* access modifiers changed from: private */
 
     /* renamed from: E */
-    public EditText f2466E;
+    public EditText edit_ecg_content;
     /* access modifiers changed from: private */
 
     /* renamed from: F */
-    public boolean f2467F = false;
+    public boolean isShowSaveAlert = false;
 
     /* renamed from: G */
-    private PopupWindow f2468G;
+    private PopupWindow popwindow_ecg_tool;
     /* access modifiers changed from: private */
 
     /* renamed from: H */
-    public PopupWindow f2469H;
+    public PopupWindow ecg_comment_pupopwindow;
     /* access modifiers changed from: private */
 
     /* renamed from: I */
-    public ProgressDialog f2470I = null;
+    public ProgressDialog progress_saving_edit = null;
 
     /* renamed from: J */
-    private ServiceConnection f2471J = new ServiceConnection() {
+    private ServiceConnection realMainServiceConn = new ServiceConnection() {
         public void onServiceConnected(ComponentName componentName, IBinder iBinder) {
-            RealtimeECGDisplayActivity.this.f2492u = ((MainService.C0762a) iBinder).mo2756a();
-            if (RealtimeECGDisplayActivity.this.f2492u.mo2728b()) {
-                RealtimeECGDisplayActivity.this.f2482k.setText(RealtimeECGDisplayActivity.this.getResources().getString(R.string.BLE_state));
-                RealtimeECGDisplayActivity.this.f2492u.mo2737k();
+            RealtimeECGDisplayActivity.this.realtimeMainService = ((MainService.MainBinder) iBinder).getMainBinder();
+            if (RealtimeECGDisplayActivity.this.realtimeMainService.isMBleConn()) {
+                tv_ecg_blr_status.setText(RealtimeECGDisplayActivity.this.getResources().getString(R.string.BLE_state));
+                RealtimeECGDisplayActivity.this.realtimeMainService.mo2737k();
                 new Handler().postDelayed(new Runnable() {
                     public void run() {
-                        RealtimeECGDisplayActivity.this.m2475e();
-                        RealtimeECGDisplayActivity.this.f2487p.setVisible(false);
-                        RealtimeECGDisplayActivity.this.f2488q.setVisible(true);
+                        RealtimeECGDisplayActivity.this.beginEcg();
+                        menu_ecg_start.setVisible(false);
+                        menu_ecg_stop.setVisible(true);
                     }
                 }, 1000);
                 return;
             }
-            RealtimeECGDisplayActivity.this.f2482k.setText(RealtimeECGDisplayActivity.this.getResources().getString(R.string.BLE_state1));
+            RealtimeECGDisplayActivity.this.tv_ecg_blr_status.setText(RealtimeECGDisplayActivity.this.getResources().getString(R.string.BLE_state1));
         }
 
         public void onServiceDisconnected(ComponentName componentName) {
-            RealtimeECGDisplayActivity.this.f2492u = null;
+            RealtimeECGDisplayActivity.this.realtimeMainService = null;
         }
     };
 
     /* renamed from: K */
-    private BroadcastReceiver f2472K = new BroadcastReceiver() {
+    private BroadcastReceiver ecgBroadcastReceiver = new BroadcastReceiver() {
         public void onReceive(Context context, Intent intent) {
             TextView a = new TextView(context);
             String string;
@@ -124,19 +124,19 @@ public class RealtimeECGDisplayActivity extends C0721a {
             String action = intent.getAction();
             try {
                 if (action.equals("com.hopetruly.ec.services.ACTION_GATT_DATA_NOTIFY")) {
-                    if (intent.getStringExtra("com.hopetruly.ec.services.EXTRA_UUID").equals(Sensor.ECG.getData().toString()) && RealtimeECGDisplayActivity.this.f2492u.mo2736j()) {
-                        RealtimeECGDisplayActivity.this.m2466a(intent.getByteArrayExtra("com.hopetruly.ec.services.EXTRA_DATA"));
+                    if (intent.getStringExtra("com.hopetruly.ec.services.EXTRA_UUID").equals(Sensor.ECG.getData().toString()) && RealtimeECGDisplayActivity.this.realtimeMainService.mo2736j()) {
+                        RealtimeECGDisplayActivity.this.covertECGData(intent.getByteArrayExtra("com.hopetruly.ec.services.EXTRA_DATA"));
                     }
                 } else if (action.equals("com.hopetruly.ecg.services.MainService.REFRESH_TIMER")) {
-                    RealtimeECGDisplayActivity.this.m2461a(intent.getLongExtra("com.hopetruly.ecg.services.MainService.REFRESH_TIMER", 0));
+                    RealtimeECGDisplayActivity.this.refreshTimer(intent.getLongExtra("com.hopetruly.ecg.services.MainService.REFRESH_TIMER", 0));
                 } else if (action.equals("com.hopetruly.ecg.services.MainService.REFRESH_DATETIME")) {
-                    RealtimeECGDisplayActivity.this.m2465a(intent.getStringExtra("com.hopetruly.ecg.services.MainService.REFRESH_DATETIME"));
+                    RealtimeECGDisplayActivity.this.refreshDatetime(intent.getStringExtra("com.hopetruly.ecg.services.MainService.REFRESH_DATETIME"));
                 } else if (action.equals("com.hopetruly.ec.services.ACTION_GATT_DISCONNECTED")) {
                     RealtimeECGDisplayActivity.this.m2476f();
-                    RealtimeECGDisplayActivity.this.f2482k.setText(RealtimeECGDisplayActivity.this.getResources().getString(R.string.BLE_state1));
+                    RealtimeECGDisplayActivity.this.tv_ecg_blr_status.setText(RealtimeECGDisplayActivity.this.getResources().getString(R.string.BLE_state1));
                     RealtimeECGDisplayActivity.this.m2478g();
                 } else if (action.equals("com.hopetruly.ecg.services.MainService.FILE_SAVE_START")) {
-                    RealtimeECGDisplayActivity.this.m2480h();
+                    RealtimeECGDisplayActivity.this.showSaveingprogressDialog();
                 } else {
                     if (action.equals("com.hopetruly.ecg.services.MainService.FILE_SAVE_SUCCESS")) {
                         realtimeECGDisplayActivity = RealtimeECGDisplayActivity.this;
@@ -145,15 +145,15 @@ public class RealtimeECGDisplayActivity extends C0721a {
                     } else {
                         if (action.equals("com.hopetruly.ecg.services.MainService.RECEIVE_LOCATION_SUCCESS")) {
                             stringExtra = intent.getStringExtra("Address");
-                            textView = RealtimeECGDisplayActivity.this.f2481j;
+                            textView = RealtimeECGDisplayActivity.this.tv_main_location;
                         } else {
                             if (action.equals("com.hopetruly.ecg.services.MainService.RECEIVE_LOCATION_FAIL")) {
-                                RealtimeECGDisplayActivity.this.f2481j.setText("Failed to locate ！");
+                                RealtimeECGDisplayActivity.this.tv_main_location.setText("Failed to locate ！");
                             } else if (action.equals("com.hopetruly.ecg.services.MainService.MARK_TIME_START")) {
                                 Toast.makeText(RealtimeECGDisplayActivity.this, RealtimeECGDisplayActivity.this.getString(R.string.marking_finish), 0).show();
                                 return;
                             } else if (action.equals("com.holptruly.ecg.services.NetService.NET_CHANGE")) {
-                                RealtimeECGDisplayActivity.this.m2473d();
+                                RealtimeECGDisplayActivity.this.updataStatus();
                                 return;
                             } else if (action.equals("com.hopetruly.ecg.util.ACTION_HEARTRATE")) {
                                 stringExtra = intent.getStringExtra("heart_rate");
@@ -163,17 +163,17 @@ public class RealtimeECGDisplayActivity extends C0721a {
                                     RealtimeECGDisplayActivity.this.f2493v.mo2449a();
                                 }
                                 if (RealtimeECGDisplayActivity.this.f2493v.mo2456g()) {
-                                    RealtimeECGDisplayActivity.this.f2464C.setVisibility(0);
-                                    C0764a.m2746a(RealtimeECGDisplayActivity.this.f2464C);
+                                    RealtimeECGDisplayActivity.this.btn_ecg_bt_disable_alarm.setVisibility(0);
+                                    C0764a.m2746a(RealtimeECGDisplayActivity.this.btn_ecg_bt_disable_alarm);
                                 } else {
-                                    C0764a.m2747b(RealtimeECGDisplayActivity.this.f2464C);
-                                    RealtimeECGDisplayActivity.this.f2464C.setVisibility(8);
+                                    C0764a.m2747b(RealtimeECGDisplayActivity.this.btn_ecg_bt_disable_alarm);
+                                    RealtimeECGDisplayActivity.this.btn_ecg_bt_disable_alarm.setVisibility(8);
                                 }
-                                textView = RealtimeECGDisplayActivity.this.f2480i;
+                                textView = RealtimeECGDisplayActivity.this.tv_heartrate;
                             } else if (action.equals("com.hopetruly.ecg.util.MyAlarmClock.COUNT_SEC")) {
                                 RealtimeECGDisplayActivity.this.f2493v.mo2454e();
                                 if (RealtimeECGDisplayActivity.this.f2493v.mo2451b() && !RealtimeECGDisplayActivity.this.f2493v.mo2455f()) {
-                                    RealtimeECGDisplayActivity.this.f2463B.setText(R.string.ecg_alarm_status_on);
+                                    RealtimeECGDisplayActivity.this.tv_ecg_alarm_status.setText(R.string.ecg_alarm_status_on);
                                 } else {
                                     return;
                                 }
@@ -185,7 +185,7 @@ public class RealtimeECGDisplayActivity extends C0721a {
                         textView.setText(stringExtra);
                         return;
                     }
-                    realtimeECGDisplayActivity.m2482i();
+                    realtimeECGDisplayActivity.dissmissSaveingprogressDialog();
                 }
             } catch (Exception e) {
                 e.printStackTrace();
@@ -194,7 +194,7 @@ public class RealtimeECGDisplayActivity extends C0721a {
     };
 
     /* renamed from: a */
-    WarickSurfaceView f2473a;
+    WarickSurfaceView sv_heart_rate;
 
     /* renamed from: c */
     C0814c f2474c;
@@ -203,100 +203,100 @@ public class RealtimeECGDisplayActivity extends C0721a {
     C0813b f2475d;
 
     /* renamed from: e */
-    TextView f2476e;
+    TextView tv_ecg_values;
 
     /* renamed from: f */
-    TextView f2477f;
+    TextView tv_ecg_scale_info;
 
     /* renamed from: g */
-    TextView f2478g;
+    TextView tv_main_timer;
 
     /* renamed from: h */
-    TextView f2479h;
+    TextView tv_main_datatime;
 
     /* renamed from: i */
-    TextView f2480i;
+    TextView tv_heartrate;
 
     /* renamed from: j */
-    TextView f2481j;
+    TextView tv_main_location;
 
     /* renamed from: k */
-    TextView f2482k;
+    TextView tv_ecg_blr_status;
 
     /* renamed from: l */
-    TextView f2483l;
+    TextView tv_ecg_auto_rec;
 
     /* renamed from: m */
-    TextView f2484m;
+    TextView tv_ecg_realtime_upload_status;
 
     /* renamed from: n */
-    TextView f2485n;
+    TextView tv_main_ecg_description;
 
     /* renamed from: o */
-    TextView f2486o;
+    TextView tv_ecg_net_status;
 
     /* renamed from: p */
-    MenuItem f2487p;
+    MenuItem menu_ecg_start;
 
     /* renamed from: q */
-    MenuItem f2488q;
+    MenuItem menu_ecg_stop;
 
     /* renamed from: r */
-    MenuItem f2489r;
+    MenuItem menu_ecg_filter_on;
 
     /* renamed from: s */
-    MenuItem f2490s;
+    MenuItem menu_ecg_filter_off;
 
     /* renamed from: t */
-    ECGRecord f2491t;
+    ECGRecord realtimeECGRecord;
 
     /* renamed from: u */
-    MainService f2492u;
+    MainService realtimeMainService;
 
     /* renamed from: v */
     C0736b f2493v;
 
     /* renamed from: w */
-    ECGApplication f2494w;
+    ECGApplication realtimeApplication;
 
     /* renamed from: x */
-    HeartRateCounter3 f2495x;
+    HeartRateCounter3 mHeartRateCounter3;
 
     /* renamed from: y */
-    ProgressDialog f2496y;
+    ProgressDialog saveprogressDialog;
 
     /* renamed from: a */
-    private void m2459a() {
+    private void checkEcgSet() {
         TextView textView;
         int i;
         TextView textView2;
         int i2;
-        bindService(new Intent(this, MainService.class), this.f2471J, 1);
-        this.f2493v = new C0736b(this);
-        this.f2495x = new HeartRateCounter3();
+        bindService(new Intent(this, MainService.class), this.realMainServiceConn, 1);
+        f2493v = new C0736b(this);
+        mHeartRateCounter3 = new HeartRateCounter3();
         if (getIntent().getIntExtra("Lead", 0) == 0) {
-            this.f2491t.setLeadType(0);
-            this.f2485n.setText(getString(R.string.l_with_hand));
+            this.realtimeECGRecord.setLeadType(0);
+            this.tv_main_ecg_description.setText(getString(R.string.l_with_hand));
             if (this.f2474c != null) {
                 this.f2474c.mo2911a(true);
             }
-            textView = this.f2462A;
+            textView = this.tv_ecg_filter_status;
             i = R.string.ecg_filter_status_on;
         } else {
-            this.f2491t.setLeadType(1);
-            this.f2485n.setText(getString(R.string.l_with_chest));
+            this.realtimeECGRecord.setLeadType(1);
+            this.tv_main_ecg_description.setText(getString(R.string.l_with_chest));
             if (this.f2474c != null) {
                 this.f2474c.mo2911a(false);
             }
-            textView = this.f2462A;
+            textView = this.tv_ecg_filter_status;
             i = R.string.ecg_filter_status_off;
         }
         textView.setText(getString(i));
         if (this.f2493v.mo2451b()) {
-            textView2 = this.f2463B;
+            textView2 = this.tv_ecg_alarm_status;
             i2 = R.string.ecg_alarm_status_on;
         } else {
-            textView2 = this.f2463B;
+            textView2 = this.tv_ecg_alarm_status;
             i2 = R.string.ecg_alarm_status_off;
         }
         textView2.setText(getString(i2));
@@ -313,11 +313,11 @@ public class RealtimeECGDisplayActivity extends C0721a {
         intentFilter.addAction("com.hopetruly.ecg.services.MainService.MARK_TIME_START");
         intentFilter.addAction("com.holptruly.ecg.services.NetService.NET_CHANGE");
         intentFilter.addAction("com.hopetruly.ecg.util.MyAlarmClock.COUNT_SEC");
-        LocalBroadcastManager.getInstance(getApplicationContext()).registerReceiver(this.f2472K, intentFilter);
+        LocalBroadcastManager.getInstance(getApplicationContext()).registerReceiver(this.ecgBroadcastReceiver, intentFilter);
     }
 
     /* renamed from: a */
-    private void m2460a(int i) {
+    private void showTime_is_reached_dialog(int i) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle(getResources().getString(R.string.Tip));
         builder.setMessage(i + getResources().getString(R.string.set_time_is_reached));
@@ -333,22 +333,22 @@ public class RealtimeECGDisplayActivity extends C0721a {
 
     /* access modifiers changed from: private */
     /* renamed from: a */
-    public void m2461a(long j) {
+    public void refreshTimer(long j) {
         long j2 = j % 3600;
-        TextView textView = this.f2478g;
+        TextView textView = this.tv_main_timer;
         textView.setText("" + String.format("%02d", new Object[]{Integer.valueOf((int) (j / 3600))}) + ":" + String.format("%02d", new Object[]{Integer.valueOf((int) (j2 / 60))}) + ":" + String.format("%02d", new Object[]{Integer.valueOf((int) (j2 % 60))}));
-        if (this.f2494w.f2085f.mo2641a() > 0 && j2 >= ((long) (this.f2494w.f2085f.mo2641a() * 60))) {
+        if (this.realtimeApplication.appECGConf.mo2641a() > 0 && j2 >= ((long) (this.realtimeApplication.appECGConf.mo2641a() * 60))) {
             m2476f();
-            m2460a(this.f2494w.f2085f.mo2641a());
+            showTime_is_reached_dialog(this.realtimeApplication.appECGConf.mo2641a());
         }
     }
 
     /* access modifiers changed from: private */
     /* renamed from: a */
-    public void m2465a(String str) {
-        this.f2479h.setVisibility(0);
-        this.f2485n.setVisibility(0);
-        this.f2479h.setText(str);
+    public void refreshDatetime(String str) {
+        this.tv_main_datatime.setVisibility(0);
+        this.tv_main_ecg_description.setVisibility(0);
+        this.tv_main_datatime.setText(str);
     }
 
     /*
@@ -363,6 +363,7 @@ public class RealtimeECGDisplayActivity extends C0721a {
     private byte[] realGattValue;
 
     private int bytesNum = 0;
+
     /*
      *   byte数组转成十六进制
      */
@@ -386,7 +387,7 @@ public class RealtimeECGDisplayActivity extends C0721a {
     /* access modifiers changed from: private */
     /* renamed from: a */
     @SuppressLint("LongLogTag")
-    public void m2466a(byte[] bArr) {
+    public void covertECGData(byte[] bArr) {
 
         if (s.length() < 138) {
             bytesNum--;
@@ -394,68 +395,68 @@ public class RealtimeECGDisplayActivity extends C0721a {
         if (bytesNum < 6) {
             int length = s.length();
             s += bytesToHex(bArr, 0, bArr.length, false);
-            Log.d(f2461z, "s'length: " + length + "," + bytesNum);
-//            Log.d(f2461z, "s'origin value: " + s);
-            System.arraycopy(bArr, 0, gattValue, length/2, bArr.length);
-//            Log.d(f2461z, "gattValue' origin value: " + bytesToHex(gattValue, 0, gattValue.length, false));
+            Log.d(TAG, "s'length: " + length + "," + bytesNum);
+//            Log.d(TAG, "s'origin value: " + s);
+            System.arraycopy(bArr, 0, gattValue, length / 2, bArr.length);
+//            Log.d(TAG, "gattValue' origin value: " + bytesToHex(gattValue, 0, gattValue.length, false));
             bytesNum++;
             return;
         }
 
         int index = s.indexOf("56A1D");
         s = s.substring(index, s.length());
-        Log.d(f2461z, "56a1d'index: " + index);
-        System.arraycopy(gattValue, index/2, gattValue, 0, gattValue.length - index/2);
+        Log.d(TAG, "56a1d'index: " + index);
+        System.arraycopy(gattValue, index / 2, gattValue, 0, gattValue.length - index / 2);
 //        byte[] bRex = Arrays.copyOfRange(gattValue, index/2, (s.length() + index)/2);
-//        Log.d(f2461z, "g'long sub: " + index/2 + ","  + bytesToHex(gattValue, 0, gattValue.length, false));
+//        Log.d(TAG, "g'long sub: " + index/2 + ","  + bytesToHex(gattValue, 0, gattValue.length, false));
         String sub = s.substring(0, 7);
         if (sub.contains("56A1D0")) {
             realGattValue = Arrays.copyOfRange(gattValue, 6, 16);
             s = s.substring(42, s.length());
             int length = s.length();
             s += bytesToHex(bArr, 0, bArr.length, false);
-//            Log.d(f2461z, "s'new sub: " + index + "," + s);
-            System.arraycopy(gattValue, 21, gattValue, 0, length/2);
-            System.arraycopy(bArr, 0, gattValue, length/2, bArr.length);
-//            Log.d(f2461z, "g'new sub: " + index/2 + ","  + bytesToHex(gattValue, 0, gattValue.length, false));
+//            Log.d(TAG, "s'new sub: " + index + "," + s);
+            System.arraycopy(gattValue, 21, gattValue, 0, length / 2);
+            System.arraycopy(bArr, 0, gattValue, length / 2, bArr.length);
+//            Log.d(TAG, "g'new sub: " + index/2 + ","  + bytesToHex(gattValue, 0, gattValue.length, false));
 
-        }else if (sub.contains("56A1D1")) {
+        } else if (sub.contains("56A1D1")) {
             //todo
             s = s.substring(34, s.length());
             int length = s.length();
             s += bytesToHex(bArr, 0, bArr.length, false);
-            System.arraycopy(gattValue, 17, gattValue, 0, length/2);
-            System.arraycopy(bArr, 0, gattValue, length/2, bArr.length);
+            System.arraycopy(gattValue, 17, gattValue, 0, length / 2);
+            System.arraycopy(bArr, 0, gattValue, length / 2, bArr.length);
         }
 
-//        Log.d(f2461z, "getGattValue: " + s + "-----" + index);
-//        Log.d(f2461z, "getRealValue: " + bytesToHex(realGattValue, 0, realGattValue.length, false));
+//        Log.d(TAG, "getGattValue: " + s + "-----" + index);
+//        Log.d(TAG, "getRealValue: " + bytesToHex(realGattValue, 0, realGattValue.length, false));
         String str;
         TextView textView;
         if (this.f2474c != null) {
-            C0746b convertECG = Sensor.ECG.convertECG(realGattValue);
-            f2492u.f2850b.mo2703a(convertECG.f2795b);
-            for (int i = 0; i < convertECG.f2795b.length; i++) {
-                this.f2474c.mo2918c((float) convertECG.f2795b[i]);
-                this.f2495x.mo2439a((float) (convertECG.f2795b[i] * this.f2474c.mo2925h()));
-                if (this.f2495x.getHrStatus() != 2 || this.f2495x.getHeartRate() <= 0) {
-                    textView = this.f2480i;
+            ConvertECG convertECG = Sensor.ECG.convertECG(realGattValue);
+            realtimeMainService.mmainFileService.mo2703a(convertECG.ecgArr);
+            for (int i = 0; i < convertECG.ecgArr.length; i++) {
+                this.f2474c.mo2918c((float) convertECG.ecgArr[i]);
+                this.mHeartRateCounter3.mo2439a((float) (convertECG.ecgArr[i] * this.f2474c.mo2925h()));
+                if (this.mHeartRateCounter3.getHrStatus() != 2 || this.mHeartRateCounter3.getHeartRate() <= 0) {
+                    textView = this.tv_heartrate;
                     str = "NaN";
                 } else {
-                    if (!String.valueOf(this.f2495x.getHeartRate()).equals("NaN")) {
-                        this.f2493v.mo2450a(this.f2495x.getHeartRate());
+                    if (!String.valueOf(this.mHeartRateCounter3.getHeartRate()).equals("NaN")) {
+                        this.f2493v.mo2450a(this.mHeartRateCounter3.getHeartRate());
                     } else {
                         this.f2493v.mo2449a();
                     }
                     if (this.f2493v.mo2456g()) {
-                        this.f2464C.setVisibility(0);
-                        C0764a.m2746a(this.f2464C);
+                        this.btn_ecg_bt_disable_alarm.setVisibility(0);
+                        C0764a.m2746a(this.btn_ecg_bt_disable_alarm);
                     } else {
-                        C0764a.m2747b(this.f2464C);
-                        this.f2464C.setVisibility(8);
+                        C0764a.m2747b(this.btn_ecg_bt_disable_alarm);
+                        this.btn_ecg_bt_disable_alarm.setVisibility(8);
                     }
-                    textView = this.f2480i;
-                    str = String.valueOf(this.f2495x.getHeartRate());
+                    textView = this.tv_heartrate;
+                    str = String.valueOf(this.mHeartRateCounter3.getHeartRate());
                 }
                 textView.setText(str);
             }
@@ -463,64 +464,64 @@ public class RealtimeECGDisplayActivity extends C0721a {
     }
 
     /* renamed from: b */
-    private void m2469b() {
-        this.f2473a = (WarickSurfaceView) findViewById(R.id.heart_rate_sv);
+    private void initView() {
+        this.sv_heart_rate = (WarickSurfaceView) findViewById(R.id.heart_rate_sv);
         this.f2475d = new C0813b();
-        this.f2473a.mo2893a((WarickSurfaceView.C0809a) this.f2475d);
+        this.sv_heart_rate.mo2893a((WarickSurfaceView.C0809a) this.f2475d);
         this.f2474c = new C0814c();
         this.f2474c.mo2908a(0);
-        this.f2473a.mo2893a((WarickSurfaceView.C0809a) this.f2474c);
-        this.f2473a.mo2892a(25);
-        this.f2476e = (TextView) findViewById(R.id.ecg_values);
-        this.f2478g = (TextView) findViewById(R.id.main_timer);
-        this.f2479h = (TextView) findViewById(R.id.main_datatime);
-        this.f2479h.setVisibility(8);
-        this.f2485n = (TextView) findViewById(R.id.main_ecg_description);
-        this.f2462A = (TextView) findViewById(R.id.main_ecg_filter_status);
-        this.f2463B = (TextView) findViewById(R.id.main_ecg_alarm_status);
-        this.f2464C = (Button) findViewById(R.id.ecg_bt_disable_alarm);
-        this.f2464C.setVisibility(8);
-        this.f2464C.setOnClickListener(new View.OnClickListener() {
+        this.sv_heart_rate.mo2893a((WarickSurfaceView.C0809a) this.f2474c);
+        this.sv_heart_rate.mo2892a(25);
+        this.tv_ecg_values = (TextView) findViewById(R.id.ecg_values);
+        this.tv_main_timer = (TextView) findViewById(R.id.main_timer);
+        this.tv_main_datatime = (TextView) findViewById(R.id.main_datatime);
+        this.tv_main_datatime.setVisibility(8);
+        this.tv_main_ecg_description = (TextView) findViewById(R.id.main_ecg_description);
+        this.tv_ecg_filter_status = (TextView) findViewById(R.id.main_ecg_filter_status);
+        this.tv_ecg_alarm_status = (TextView) findViewById(R.id.main_ecg_alarm_status);
+        this.btn_ecg_bt_disable_alarm = (Button) findViewById(R.id.ecg_bt_disable_alarm);
+        this.btn_ecg_bt_disable_alarm.setVisibility(8);
+        this.btn_ecg_bt_disable_alarm.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
                 C0764a.m2747b(view);
                 ((Button) view).setVisibility(8);
                 RealtimeECGDisplayActivity.this.f2493v.mo2452c();
-                RealtimeECGDisplayActivity.this.f2463B.setText(RealtimeECGDisplayActivity.this.getString(R.string.ecg_alarm_hand_off));
+                RealtimeECGDisplayActivity.this.tv_ecg_alarm_status.setText(RealtimeECGDisplayActivity.this.getString(R.string.ecg_alarm_hand_off));
             }
         });
-        this.f2480i = (TextView) findViewById(R.id.main_heartrate);
-        this.f2481j = (TextView) findViewById(R.id.main_location);
-        this.f2482k = (TextView) findViewById(R.id.ecg_blr_status);
-        this.f2482k.setText(getResources().getString(R.string.BLE_state));
-        this.f2483l = (TextView) findViewById(R.id.ecg_auto_rec_status);
-        this.f2484m = (TextView) findViewById(R.id.ecg_realtime_upload_status);
-        this.f2486o = (TextView) findViewById(R.id.ecg_net_status);
-        this.f2477f = (TextView) findViewById(R.id.ecg_scale_info);
+        tv_heartrate = (TextView) findViewById(R.id.main_heartrate);
+        tv_main_location = (TextView) findViewById(R.id.main_location);
+        tv_ecg_blr_status = (TextView) findViewById(R.id.ecg_blr_status);
+        tv_ecg_blr_status.setText(getResources().getString(R.string.BLE_state));
+        tv_ecg_auto_rec = (TextView) findViewById(R.id.ecg_auto_rec_status);
+        tv_ecg_realtime_upload_status = (TextView) findViewById(R.id.ecg_realtime_upload_status);
+        tv_ecg_net_status = (TextView) findViewById(R.id.ecg_net_status);
+        tv_ecg_scale_info = (TextView) findViewById(R.id.ecg_scale_info);
     }
 
     /* renamed from: c */
-    private void m2471c() {
+    private void showPupop_ecg_tool() {
         View inflate = LayoutInflater.from(this).inflate(R.layout.pupop_ecg_tool, (ViewGroup) null);
-        this.f2468G = new PopupWindow(inflate, -2, -2, false);
-        this.f2468G.setBackgroundDrawable(new BitmapDrawable());
-        this.f2468G.setOutsideTouchable(true);
-        this.f2468G.setFocusable(true);
-        this.f2465D = (Switch) inflate.findViewById(R.id.filter_switch);
-        this.f2465D.setChecked(this.f2474c.mo2923f());
-        this.f2465D.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        this.popwindow_ecg_tool = new PopupWindow(inflate, -2, -2, false);
+        this.popwindow_ecg_tool.setBackgroundDrawable(new BitmapDrawable());
+        this.popwindow_ecg_tool.setOutsideTouchable(true);
+        this.popwindow_ecg_tool.setFocusable(true);
+        this.switch_filter = (Switch) inflate.findViewById(R.id.filter_switch);
+        this.switch_filter.setChecked(this.f2474c.mo2923f());
+        this.switch_filter.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             public void onCheckedChanged(CompoundButton compoundButton, boolean z) {
                 TextView b;
                 RealtimeECGDisplayActivity realtimeECGDisplayActivity;
                 int i;
                 RealtimeECGDisplayActivity.this.f2474c.mo2911a(z);
-                RealtimeECGDisplayActivity.this.f2489r.setVisible(z);
-                RealtimeECGDisplayActivity.this.f2490s.setVisible(!z);
+                RealtimeECGDisplayActivity.this.menu_ecg_filter_on.setVisible(z);
+                RealtimeECGDisplayActivity.this.menu_ecg_filter_off.setVisible(!z);
                 if (RealtimeECGDisplayActivity.this.f2474c.mo2923f()) {
-                    b = RealtimeECGDisplayActivity.this.f2462A;
+                    b = RealtimeECGDisplayActivity.this.tv_ecg_filter_status;
                     realtimeECGDisplayActivity = RealtimeECGDisplayActivity.this;
                     i = R.string.ecg_filter_status_on;
                 } else {
-                    b = RealtimeECGDisplayActivity.this.f2462A;
+                    b = RealtimeECGDisplayActivity.this.tv_ecg_filter_status;
                     realtimeECGDisplayActivity = RealtimeECGDisplayActivity.this;
                     i = R.string.ecg_filter_status_off;
                 }
@@ -540,19 +541,19 @@ public class RealtimeECGDisplayActivity extends C0721a {
                 switch (i) {
                     case R.id.ecg_scale_type_12_5:
                         RealtimeECGDisplayActivity.this.f2474c.specialMo2907a(1.0f);
-                        textView = RealtimeECGDisplayActivity.this.f2477f;
+                        textView = RealtimeECGDisplayActivity.this.tv_ecg_scale_info;
                         realtimeECGDisplayActivity = RealtimeECGDisplayActivity.this;
                         i2 = R.string.l_ecg_scale_12_5;
                         break;
                     case R.id.ecg_scale_type_25 /*2131165298*/:
                         RealtimeECGDisplayActivity.this.f2474c.mo2907a(1.0f);
-                        textView = RealtimeECGDisplayActivity.this.f2477f;
+                        textView = RealtimeECGDisplayActivity.this.tv_ecg_scale_info;
                         realtimeECGDisplayActivity = RealtimeECGDisplayActivity.this;
                         i2 = R.string.l_ecg_scale_25;
                         break;
                     case R.id.ecg_scale_type_50 /*2131165299*/:
                         RealtimeECGDisplayActivity.this.f2474c.mo2907a(2.0f);
-                        textView = RealtimeECGDisplayActivity.this.f2477f;
+                        textView = RealtimeECGDisplayActivity.this.tv_ecg_scale_info;
                         realtimeECGDisplayActivity = RealtimeECGDisplayActivity.this;
                         i2 = R.string.l_ecg_scale_50;
                         break;
@@ -562,53 +563,53 @@ public class RealtimeECGDisplayActivity extends C0721a {
                 textView.setText(realtimeECGDisplayActivity.getString(i2));
             }
         });
-        this.f2477f.setText(getString(R.string.l_ecg_scale_25));
+        this.tv_ecg_scale_info.setText(getString(R.string.l_ecg_scale_25));
         inflate.findViewById(R.id.btn_previous).setVisibility(8);
         inflate.findViewById(R.id.btn_next).setVisibility(8);
         View inflate2 = LayoutInflater.from(this).inflate(R.layout.pupop_ecg_comment, (ViewGroup) null);
-        this.f2469H = new PopupWindow(inflate2, -2, -2, true);
-        this.f2469H.setBackgroundDrawable(new BitmapDrawable());
-        this.f2469H.setOutsideTouchable(false);
-        this.f2469H.setFocusable(true);
-        this.f2466E = (EditText) inflate2.findViewById(R.id.ecg_comment_content);
+        this.ecg_comment_pupopwindow = new PopupWindow(inflate2, -2, -2, true);
+        this.ecg_comment_pupopwindow.setBackgroundDrawable(new BitmapDrawable());
+        this.ecg_comment_pupopwindow.setOutsideTouchable(false);
+        this.ecg_comment_pupopwindow.setFocusable(true);
+        this.edit_ecg_content = (EditText) inflate2.findViewById(R.id.ecg_comment_content);
         ((Button) inflate2.findViewById(R.id.ecg_comment_ok)).setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
-                ProgressDialog unused = RealtimeECGDisplayActivity.this.f2470I = ProgressDialog.show(RealtimeECGDisplayActivity.this, (CharSequence) null, RealtimeECGDisplayActivity.this.getString(R.string.saving_edit), true, true, (DialogInterface.OnCancelListener) null);
+                ProgressDialog unused = RealtimeECGDisplayActivity.this.progress_saving_edit = ProgressDialog.show(RealtimeECGDisplayActivity.this, (CharSequence) null, RealtimeECGDisplayActivity.this.getString(R.string.saving_edit), true, true, (DialogInterface.OnCancelListener) null);
                 new Thread(new Runnable() {
                     public void run() {
-                        String obj = RealtimeECGDisplayActivity.this.f2466E.getText().toString();
+                        String obj = RealtimeECGDisplayActivity.this.edit_ecg_content.getText().toString();
                         if (obj != null) {
                             try {
-                                File file = new File(RealtimeECGDisplayActivity.this.f2491t.getFilePath());
+                                File file = new File(RealtimeECGDisplayActivity.this.realtimeECGRecord.getFilePath());
                                 C0770f.m2780a(file, "text", obj);
-                                RealtimeECGDisplayActivity.this.f2491t.setDescription(obj);
-                                C0740b bVar = new C0740b(RealtimeECGDisplayActivity.this.getApplicationContext());
-                                for (ECGRecord next : bVar.mo2467a(RealtimeECGDisplayActivity.this.f2494w.f2081b.getId())) {
+                                RealtimeECGDisplayActivity.this.realtimeECGRecord.setDescription(obj);
+                                SqlManager bVar = new SqlManager(RealtimeECGDisplayActivity.this.getApplicationContext());
+                                for (ECGRecord next : bVar.mo2467a(RealtimeECGDisplayActivity.this.realtimeApplication.mUserInfo.getId())) {
                                     if (next.getFileName().equals(file.getName())) {
-                                        RealtimeECGDisplayActivity.this.f2491t.setId(next.getId());
+                                        RealtimeECGDisplayActivity.this.realtimeECGRecord.setId(next.getId());
                                     }
                                 }
-                                bVar.mo2471b(RealtimeECGDisplayActivity.this.f2491t);
+                                bVar.mo2471b(RealtimeECGDisplayActivity.this.realtimeECGRecord);
                             } catch (Exception e) {
                                 e.printStackTrace();
                             }
                         }
-                        if (RealtimeECGDisplayActivity.this.f2470I != null) {
-                            RealtimeECGDisplayActivity.this.f2470I.dismiss();
+                        if (RealtimeECGDisplayActivity.this.progress_saving_edit != null) {
+                            RealtimeECGDisplayActivity.this.progress_saving_edit.dismiss();
                         }
-                        ProgressDialog unused = RealtimeECGDisplayActivity.this.f2470I = null;
+                        ProgressDialog unused = RealtimeECGDisplayActivity.this.progress_saving_edit = null;
                     }
                 }).start();
-                RealtimeECGDisplayActivity.this.f2469H.dismiss();
-                if (!RealtimeECGDisplayActivity.this.f2492u.mo2728b()) {
+                RealtimeECGDisplayActivity.this.ecg_comment_pupopwindow.dismiss();
+                if (!RealtimeECGDisplayActivity.this.realtimeMainService.isMBleConn()) {
                     RealtimeECGDisplayActivity.this.onBackPressed();
                 }
             }
         });
         ((Button) inflate2.findViewById(R.id.ecg_comment_cancel)).setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
-                RealtimeECGDisplayActivity.this.f2469H.dismiss();
-                if (!RealtimeECGDisplayActivity.this.f2492u.mo2728b()) {
+                RealtimeECGDisplayActivity.this.ecg_comment_pupopwindow.dismiss();
+                if (!RealtimeECGDisplayActivity.this.realtimeMainService.isMBleConn()) {
                     RealtimeECGDisplayActivity.this.onBackPressed();
                 }
             }
@@ -617,7 +618,7 @@ public class RealtimeECGDisplayActivity extends C0721a {
 
     /* access modifiers changed from: private */
     /* renamed from: d */
-    public void m2473d() {
+    public void updataStatus() {
         TextView textView;
         Resources resources;
         int i;
@@ -627,39 +628,39 @@ public class RealtimeECGDisplayActivity extends C0721a {
         int i3;
         Resources resources3;
         TextView textView3;
-        if (this.f2494w.f2085f.mo2644b() == 1) {
-            textView = this.f2483l;
+        if (this.realtimeApplication.appECGConf.mo2644b() == 1) {
+            textView = this.tv_ecg_auto_rec;
             resources = getResources();
             i = R.string.auto_save;
         } else {
-            textView = this.f2483l;
+            textView = this.tv_ecg_auto_rec;
             resources = getResources();
             i = R.string.auto_save1;
         }
         textView.setText(resources.getString(i));
-        if (this.f2494w.f2085f.mo2648d() == 1) {
-            textView2 = this.f2484m;
+        if (this.realtimeApplication.appECGConf.mo2648d() == 1) {
+            textView2 = this.tv_ecg_realtime_upload_status;
             resources2 = getResources();
             i2 = R.string.Real_time_upload;
         } else {
-            textView2 = this.f2484m;
+            textView2 = this.tv_ecg_realtime_upload_status;
             resources2 = getResources();
             i2 = R.string.Real_time_upload1;
         }
         textView2.setText(resources2.getString(i2));
-        switch (this.f2494w.f2093n) {
+        switch (this.realtimeApplication.f2093n) {
             case -1:
-                textView3 = this.f2486o;
+                textView3 = this.tv_ecg_net_status;
                 resources3 = getResources();
                 i3 = R.string.network_state;
                 break;
             case 0:
-                textView3 = this.f2486o;
+                textView3 = this.tv_ecg_net_status;
                 resources3 = getResources();
                 i3 = R.string.network_state_mobile;
                 break;
             case 1:
-                textView3 = this.f2486o;
+                textView3 = this.tv_ecg_net_status;
                 resources3 = getResources();
                 i3 = R.string.network_state_wifi;
                 break;
@@ -671,15 +672,15 @@ public class RealtimeECGDisplayActivity extends C0721a {
 
     /* access modifiers changed from: private */
     /* renamed from: e */
-    public void m2475e() {
-        if (!this.f2492u.mo2736j()) {
-            if (!this.f2492u.mo2728b()) {
+    public void beginEcg() {
+        if (!this.realtimeMainService.mo2736j()) {
+            if (!this.realtimeMainService.isMBleConn()) {
                 Toast.makeText(getApplicationContext(), getString(R.string.ble_not_connect), 0).show();
                 return;
             }
             this.f2474c.mo2926i();
-            this.f2492u.mo2721a(this.f2491t);
-            this.f2495x.init();
+            this.realtimeMainService.startMyECG(this.realtimeECGRecord);
+            this.mHeartRateCounter3.init();
             this.f2493v.mo2453d();
         }
     }
@@ -687,18 +688,18 @@ public class RealtimeECGDisplayActivity extends C0721a {
     /* access modifiers changed from: private */
     /* renamed from: f */
     public void m2476f() {
-        if (this.f2492u.mo2736j()) {
-            this.f2491t.setHeartRate(this.f2495x.getAvgHr());
-            this.f2492u.mo2734h();
-            this.f2479h.setVisibility(8);
-            this.f2485n.setVisibility(8);
-            if (this.f2494w.f2085f.mo2644b() == 0) {
-                m2484j();
+        if (this.realtimeMainService.mo2736j()) {
+            this.realtimeECGRecord.setHeartRate(this.mHeartRateCounter3.getAvgHr());
+            this.realtimeMainService.mo2734h();
+            this.tv_main_datatime.setVisibility(8);
+            this.tv_main_ecg_description.setVisibility(8);
+            if (this.realtimeApplication.appECGConf.mo2644b() == 0) {
+                showSaveAlertDialog();
                 return;
             }
-            this.f2492u.mo2735i();
-            this.f2469H.showAtLocation(findViewById(R.id.heart_rate_sv), 17, 0, 0);
-            this.f2466E.setText("");
+            this.realtimeMainService.mo2735i();
+            this.ecg_comment_pupopwindow.showAtLocation(findViewById(R.id.heart_rate_sv), 17, 0, 0);
+            this.edit_ecg_content.setText("");
         }
     }
 
@@ -711,7 +712,7 @@ public class RealtimeECGDisplayActivity extends C0721a {
         builder.setPositiveButton(getResources().getString(R.string.ok), new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialogInterface, int i) {
                 dialogInterface.dismiss();
-                if (!RealtimeECGDisplayActivity.this.f2467F) {
+                if (!RealtimeECGDisplayActivity.this.isShowSaveAlert) {
                     RealtimeECGDisplayActivity.this.onBackPressed();
                 }
             }
@@ -723,38 +724,38 @@ public class RealtimeECGDisplayActivity extends C0721a {
 
     /* access modifiers changed from: private */
     /* renamed from: h */
-    public void m2480h() {
-        this.f2496y = new ProgressDialog(this);
-        this.f2496y.setMessage(getResources().getString(R.string.Saving));
-        this.f2496y.setCancelable(false);
-        this.f2496y.show();
+    public void showSaveingprogressDialog() {
+        this.saveprogressDialog = new ProgressDialog(this);
+        this.saveprogressDialog.setMessage(getResources().getString(R.string.Saving));
+        this.saveprogressDialog.setCancelable(false);
+        this.saveprogressDialog.show();
     }
 
     /* access modifiers changed from: private */
     /* renamed from: i */
-    public void m2482i() {
-        this.f2496y.dismiss();
+    public void dissmissSaveingprogressDialog() {
+        this.saveprogressDialog.dismiss();
     }
 
     /* renamed from: j */
-    private void m2484j() {
-        this.f2467F = true;
+    private void showSaveAlertDialog() {
+        this.isShowSaveAlert = true;
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle(getResources().getString(R.string.Save));
         builder.setMessage(getResources().getString(R.string.Save_to_file));
         builder.setPositiveButton(getResources().getString(R.string.Yes), new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialogInterface, int i) {
-                boolean unused = RealtimeECGDisplayActivity.this.f2467F = false;
-                RealtimeECGDisplayActivity.this.f2492u.mo2735i();
-                RealtimeECGDisplayActivity.this.f2469H.showAtLocation(RealtimeECGDisplayActivity.this.findViewById(R.id.heart_rate_sv), 17, 0, 0);
-                RealtimeECGDisplayActivity.this.f2466E.setText("");
+                boolean unused = RealtimeECGDisplayActivity.this.isShowSaveAlert = false;
+                RealtimeECGDisplayActivity.this.realtimeMainService.mo2735i();
+                RealtimeECGDisplayActivity.this.ecg_comment_pupopwindow.showAtLocation(RealtimeECGDisplayActivity.this.findViewById(R.id.heart_rate_sv), 17, 0, 0);
+                RealtimeECGDisplayActivity.this.edit_ecg_content.setText("");
             }
         });
         builder.setNegativeButton(getResources().getString(R.string.No), new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialogInterface, int i) {
-                boolean unused = RealtimeECGDisplayActivity.this.f2467F = false;
+                boolean unused = RealtimeECGDisplayActivity.this.isShowSaveAlert = false;
                 dialogInterface.dismiss();
-                if (!RealtimeECGDisplayActivity.this.f2492u.mo2728b()) {
+                if (!RealtimeECGDisplayActivity.this.realtimeMainService.isMBleConn()) {
                     RealtimeECGDisplayActivity.this.onBackPressed();
                 }
             }
@@ -780,7 +781,7 @@ public class RealtimeECGDisplayActivity extends C0721a {
     }
 
     public void onBackPressed() {
-        if (this.f2492u.mo2736j()) {
+        if (this.realtimeMainService.mo2736j()) {
             m2486k();
         } else {
             finish();
@@ -791,39 +792,39 @@ public class RealtimeECGDisplayActivity extends C0721a {
     @SuppressLint("LongLogTag")
     public void onCreate(Bundle bundle) {
         super.onCreate(bundle);
-        Log.i(f2461z, "oncreat~~~~");
-        this.f2494w = (ECGApplication) getApplication();
+        Log.i(TAG, "oncreat~~~~");
+        realtimeApplication = (ECGApplication) getApplication();
         getActionBar().setDisplayHomeAsUpEnabled(true);
-        this.f2491t = new ECGRecord();
+        this.realtimeECGRecord = new ECGRecord();
         getWindow().setFlags(128, 128);
         setContentView(R.layout.activity_realtime_ecg_display);
-        m2469b();
-        m2459a();
-        m2471c();
+        initView();
+        checkEcgSet();
+        showPupop_ecg_tool();
     }
 
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.ecg_realtime_display_menu, menu);
-        this.f2487p = menu.findItem(R.id.action_ecg_start);
-        this.f2488q = menu.findItem(R.id.action_ecg_stop);
-        this.f2487p.setVisible(true);
-        this.f2489r = menu.findItem(R.id.action_ecg_filter_on);
-        this.f2490s = menu.findItem(R.id.action_ecg_filter_off);
-        this.f2489r.setVisible(this.f2474c.mo2923f());
-        this.f2490s.setVisible(!this.f2474c.mo2923f());
+        this.menu_ecg_start = menu.findItem(R.id.action_ecg_start);
+        this.menu_ecg_stop = menu.findItem(R.id.action_ecg_stop);
+        this.menu_ecg_start.setVisible(true);
+        this.menu_ecg_filter_on = menu.findItem(R.id.action_ecg_filter_on);
+        this.menu_ecg_filter_off = menu.findItem(R.id.action_ecg_filter_off);
+        this.menu_ecg_filter_on.setVisible(this.f2474c.mo2923f());
+        this.menu_ecg_filter_off.setVisible(!this.f2474c.mo2923f());
         return true;
     }
 
     /* access modifiers changed from: protected */
     @SuppressLint("LongLogTag")
     public void onDestroy() {
-        Log.i(f2461z, "onDestroy~~~~");
-        if (this.f2492u != null) {
-            this.f2492u.mo2747r();
+        Log.i(TAG, "onDestroy~~~~");
+        if (this.realtimeMainService != null) {
+            this.realtimeMainService.mo2747r();
         }
-        unbindService(this.f2471J);
+        unbindService(this.realMainServiceConn);
         this.f2493v.mo2459j();
-        LocalBroadcastManager.getInstance(getApplicationContext()).unregisterReceiver(this.f2472K);
+        LocalBroadcastManager.getInstance(getApplicationContext()).unregisterReceiver(this.ecgBroadcastReceiver);
         super.onDestroy();
     }
 
@@ -838,23 +839,23 @@ public class RealtimeECGDisplayActivity extends C0721a {
             switch (itemId) {
                 case R.id.action_ecg_filter_off /*2131165206*/:
                     this.f2474c.mo2911a(true);
-                    this.f2465D.setChecked(true);
-                    this.f2489r.setVisible(true);
-                    this.f2490s.setVisible(false);
-                    textView = this.f2462A;
+                    this.switch_filter.setChecked(true);
+                    this.menu_ecg_filter_on.setVisible(true);
+                    this.menu_ecg_filter_off.setVisible(false);
+                    textView = this.tv_ecg_filter_status;
                     i = R.string.ecg_filter_status_on;
                     break;
                 case R.id.action_ecg_filter_on /*2131165207*/:
                     this.f2474c.mo2911a(false);
-                    this.f2465D.setChecked(false);
-                    this.f2489r.setVisible(false);
-                    this.f2490s.setVisible(true);
-                    textView = this.f2462A;
+                    this.switch_filter.setChecked(false);
+                    this.menu_ecg_filter_on.setVisible(false);
+                    this.menu_ecg_filter_off.setVisible(true);
+                    textView = this.tv_ecg_filter_status;
                     i = R.string.ecg_filter_status_off;
                     break;
                 case R.id.action_ecg_options /*2131165208*/:
                     try {
-                        this.f2468G.showAsDropDown(findViewById(menuItem.getItemId()));
+                        this.popwindow_ecg_tool.showAsDropDown(findViewById(menuItem.getItemId()));
                         return true;
                     } catch (Exception e) {
                         e.printStackTrace();
@@ -864,17 +865,17 @@ public class RealtimeECGDisplayActivity extends C0721a {
                     this.f2474c.mo2924g();
                     return true;
                 case R.id.action_ecg_start /*2131165210*/:
-                    m2475e();
-                    this.f2488q.setVisible(true);
-                    this.f2487p.setVisible(false);
+                    beginEcg();
+                    this.menu_ecg_stop.setVisible(true);
+                    this.menu_ecg_start.setVisible(false);
                     return true;
                 case R.id.action_ecg_stop /*2131165211*/:
                     m2476f();
                     this.f2493v.mo2452c();
-                    C0764a.m2747b(this.f2464C);
-                    this.f2464C.setVisibility(8);
-                    this.f2488q.setVisible(false);
-                    this.f2487p.setVisible(true);
+                    C0764a.m2747b(this.btn_ecg_bt_disable_alarm);
+                    this.btn_ecg_bt_disable_alarm.setVisibility(8);
+                    this.menu_ecg_stop.setVisible(false);
+                    this.menu_ecg_start.setVisible(true);
                     return true;
                 default:
                     return super.onOptionsItemSelected(menuItem);
@@ -890,14 +891,14 @@ public class RealtimeECGDisplayActivity extends C0721a {
     /* access modifiers changed from: protected */
     @SuppressLint("LongLogTag")
     public void onResume() {
-        Log.i(f2461z, "onResume~~~~");
-        m2473d();
+        Log.i(TAG, "onResume~~~~");
+        updataStatus();
         super.onResume();
     }
 
     /* access modifiers changed from: protected */
     public void onStop() {
-        this.f2468G.dismiss();
+        this.popwindow_ecg_tool.dismiss();
         super.onStop();
     }
 }

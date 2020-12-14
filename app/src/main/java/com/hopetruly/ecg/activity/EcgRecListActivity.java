@@ -33,7 +33,7 @@ import com.hopetruly.ecg.ECGApplication;
 import com.hopetruly.ecg.R;
 import com.hopetruly.ecg.entity.ECGEntity;
 import com.hopetruly.ecg.entity.ECGRecord;
-import com.hopetruly.ecg.p022b.C0740b;
+import com.hopetruly.ecg.p022b.SqlManager;
 import com.hopetruly.ecg.services.FileService;
 import com.hopetruly.ecg.util.C0770f;
 import com.hopetruly.part.net.NetService;
@@ -48,7 +48,7 @@ import java.util.List;
 
 import javax.xml.parsers.ParserConfigurationException;
 
-public class EcgRecListActivity extends C0721a implements AdapterView.OnItemLongClickListener {
+public class EcgRecListActivity extends BaseActivity implements AdapterView.OnItemLongClickListener {
     /* access modifiers changed from: private */
 
     /* renamed from: j */
@@ -64,7 +64,7 @@ public class EcgRecListActivity extends C0721a implements AdapterView.OnItemLong
     C0589b f2147d;
 
     /* renamed from: e */
-    C0740b f2148e;
+    SqlManager f2148e;
 
     /* renamed from: f */
     ECGApplication f2149f;
@@ -93,7 +93,7 @@ public class EcgRecListActivity extends C0721a implements AdapterView.OnItemLong
     /* renamed from: n */
     private ServiceConnection f2156n = new ServiceConnection() {
         public void onServiceConnected(ComponentName componentName, IBinder iBinder) {
-            EcgRecListActivity.this.f2150g = ((NetService.C0786c) iBinder).mo2852a();
+            EcgRecListActivity.this.f2150g = ((NetService.NetSerBinder) iBinder).getNetSerBinder();
         }
 
         public void onServiceDisconnected(ComponentName componentName) {
@@ -104,7 +104,7 @@ public class EcgRecListActivity extends C0721a implements AdapterView.OnItemLong
     /* renamed from: o */
     private ServiceConnection f2157o = new ServiceConnection() {
         public void onServiceConnected(ComponentName componentName, IBinder iBinder) {
-            EcgRecListActivity.this.f2151h = ((FileService.C0755a) iBinder).mo2708a();
+            EcgRecListActivity.this.f2151h = ((FileService.FileServiceBinder) iBinder).getFileService();
         }
 
         public void onServiceDisconnected(ComponentName componentName) {
@@ -190,7 +190,7 @@ public class EcgRecListActivity extends C0721a implements AdapterView.OnItemLong
                 } else if (action.equals("com.holptruly.ecg.services.NetService.LOGIN_SUCCESSFUL")) {
                     EcgRecListActivity.this.m2262d();
                     EcgRecListActivity.this.f2153k.dismiss();
-                    EcgRecListActivity.this.f2150g.mo2821a(EcgRecListActivity.this.f2149f.f2081b.getId());
+                    EcgRecListActivity.this.f2150g.mo2821a(EcgRecListActivity.this.f2149f.mUserInfo.getId());
                     return;
                 } else if (action.equals("com.holptruly.ecg.services.NetService.LOGIN_FAILE")) {
                     EcgRecListActivity.this.m2262d();
@@ -225,9 +225,9 @@ public class EcgRecListActivity extends C0721a implements AdapterView.OnItemLong
         /* access modifiers changed from: protected */
         /* renamed from: a */
         public List<ECGRecord> doInBackground(Void... voidArr) {
-            EcgRecListActivity.this.f2146c = EcgRecListActivity.this.f2148e.mo2467a(EcgRecListActivity.this.f2149f.f2081b.getId());
+            EcgRecListActivity.this.f2146c = EcgRecListActivity.this.f2148e.mo2467a(EcgRecListActivity.this.f2149f.mUserInfo.getId());
             for (ECGRecord user : EcgRecListActivity.this.f2146c) {
-                user.setUser(EcgRecListActivity.this.f2149f.f2081b);
+                user.setUser(EcgRecListActivity.this.f2149f.mUserInfo);
             }
             return EcgRecListActivity.this.f2146c;
         }
@@ -471,7 +471,7 @@ public class EcgRecListActivity extends C0721a implements AdapterView.OnItemLong
             this.f2153k.setOutsideTouchable(false);
             this.f2153k.setFocusable(true);
             this.f2154l = (EditText) inflate.findViewById(R.id.login_user_name);
-            this.f2154l.setText(((ECGApplication) getApplication()).f2081b.getName());
+            this.f2154l.setText(((ECGApplication) getApplication()).mUserInfo.getName());
             this.f2155m = (EditText) inflate.findViewById(R.id.login_user_pwd);
             this.f2155m.requestFocus();
             ((Button) inflate.findViewById(R.id.login_btn_login)).setOnClickListener(new View.OnClickListener() {
@@ -520,7 +520,7 @@ public class EcgRecListActivity extends C0721a implements AdapterView.OnItemLong
                 string = getResources().getString(R.string.p_not_valid_ecg_rec_file);
             } else {
                 String[] split = stringExtra.split("/");
-                this.f2151h.mo2702a(stringExtra, split[split.length - 1], this.f2149f.f2081b.getName());
+                this.f2151h.mo2702a(stringExtra, split[split.length - 1], this.f2149f.mUserInfo.getName());
                 return;
             }
             Toast.makeText(this, string, Toast.LENGTH_SHORT).show();
@@ -571,7 +571,7 @@ public class EcgRecListActivity extends C0721a implements AdapterView.OnItemLong
                     startActivityForResult(new Intent(this, FileExploreActivity.class), 3001);
                     return true;
                 case R.id.history_action_sync /*2131165328*/:
-                    this.f2150g.mo2821a(this.f2149f.f2081b.getId());
+                    this.f2150g.mo2821a(this.f2149f.mUserInfo.getId());
                     return true;
                 default:
                     return super.onOptionsItemSelected(menuItem);
@@ -618,7 +618,7 @@ public class EcgRecListActivity extends C0721a implements AdapterView.OnItemLong
         this.f2145a.setAdapter(this.f2147d);
         this.f2145a.setOnItemClickListener(this.f2160r);
         this.f2145a.setOnItemLongClickListener(this);
-        this.f2148e = new C0740b(this);
+        this.f2148e = new SqlManager(this);
         m2259b();
         super.onStart();
     }

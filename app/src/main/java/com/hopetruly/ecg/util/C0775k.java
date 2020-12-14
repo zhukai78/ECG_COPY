@@ -120,7 +120,7 @@ public class C0775k {
         float f2 = this.f2925c * 4.0f;
         float f3 = this.f2925c * 5.0f;
         ECGApplication eCGApplication = (ECGApplication) this.f2923a.getApplicationContext();
-        canvas.drawText((TextUtils.isEmpty(eCGApplication.f2081b.getLastName()) ? "" : eCGApplication.f2081b.getLastName()) + (TextUtils.isEmpty(eCGApplication.f2081b.getFirstName()) ? "" : eCGApplication.f2081b.getFirstName()), f, f2, paint);
+        canvas.drawText((TextUtils.isEmpty(eCGApplication.mUserInfo.getLastName()) ? "" : eCGApplication.mUserInfo.getLastName()) + (TextUtils.isEmpty(eCGApplication.mUserInfo.getFirstName()) ? "" : eCGApplication.mUserInfo.getFirstName()), f, f2, paint);
         m2809a(canvas, C0770f.m2775a(new File(eCGRecord.getFilePath()), "text"), f, f2 + f3, f3, paint);
         switch (eCGRecord.getLeadType()) {
             case 0:
