@@ -5,9 +5,9 @@ import java.io.IOException;
 import java.io.InputStream;
 
 /* renamed from: com.hopetruly.ecg.util.l */
-public class C0776l {
+public class StreamToByteUtils {
     /* renamed from: a */
-    public static byte[] m2818a(InputStream inputStream) throws IOException {
+    public static byte[] stoBytes(InputStream inputStream) throws IOException {
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
         byte[] bArr = new byte[1024];
         while (true) {

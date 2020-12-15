@@ -34,7 +34,7 @@ import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import com.hopetruly.ecg.ECGApplication;
 import com.hopetruly.ecg.R;
-import com.hopetruly.ecg.algorithm.C0736b;
+import com.hopetruly.ecg.algorithm.MaybeAlertHelper;
 import com.hopetruly.ecg.algorithm.HeartRateCounter3;
 import com.hopetruly.ecg.device.ConvertECG;
 import com.hopetruly.ecg.device.Sensor;
@@ -150,7 +150,7 @@ public class RealtimeECGDisplayActivity extends BaseActivity {
                             if (action.equals("com.hopetruly.ecg.services.MainService.RECEIVE_LOCATION_FAIL")) {
                                 RealtimeECGDisplayActivity.this.tv_main_location.setText("Failed to locate ！");
                             } else if (action.equals("com.hopetruly.ecg.services.MainService.MARK_TIME_START")) {
-                                Toast.makeText(RealtimeECGDisplayActivity.this, RealtimeECGDisplayActivity.this.getString(R.string.marking_finish), 0).show();
+                                Toast.makeText(RealtimeECGDisplayActivity.this, RealtimeECGDisplayActivity.this.getString(R.string.marking_finish), Toast.LENGTH_LONG).show();
                                 return;
                             } else if (action.equals("com.holptruly.ecg.services.NetService.NET_CHANGE")) {
                                 RealtimeECGDisplayActivity.this.updataStatus();
@@ -254,7 +254,7 @@ public class RealtimeECGDisplayActivity extends BaseActivity {
     MainService realtimeMainService;
 
     /* renamed from: v */
-    C0736b f2493v;
+    MaybeAlertHelper f2493v;
 
     /* renamed from: w */
     ECGApplication realtimeApplication;
@@ -272,7 +272,7 @@ public class RealtimeECGDisplayActivity extends BaseActivity {
         TextView textView2;
         int i2;
         bindService(new Intent(this, MainService.class), this.realMainServiceConn, 1);
-        f2493v = new C0736b(this);
+        f2493v = new MaybeAlertHelper(this);
         mHeartRateCounter3 = new HeartRateCounter3();
         if (getIntent().getIntExtra("Lead", 0) == 0) {
             this.realtimeECGRecord.setLeadType(0);
@@ -584,12 +584,12 @@ public class RealtimeECGDisplayActivity extends BaseActivity {
                                 C0770f.m2780a(file, "text", obj);
                                 RealtimeECGDisplayActivity.this.realtimeECGRecord.setDescription(obj);
                                 SqlManager bVar = new SqlManager(RealtimeECGDisplayActivity.this.getApplicationContext());
-                                for (ECGRecord next : bVar.mo2467a(RealtimeECGDisplayActivity.this.realtimeApplication.mUserInfo.getId())) {
+                                for (ECGRecord next : bVar.getECGRecord(RealtimeECGDisplayActivity.this.realtimeApplication.mUserInfo.getId())) {
                                     if (next.getFileName().equals(file.getName())) {
                                         RealtimeECGDisplayActivity.this.realtimeECGRecord.setId(next.getId());
                                     }
                                 }
-                                bVar.mo2471b(RealtimeECGDisplayActivity.this.realtimeECGRecord);
+                                bVar.updateEcgRecord(RealtimeECGDisplayActivity.this.realtimeECGRecord);
                             } catch (Exception e) {
                                 e.printStackTrace();
                             }
@@ -675,7 +675,7 @@ public class RealtimeECGDisplayActivity extends BaseActivity {
     public void beginEcg() {
         if (!this.realtimeMainService.mo2736j()) {
             if (!this.realtimeMainService.isMBleConn()) {
-                Toast.makeText(getApplicationContext(), getString(R.string.ble_not_connect), 0).show();
+                Toast.makeText(getApplicationContext(), getString(R.string.ble_not_connect), Toast.LENGTH_LONG).show();
                 return;
             }
             this.f2474c.mo2926i();

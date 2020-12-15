@@ -1,7 +1,7 @@
 package com.hopetruly.ecg.util;
 
 /* renamed from: com.hopetruly.ecg.util.c */
-public class C0767c {
+public class DataParser {
     /* renamed from: a */
     public static byte m2756a(int i) {
         return (byte) (i & 255);
@@ -28,7 +28,7 @@ public class C0767c {
     }
 
     /* renamed from: b */
-    public static int m2761b(byte b, byte b2) {
+    public static int parser(byte b, byte b2) {
         byte[] bArr = {b2, b, 0, 0};
         return ((bArr[2] & 255) << 16) | ((bArr[3] & 255) << 24) | ((bArr[1] & 255) << 8) | (bArr[0] & 255);
     }

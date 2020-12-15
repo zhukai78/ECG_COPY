@@ -16,27 +16,27 @@ import com.hopetruly.ecg.p022b.SqlManager;
 public class SettingPedometerActivity extends BaseActivity {
 
     /* renamed from: a */
-    EditText f2644a;
+    EditText edt_pedometer_target;
 
     /* renamed from: c */
-    ECGApplication f2645c;
+    ECGApplication settingECGApplication;
 
     /* renamed from: d */
-    InputMethodManager f2646d;
+    InputMethodManager mInputMethodManager;
 
     /* renamed from: a */
     private void m2545a() {
-        this.f2644a = (EditText) findViewById(R.id.pedometer_target);
-        this.f2644a.setText(String.valueOf(this.f2645c.appPedometerConf.mo2672b()));
+        this.edt_pedometer_target = (EditText) findViewById(R.id.pedometer_target);
+        this.edt_pedometer_target.setText(String.valueOf(this.settingECGApplication.appPedometerConf.mo2672b()));
     }
 
     /* access modifiers changed from: protected */
     public void onCreate(Bundle bundle) {
         super.onCreate(bundle);
-        this.f2645c = (ECGApplication) getApplication();
+        this.settingECGApplication = (ECGApplication) getApplication();
         setContentView(R.layout.activity_setting_pedometer);
         getActionBar().setDisplayHomeAsUpEnabled(true);
-        this.f2646d = (InputMethodManager) getSystemService("input_method");
+        this.mInputMethodManager = (InputMethodManager) getSystemService("input_method");
         m2545a();
     }
 
@@ -55,20 +55,20 @@ public class SettingPedometerActivity extends BaseActivity {
         if (itemId == 16908332) {
             onBackPressed();
         } else if (itemId == R.id.action_save) {
-            String obj = this.f2644a.getText().toString();
+            String obj = this.edt_pedometer_target.getText().toString();
             if (!TextUtils.isEmpty(obj)) {
-                this.f2645c.appPedometerConf.setSTEP_TARGET(Long.valueOf(obj).longValue());
-                SharedPreferences.Editor edit = this.f2645c.spPedometer_onf.edit();
+                this.settingECGApplication.appPedometerConf.setSTEP_TARGET(Long.valueOf(obj).longValue());
+                SharedPreferences.Editor edit = this.settingECGApplication.spPedometer_onf.edit();
                 edit.putLong("STEP_TARGET", Long.valueOf(obj).longValue());
                 edit.commit();
-                PedometerRecord q = this.f2645c.appMainService.mo2746q();
+                PedometerRecord q = this.settingECGApplication.appMainService.mo2746q();
                 if (q != null) {
-                    q.setTarget(this.f2645c.appPedometerConf.mo2672b());
-                    new SqlManager(getApplicationContext()).mo2474c(q);
+                    q.setTarget(this.settingECGApplication.appPedometerConf.mo2672b());
+                    new SqlManager(getApplicationContext()).writeStepRec(q);
                 }
                 setResult(-1);
                 if (getWindow().getAttributes().softInputMode == 0) {
-                    this.f2646d.toggleSoftInput(0, 2);
+                    this.mInputMethodManager.toggleSoftInput(0, 2);
                 }
                 finish();
             }

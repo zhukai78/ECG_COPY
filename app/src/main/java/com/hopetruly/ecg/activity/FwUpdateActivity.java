@@ -33,7 +33,7 @@ import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import com.hopetruly.ecg.R;
 import com.hopetruly.ecg.device.ECGUUIDS;
 import com.hopetruly.ecg.services.MainService;
-import com.hopetruly.ecg.util.C0767c;
+import com.hopetruly.ecg.util.DataParser;
 import com.hopetruly.ecg.util.LogUtils;
 import com.hopetruly.part.net.NetService;
 import com.hopetruly.part.p024a.BleHelper;
@@ -148,9 +148,9 @@ public class FwUpdateActivity extends BaseActivity {
             if ("com.hopetruly.ec.services.ACTION_GATT_DATA_NOTIFY".equals(action)) {
                 byte[] byteArrayExtra = intent.getByteArrayExtra("com.hopetruly.ec.services.EXTRA_DATA");
                 if (intent.getStringExtra("com.hopetruly.ec.services.EXTRA_UUID").equals(FwUpdateActivity.this.f2274r.getUuid().toString())) {
-                    FwUpdateActivity.this.f2248A.f2290a = C0767c.m2758a(byteArrayExtra[1], byteArrayExtra[0]);
+                    FwUpdateActivity.this.f2248A.f2290a = DataParser.m2758a(byteArrayExtra[1], byteArrayExtra[0]);
                     FwUpdateActivity.this.f2248A.f2292c = Character.valueOf((FwUpdateActivity.this.f2248A.f2290a & 1) == 1 ? 'B' : 'A');
-                    FwUpdateActivity.this.f2248A.f2291b = C0767c.m2761b(byteArrayExtra[3], byteArrayExtra[2]);
+                    FwUpdateActivity.this.f2248A.f2291b = DataParser.parser(byteArrayExtra[3], byteArrayExtra[2]);
                     FwUpdateActivity.this.m2310a(FwUpdateActivity.this.f2260d, FwUpdateActivity.this.f2248A);
                     try {
                         FwUpdateActivity.this.mo2204b();
@@ -351,14 +351,14 @@ public class FwUpdateActivity extends BaseActivity {
 
     /* renamed from: a */
     private boolean m2312a(BluetoothGattCharacteristic bluetoothGattCharacteristic, byte b) {
-        boolean a = this.f2277u.mo2804a(new byte[]{b}, bluetoothGattCharacteristic);
-        return a ? this.f2277u.mo2806b(100) : a;
+        boolean a = this.f2277u.writeCharacteristicBytes(new byte[]{b}, bluetoothGattCharacteristic);
+        return a ? this.f2277u.sleep10(100) : a;
     }
 
     /* renamed from: a */
     private boolean m2313a(BluetoothGattCharacteristic bluetoothGattCharacteristic, boolean z) {
-        boolean a = this.f2277u.mo2800a(bluetoothGattCharacteristic, z);
-        return a ? this.f2277u.mo2806b(100) : a;
+        boolean a = this.f2277u.eNABLE_NOTIFICATION_VALUE(bluetoothGattCharacteristic, z);
+        return a ? this.f2277u.sleep10(100) : a;
     }
 
     /* renamed from: a */
@@ -376,8 +376,8 @@ public class FwUpdateActivity extends BaseActivity {
         }
         inputStream.read(this.f2280x, 0, this.f2280x.length);
         inputStream.close();
-        this.f2282z.f2290a = C0767c.m2758a(this.f2280x[5], this.f2280x[4]);
-        this.f2282z.f2291b = C0767c.m2761b(this.f2280x[7], this.f2280x[6]);
+        this.f2282z.f2290a = DataParser.m2758a(this.f2280x[5], this.f2280x[4]);
+        this.f2282z.f2291b = DataParser.parser(this.f2280x[7], this.f2280x[6]);
         boolean z2 = true;
         this.f2282z.f2292c = Character.valueOf((this.f2282z.f2290a & 1) == 1 ? 'B' : 'A');
         System.arraycopy(this.f2280x, 8, this.f2282z.f2293d, 0, 4);
@@ -410,13 +410,13 @@ public class FwUpdateActivity extends BaseActivity {
         this.f2253F = true;
         m2332h();
         byte[] bArr = new byte[12];
-        bArr[0] = C0767c.m2757a(this.f2282z.f2290a);
-        bArr[1] = C0767c.m2760b(this.f2282z.f2290a);
-        bArr[2] = C0767c.m2756a(this.f2282z.f2291b);
-        bArr[3] = C0767c.m2759b(this.f2282z.f2291b);
+        bArr[0] = DataParser.m2757a(this.f2282z.f2290a);
+        bArr[1] = DataParser.m2760b(this.f2282z.f2290a);
+        bArr[2] = DataParser.m2756a(this.f2282z.f2291b);
+        bArr[3] = DataParser.m2759b(this.f2282z.f2291b);
         System.arraycopy(this.f2282z.f2293d, 0, bArr, 4, 4);
         this.f2274r.setValue(bArr);
-        this.f2277u.mo2799a(this.f2274r);
+        this.f2277u.writeCharacteristicBle(this.f2274r);
         this.f2250C.mo2223a();
         this.f2249B = null;
         this.f2249B = new Timer();
@@ -500,15 +500,15 @@ public class FwUpdateActivity extends BaseActivity {
     /* access modifiers changed from: private */
     /* renamed from: k */
     public void m2338k() {
-        this.f2276t.setValue(new byte[]{C0767c.m2757a((short) 10), C0767c.m2760b((short) 10), C0767c.m2757a((short) 10), C0767c.m2760b((short) 10), 0, 0, C0767c.m2757a((short) 100), C0767c.m2760b((short) 100)});
-        if (this.f2277u.mo2799a(this.f2276t)) {
-            this.f2277u.mo2806b(100);
+        this.f2276t.setValue(new byte[]{DataParser.m2757a((short) 10), DataParser.m2760b((short) 10), DataParser.m2757a((short) 10), DataParser.m2760b((short) 10), 0, 0, DataParser.m2757a((short) 100), DataParser.m2760b((short) 100)});
+        if (this.f2277u.writeCharacteristicBle(this.f2276t)) {
+            this.f2277u.sleep10(100);
         }
     }
 
     /* access modifiers changed from: private */
     /* JADX WARNING: Code restructure failed: missing block: B:6:0x006b, code lost:
-        if (r7.f2277u.mo2810f() == null) goto L_0x006d;
+        if (r7.f2277u.getBluetoothGatt() == null) goto L_0x006d;
      */
     /* JADX WARNING: Removed duplicated region for block: B:10:0x007b  */
     /* JADX WARNING: Removed duplicated region for block: B:12:? A[RETURN, SYNTHETIC] */
@@ -516,11 +516,11 @@ public class FwUpdateActivity extends BaseActivity {
     public void m2340l() {
         if (this.f2250C.f2296b < this.f2250C.f2297c) {
             this.f2253F = true;
-            this.f2281y[0] = C0767c.m2757a(this.f2250C.f2296b);
-            this.f2281y[1] = C0767c.m2760b(this.f2250C.f2296b);
+            this.f2281y[0] = DataParser.m2757a(this.f2250C.f2296b);
+            this.f2281y[1] = DataParser.m2760b(this.f2250C.f2296b);
             System.arraycopy(this.f2280x, this.f2250C.f2295a, this.f2281y, 2, 16);
             this.f2275s.setValue(this.f2281y);
-            if (this.f2277u.mo2799a(this.f2275s)) {
+            if (this.f2277u.writeCharacteristicBle(this.f2275s)) {
                 C0622b bVar = this.f2250C;
                 bVar.f2296b = (short) (bVar.f2296b + 1);
                 this.f2250C.f2295a += 16;

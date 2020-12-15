@@ -78,7 +78,7 @@ public class RegisterActivity extends BaseActivity {
                     resources = RegisterActivity.this.getResources();
                     i = R.string.diff_pwd;
                 }
-                Toast.makeText(context, resources.getString(i), 0).show();
+                Toast.makeText(context, resources.getString(i), Toast.LENGTH_LONG).show();
             }
         }
     };
@@ -127,7 +127,7 @@ public class RegisterActivity extends BaseActivity {
                         e.printStackTrace();
                     }
                 } else {
-                    Toast.makeText(RegisterActivity.this.getApplicationContext(), RegisterActivity.this.getResources().getString(R.string.net_error), 0).show();
+                    Toast.makeText(RegisterActivity.this.getApplicationContext(), RegisterActivity.this.getResources().getString(R.string.net_error), Toast.LENGTH_LONG).show();
                 }
                 super.onPostExecute(str);
             }
@@ -165,7 +165,7 @@ public class RegisterActivity extends BaseActivity {
             this.f2520j.execute(new String[]{this.f2518h, this.f2519i});
             return;
         }
-        Toast.makeText(getApplicationContext(), getString(R.string.registering), 0).show();
+        Toast.makeText(getApplicationContext(), getString(R.string.registering), Toast.LENGTH_LONG).show();
     }
 
     /* access modifiers changed from: private */

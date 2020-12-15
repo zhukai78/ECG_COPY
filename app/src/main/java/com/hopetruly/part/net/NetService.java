@@ -24,7 +24,7 @@ import com.hopetruly.ecg.R;
 import com.hopetruly.ecg.entity.ECGRecord;
 import com.hopetruly.ecg.p022b.SqlManager;
 import com.hopetruly.ecg.util.LogUtils;
-import com.hopetruly.ecg.util.C0776l;
+import com.hopetruly.ecg.util.StreamToByteUtils;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.client.ClientProtocolException;
@@ -123,7 +123,7 @@ public class NetService extends Service {
 
         /* access modifiers changed from: protected */
         public void onPreExecute() {
-            Toast.makeText(NetService.this.getApplicationContext(), NetService.this.getString(R.string.p_downloading), 0).show();
+            Toast.makeText(NetService.this.getApplicationContext(), NetService.this.getString(R.string.p_downloading), Toast.LENGTH_LONG).show();
             super.onPreExecute();
         }
     }
@@ -416,7 +416,7 @@ public class NetService extends Service {
                                 outputStream.flush();
                                 Log.i(NetService.this.f2947a, "post>" + stringBuffer2.toString());
                                 if (C0787d.this.f2980n.getResponseCode() == 200) {
-                                    String str4 = new String(C0776l.m2818a(C0787d.this.f2980n.getInputStream()), Charset.forName("utf-8"));
+                                    String str4 = new String(StreamToByteUtils.stoBytes(C0787d.this.f2980n.getInputStream()), Charset.forName("utf-8"));
                                     Log.e(NetService.this.f2947a, "RealTimeupdataThread>>" + str4);
                                     JSONArray jSONArray = new JSONArray(str4);
                                     int i2 = jSONArray.getInt(0);
@@ -632,7 +632,7 @@ public class NetService extends Service {
     /* renamed from: a */
     public void mo2820a(final ECGRecord eCGRecord) {
         if (this.f2950d) {
-            Toast.makeText(getApplicationContext(), getString(R.string.uploading), 0).show();
+            Toast.makeText(getApplicationContext(), getString(R.string.uploading), Toast.LENGTH_LONG).show();
         }
         LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(new Intent("com.holptruly.ecg.services.NetService.BEGIN_UPLOAD_ACTION"));
         this.f2949c = new Thread(new Runnable() {
@@ -720,7 +720,7 @@ public class NetService extends Service {
                             ArrayList arrayList2 = new ArrayList();
                             for (int i3 = 0; i3 < arrayList.size(); i3++) {
                                 ECGRecord eCGRecord2 = (ECGRecord) arrayList.get(i3);
-                                if (!bVar.mo2473b(eCGRecord2.getFileName())) {
+                                if (!bVar.selectEcgRecodBynum(eCGRecord2.getFileName())) {
                                     File a2 = NetService.this.m2844d(eCGRecord2.getFileName(), eCGRecord2.getNetPath());
                                     if (a2 != null) {
                                         LogUtils.logI(NetService.this.f2947a, "local file Name >>" + a2.getAbsolutePath());

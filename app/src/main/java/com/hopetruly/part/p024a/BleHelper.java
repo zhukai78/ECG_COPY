@@ -23,7 +23,7 @@ import java.util.UUID;
 public class BleHelper {
 
     /* renamed from: a */
-    public static UUID f2930a = UUID.fromString("00002902-0000-1000-8000-00805f9b34fb");
+    public static UUID DESC_UUID = UUID.fromString("00002902-0000-1000-8000-00805f9b34fb");
     /* access modifiers changed from: private */
 
     /* renamed from: e */
@@ -59,7 +59,7 @@ public class BleHelper {
     private boolean f2940k = false;
 
     /* renamed from: l */
-    private final BluetoothGattCallback f2941l = new BluetoothGattCallback() {
+    private final BluetoothGattCallback mBluetoothGattCallback = new BluetoothGattCallback() {
         public void onCharacteristicChanged(BluetoothGatt bluetoothGatt, BluetoothGattCharacteristic bluetoothGattCharacteristic) {
             BleHelper.this.m2825a("com.hopetruly.ec.services.ACTION_GATT_DATA_NOTIFY", 0, bluetoothGattCharacteristic);
         }
@@ -90,7 +90,7 @@ public class BleHelper {
             } else if (i2 == 0) {
                 int unused2 = BleHelper.this.f2939j = 0;
                 Log.i(BleHelper.TAG, "Disconnected from GATT server.");
-                BleHelper.this.mo2807c();
+                BleHelper.this.closeBluetoothGatt();
                 BleHelper.this.sendBleConn("com.hopetruly.ec.services.ACTION_GATT_DISCONNECTED");
             }
         }
@@ -222,7 +222,7 @@ public class BleHelper {
     }
 
     /* renamed from: a */
-    public boolean mo2799a(BluetoothGattCharacteristic bluetoothGattCharacteristic) {
+    public boolean writeCharacteristicBle(BluetoothGattCharacteristic bluetoothGattCharacteristic) {
         if (this.mbluetoothAdapter == null || this.mbluetoothGatt == null) {
             Log.w(TAG, "BluetoothAdapter not initialized");
             return false;
@@ -235,19 +235,19 @@ public class BleHelper {
     }
 
     /* renamed from: a */
-    public boolean mo2800a(BluetoothGattCharacteristic bluetoothGattCharacteristic, boolean z) {
+    public boolean eNABLE_NOTIFICATION_VALUE(BluetoothGattCharacteristic bluetoothGattCharacteristic, boolean z) {
         if (this.mbluetoothAdapter == null || this.mbluetoothGatt == null) {
             Log.w(TAG, "BluetoothAdapter not initialized");
             return false;
         }
         this.mbluetoothGatt.setCharacteristicNotification(bluetoothGattCharacteristic, z);
-        BluetoothGattDescriptor descriptor = bluetoothGattCharacteristic.getDescriptor(f2930a);
+        BluetoothGattDescriptor descriptor = bluetoothGattCharacteristic.getDescriptor(DESC_UUID);
         descriptor.setValue(BluetoothGattDescriptor.ENABLE_NOTIFICATION_VALUE);
         return this.mbluetoothGatt.writeDescriptor(descriptor);
     }
 
     /* renamed from: a */
-    public boolean mo2801a(String str) {
+    public boolean connectbLE(String str) {
         String str2;
         String str3;
         if (this.mbluetoothAdapter == null || str == null) {
@@ -259,7 +259,7 @@ public class BleHelper {
                 str2 = TAG;
                 str3 = "Device not found.  Unable to connect.";
             } else {
-                this.mbluetoothGatt = remoteDevice.connectGatt(this.mCtx, false, this.f2941l);
+                this.mbluetoothGatt = remoteDevice.connectGatt(this.mCtx, false, this.mBluetoothGattCallback);
                 Log.d(TAG, "Trying to create a new connection.");
                 this.f2937h = str;
                 this.f2939j = 1;
@@ -306,7 +306,7 @@ public class BleHelper {
         } else {
             try {
                 BluetoothGattCharacteristic characteristic = this.mbluetoothGatt.getService(uuid).getCharacteristic(uuid2);
-                BluetoothGattDescriptor descriptor = characteristic.getDescriptor(f2930a);
+                BluetoothGattDescriptor descriptor = characteristic.getDescriptor(DESC_UUID);
                 descriptor.setValue(z ? BluetoothGattDescriptor.ENABLE_NOTIFICATION_VALUE : BluetoothGattDescriptor.DISABLE_NOTIFICATION_VALUE);
                 if (!this.mbluetoothGatt.setCharacteristicNotification(characteristic, z) || !this.mbluetoothGatt.writeDescriptor(descriptor)) {
                     return false;
@@ -324,7 +324,7 @@ public class BleHelper {
     }
 
     /* renamed from: a */
-    public boolean mo2804a(byte[] bArr, BluetoothGattCharacteristic bluetoothGattCharacteristic) {
+    public boolean writeCharacteristicBytes(byte[] bArr, BluetoothGattCharacteristic bluetoothGattCharacteristic) {
         if (this.mbluetoothAdapter == null || this.mbluetoothGatt == null) {
             Log.w(TAG, "BluetoothAdapter not initialized");
             return false;
@@ -349,7 +349,7 @@ public class BleHelper {
     }
 
     /* renamed from: b */
-    public boolean mo2806b(int i) {
+    public boolean sleep10(int i) {
         try {
             Thread.sleep(10);
             return true;
@@ -360,7 +360,7 @@ public class BleHelper {
     }
 
     /* renamed from: c */
-    public void mo2807c() {
+    public void closeBluetoothGatt() {
         if (this.mbluetoothGatt != null) {
             this.mbluetoothGatt.close();
             this.mbluetoothGatt = null;
@@ -388,7 +388,7 @@ public class BleHelper {
     }
 
     /* renamed from: f */
-    public BluetoothGatt mo2810f() {
+    public BluetoothGatt getBluetoothGatt() {
         if (this.mbluetoothGatt == null) {
             return null;
         }

@@ -113,7 +113,7 @@ public class LoginActivity extends BaseActivity {
                         }
                     }
                 }
-                Toast.makeText(applicationContext, loginActivity.getString(i), 0).show();
+                Toast.makeText(applicationContext, loginActivity.getString(i), Toast.LENGTH_LONG).show();
             } else if (id == R.id.register) {
                 LoginActivity.this.startActivityForResult(new Intent(LoginActivity.this, RegisterActivity.class), 80001);
             }
@@ -179,16 +179,16 @@ public class LoginActivity extends BaseActivity {
                         int i = jSONArray.getInt(2);
                         if (i != 2) {
                             Context applicationContext = LoginActivity.this.getApplicationContext();
-                            Toast.makeText(applicationContext, LoginActivity.this.getString(R.string.p_err_code) + i, 0).show();
+                            Toast.makeText(applicationContext, LoginActivity.this.getString(R.string.p_err_code) + i, Toast.LENGTH_LONG).show();
                             return;
                         }
-                        Toast.makeText(LoginActivity.this.getApplicationContext(), LoginActivity.this.getString(R.string.p_no_user_info), 0).show();
+                        Toast.makeText(LoginActivity.this.getApplicationContext(), LoginActivity.this.getString(R.string.p_no_user_info), Toast.LENGTH_LONG).show();
                         LoginActivity.this.startActivityForResult(new Intent(LoginActivity.this, PersonInfoRegisterActivity.class), 80002);
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
                 } else {
-                    Toast.makeText(LoginActivity.this.getApplicationContext(), LoginActivity.this.getResources().getString(R.string.net_error), 0).show();
+                    Toast.makeText(LoginActivity.this.getApplicationContext(), LoginActivity.this.getResources().getString(R.string.net_error), Toast.LENGTH_LONG).show();
                 }
             }
         }
@@ -225,7 +225,7 @@ public class LoginActivity extends BaseActivity {
                         JSONArray jSONArray = new JSONArray(str);
                         int i = jSONArray.getInt(0);
                         if (i == 0) {
-                            Toast.makeText(LoginActivity.this.getApplicationContext(), LoginActivity.this.getString(R.string.p_login_success), 0).show();
+                            Toast.makeText(LoginActivity.this.getApplicationContext(), LoginActivity.this.getString(R.string.p_login_success), Toast.LENGTH_LONG).show();
                             if (LoginActivity.this.loginEcgApp.mSwConf.getAgree_flag() == 1) {
                                 LoginActivity.this.loginEcgApp.mSwConf.setAgree_flag(0);
                                 LoginActivity.this.loginEditor.putInt("SW_AGREE_FLAG", LoginActivity.this.loginEcgApp.mSwConf.getAgree_flag());
@@ -267,7 +267,7 @@ public class LoginActivity extends BaseActivity {
                     }
                 } else {
                     LoginActivity.this.loginEcgApp.mSwConf.setAgree_flag(1);
-                    Toast.makeText(LoginActivity.this.getApplicationContext(), LoginActivity.this.getResources().getString(R.string.net_error), 0).show();
+                    Toast.makeText(LoginActivity.this.getApplicationContext(), LoginActivity.this.getResources().getString(R.string.net_error), Toast.LENGTH_LONG).show();
                     LoginActivity.this.dismissLogin_loginDialog();
                 }
             }
@@ -288,7 +288,7 @@ public class LoginActivity extends BaseActivity {
                 this.mLoginmAsyncTask.execute(new String[]{str, str2});
                 return;
             }
-            Toast.makeText(getApplicationContext(), getString(R.string.p_in_login), 0).show();
+            Toast.makeText(getApplicationContext(), getString(R.string.p_in_login), Toast.LENGTH_LONG).show();
         }
     }
 
@@ -325,7 +325,7 @@ public class LoginActivity extends BaseActivity {
             this.mGet_q_user_infoAsyntask.execute(new Void[0]);
             return;
         }
-        Toast.makeText(getApplicationContext(), getString(R.string.p_wait), 0).show();
+        Toast.makeText(getApplicationContext(), getString(R.string.p_wait), Toast.LENGTH_LONG).show();
     }
 
     /* access modifiers changed from: private */
@@ -387,7 +387,7 @@ public class LoginActivity extends BaseActivity {
                 this.edt_user_name.setText(stringExtra);
                 this.edt_user_pwd.setText(stringExtra2);
             } else if (i2 == 1001) {
-                Toast.makeText(getApplicationContext(), getResources().getString(R.string.p_login_no_reg), 0).show();
+                Toast.makeText(getApplicationContext(), getResources().getString(R.string.p_login_no_reg), Toast.LENGTH_LONG).show();
             }
         } else if (i == 80002) {
             if (i2 == -1) {

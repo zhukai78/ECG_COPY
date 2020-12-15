@@ -4,7 +4,7 @@ import com.hopetruly.ecg.entity.APPUploadFile;
 import com.hopetruly.ecg.entity.ErrorInfo;
 import com.hopetruly.ecg.entity.UserInfo;
 import com.hopetruly.ecg.util.LogUtils;
-import com.hopetruly.ecg.util.C0776l;
+import com.hopetruly.ecg.util.StreamToByteUtils;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.client.ClientProtocolException;
@@ -129,7 +129,7 @@ public class MyHttpHelper {
                 for (Cookie cookie : MyHttpClient.initMyHttpClient().getCookieStore().getCookies()) {
                     LogUtils.logI("NetInterface", "cookie name>>" + cookie.getName() + "\ncookie value>>" + cookie.getValue() + "\ncookie Domain>>" + cookie.getDomain());
                 }
-                return new String(C0776l.m2818a(execute.getEntity().getContent()), Charset.forName("UTF-8"));
+                return new String(StreamToByteUtils.stoBytes(execute.getEntity().getContent()), Charset.forName("UTF-8"));
             }
             LogUtils.logI("NetInterface", "Connection release..");
             httpPost.abort();
@@ -192,7 +192,7 @@ public class MyHttpHelper {
         a.setParams(params);
         HttpResponse execute = a.execute(httpPost);
         if (execute.getStatusLine().getStatusCode() == 200) {
-            return new String(C0776l.m2818a(execute.getEntity().getContent()), Charset.forName("UTF-8"));
+            return new String(StreamToByteUtils.stoBytes(execute.getEntity().getContent()), Charset.forName("UTF-8"));
         }
         LogUtils.logI("NetInterface", "Connection release..");
         httpPost.abort();

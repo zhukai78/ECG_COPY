@@ -220,7 +220,7 @@ public class ScanActivity extends BaseActivity implements AdapterView.OnItemClic
                         ScanActivity.this.f2543e = false;
                         if (ScanActivity.this.f2549k != null) {
                             ScanActivity.this.f2549k = null;
-                            Toast.makeText(ScanActivity.this.getApplicationContext(), ScanActivity.this.getString(R.string.Connecting_bluetooth_outtime), 0).show();
+                            Toast.makeText(ScanActivity.this.getApplicationContext(), ScanActivity.this.getString(R.string.Connecting_bluetooth_outtime), Toast.LENGTH_LONG).show();
                             return;
                         }
                         return;

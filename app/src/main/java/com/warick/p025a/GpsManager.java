@@ -1,5 +1,6 @@
 package com.warick.p025a;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.location.Criteria;
 import android.location.GpsSatellite;
@@ -21,14 +22,14 @@ public class GpsManager {
     /* access modifiers changed from: private */
 
     /* renamed from: b */
-    public LocationManager f2995b;
+    public LocationManager locationManager;
     /* access modifiers changed from: private */
 
     /* renamed from: c */
-    public OnLocationChange f2996c = null;
+    public OnLocationChange mOnLocationChange = null;
 
     /* renamed from: d */
-    private GpsStatus.Listener f2997d = new GpsStatus.Listener() {
+    private GpsStatus.Listener mGpsStatusListener = new GpsStatus.Listener() {
         public void onGpsStatusChanged(int i) {
             String str;
             String str2;
@@ -47,7 +48,7 @@ public class GpsManager {
                     break;
                 case 4:
 //                    Log.i(C0795b.f2994a, "卫星状态改变");
-                    GpsStatus gpsStatus = GpsManager.this.f2995b.getGpsStatus((GpsStatus) null);
+                    @SuppressLint("MissingPermission") GpsStatus gpsStatus = GpsManager.this.locationManager.getGpsStatus((GpsStatus) null);
                     int maxSatellites = gpsStatus.getMaxSatellites();
                     Iterator<GpsSatellite> it = gpsStatus.getSatellites().iterator();
                     int i2 = 0;
@@ -67,11 +68,11 @@ public class GpsManager {
     /* access modifiers changed from: private */
 
     /* renamed from: e */
-    public LocationListener f2998e = new LocationListener() {
+    public LocationListener mLocationListener = new LocationListener() {
         public void onLocationChanged(Location location) {
-            if (GpsManager.this.f2996c != null && location != null) {
+            if (GpsManager.this.mOnLocationChange != null && location != null) {
                 Log.i(GpsManager.f2994a, "位置变更");
-                GpsManager.this.f2996c.onLastKnownLocation(location.getLongitude(), location.getLatitude());
+                GpsManager.this.mOnLocationChange.onLastKnownLocation(location.getLongitude(), location.getLatitude());
             }
         }
 
@@ -79,12 +80,13 @@ public class GpsManager {
             Log.i(GpsManager.f2994a, "GPS禁用时触发");
         }
 
+        @SuppressLint("MissingPermission")
         public void onProviderEnabled(String str) {
             Log.i(GpsManager.f2994a, "GPS开启时触发");
-            GpsManager.this.f2995b.requestLocationUpdates(str, 10000, 1.0f, GpsManager.this.f2998e);
-            Location lastKnownLocation = GpsManager.this.f2995b.getLastKnownLocation(str);
+            GpsManager.this.locationManager.requestLocationUpdates(str, 10000, 1.0f, GpsManager.this.mLocationListener);
+            Location lastKnownLocation = GpsManager.this.locationManager.getLastKnownLocation(str);
             if (lastKnownLocation != null) {
-                GpsManager.this.f2996c.onLastKnownLocation(lastKnownLocation.getLongitude(), lastKnownLocation.getLatitude());
+                GpsManager.this.mOnLocationChange.onLastKnownLocation(lastKnownLocation.getLongitude(), lastKnownLocation.getLatitude());
             }
         }
 
@@ -114,9 +116,9 @@ public class GpsManager {
     /* renamed from: f */
     private LocationListener f2999f = new LocationListener() {
         public void onLocationChanged(Location location) {
-            if (GpsManager.this.f2996c != null && location != null) {
+            if (GpsManager.this.mOnLocationChange != null && location != null) {
                 Log.i(GpsManager.f2994a, "位置变更");
-                GpsManager.this.f2996c.onNowKnownLocation(location.getLongitude(), location.getLatitude());
+                GpsManager.this.mOnLocationChange.onNowKnownLocation(location.getLongitude(), location.getLatitude());
             }
         }
 
@@ -126,9 +128,9 @@ public class GpsManager {
 
         public void onProviderEnabled(String str) {
             Log.i(GpsManager.f2994a, "GPS开启时触发");
-            Location lastKnownLocation = GpsManager.this.f2995b.getLastKnownLocation(str);
+            Location lastKnownLocation = GpsManager.this.locationManager.getLastKnownLocation(str);
             if (lastKnownLocation != null) {
-                GpsManager.this.f2996c.onLastKnownLocation(lastKnownLocation.getLongitude(), lastKnownLocation.getLatitude());
+                GpsManager.this.mOnLocationChange.onLastKnownLocation(lastKnownLocation.getLongitude(), lastKnownLocation.getLatitude());
             }
         }
 
@@ -165,7 +167,7 @@ public class GpsManager {
     }
 
     public GpsManager(Context context) {
-        this.f2995b = (LocationManager) context.getSystemService("location");
+        this.locationManager = (LocationManager) context.getSystemService("location");
     }
 
     /* renamed from: d */
@@ -182,30 +184,30 @@ public class GpsManager {
 
     /* renamed from: a */
     public void mo2868a() {
-        this.f2995b.removeGpsStatusListener(this.f2997d);
-        this.f2995b.removeUpdates(this.f2998e);
-        this.f2995b.removeUpdates(this.f2999f);
+        this.locationManager.removeGpsStatusListener(this.mGpsStatusListener);
+        this.locationManager.removeUpdates(this.mLocationListener);
+        this.locationManager.removeUpdates(this.f2999f);
     }
 
     /* renamed from: a */
     public void setOnLocationChange(OnLocationChange aVar) {
-        if (this.f2996c == null && this.f2995b != null) {
-            this.f2996c = aVar;
-            this.f2995b.addGpsStatusListener(this.f2997d);
-            if (this.f2995b.isProviderEnabled("network")) {
-                this.f2995b.requestLocationUpdates("network", 10000, 1.0f, this.f2999f);
+        if (this.mOnLocationChange == null && this.locationManager != null) {
+            this.mOnLocationChange = aVar;
+            this.locationManager.addGpsStatusListener(this.mGpsStatusListener);
+            if (this.locationManager.isProviderEnabled("network")) {
+                this.locationManager.requestLocationUpdates("network", 10000, 1.0f, this.f2999f);
             }
-            String bestProvider = this.f2995b.getBestProvider(m2896d(), true);
-            Location lastKnownLocation = this.f2995b.getLastKnownLocation(bestProvider);
-            if (!(lastKnownLocation == null || this.f2996c == null)) {
-                this.f2996c.onLastKnownLocation(lastKnownLocation.getLongitude(), lastKnownLocation.getLatitude());
+            String bestProvider = this.locationManager.getBestProvider(m2896d(), true);
+            Location lastKnownLocation = this.locationManager.getLastKnownLocation(bestProvider);
+            if (!(lastKnownLocation == null || this.mOnLocationChange == null)) {
+                this.mOnLocationChange.onLastKnownLocation(lastKnownLocation.getLongitude(), lastKnownLocation.getLatitude());
             }
-            this.f2995b.requestLocationUpdates(bestProvider, 10000, 1.0f, this.f2998e);
+            this.locationManager.requestLocationUpdates(bestProvider, 10000, 1.0f, this.mLocationListener);
         }
     }
 
     /* renamed from: b */
     public boolean mo2870b() {
-        return this.f2995b.isProviderEnabled("gps");
+        return this.locationManager.isProviderEnabled("gps");
     }
 }

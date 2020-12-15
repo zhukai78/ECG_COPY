@@ -31,7 +31,7 @@ import javax.xml.parsers.ParserConfigurationException;
 public class C0775k {
 
     /* renamed from: a */
-    Context f2923a;
+    Context mctx;
 
     /* renamed from: b */
     private float f2924b = 10.0f;
@@ -52,7 +52,7 @@ public class C0775k {
     private boolean f2929g = true;
 
     public C0775k(Context context) {
-        this.f2923a = context;
+        this.mctx = context;
     }
 
     /* renamed from: a */
@@ -71,7 +71,7 @@ public class C0775k {
     }
 
     /* renamed from: a */
-    private String m2806a(Bitmap bitmap) {
+    private String bitmapToJpg(Bitmap bitmap) {
         StringBuffer stringBuffer = new StringBuffer(Environment.getExternalStorageDirectory().getAbsolutePath());
         stringBuffer.append(File.separator);
         stringBuffer.append("hopetruly");
@@ -119,7 +119,7 @@ public class C0775k {
         float f = this.f2925c * 65.0f;
         float f2 = this.f2925c * 4.0f;
         float f3 = this.f2925c * 5.0f;
-        ECGApplication eCGApplication = (ECGApplication) this.f2923a.getApplicationContext();
+        ECGApplication eCGApplication = (ECGApplication) this.mctx.getApplicationContext();
         canvas.drawText((TextUtils.isEmpty(eCGApplication.mUserInfo.getLastName()) ? "" : eCGApplication.mUserInfo.getLastName()) + (TextUtils.isEmpty(eCGApplication.mUserInfo.getFirstName()) ? "" : eCGApplication.mUserInfo.getFirstName()), f, f2, paint);
         m2809a(canvas, C0770f.m2775a(new File(eCGRecord.getFilePath()), "text"), f, f2 + f3, f3, paint);
         switch (eCGRecord.getLeadType()) {
@@ -294,7 +294,7 @@ public class C0775k {
         float[] fArr2 = fArr;
         String str2 = str;
         int i5 = i2;
-        ECGApplication eCGApplication = (ECGApplication) this.f2923a.getApplicationContext();
+        ECGApplication eCGApplication = (ECGApplication) this.mctx.getApplicationContext();
         if (eCGRecord2 == null) {
             return null;
         }
@@ -340,7 +340,7 @@ public class C0775k {
         }
         options.inSampleSize = i4;
         options.inJustDecodeBounds = false;
-        Bitmap decodeResource = BitmapFactory.decodeResource(this.f2923a.getResources(), R.drawable.ecg_bg, options);
+        Bitmap decodeResource = BitmapFactory.decodeResource(this.mctx.getResources(), R.drawable.ecg_bg, options);
         canvas2.save();
         canvas2.translate(0.0f, 0.0f);
         canvas2.drawBitmap(decodeResource, 0.0f, 0.0f, new Paint());
@@ -378,7 +378,7 @@ public class C0775k {
         }
         canvas.drawLine(f2, f, this.f2924b * 6.0f, f, paint2);
         m2810a(a, m2811a(fArr2), canvas2, paint);
-        return m2806a(createBitmap);
+        return bitmapToJpg(createBitmap);
     }
 
     /* renamed from: a */

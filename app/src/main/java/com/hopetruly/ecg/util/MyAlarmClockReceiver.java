@@ -10,7 +10,7 @@ import java.util.Calendar;
 
 public class MyAlarmClockReceiver extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
-        C0773i a = C0773i.m2798a(context);
+        MyAlarmClock a = MyAlarmClock.getInstance(context);
         if (a.f2918e) {
             a.f2920g++;
         }
@@ -20,8 +20,8 @@ public class MyAlarmClockReceiver extends BroadcastReceiver {
             LocalBroadcastManager.getInstance(context).sendBroadcast(intent2);
         }
         Calendar instance = Calendar.getInstance();
-        if (a.f2921h != null && a.f2921h.get(5) != instance.get(5)) {
-            a.f2921h = instance;
+        if (a.mCalendar != null && a.mCalendar.get(5) != instance.get(5)) {
+            a.mCalendar = instance;
             Intent intent3 = new Intent("com.hopetruly.ecg.util.MyAlarmClock.DATE_CHANGE");
             intent3.putExtra("com.hopetruly.ecg.util.MyAlarmClock.DATE_CHANGE", instance.getTimeInMillis());
             LocalBroadcastManager.getInstance(context).sendBroadcast(intent3);

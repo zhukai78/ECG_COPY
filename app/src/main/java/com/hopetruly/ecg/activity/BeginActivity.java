@@ -44,7 +44,7 @@ public class BeginActivity extends Activity {
     private SharedPreferences.Editor spSw_conf;
 
     /* renamed from: b */
-    private void scheduleToSplah() {
+    private void scheduleToSplash() {
         new Timer().schedule(new TimerTask() {
             public void run() {
                 Looper.prepare();
@@ -152,7 +152,7 @@ public class BeginActivity extends Activity {
                     return;
                 }
             }
-            scheduleToSplah();
+            scheduleToSplash();
         }
     }
 
@@ -169,7 +169,7 @@ public class BeginActivity extends Activity {
         if (!arrayList.isEmpty()) {
             ActivityCompat.requestPermissions(this, (String[]) arrayList.toArray(new String[arrayList.size()]), 1);
         } else {
-            scheduleToSplah();
+            scheduleToSplash();
         }
         super.onResume();
     }

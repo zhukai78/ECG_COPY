@@ -52,63 +52,63 @@ public class EcgRecListActivity extends BaseActivity implements AdapterView.OnIt
     /* access modifiers changed from: private */
 
     /* renamed from: j */
-    public static final String f2144j = "EcgRecListActivity";
+    public static final String TAG = "EcgRecListActivity";
 
     /* renamed from: a */
-    ListView f2145a;
+    ListView lv_ecg_rec;
 
     /* renamed from: c */
-    List<ECGRecord> f2146c;
+    List<ECGRecord> mErecords;
 
     /* renamed from: d */
-    C0589b f2147d;
+    EcgListAdapter mEcgListAdapter;
 
     /* renamed from: e */
-    SqlManager f2148e;
+    SqlManager ecgrecSqlManager;
 
     /* renamed from: f */
-    ECGApplication f2149f;
+    ECGApplication ecgrecApp;
 
     /* renamed from: g */
-    NetService f2150g;
+    NetService ecgrecNetService;
 
     /* renamed from: h */
-    FileService f2151h;
+    FileService ecgrecFileService;
 
     /* renamed from: i */
-    C0588a f2152i;
+    EcgrecAsyncTask mEcgrecAsyncTask;
     /* access modifiers changed from: private */
 
     /* renamed from: k */
-    public PopupWindow f2153k;
+    public PopupWindow pupop_login;
     /* access modifiers changed from: private */
 
     /* renamed from: l */
-    public EditText f2154l;
+    public EditText edt_login_user_name;
     /* access modifiers changed from: private */
 
     /* renamed from: m */
-    public EditText f2155m;
+    public EditText edt_login_user_pwd;
 
     /* renamed from: n */
     private ServiceConnection f2156n = new ServiceConnection() {
         public void onServiceConnected(ComponentName componentName, IBinder iBinder) {
-            EcgRecListActivity.this.f2150g = ((NetService.NetSerBinder) iBinder).getNetSerBinder();
+            EcgRecListActivity.this.ecgrecNetService = ((NetService.NetSerBinder) iBinder).getNetSerBinder();
         }
 
         public void onServiceDisconnected(ComponentName componentName) {
-            EcgRecListActivity.this.f2150g = null;
+            EcgRecListActivity.this.ecgrecNetService = null;
         }
     };
 
     /* renamed from: o */
     private ServiceConnection f2157o = new ServiceConnection() {
         public void onServiceConnected(ComponentName componentName, IBinder iBinder) {
-            EcgRecListActivity.this.f2151h = ((FileService.FileServiceBinder) iBinder).getFileService();
+            EcgRecListActivity.this.ecgrecFileService = ((FileService.FileServiceBinder) iBinder).getFileService();
         }
 
         public void onServiceDisconnected(ComponentName componentName) {
-            EcgRecListActivity.this.f2151h = null;
+            EcgRecListActivity.this.ecgrecFileService = null;
         }
     };
 
@@ -120,11 +120,11 @@ public class EcgRecListActivity extends BaseActivity implements AdapterView.OnIt
             int i;
             String action = intent.getAction();
             if (action.equals("com.holptruly.ecg.services.FileService.FILE_IMPORT_START")) {
-                EcgRecListActivity.this.m2256a(EcgRecListActivity.this.getString(R.string.p_importing_file));
+                EcgRecListActivity.this.showmProgressDialog(EcgRecListActivity.this.getString(R.string.p_importing_file));
             } else if (action.equals("com.holptruly.ecg.services.FileService.FILE_IMPORT_SUCCESS")) {
                 ECGRecord a = C0770f.m2774a((Context) EcgRecListActivity.this, intent.getStringExtra("com.holptruly.ecg.services.FileService.EXTRA_FILE"));
                 if (a != null) {
-                    EcgRecListActivity.this.f2148e.mo2469a(a);
+                    EcgRecListActivity.this.ecgrecSqlManager.insertEcgRecord(a);
                     EcgRecListActivity.this.m2262d();
                     applicationContext = EcgRecListActivity.this.getApplicationContext();
                     ecgRecListActivity = EcgRecListActivity.this;
@@ -136,7 +136,7 @@ public class EcgRecListActivity extends BaseActivity implements AdapterView.OnIt
                     i = R.string.p_import_error;
                 }
                 Toast.makeText(applicationContext, ecgRecListActivity.getString(i), Toast.LENGTH_SHORT).show();
-                EcgRecListActivity.this.m2261c();
+                EcgRecListActivity.this.startAcyn();
             } else if (action.equals("com.holptruly.ecg.services.FileService.FILE_IMPORT_FAIL")) {
                 EcgRecListActivity.this.m2262d();
                 Toast.makeText(EcgRecListActivity.this.getApplicationContext(), EcgRecListActivity.this.getString(R.string.p_import_failed), Toast.LENGTH_SHORT).show();
@@ -152,7 +152,7 @@ public class EcgRecListActivity extends BaseActivity implements AdapterView.OnIt
             int i;
             String action = intent.getAction();
             if (action.equals("com.holptruly.ecg.services.NetService.SYNC_DATA_BEGIN_ACTION")) {
-                EcgRecListActivity.this.m2256a(EcgRecListActivity.this.getString(R.string.downloading));
+                EcgRecListActivity.this.showmProgressDialog(EcgRecListActivity.this.getString(R.string.downloading));
             } else if (action.equals("com.holptruly.ecg.services.NetService.SYNC_DATA_SUCCESS_ACTION")) {
                 List list = (List) intent.getSerializableExtra("records");
                 if (list.size() > 0) {
@@ -166,31 +166,31 @@ public class EcgRecListActivity extends BaseActivity implements AdapterView.OnIt
                             } else if (a.getLeadExten().equals(ECGEntity.LEAD_PART_CHEST)) {
                                 eCGRecord.setLeadType(1);
                             }
-                            EcgRecListActivity.this.f2148e.mo2469a(eCGRecord);
-                            EcgRecListActivity.this.f2148e.mo2468a();
+                            EcgRecListActivity.this.ecgrecSqlManager.insertEcgRecord(eCGRecord);
+                            EcgRecListActivity.this.ecgrecSqlManager.closeDatabase();
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
                     }
                 }
                 EcgRecListActivity.this.m2262d();
-                EcgRecListActivity.this.m2261c();
+                EcgRecListActivity.this.startAcyn();
             } else {
                 if (action.equals("com.holptruly.ecg.services.NetService.SYNC_DATA_FAIL_ACTION")) {
                     EcgRecListActivity.this.m2262d();
-                    EcgRecListActivity.this.m2261c();
+                    EcgRecListActivity.this.startAcyn();
                     applicationContext = EcgRecListActivity.this.getApplicationContext();
                     ecgRecListActivity = EcgRecListActivity.this;
                     i = R.string.l_no_data;
                 } else if (action.equals("com.holptruly.ecg.services.NetService.NEED_LOGIN")) {
-                    Log.d(EcgRecListActivity.f2144j, "Receive need log message");
+                    Log.d(EcgRecListActivity.TAG, "Receive need log message");
                     EcgRecListActivity.this.m2262d();
-                    EcgRecListActivity.this.f2153k.showAtLocation(EcgRecListActivity.this.findViewById(R.id.ecg_rec_list), 17, 0, 0);
+                    EcgRecListActivity.this.pupop_login.showAtLocation(EcgRecListActivity.this.findViewById(R.id.ecg_rec_list), 17, 0, 0);
                     return;
                 } else if (action.equals("com.holptruly.ecg.services.NetService.LOGIN_SUCCESSFUL")) {
                     EcgRecListActivity.this.m2262d();
-                    EcgRecListActivity.this.f2153k.dismiss();
-                    EcgRecListActivity.this.f2150g.mo2821a(EcgRecListActivity.this.f2149f.mUserInfo.getId());
+                    EcgRecListActivity.this.pupop_login.dismiss();
+                    EcgRecListActivity.this.ecgrecNetService.mo2821a(EcgRecListActivity.this.ecgrecApp.mUserInfo.getId());
                     return;
                 } else if (action.equals("com.holptruly.ecg.services.NetService.LOGIN_FAILE")) {
                     EcgRecListActivity.this.m2262d();
@@ -206,30 +206,30 @@ public class EcgRecListActivity extends BaseActivity implements AdapterView.OnIt
     };
 
     /* renamed from: r */
-    private AdapterView.OnItemClickListener f2160r = new AdapterView.OnItemClickListener() {
+    private AdapterView.OnItemClickListener adOnItemClickListener = new AdapterView.OnItemClickListener() {
         public void onItemClick(AdapterView<?> adapterView, View view, int i, long j) {
             Intent intent = new Intent(EcgRecListActivity.this, HistoryECGDisplayActivity.class);
-            intent.putExtra("record", EcgRecListActivity.this.f2146c.get(i));
+            intent.putExtra("record", EcgRecListActivity.this.mErecords.get(i));
             EcgRecListActivity.this.startActivity(intent);
         }
     };
 
     /* renamed from: s */
-    private ProgressDialog f2161s;
+    private ProgressDialog mProgressDialog;
 
     /* renamed from: com.hopetruly.ecg.activity.EcgRecListActivity$a */
-    class C0588a extends AsyncTask<Void, Void, List<ECGRecord>> {
-        C0588a() {
+    class EcgrecAsyncTask extends AsyncTask<Void, Void, List<ECGRecord>> {
+        EcgrecAsyncTask() {
         }
 
         /* access modifiers changed from: protected */
         /* renamed from: a */
         public List<ECGRecord> doInBackground(Void... voidArr) {
-            EcgRecListActivity.this.f2146c = EcgRecListActivity.this.f2148e.mo2467a(EcgRecListActivity.this.f2149f.mUserInfo.getId());
-            for (ECGRecord user : EcgRecListActivity.this.f2146c) {
-                user.setUser(EcgRecListActivity.this.f2149f.mUserInfo);
+            EcgRecListActivity.this.mErecords = EcgRecListActivity.this.ecgrecSqlManager.getECGRecord(EcgRecListActivity.this.ecgrecApp.mUserInfo.getId());
+            for (ECGRecord user : EcgRecListActivity.this.mErecords) {
+                user.setUser(EcgRecListActivity.this.ecgrecApp.mUserInfo);
             }
-            return EcgRecListActivity.this.f2146c;
+            return EcgRecListActivity.this.mErecords;
         }
 
         /* access modifiers changed from: protected */
@@ -237,7 +237,7 @@ public class EcgRecListActivity extends BaseActivity implements AdapterView.OnIt
         public void onPostExecute(List<ECGRecord> list) {
             if (!isCancelled()) {
                 if (list.size() > 0) {
-                    EcgRecListActivity.this.f2147d.notifyDataSetChanged();
+                    EcgRecListActivity.this.mEcgListAdapter.notifyDataSetChanged();
                 }
                 super.onPostExecute(list);
             }
@@ -245,7 +245,7 @@ public class EcgRecListActivity extends BaseActivity implements AdapterView.OnIt
     }
 
     /* renamed from: com.hopetruly.ecg.activity.EcgRecListActivity$b */
-    private class C0589b extends BaseAdapter {
+    private class EcgListAdapter extends BaseAdapter {
 
         /* renamed from: a */
         final int f2173a;
@@ -281,7 +281,7 @@ public class EcgRecListActivity extends BaseActivity implements AdapterView.OnIt
             }
         }
 
-        private C0589b() {
+        private EcgListAdapter() {
             this.f2173a = 2;
             this.f2174b = 0;
             this.f2175c = 1;
@@ -301,12 +301,12 @@ public class EcgRecListActivity extends BaseActivity implements AdapterView.OnIt
         }
 
         public int getCount() {
-            return EcgRecListActivity.this.f2146c.size();
+            return EcgRecListActivity.this.mErecords.size();
         }
 
         public Object getItem(int i) {
-            if (EcgRecListActivity.this.f2146c != null) {
-                return EcgRecListActivity.this.f2146c.get(i);
+            if (EcgRecListActivity.this.mErecords != null) {
+                return EcgRecListActivity.this.mErecords.get(i);
             }
             return null;
         }
@@ -316,7 +316,7 @@ public class EcgRecListActivity extends BaseActivity implements AdapterView.OnIt
         }
 
         public int getItemViewType(int i) {
-            String mark_time = EcgRecListActivity.this.f2146c.get(i).getMark_time();
+            String mark_time = EcgRecListActivity.this.mErecords.get(i).getMark_time();
             return (mark_time == null || mark_time.equals("none")) ? 0 : 1;
         }
 
@@ -330,7 +330,7 @@ public class EcgRecListActivity extends BaseActivity implements AdapterView.OnIt
             int i3;
             EcgRecListActivity ecgRecListActivity;
             TextView textView2;
-            ECGRecord eCGRecord = EcgRecListActivity.this.f2146c.get(i);
+            ECGRecord eCGRecord = EcgRecListActivity.this.mErecords.get(i);
             int itemViewType = getItemViewType(i);
             if (view == null) {
                 aVar = new C0590a();
@@ -393,32 +393,32 @@ public class EcgRecListActivity extends BaseActivity implements AdapterView.OnIt
     }
 
     /* renamed from: a */
-    private void m2254a(final int i) {
+    private void showDeletDialog(final int i) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle(getResources().getString(R.string.delete));
         builder.setMessage(getResources().getString(R.string.delete_rec));
         builder.setPositiveButton(getResources().getString(R.string.delete), new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialogInterface, int i) {
-                String filePath = EcgRecListActivity.this.f2146c.get(i).getFilePath();
+                String filePath = EcgRecListActivity.this.mErecords.get(i).getFilePath();
                 if (filePath == null || filePath.length() <= 0) {
-                    EcgRecListActivity.this.f2148e.mo2475c(String.valueOf(EcgRecListActivity.this.f2146c.get(i).getId()));
-                    EcgRecListActivity.this.f2146c.remove(i);
+                    EcgRecListActivity.this.ecgrecSqlManager.deleteECGRec(String.valueOf(EcgRecListActivity.this.mErecords.get(i).getId()));
+                    EcgRecListActivity.this.mErecords.remove(i);
                 } else {
                     try {
                         File file = new File(filePath);
                         if (!file.exists() || !file.isFile()) {
-                            String a = EcgRecListActivity.f2144j;
+                            String a = EcgRecListActivity.TAG;
                             Log.d(a, "File:[" + filePath + "] is not exists file");
                         } else {
                             file.delete();
-                            EcgRecListActivity.this.f2148e.mo2475c(String.valueOf(EcgRecListActivity.this.f2146c.get(i).getId()));
-                            EcgRecListActivity.this.f2146c.remove(i);
+                            EcgRecListActivity.this.ecgrecSqlManager.deleteECGRec(String.valueOf(EcgRecListActivity.this.mErecords.get(i).getId()));
+                            EcgRecListActivity.this.mErecords.remove(i);
                         }
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
                 }
-                EcgRecListActivity.this.f2147d.notifyDataSetChanged();
+                EcgRecListActivity.this.mEcgListAdapter.notifyDataSetChanged();
                 dialogInterface.dismiss();
             }
         });
@@ -432,19 +432,19 @@ public class EcgRecListActivity extends BaseActivity implements AdapterView.OnIt
 
     /* access modifiers changed from: private */
     /* renamed from: a */
-    public void m2256a(String str) {
-        if (this.f2161s == null) {
-            this.f2161s = new ProgressDialog(this);
-            this.f2161s.setCanceledOnTouchOutside(false);
+    public void showmProgressDialog(String str) {
+        if (this.mProgressDialog == null) {
+            this.mProgressDialog = new ProgressDialog(this);
+            this.mProgressDialog.setCanceledOnTouchOutside(false);
         }
-        this.f2161s.setMessage(str);
-        if (!this.f2161s.isShowing()) {
-            this.f2161s.show();
+        this.mProgressDialog.setMessage(str);
+        if (!this.mProgressDialog.isShowing()) {
+            this.mProgressDialog.show();
         }
     }
 
     /* renamed from: a */
-    private boolean m2257a(File file) {
+    private boolean dismissmProgressDialog(File file) {
         try {
             C0770f.m2775a(file, "AnnotatedECG");
             return true;
@@ -464,21 +464,21 @@ public class EcgRecListActivity extends BaseActivity implements AdapterView.OnIt
     }
 
     /* renamed from: b */
-    private void m2259b() {
-        if (this.f2153k == null) {
+    private void initPopView() {
+        if (this.pupop_login == null) {
             View inflate = LayoutInflater.from(this).inflate(R.layout.pupop_login, (ViewGroup) null);
-            this.f2153k = new PopupWindow(inflate, -2, -2, true);
-            this.f2153k.setOutsideTouchable(false);
-            this.f2153k.setFocusable(true);
-            this.f2154l = (EditText) inflate.findViewById(R.id.login_user_name);
-            this.f2154l.setText(((ECGApplication) getApplication()).mUserInfo.getName());
-            this.f2155m = (EditText) inflate.findViewById(R.id.login_user_pwd);
-            this.f2155m.requestFocus();
+            this.pupop_login = new PopupWindow(inflate, -2, -2, true);
+            this.pupop_login.setOutsideTouchable(false);
+            this.pupop_login.setFocusable(true);
+            this.edt_login_user_name = (EditText) inflate.findViewById(R.id.login_user_name);
+            this.edt_login_user_name.setText(((ECGApplication) getApplication()).mUserInfo.getName());
+            this.edt_login_user_pwd = (EditText) inflate.findViewById(R.id.login_user_pwd);
+            this.edt_login_user_pwd.requestFocus();
             ((Button) inflate.findViewById(R.id.login_btn_login)).setOnClickListener(new View.OnClickListener() {
                 public void onClick(View view) {
                     try {
-                        EcgRecListActivity.this.f2150g.mo2829c(EcgRecListActivity.this.f2154l.getText().toString(), EcgRecListActivity.this.f2155m.getText().toString());
-                        EcgRecListActivity.this.m2256a(EcgRecListActivity.this.getString(R.string.p_login_login));
+                        EcgRecListActivity.this.ecgrecNetService.mo2829c(EcgRecListActivity.this.edt_login_user_name.getText().toString(), EcgRecListActivity.this.edt_login_user_pwd.getText().toString());
+                        EcgRecListActivity.this.showmProgressDialog(EcgRecListActivity.this.getString(R.string.p_login_login));
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
@@ -486,7 +486,7 @@ public class EcgRecListActivity extends BaseActivity implements AdapterView.OnIt
             });
             ((Button) inflate.findViewById(R.id.login_btn_cancel)).setOnClickListener(new View.OnClickListener() {
                 public void onClick(View view) {
-                    EcgRecListActivity.this.f2153k.dismiss();
+                    EcgRecListActivity.this.pupop_login.dismiss();
                 }
             });
         }
@@ -494,17 +494,17 @@ public class EcgRecListActivity extends BaseActivity implements AdapterView.OnIt
 
     /* access modifiers changed from: private */
     /* renamed from: c */
-    public void m2261c() {
-        this.f2146c.clear();
-        this.f2152i = new C0588a();
-        this.f2152i.execute(new Void[0]);
+    public void startAcyn() {
+        this.mErecords.clear();
+        this.mEcgrecAsyncTask = new EcgrecAsyncTask();
+        this.mEcgrecAsyncTask.execute(new Void[0]);
     }
 
     /* access modifiers changed from: private */
     /* renamed from: d */
     public void m2262d() {
-        if (this.f2161s != null && this.f2161s.isShowing()) {
-            this.f2161s.dismiss();
+        if (this.mProgressDialog != null && this.mProgressDialog.isShowing()) {
+            this.mProgressDialog.dismiss();
         }
     }
 
@@ -516,11 +516,11 @@ public class EcgRecListActivity extends BaseActivity implements AdapterView.OnIt
             File file = new File(stringExtra);
             if (file.isDirectory()) {
                 string = getResources().getString(R.string.p_file_not_exist);
-            } else if (!file.isFile() || !m2257a(file)) {
+            } else if (!file.isFile() || !dismissmProgressDialog(file)) {
                 string = getResources().getString(R.string.p_not_valid_ecg_rec_file);
             } else {
                 String[] split = stringExtra.split("/");
-                this.f2151h.mo2702a(stringExtra, split[split.length - 1], this.f2149f.mUserInfo.getName());
+                this.ecgrecFileService.mo2702a(stringExtra, split[split.length - 1], this.ecgrecApp.mUserInfo.getName());
                 return;
             }
             Toast.makeText(this, string, Toast.LENGTH_SHORT).show();
@@ -545,21 +545,21 @@ public class EcgRecListActivity extends BaseActivity implements AdapterView.OnIt
     }
 
     public void onDestroy() {
-        if (this.f2151h != null) {
-            Log.d(f2144j, "fileService unbindService");
+        if (this.ecgrecFileService != null) {
+            Log.d(TAG, "fileService unbindService");
             unbindService(this.f2157o);
-            this.f2151h = null;
+            this.ecgrecFileService = null;
         }
         LocalBroadcastManager.getInstance(getApplicationContext()).unregisterReceiver(this.f2158p);
-        if (this.f2152i != null && this.f2152i.getStatus() == AsyncTask.Status.RUNNING) {
-            this.f2152i.cancel(true);
-            this.f2152i = null;
+        if (this.mEcgrecAsyncTask != null && this.mEcgrecAsyncTask.getStatus() == AsyncTask.Status.RUNNING) {
+            this.mEcgrecAsyncTask.cancel(true);
+            this.mEcgrecAsyncTask = null;
         }
         super.onDestroy();
     }
 
     public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long j) {
-        m2254a(i);
+        showDeletDialog(i);
         return true;
     }
 
@@ -571,7 +571,7 @@ public class EcgRecListActivity extends BaseActivity implements AdapterView.OnIt
                     startActivityForResult(new Intent(this, FileExploreActivity.class), 3001);
                     return true;
                 case R.id.history_action_sync /*2131165328*/:
-                    this.f2150g.mo2821a(this.f2149f.mUserInfo.getId());
+                    this.ecgrecNetService.mo2821a(this.ecgrecApp.mUserInfo.getId());
                     return true;
                 default:
                     return super.onOptionsItemSelected(menuItem);
@@ -584,25 +584,25 @@ public class EcgRecListActivity extends BaseActivity implements AdapterView.OnIt
 
     /* access modifiers changed from: protected */
     public void onPause() {
-        Log.d(f2144j, "onPause");
+        Log.d(TAG, "onPause");
         LocalBroadcastManager.getInstance(getApplicationContext()).unregisterReceiver(this.f2159q);
-        if (this.f2150g != null) {
-            Log.d(f2144j, "netService unbindService");
+        if (this.ecgrecNetService != null) {
+            Log.d(TAG, "netService unbindService");
             unbindService(this.f2156n);
-            this.f2150g = null;
+            this.ecgrecNetService = null;
         }
         super.onPause();
     }
 
     public void onResume() {
-        m2261c();
+        startAcyn();
         super.onResume();
     }
 
     public void onStart() {
-        Log.d(f2144j, "OnStart");
+        Log.d(TAG, "OnStart");
         getActionBar().setDisplayHomeAsUpEnabled(true);
-        this.f2149f = (ECGApplication) getApplication();
+        this.ecgrecApp = (ECGApplication) getApplication();
         bindService(new Intent(this, NetService.class), this.f2156n, Context.BIND_AUTO_CREATE);
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction("com.holptruly.ecg.services.NetService.SYNC_DATA_BEGIN_ACTION");
@@ -612,14 +612,14 @@ public class EcgRecListActivity extends BaseActivity implements AdapterView.OnIt
         intentFilter.addAction("com.holptruly.ecg.services.NetService.LOGIN_SUCCESSFUL");
         intentFilter.addAction("com.holptruly.ecg.services.NetService.LOGIN_FAILE");
         LocalBroadcastManager.getInstance(getApplicationContext()).registerReceiver(this.f2159q, intentFilter);
-        this.f2145a = (ListView) findViewById(R.id.ecg_rec_list);
-        this.f2147d = new C0589b();
-        this.f2146c = new ArrayList();
-        this.f2145a.setAdapter(this.f2147d);
-        this.f2145a.setOnItemClickListener(this.f2160r);
-        this.f2145a.setOnItemLongClickListener(this);
-        this.f2148e = new SqlManager(this);
-        m2259b();
+        this.lv_ecg_rec = (ListView) findViewById(R.id.ecg_rec_list);
+        this.mEcgListAdapter = new EcgListAdapter();
+        this.mErecords = new ArrayList();
+        this.lv_ecg_rec.setAdapter(this.mEcgListAdapter);
+        this.lv_ecg_rec.setOnItemClickListener(this.adOnItemClickListener);
+        this.lv_ecg_rec.setOnItemLongClickListener(this);
+        this.ecgrecSqlManager = new SqlManager(this);
+        initPopView();
         super.onStart();
     }
 }

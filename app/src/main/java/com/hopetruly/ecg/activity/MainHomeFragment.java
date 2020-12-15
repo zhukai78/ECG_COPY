@@ -136,7 +136,7 @@ public class MainHomeFragment extends Fragment {
         Log.d(TAG, "onStart");
         this.f2703l = false;
         this.f2704m = (FunChooseActivity) getActivity();
-        int d = new SqlManager(getActivity()).mo2476d(((ECGApplication) getActivity().getApplication()).mUserInfo.getId());
+        int d = new SqlManager(getActivity()).rawQueryEcgRecord(((ECGApplication) getActivity().getApplication()).mUserInfo.getId());
         this.f2699h = (TextView) getView().findViewById(R.id.home_rec_num);
         this.f2699h.setText(String.valueOf(d));
         this.rl_ecg_rec_list_btn = (RelativeLayout) getView().findViewById(R.id.ecg_rec_list_btn);

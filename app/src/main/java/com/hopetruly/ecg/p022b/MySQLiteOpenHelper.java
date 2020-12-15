@@ -6,24 +6,24 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
 /* renamed from: com.hopetruly.ecg.b.a */
-public class C0739a extends SQLiteOpenHelper {
+public class MySQLiteOpenHelper extends SQLiteOpenHelper {
 
     /* renamed from: a */
     private static final String f2764a = "a";
 
     /* renamed from: b */
-    private static C0739a f2765b;
+    private static MySQLiteOpenHelper mSQLiteOpenHelper;
 
-    private C0739a(Context context) {
+    private MySQLiteOpenHelper(Context context) {
         super(context, "heatrate.db", (SQLiteDatabase.CursorFactory) null, 3);
     }
 
     /* renamed from: a */
-    public static C0739a m2607a(Context context) {
-        if (f2765b == null) {
-            f2765b = new C0739a(context);
+    public static MySQLiteOpenHelper getInstance(Context context) {
+        if (mSQLiteOpenHelper == null) {
+            mSQLiteOpenHelper = new MySQLiteOpenHelper(context);
         }
-        return f2765b;
+        return mSQLiteOpenHelper;
     }
 
     public void onCreate(SQLiteDatabase sQLiteDatabase) {

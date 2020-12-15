@@ -235,7 +235,7 @@ public class SOSSMSActivity extends BaseActivity {
                     i = R.string.p_ha_zero;
                 } else {
                     if (parseInt > 300) {
-                        Toast.makeText(this, getString(R.string.p_mark_large), 0).show();
+                        Toast.makeText(this, getString(R.string.p_mark_large), Toast.LENGTH_LONG).show();
                         this.f2525a.appECGConf.setECG_MARKING_PERIOD(300);
                     } else {
                         this.f2525a.appECGConf.setECG_MARKING_PERIOD(parseInt);
@@ -244,7 +244,7 @@ public class SOSSMSActivity extends BaseActivity {
                     this.f2526c.commit();
                 }
             }
-            Toast.makeText(this, getString(i), 0).show();
+            Toast.makeText(this, getString(i), Toast.LENGTH_LONG).show();
             this.f2526c.putInt("ECG_MARKING_PERIOD", this.f2525a.appECGConf.mo2666m());
             this.f2526c.commit();
         }
@@ -282,7 +282,7 @@ public class SOSSMSActivity extends BaseActivity {
             onBackPressed();
         } else if (itemId == R.id.action_save) {
             m2507d();
-            Toast.makeText(getApplicationContext(), getResources().getString(R.string.p_save), 0).show();
+            Toast.makeText(getApplicationContext(), getResources().getString(R.string.p_save), Toast.LENGTH_LONG).show();
             setResult(-1);
             m2508e();
             finish();

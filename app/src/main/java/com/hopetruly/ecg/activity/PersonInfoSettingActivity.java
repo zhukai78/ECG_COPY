@@ -230,7 +230,7 @@ public class PersonInfoSettingActivity extends BaseActivity {
                     e.printStackTrace();
                 }
             } else {
-                Toast.makeText(PersonInfoSettingActivity.this, PersonInfoSettingActivity.this.getString(R.string.net_error), 0).show();
+                Toast.makeText(PersonInfoSettingActivity.this, PersonInfoSettingActivity.this.getString(R.string.net_error), Toast.LENGTH_LONG).show();
             }
         }
 
@@ -450,54 +450,54 @@ public class PersonInfoSettingActivity extends BaseActivity {
     private void m2448c() {
         String obj = this.f2430c.getText().toString();
         if (obj == null || obj.length() <= 0) {
-            Toast.makeText(this, getResources().getString(R.string.not_enter_f_name), 0).show();
+            Toast.makeText(this, getResources().getString(R.string.not_enter_f_name), Toast.LENGTH_LONG).show();
             return;
         }
         this.f2448u.mUserInfo.setFirstName(obj);
         String obj2 = this.f2431d.getText().toString();
         if (obj2 == null || obj2.length() <= 0) {
-            Toast.makeText(this, getResources().getString(R.string.not_enter_l_name), 0).show();
+            Toast.makeText(this, getResources().getString(R.string.not_enter_l_name), Toast.LENGTH_LONG).show();
             return;
         }
         this.f2448u.mUserInfo.setLastName(obj2);
         if (this.f2448u.mUserInfo.getBirthday() == null) {
-            Toast.makeText(this, getResources().getString(R.string.not_select_date), 0).show();
+            Toast.makeText(this, getResources().getString(R.string.not_select_date), Toast.LENGTH_LONG).show();
         } else if (this.f2448u.mUserInfo.getSex() == null) {
-            Toast.makeText(this, getResources().getString(R.string.not_select_sex), 0).show();
+            Toast.makeText(this, getResources().getString(R.string.not_select_sex), Toast.LENGTH_LONG).show();
         } else {
             String obj3 = this.f2436i.getText().toString();
             if (obj3 == null || obj3.length() <= 0) {
-                Toast.makeText(this, getResources().getString(R.string.not_enter_phone), 0).show();
+                Toast.makeText(this, getResources().getString(R.string.not_enter_phone), Toast.LENGTH_LONG).show();
                 return;
             }
             this.f2448u.mUserInfo.setPhone(obj3);
             String obj4 = this.f2438k.getText().toString();
             if (obj4 == null || obj4.length() <= 0) {
-                Toast.makeText(this, getResources().getString(R.string.not_enter_profression), 0).show();
+                Toast.makeText(this, getResources().getString(R.string.not_enter_profression), Toast.LENGTH_LONG).show();
                 return;
             }
             this.f2448u.mUserInfo.setProfession(obj4);
             String obj5 = this.f2437j.getText().toString();
             if (obj5 == null || obj5.length() <= 0) {
-                Toast.makeText(this, getResources().getString(R.string.not_enter_email), 0).show();
+                Toast.makeText(this, getResources().getString(R.string.not_enter_email), Toast.LENGTH_LONG).show();
                 return;
             }
             this.f2448u.mUserInfo.setEmail(obj5);
             String obj6 = this.f2439l.getText().toString();
             if (obj6 == null || obj6.length() <= 0) {
-                Toast.makeText(this, getResources().getString(R.string.not_enter_address), 0).show();
+                Toast.makeText(this, getResources().getString(R.string.not_enter_address), Toast.LENGTH_LONG).show();
                 return;
             }
             this.f2448u.mUserInfo.setAddress(obj6);
             String obj7 = this.f2433f.getText().toString();
             if (obj7 == null || obj7.length() <= 0) {
-                Toast.makeText(this, getResources().getString(R.string.not_enter_height), 0).show();
+                Toast.makeText(this, getResources().getString(R.string.not_enter_height), Toast.LENGTH_LONG).show();
                 return;
             }
             this.f2448u.mUserInfo.setHeight(obj7);
             String obj8 = this.f2434g.getText().toString();
             if (obj8 == null || obj8.length() <= 0) {
-                Toast.makeText(this, getResources().getString(R.string.not_enter_weight), 0).show();
+                Toast.makeText(this, getResources().getString(R.string.not_enter_weight), Toast.LENGTH_LONG).show();
                 return;
             }
             this.f2448u.mUserInfo.setWeight(obj8);

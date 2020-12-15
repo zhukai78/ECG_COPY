@@ -415,7 +415,7 @@ public class HistoryECGDisplayActivity extends BaseActivity {
                 HistoryECGDisplayActivity.this.m2389f();
                 return;
             }
-            Toast.makeText(applicationContext, historyECGDisplayActivity.getString(i), 0).show();
+            Toast.makeText(applicationContext, historyECGDisplayActivity.getString(i), Toast.LENGTH_LONG).show();
         }
     };
 
@@ -627,7 +627,7 @@ public class HistoryECGDisplayActivity extends BaseActivity {
         } else {
             string = getResources().getString(R.string.p_not_valid_ecg_rec_file);
         }
-        Toast.makeText(this, string, 0).show();
+        Toast.makeText(this, string, Toast.LENGTH_LONG).show();
         return null;
     }
 
@@ -814,7 +814,7 @@ public class HistoryECGDisplayActivity extends BaseActivity {
                             HistoryECGDisplayActivity.this.f2330f.setProgress((int) (((double) HistoryECGDisplayActivity.this.f2346v[b - 2]) * 0.25d));
                         }
                         if (b <= 2 && ((double) progress) >= ((double) HistoryECGDisplayActivity.this.f2346v[0]) * 0.25d) {
-                            Toast.makeText(HistoryECGDisplayActivity.this, HistoryECGDisplayActivity.this.getString(R.string.p_first_exc), 0).show();
+                            Toast.makeText(HistoryECGDisplayActivity.this, HistoryECGDisplayActivity.this.getString(R.string.p_first_exc), Toast.LENGTH_LONG).show();
                         }
                     }
                 }
@@ -829,7 +829,7 @@ public class HistoryECGDisplayActivity extends BaseActivity {
                             HistoryECGDisplayActivity.this.f2330f.setProgress((int) (((double) HistoryECGDisplayActivity.this.f2346v[c + 2]) * 0.25d));
                         }
                         if (c == HistoryECGDisplayActivity.this.f2346v.length - 4 && d <= ((double) HistoryECGDisplayActivity.this.f2346v[HistoryECGDisplayActivity.this.f2346v.length - 1]) * 0.25d) {
-                            Toast.makeText(HistoryECGDisplayActivity.this, HistoryECGDisplayActivity.this.getString(R.string.p_last_exc), 0).show();
+                            Toast.makeText(HistoryECGDisplayActivity.this, HistoryECGDisplayActivity.this.getString(R.string.p_last_exc), Toast.LENGTH_LONG).show();
                         }
                     }
                 }
@@ -890,7 +890,7 @@ public class HistoryECGDisplayActivity extends BaseActivity {
                             try {
                                 C0770f.m2780a(new File(HistoryECGDisplayActivity.this.f2347w.getFilePath()), "text", obj);
                                 HistoryECGDisplayActivity.this.f2347w.setDescription(obj);
-                                new SqlManager(HistoryECGDisplayActivity.this.getApplicationContext()).mo2471b(HistoryECGDisplayActivity.this.f2347w);
+                                new SqlManager(HistoryECGDisplayActivity.this.getApplicationContext()).updateEcgRecord(HistoryECGDisplayActivity.this.f2347w);
                             } catch (Exception e) {
                                 e.printStackTrace();
                             }
@@ -1137,7 +1137,7 @@ public class HistoryECGDisplayActivity extends BaseActivity {
         return true;
      */
     /* JADX WARNING: Code restructure failed: missing block: B:40:0x0290, code lost:
-        android.widget.Toast.makeText(r12, getString(r0), 0).show();
+        android.widget.Toast.makeText(r12, getString(r0), Toast.LENGTH_LONG).show();
      */
     /* JADX WARNING: Code restructure failed: missing block: B:41:0x029b, code lost:
         return true;

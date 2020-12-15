@@ -15,8 +15,8 @@ import com.hopetruly.ecg.ECGApplication;
 import com.hopetruly.ecg.R;
 import com.hopetruly.ecg.entity.ECGEntity;
 import com.hopetruly.ecg.entity.ECGRecord;
-import com.hopetruly.ecg.p021a.C0566a;
-import com.hopetruly.ecg.p021a.C0569b;
+import com.hopetruly.ecg.p021a.MyFileListener;
+import com.hopetruly.ecg.p021a.FileListener;
 import com.hopetruly.ecg.util.C0770f;
 import com.hopetruly.ecg.util.LogUtils;
 
@@ -34,7 +34,7 @@ public class FileService extends Service {
     ECGApplication f2835a;
 
     /* renamed from: b */
-    C0569b f2836b;
+    FileListener f2836b;
 
     /* renamed from: c */
     private final IBinder f2837c = new FileServiceBinder();
@@ -282,7 +282,7 @@ public class FileService extends Service {
 
     /* renamed from: a */
     public void mo2703a(int[] iArr) {
-        this.f2836b.mo2104a(iArr);
+        this.f2836b.savemEcgData(iArr);
     }
 
     /* renamed from: b */
@@ -302,7 +302,7 @@ public class FileService extends Service {
     public void onCreate() {
         super.onCreate();
         this.f2835a = (ECGApplication) getApplication();
-        this.f2836b = new C0566a(this);
+        this.f2836b = new MyFileListener(this);
         StringBuffer stringBuffer = new StringBuffer(Environment.getExternalStorageDirectory().getAbsolutePath());
         stringBuffer.append(File.separator);
         stringBuffer.append("hopetruly");

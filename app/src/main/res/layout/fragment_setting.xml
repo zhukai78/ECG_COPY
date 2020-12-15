@@ -101,15 +101,21 @@
 
                     <RadioButton
                         android:id="@+id/setting_alarm_type_vibration"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
                         android:checked="true"
                         android:text="@string/l_ha_type_vibration" />
 
                     <RadioButton
                         android:id="@+id/setting_alarm_type_sound"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
                         android:text="@string/l_ha_type_sound" />
 
                     <RadioButton
                         android:id="@+id/setting_alarm_type_vibration_sound"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
                         android:text="@string/l_ha_type_vibration_sound" />
                 </RadioGroup>
 
@@ -146,6 +152,8 @@
 
                     <RadioButton
                         android:id="@+id/time_30s"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
                         android:text="@string/thirtieth_Second" />
                 </RadioGroup>
             </LinearLayout>
@@ -183,10 +191,14 @@
 
                 <RadioButton
                     android:id="@+id/time_5m"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:text="@string/five_Minute" />
 
                 <RadioButton
                     android:id="@+id/time_10m"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:text="@string/ten_Minute" />
             </RadioGroup>
 

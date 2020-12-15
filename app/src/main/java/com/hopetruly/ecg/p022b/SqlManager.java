@@ -17,19 +17,19 @@ import java.util.List;
 public class SqlManager {
 
     /* renamed from: a */
-    C0739a f2766a;
+    MySQLiteOpenHelper mMySQLiteOpenHelper;
 
     /* renamed from: b */
-    private SQLiteDatabase f2767b = null;
+    private SQLiteDatabase mSQLiteDatabase = null;
 
     public SqlManager(Context context) {
-        this.f2766a = C0739a.m2607a(context);
+        this.mMySQLiteOpenHelper = MySQLiteOpenHelper.getInstance(context);
     }
 
     /* renamed from: a */
-    public PedometerRecord mo2466a(String str, int i, int i2, int i3) {
+    public PedometerRecord getPedometerRecord(String str, int i, int i2, int i3) {
         PedometerRecord pedometerRecord;
-        SQLiteDatabase readableDatabase = this.f2766a.getReadableDatabase();
+        SQLiteDatabase readableDatabase = this.mMySQLiteOpenHelper.getReadableDatabase();
         Cursor rawQuery = readableDatabase.rawQuery("select * from step_record where userId=? and year=? and month=? and day=?", new String[]{str, String.valueOf(i), String.valueOf(i2), String.valueOf(i3)});
         if (rawQuery.moveToFirst()) {
             pedometerRecord = new PedometerRecord();
@@ -50,9 +50,9 @@ public class SqlManager {
     }
 
     /* renamed from: a */
-    public List<ECGRecord> mo2467a(String str) {
+    public List<ECGRecord> getECGRecord(String str) {
         ArrayList arrayList = new ArrayList();
-        SQLiteDatabase readableDatabase = this.f2766a.getReadableDatabase();
+        SQLiteDatabase readableDatabase = this.mMySQLiteOpenHelper.getReadableDatabase();
         Cursor rawQuery = readableDatabase.rawQuery("select * from ecg_record where userId=? order by record_id desc", new String[]{str});
         if (rawQuery.moveToFirst()) {
             do {
@@ -77,22 +77,22 @@ public class SqlManager {
         }
         rawQuery.close();
         readableDatabase.close();
-        mo2468a();
+        closeDatabase();
         return arrayList;
     }
 
     /* renamed from: a */
-    public void mo2468a() {
-        if (this.f2767b != null) {
-            this.f2767b.close();
-            this.f2767b = null;
+    public void closeDatabase() {
+        if (this.mSQLiteDatabase != null) {
+            this.mSQLiteDatabase.close();
+            this.mSQLiteDatabase = null;
         }
     }
 
     /* renamed from: a */
-    public void mo2469a(ECGRecord eCGRecord) {
-        this.f2767b = this.f2766a.getWritableDatabase();
-        SQLiteDatabase sQLiteDatabase = this.f2767b;
+    public void insertEcgRecord(ECGRecord eCGRecord) {
+        this.mSQLiteDatabase = this.mMySQLiteOpenHelper.getWritableDatabase();
+        SQLiteDatabase sQLiteDatabase = this.mSQLiteDatabase;
         String[] strArr = new String[12];
         strArr[0] = eCGRecord.getUser().getId();
         strArr[1] = eCGRecord.getMachine() == null ? "null" : eCGRecord.getMachine().getId();
@@ -110,15 +110,15 @@ public class SqlManager {
     }
 
     /* renamed from: a */
-    public void mo2470a(PedometerRecord pedometerRecord) {
-        SQLiteDatabase writableDatabase = this.f2766a.getWritableDatabase();
+    public void insertStepRecord(PedometerRecord pedometerRecord) {
+        SQLiteDatabase writableDatabase = this.mMySQLiteOpenHelper.getWritableDatabase();
         writableDatabase.execSQL("insert into step_record(userId,target,step,cal,year,month,day,desc) values(?,?,?,?,?,?,?,?)", new String[]{pedometerRecord.getUserId(), String.valueOf(pedometerRecord.getTarget()), String.valueOf(pedometerRecord.getCount()), String.valueOf(pedometerRecord.getCal()), String.valueOf(pedometerRecord.getYear()), String.valueOf(pedometerRecord.getMonth()), String.valueOf(pedometerRecord.getDay()), pedometerRecord.getDesc()});
         writableDatabase.close();
     }
 
     /* renamed from: b */
-    public void mo2471b(ECGRecord eCGRecord) {
-        SQLiteDatabase writableDatabase = this.f2766a.getWritableDatabase();
+    public void updateEcgRecord(ECGRecord eCGRecord) {
+        SQLiteDatabase writableDatabase = this.mMySQLiteOpenHelper.getWritableDatabase();
         String[] strArr = new String[13];
         strArr[0] = eCGRecord.getUser().getId();
         strArr[1] = eCGRecord.getMachine() == null ? "null" : eCGRecord.getMachine().getId();
@@ -138,15 +138,15 @@ public class SqlManager {
     }
 
     /* renamed from: b */
-    public void mo2472b(PedometerRecord pedometerRecord) {
-        SQLiteDatabase writableDatabase = this.f2766a.getWritableDatabase();
+    public void deleteStepRecord(PedometerRecord pedometerRecord) {
+        SQLiteDatabase writableDatabase = this.mMySQLiteOpenHelper.getWritableDatabase();
         writableDatabase.execSQL("delete from step_record where userId=? and year=? and month=? and day=?", new String[]{pedometerRecord.getUserId(), String.valueOf(pedometerRecord.getYear()), String.valueOf(pedometerRecord.getMonth()), String.valueOf(pedometerRecord.getDay())});
         writableDatabase.close();
     }
 
     /* renamed from: b */
-    public boolean mo2473b(String str) {
-        SQLiteDatabase readableDatabase = this.f2766a.getReadableDatabase();
+    public boolean selectEcgRecodBynum(String str) {
+        SQLiteDatabase readableDatabase = this.mMySQLiteOpenHelper.getReadableDatabase();
         Cursor rawQuery = readableDatabase.rawQuery("select count(*) as num from ecg_record where fileName=?", new String[]{str});
         rawQuery.moveToFirst();
         int i = rawQuery.getInt(rawQuery.getColumnIndex("num"));
@@ -156,8 +156,8 @@ public class SqlManager {
     }
 
     /* renamed from: c */
-    public void mo2474c(PedometerRecord pedometerRecord) {
-        SQLiteDatabase writableDatabase = this.f2766a.getWritableDatabase();
+    public void writeStepRec(PedometerRecord pedometerRecord) {
+        SQLiteDatabase writableDatabase = this.mMySQLiteOpenHelper.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put("step", Long.valueOf(pedometerRecord.getCount()));
         contentValues.put("cal", Long.valueOf(pedometerRecord.getCal()));
@@ -167,18 +167,18 @@ public class SqlManager {
     }
 
     /* renamed from: c */
-    public void mo2475c(String str) {
-        SQLiteDatabase writableDatabase = this.f2766a.getWritableDatabase();
+    public void deleteECGRec(String str) {
+        SQLiteDatabase writableDatabase = this.mMySQLiteOpenHelper.getWritableDatabase();
         writableDatabase.execSQL("delete from ecg_record where record_id=?", new String[]{str});
         writableDatabase.close();
     }
 
     /* renamed from: d */
-    public int mo2476d(String str) {
+    public int rawQueryEcgRecord(String str) {
         if (str == null) {
             str = "null";
         }
-        Cursor rawQuery = this.f2766a.getReadableDatabase().rawQuery("select count(1) from ecg_record where userId=?", new String[]{str});
+        Cursor rawQuery = this.mMySQLiteOpenHelper.getReadableDatabase().rawQuery("select count(1) from ecg_record where userId=?", new String[]{str});
         if (rawQuery.moveToFirst()) {
             return rawQuery.getInt(0);
         }
@@ -186,8 +186,8 @@ public class SqlManager {
     }
 
     /* renamed from: e */
-    public ArrayList<PedometerRecord> mo2477e(String str) {
-        SQLiteDatabase readableDatabase = this.f2766a.getReadableDatabase();
+    public ArrayList<PedometerRecord> getPedometerRecord(String str) {
+        SQLiteDatabase readableDatabase = this.mMySQLiteOpenHelper.getReadableDatabase();
         ArrayList<PedometerRecord> arrayList = new ArrayList<>();
         Cursor rawQuery = readableDatabase.rawQuery("select * from step_record where userId=? order by record_id desc", new String[]{str});
         if (rawQuery.moveToFirst()) {

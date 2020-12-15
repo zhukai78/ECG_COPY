@@ -3,7 +3,7 @@ package com.hopetruly.ecg.algorithm;
 import android.util.Log;
 
 /* renamed from: com.hopetruly.ecg.algorithm.d */
-public class C0738d {
+public class MathUtil {
 
     /* renamed from: a */
     public int f2754a = 0;

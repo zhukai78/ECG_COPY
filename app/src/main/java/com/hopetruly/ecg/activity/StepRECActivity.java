@@ -62,7 +62,7 @@ public class StepRECActivity extends BaseActivity {
         /* access modifiers changed from: protected */
         /* renamed from: a */
         public ArrayList<PedometerRecord> doInBackground(String... strArr) {
-            return StepRECActivity.this.f2672h.mo2477e(strArr[0]);
+            return StepRECActivity.this.f2672h.getPedometerRecord(strArr[0]);
         }
 
         /* access modifiers changed from: protected */
@@ -76,7 +76,7 @@ public class StepRECActivity extends BaseActivity {
                 StepRECActivity.this.f2668d.notifyDataSetChanged();
                 return;
             }
-            Toast.makeText(StepRECActivity.this.getApplicationContext(), StepRECActivity.this.getString(R.string.l_no_data), 0).show();
+            Toast.makeText(StepRECActivity.this.getApplicationContext(), StepRECActivity.this.getString(R.string.l_no_data), Toast.LENGTH_LONG).show();
         }
 
         /* access modifiers changed from: protected */
@@ -196,7 +196,7 @@ public class StepRECActivity extends BaseActivity {
         builder.setMessage(getResources().getString(R.string.delete_rec));
         builder.setPositiveButton(getResources().getString(R.string.delete), new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialogInterface, int i) {
-                StepRECActivity.this.f2672h.mo2472b(StepRECActivity.this.f2669e.get(i));
+                StepRECActivity.this.f2672h.deleteStepRecord(StepRECActivity.this.f2669e.get(i));
                 StepRECActivity.this.f2669e.remove(i);
                 StepRECActivity.this.f2668d.notifyDataSetChanged();
                 dialogInterface.dismiss();

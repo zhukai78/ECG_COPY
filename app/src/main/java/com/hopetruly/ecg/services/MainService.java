@@ -32,7 +32,7 @@ import com.hopetruly.ecg.entity.PedometerRecord;
 import com.hopetruly.ecg.p022b.SqlManager;
 import com.hopetruly.ecg.util.LogUtils;
 import com.hopetruly.ecg.util.C0772h;
-import com.hopetruly.ecg.util.C0773i;
+import com.hopetruly.ecg.util.MyAlarmClock;
 import com.hopetruly.ecg.util.NotificationUtils;
 import com.hopetruly.part.net.MyHttpClient;
 import com.hopetruly.part.net.NetService;
@@ -95,7 +95,7 @@ public class MainService extends Service {
     ArrayList<Sensor> mSensors = new ArrayList<>();
 
     /* renamed from: h */
-    C0773i f2856h;
+    MyAlarmClock f2856h;
 
     /* renamed from: i */
     long saveTimeSec = 0;
@@ -357,8 +357,8 @@ public class MainService extends Service {
                                 MainService.this.mSaveECGRecord.setFilePath(stringExtra3);
                                 MainService.this.mSaveECGRecord.setFileName(new File(stringExtra3).getName());
                                 MainService.this.mSaveECGRecord.setMark_time(MainService.this.mSaveECGRecord.getEcgEntity().getMark_time());
-                                MainService.this.mSqlManager.mo2469a(MainService.this.mSaveECGRecord);
-                                MainService.this.mSqlManager.mo2468a();
+                                MainService.this.mSqlManager.insertEcgRecord(MainService.this.mSaveECGRecord);
+                                MainService.this.mSqlManager.closeDatabase();
                                 if (MainService.this.mmainecggApp.appECGConf.mo2646c() == 1) {
                                     MainService.this.mmainNetService.mo2820a(MainService.this.mSaveECGRecord);
                                 }
@@ -389,9 +389,9 @@ public class MainService extends Service {
                             } else if (action.equals("com.hopetruly.ecg.util.MyAlarmClock.DATE_CHANGE")) {
                                 if (MainService.this.mainPedometerRecord != null) {
                                     if (MainService.this.mainPedometerRecord.getTarget() == 0 && MainService.this.mainPedometerRecord.getCurStep() == 0 && MainService.this.mainPedometerRecord.getCount() == 0) {
-                                        MainService.this.mSqlManager.mo2472b(MainService.this.mainPedometerRecord);
+                                        MainService.this.mSqlManager.deleteStepRecord(MainService.this.mainPedometerRecord);
                                     } else {
-                                        MainService.this.mSqlManager.mo2474c(MainService.this.mainPedometerRecord);
+                                        MainService.this.mSqlManager.writeStepRec(MainService.this.mainPedometerRecord);
                                     }
                                 }
                                 if (MainService.this.isGattStop) {
@@ -520,7 +520,7 @@ public class MainService extends Service {
             this.mainPedometerRecord.setYear(instance.get(1));
             this.mainPedometerRecord.setMonth(instance.get(2) + 1);
             this.mainPedometerRecord.setDay(instance.get(5));
-            this.mSqlManager.mo2470a(this.mainPedometerRecord);
+            this.mSqlManager.insertStepRecord(this.mainPedometerRecord);
         }
     }
 
@@ -529,7 +529,7 @@ public class MainService extends Service {
         LogUtils.logI(this.TAG, "ExitService~~");
         mo2734h();
         mo2737k();
-        this.f2856h.mo2788b();
+        this.f2856h.cancelAlarmManager();
         MyHttpClient.initMyHttpClient().closeHttpClient();
         stopSelf();
     }
@@ -587,7 +587,7 @@ public class MainService extends Service {
         if (this.mainbleHelper != null) {
             this.f2863o = str;
             this.mainbleHelper.mo2808d();
-            this.mainbleHelper.mo2801a(str);
+            this.mainbleHelper.connectbLE(str);
             return;
         }
         LogUtils.logW(this.TAG, "ConnectBLE>BLEservice = null");
@@ -601,7 +601,7 @@ public class MainService extends Service {
             return false;
         }
         characteristic.setValue(new byte[]{z ? (byte) 1 : 0});
-        return this.mainbleHelper.mo2799a(characteristic);
+        return this.mainbleHelper.writeCharacteristicBle(characteristic);
     }
 
     /* renamed from: a */
@@ -612,7 +612,7 @@ public class MainService extends Service {
             return false;
         }
         characteristic.setValue(new byte[]{(byte) i});
-        return this.mainbleHelper.mo2799a(characteristic);
+        return this.mainbleHelper.writeCharacteristicBle(characteristic);
     }
 
     /* renamed from: b */
@@ -770,9 +770,9 @@ public class MainService extends Service {
         }
         this.mainPedometerRecord.setCount(this.mainPedometerRecord.getCount() + this.mainPedometerRecord.getCurStep());
         if (this.mainPedometerRecord.getTarget() == 0 && this.mainPedometerRecord.getCurStep() == 0 && this.mainPedometerRecord.getCount() == 0) {
-            this.mSqlManager.mo2472b(this.mainPedometerRecord);
+            this.mSqlManager.deleteStepRecord(this.mainPedometerRecord);
         } else {
-            this.mSqlManager.mo2474c(this.mainPedometerRecord);
+            this.mSqlManager.writeStepRec(this.mainPedometerRecord);
         }
         m2710x();
         return true;
@@ -790,9 +790,9 @@ public class MainService extends Service {
         }
         this.mainPedometerRecord.setCount(this.mainPedometerRecord.getCount() + this.mainPedometerRecord.getCurStep());
         if (this.mainPedometerRecord.getTarget() == 0 && this.mainPedometerRecord.getCurStep() == 0 && this.mainPedometerRecord.getCount() == 0) {
-            this.mSqlManager.mo2472b(this.mainPedometerRecord);
+            this.mSqlManager.deleteStepRecord(this.mainPedometerRecord);
         } else {
-            this.mSqlManager.mo2474c(this.mainPedometerRecord);
+            this.mSqlManager.writeStepRec(this.mainPedometerRecord);
         }
         m2710x();
         return true;
@@ -828,8 +828,8 @@ public class MainService extends Service {
         this.f2869u = new C0772h();
         this.mainmStepCounter = new StepCounter(this, 0, 0);
         this.mFallDownAlgorithm = new FallDownAlgorithm(this);
-        this.f2856h = C0773i.m2798a((Context) this);
-        this.f2856h.mo2786a();
+        this.f2856h = MyAlarmClock.getInstance((Context) this);
+        this.f2856h.setTimeDate();
         this.f2856h.mo2789b(true);
     }
 
@@ -860,7 +860,7 @@ public class MainService extends Service {
     /* renamed from: q */
     public PedometerRecord mo2746q() {
         Calendar instance = Calendar.getInstance();
-        this.mainPedometerRecord = this.mSqlManager.mo2466a(this.mmainecggApp.mUserInfo.getId(), instance.get(1), instance.get(2) + 1, instance.get(5));
+        this.mainPedometerRecord = this.mSqlManager.getPedometerRecord(this.mmainecggApp.mUserInfo.getId(), instance.get(1), instance.get(2) + 1, instance.get(5));
         return this.mainPedometerRecord;
     }
 

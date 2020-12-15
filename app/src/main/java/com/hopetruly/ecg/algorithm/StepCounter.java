@@ -33,7 +33,7 @@ public class StepCounter {
     private double f2750g = 0.0d;
 
     /* renamed from: h */
-    private C0738d f2751h;
+    private MathUtil f2751h;
 
     /* renamed from: i */
     private double[] f2752i;
@@ -49,7 +49,7 @@ public class StepCounter {
         if (i2 > 0) {
             this.f2746c = i2;
         }
-        this.f2751h = new C0738d();
+        this.f2751h = new MathUtil();
         this.f2752i = new double[Fir.getOrder(Fir.f3077g)];
         Fir.m2980a(Fir.f3077g, this.f2752i);
     }

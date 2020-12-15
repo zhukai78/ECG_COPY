@@ -16,7 +16,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 
 /* renamed from: com.hopetruly.ecg.a.a */
-public class C0566a implements C0569b {
+public class MyFileListener implements FileListener {
 
     /* renamed from: a */
     private final int f2096a = 0;
@@ -81,52 +81,52 @@ public class C0566a implements C0569b {
     private Thread f2113r = new Thread() {
         public void run() {
             Looper.prepare();
-            Looper unused = C0566a.this.f2103h = Looper.myLooper();
-            Handler unused2 = C0566a.this.f2104i = new Handler(C0566a.this.f2103h) {
+            Looper unused = MyFileListener.this.f2103h = Looper.myLooper();
+            Handler unused2 = MyFileListener.this.f2104i = new Handler(MyFileListener.this.f2103h) {
                 public void handleMessage(Message message) {
                     switch (message.what) {
                         case 0:
-                            if (C0566a.this.f2100e == null) {
+                            if (MyFileListener.this.f2100e == null) {
                                 LogUtils.logE("FileCache", "未有设置缓存文件的位置? SetCacheFile()");
                                 return;
                             }
-                            int unused = C0566a.this.f2108m = 0;
-                            int unused2 = C0566a.this.f2109n = 0;
-                            int unused3 = C0566a.this.f2110o = 0;
+                            int unused = MyFileListener.this.f2108m = 0;
+                            int unused2 = MyFileListener.this.f2109n = 0;
+                            int unused3 = MyFileListener.this.f2110o = 0;
                             try {
-                                if (!C0566a.this.f2100e.exists()) {
-                                    C0566a.this.f2100e.createNewFile();
+                                if (!MyFileListener.this.f2100e.exists()) {
+                                    MyFileListener.this.f2100e.createNewFile();
                                 } else {
-                                    FileWriter fileWriter = new FileWriter(C0566a.this.f2100e, false);
+                                    FileWriter fileWriter = new FileWriter(MyFileListener.this.f2100e, false);
                                     fileWriter.write("");
                                     fileWriter.close();
                                     LogUtils.logE("FileCache", "OPEN_CACHE_FILE >> clear file ");
                                 }
-                                boolean unused4 = C0566a.this.f2102g = true;
+                                boolean unused4 = MyFileListener.this.f2102g = true;
                                 return;
                             } catch (IOException e) {
                                 e.printStackTrace();
                                 return;
                             }
                         case 1:
-                            if (C0566a.this.f2102g) {
-                                C0566a.this.m2222e();
-                                boolean unused5 = C0566a.this.f2102g = false;
+                            if (MyFileListener.this.f2102g) {
+                                MyFileListener.this.m2222e();
+                                boolean unused5 = MyFileListener.this.f2102g = false;
                                 LogUtils.logE("FileCache", "CLOSE_CACHE_FILE >> CanWrite = false; ");
                             } else {
                                 Log.e("FileCache", "文件缓存还不能写入，检查是否OpenFileCache");
                             }
-                            int unused6 = C0566a.this.f2111p = 0;
+                            int unused6 = MyFileListener.this.f2111p = 0;
                             return;
                         case 2:
-                            if (C0566a.this.f2102g) {
-                                C0566a.this.m2218c((int[]) message.obj);
+                            if (MyFileListener.this.f2102g) {
+                                MyFileListener.this.m2218c((int[]) message.obj);
                                 return;
                             }
                             break;
                         case 3:
-                            if (C0566a.this.f2102g) {
-                                C0566a.this.m2216b((int[]) message.obj);
+                            if (MyFileListener.this.f2102g) {
+                                MyFileListener.this.m2216b((int[]) message.obj);
                                 return;
                             }
                             break;
@@ -140,7 +140,7 @@ public class C0566a implements C0569b {
         }
     };
 
-    public C0566a(Context context) {
+    public MyFileListener(Context context) {
         this.f2101f = context;
         this.f2113r.start();
     }
@@ -235,7 +235,7 @@ public class C0566a implements C0569b {
     }
 
     /* renamed from: a */
-    public void mo2104a(int[] iArr) {
+    public void savemEcgData(int[] iArr) {
         if (this.f2104i != null) {
             Message obtain = Message.obtain(this.f2104i);
             obtain.what = 3;

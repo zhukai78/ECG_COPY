@@ -124,7 +124,7 @@ public class StepFragment extends Fragment {
         long b = 0;
         this.f2661o = (FunChooseActivity) getActivity();
         Calendar instance = Calendar.getInstance();
-        this.f2654h = new SqlManager(getActivity().getApplicationContext()).mo2466a(this.f2653g.mUserInfo.getId(), instance.get(1), instance.get(2) + 1, instance.get(5));
+        this.f2654h = new SqlManager(getActivity().getApplicationContext()).getPedometerRecord(this.f2653g.mUserInfo.getId(), instance.get(1), instance.get(2) + 1, instance.get(5));
         this.f2648b = (TextView) getView().findViewById(R.id.step_step);
         this.f2649c = (TextView) getView().findViewById(R.id.step_calories);
         this.f2651e = (TextView) getView().findViewById(R.id.step_complete);

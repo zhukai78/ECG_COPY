@@ -8,7 +8,7 @@ import android.graphics.Rect;
 import android.util.AttributeSet;
 import android.view.View;
 
-import com.hopetruly.ecg.util.C0769e;
+import com.hopetruly.ecg.util.DpUtil;
 import com.hopetruly.ecg.util.LogUtils;
 
 import java.text.DecimalFormat;
@@ -96,7 +96,7 @@ public class BarChart extends View {
         this.f2885f.setColor(-16776961);
         this.f2886g = new Paint(1);
         this.f2886g.setColor(-16777216);
-        this.f2886g.setTextSize((float) C0769e.m2772a(context, 14.0f));
+        this.f2886g.setTextSize((float) DpUtil.toDp(context, 14.0f));
         this.f2886g.setTextAlign(Paint.Align.RIGHT);
         mo2757a(0, 6211, 5);
         mo2758a(7, new String[]{"1", "2", "3", "4", "5", "6", "7"});
@@ -142,10 +142,10 @@ public class BarChart extends View {
         sb.append("");
         int measureText = (int) paint.measureText(sb.toString());
         int i2 = measureText + 30;
-        C0763a aVar = new C0763a(i2, height - C0769e.m2772a(this.f2881b, 50.0f));
-        C0763a aVar2 = new C0763a(width - C0769e.m2772a(this.f2881b, 20.0f), height - C0769e.m2772a(this.f2881b, 50.0f));
-        C0763a aVar3 = new C0763a(i2, C0769e.m2772a(this.f2881b, 20.0f));
-        C0763a aVar4 = new C0763a(width - C0769e.m2772a(this.f2881b, 20.0f), C0769e.m2772a(this.f2881b, 20.0f));
+        C0763a aVar = new C0763a(i2, height - DpUtil.toDp(this.f2881b, 50.0f));
+        C0763a aVar2 = new C0763a(width - DpUtil.toDp(this.f2881b, 20.0f), height - DpUtil.toDp(this.f2881b, 50.0f));
+        C0763a aVar3 = new C0763a(i2, DpUtil.toDp(this.f2881b, 20.0f));
+        C0763a aVar4 = new C0763a(width - DpUtil.toDp(this.f2881b, 20.0f), DpUtil.toDp(this.f2881b, 20.0f));
         canvas2.drawLine((float) aVar.f2893a, (float) aVar.f2894b, (float) aVar2.f2893a, (float) aVar2.f2894b, this.f2883d);
         canvas2.drawLine((float) aVar.f2893a, (float) aVar.f2894b, (float) aVar3.f2893a, (float) aVar3.f2894b, this.f2883d);
         canvas2.drawLine((float) aVar3.f2893a, (float) aVar3.f2894b, (float) aVar4.f2893a, (float) aVar4.f2894b, this.f2883d);
@@ -168,16 +168,16 @@ public class BarChart extends View {
                 i = i4;
                 canvas2.drawLine(f, f5, f6, f7, this.f2884e);
             }
-            canvas2.drawText(this.f2882c.format((double) (((float) (i * i3)) / 1000.0f)) + "k", (float) (measureText + 20), (float) ((aVar.f2894b - (i * abs)) + C0769e.m2772a(this.f2881b, 7.0f)), this.f2886g);
+            canvas2.drawText(this.f2882c.format((double) (((float) (i * i3)) / 1000.0f)) + "k", (float) (measureText + 20), (float) ((aVar.f2894b - (i * abs)) + DpUtil.toDp(this.f2881b, 7.0f)), this.f2886g);
             i4 = i + 1;
         }
         int abs2 = Math.abs(aVar.f2893a - aVar2.f2893a) / this.f2890k;
         for (int i6 = 0; i6 < this.f2890k; i6++) {
-            canvas2.drawText(this.f2891l[i6], (float) (aVar.f2893a + (abs2 / 2) + (i6 * abs2)), (float) (aVar.f2894b + C0769e.m2772a(this.f2881b, 20.0f)), this.f2886g);
+            canvas2.drawText(this.f2891l[i6], (float) (aVar.f2893a + (abs2 / 2) + (i6 * abs2)), (float) (aVar.f2894b + DpUtil.toDp(this.f2881b, 20.0f)), this.f2886g);
         }
         for (int i7 = 0; i7 < this.f2892m.length; i7++) {
             int i8 = i7 * abs2;
-            canvas2.drawRect(new Rect(aVar.f2893a + i8 + C0769e.m2772a(this.f2881b, 5.0f), aVar.f2894b - ((Math.abs(aVar.f2894b - aVar3.f2894b) * this.f2892m[i7]) / this.f2888i), ((aVar.f2893a + i8) + abs2) - C0769e.m2772a(this.f2881b, 5.0f), aVar.f2894b), this.f2885f);
+            canvas2.drawRect(new Rect(aVar.f2893a + i8 + DpUtil.toDp(this.f2881b, 5.0f), aVar.f2894b - ((Math.abs(aVar.f2894b - aVar3.f2894b) * this.f2892m[i7]) / this.f2888i), ((aVar.f2893a + i8) + abs2) - DpUtil.toDp(this.f2881b, 5.0f), aVar.f2894b), this.f2885f);
         }
     }
 }
