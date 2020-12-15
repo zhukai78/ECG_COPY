@@ -188,7 +188,7 @@ public class EcgUncaughtExceptionHandler implements Thread.UncaughtExceptionHand
         while (it.hasNext()) {
             Service next = it.next();
             if (next instanceof MainService) {
-                ((MainService) next).mo2719a();
+                ((MainService) next).exitService();
             } else {
                 next.stopSelf();
             }

@@ -41,7 +41,7 @@ public class FunChooseActivity extends BaseActivity {
     boolean isGpsOpen = false;
 
     /* renamed from: g */
-    boolean f2220g = false;
+    boolean isResumeGps = false;
 
     /* renamed from: h */
     ECGApplication fcECGApplication;
@@ -188,14 +188,14 @@ public class FunChooseActivity extends BaseActivity {
     }
 
     /* renamed from: a */
-    public boolean mo2181a() {
+    public boolean isBleConn() {
         return this.fcMainService != null && this.fcMainService.isMBleConn();
     }
 
     /* renamed from: b */
-    public int mo2182b() {
+    public int getgetbatterylevel() {
         if (this.fcMainService != null) {
-            return this.fcMainService.mo2750u();
+            return this.fcMainService.getbatterylevel();
         }
         return 0;
     }
@@ -263,7 +263,7 @@ public class FunChooseActivity extends BaseActivity {
             public void onClick(DialogInterface dialogInterface, int i) {
                 GpsManagerHelper.removegps();
                 FunChooseActivity.this.isGpsOpen = true;
-                if (FunChooseActivity.this.f2220g) {
+                if (FunChooseActivity.this.isResumeGps) {
                     GpsManagerHelper.initGpsManagerHelper(FunChooseActivity.this.getApplicationContext());
                 }
                 dialogInterface.dismiss();
@@ -307,7 +307,7 @@ public class FunChooseActivity extends BaseActivity {
     public void onDestroy() {
         LogUtils.logI("FunChooseActivity", "onDestroy~~~~~");
         if (this.fcMainService != null) {
-            this.fcMainService.mo2719a();
+            this.fcMainService.exitService();
         }
         unbindService(this.fcMainServiceConn);
         unbindService(this.fcNetServiceConn);
@@ -331,7 +331,7 @@ public class FunChooseActivity extends BaseActivity {
             if (!GpsManagerHelper.initGpsManagerHelper(getApplicationContext())) {
                 showGpsAlertDialog();
             } else {
-                this.f2220g = true;
+                this.isResumeGps = true;
             }
         }
         super.onResume();

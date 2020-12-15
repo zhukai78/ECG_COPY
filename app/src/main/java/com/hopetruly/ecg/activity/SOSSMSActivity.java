@@ -124,11 +124,11 @@ public class SOSSMSActivity extends BaseActivity {
                     SOSSMSActivity.this.f2525a.appECGConf.setECG_SMS_ALARM(0);
                     GpsManagerHelper.removegps();
                 }
-                SOSSMSActivity.this.f2526c.putInt("ECG_SMS_ALARM", SOSSMSActivity.this.f2525a.appECGConf.mo2660j());
+                SOSSMSActivity.this.f2526c.putInt("ECG_SMS_ALARM", SOSSMSActivity.this.f2525a.appECGConf.getECG_SMS_ALARM());
                 SOSSMSActivity.this.f2526c.commit();
             }
         });
-        if (this.f2525a.appECGConf.mo2660j() == 1) {
+        if (this.f2525a.appECGConf.getECG_SMS_ALARM() == 1) {
             this.f2530g.setChecked(true);
         } else {
             this.f2530g.setChecked(false);
@@ -140,25 +140,25 @@ public class SOSSMSActivity extends BaseActivity {
             public void onCheckedChanged(CompoundButton compoundButton, boolean z) {
                 if (z) {
                     SOSSMSActivity.this.f2525a.appECGConf.setECG_ENABLE_MARK(1);
-                    SOSSMSActivity.this.f2533j.setVisibility(0);
+                    SOSSMSActivity.this.f2533j.setVisibility(View.VISIBLE);
                     SOSSMSActivity.this.f2534k.setEnabled(true);
-                    SOSSMSActivity.this.f2534k.setText(String.valueOf(SOSSMSActivity.this.f2525a.appECGConf.mo2666m()));
+                    SOSSMSActivity.this.f2534k.setText(String.valueOf(SOSSMSActivity.this.f2525a.appECGConf.getECG_MARKING_PERIOD()));
                 } else {
                     SOSSMSActivity.this.f2525a.appECGConf.setECG_ENABLE_MARK(0);
                     SOSSMSActivity.this.f2534k.setEnabled(false);
-                    SOSSMSActivity.this.f2533j.setVisibility(8);
+                    SOSSMSActivity.this.f2533j.setVisibility(View.GONE);
                 }
-                SOSSMSActivity.this.f2526c.putInt("ECG_ENABLE_MARK", SOSSMSActivity.this.f2525a.appECGConf.mo2662k());
+                SOSSMSActivity.this.f2526c.putInt("ECG_ENABLE_MARK", SOSSMSActivity.this.f2525a.appECGConf.getECG_ENABLE_MARK());
                 SOSSMSActivity.this.f2526c.commit();
             }
         });
-        if (this.f2525a.appECGConf.mo2662k() == 1) {
+        if (this.f2525a.appECGConf.getECG_ENABLE_MARK() == 1) {
             this.f2531h.setChecked(true);
-            this.f2533j.setVisibility(0);
+            this.f2533j.setVisibility(View.VISIBLE);
             return;
         }
         this.f2531h.setChecked(false);
-        this.f2533j.setVisibility(8);
+        this.f2533j.setVisibility(View.GONE);
     }
 
     /* access modifiers changed from: private */
@@ -240,12 +240,12 @@ public class SOSSMSActivity extends BaseActivity {
                     } else {
                         this.f2525a.appECGConf.setECG_MARKING_PERIOD(parseInt);
                     }
-                    this.f2526c.putInt("ECG_MARKING_PERIOD", this.f2525a.appECGConf.mo2666m());
+                    this.f2526c.putInt("ECG_MARKING_PERIOD", this.f2525a.appECGConf.getECG_MARKING_PERIOD());
                     this.f2526c.commit();
                 }
             }
             Toast.makeText(this, getString(i), Toast.LENGTH_LONG).show();
-            this.f2526c.putInt("ECG_MARKING_PERIOD", this.f2525a.appECGConf.mo2666m());
+            this.f2526c.putInt("ECG_MARKING_PERIOD", this.f2525a.appECGConf.getECG_MARKING_PERIOD());
             this.f2526c.commit();
         }
     }

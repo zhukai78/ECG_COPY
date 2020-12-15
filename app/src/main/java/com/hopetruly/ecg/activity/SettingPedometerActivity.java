@@ -61,7 +61,7 @@ public class SettingPedometerActivity extends BaseActivity {
                 SharedPreferences.Editor edit = this.settingECGApplication.spPedometer_onf.edit();
                 edit.putLong("STEP_TARGET", Long.valueOf(obj).longValue());
                 edit.commit();
-                PedometerRecord q = this.settingECGApplication.appMainService.mo2746q();
+                PedometerRecord q = this.settingECGApplication.appMainService.getSqlPedometerRecord();
                 if (q != null) {
                     q.setTarget(this.settingECGApplication.appPedometerConf.mo2672b());
                     new SqlManager(getApplicationContext()).writeStepRec(q);

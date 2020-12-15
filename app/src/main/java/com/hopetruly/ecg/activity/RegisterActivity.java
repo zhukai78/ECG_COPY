@@ -25,34 +25,34 @@ import org.json.JSONException;
 public class RegisterActivity extends BaseActivity {
 
     /* renamed from: a */
-    final String f2512a = "RegisterActivity";
+    final String TAG = "RegisterActivity";
 
     /* renamed from: c */
-    EditText f2513c;
+    EditText edt_regiter_username;
 
     /* renamed from: d */
-    EditText f2514d;
+    EditText edt_register_password;
 
     /* renamed from: e */
-    EditText f2515e;
+    EditText edt_register_password_confirm;
 
     /* renamed from: f */
-    Button f2516f;
+    Button btn_register_button;
 
     /* renamed from: g */
-    ECGApplication f2517g;
+    ECGApplication mECGApplication;
 
     /* renamed from: h */
-    String f2518h;
+    String username;
 
     /* renamed from: i */
-    String f2519i;
+    String userpwd;
 
     /* renamed from: j */
-    C0678a f2520j;
+    Register_ajaxAsynTask register_ajaxAsynTask;
 
     /* renamed from: k */
-    ProgressDialog f2521k;
+    ProgressDialog loadProgressDialog;
 
     /* renamed from: l */
     private View.OnClickListener f2522l = new View.OnClickListener() {
@@ -61,17 +61,17 @@ public class RegisterActivity extends BaseActivity {
             int i;
             Resources resources;
             if (view.getId() == R.id.register_button) {
-                RegisterActivity.this.f2518h = RegisterActivity.this.f2513c.getText().toString();
-                RegisterActivity.this.f2519i = RegisterActivity.this.f2514d.getText().toString();
-                String obj = RegisterActivity.this.f2515e.getText().toString();
-                if (RegisterActivity.this.f2518h == null || RegisterActivity.this.f2518h.length() <= 0 || RegisterActivity.this.f2519i == null || RegisterActivity.this.f2519i.length() <= 0 || obj == null || obj.length() <= 0) {
+                RegisterActivity.this.username = RegisterActivity.this.edt_regiter_username.getText().toString();
+                RegisterActivity.this.userpwd = RegisterActivity.this.edt_register_password.getText().toString();
+                String obj = RegisterActivity.this.edt_register_password_confirm.getText().toString();
+                if (RegisterActivity.this.username == null || RegisterActivity.this.username.length() <= 0 || RegisterActivity.this.userpwd == null || RegisterActivity.this.userpwd.length() <= 0 || obj == null || obj.length() <= 0) {
                     context = RegisterActivity.this.getApplicationContext();
                     resources = RegisterActivity.this.getResources();
                     i = R.string.Not_completed;
                 } else {
-                    Log.i("RegisterActivity", RegisterActivity.this.f2519i + "???" + obj);
-                    if (RegisterActivity.this.f2519i.equals(obj)) {
-                        RegisterActivity.this.m2495a(RegisterActivity.this.f2518h, RegisterActivity.this.f2519i);
+                    Log.i("RegisterActivity", RegisterActivity.this.userpwd + "???" + obj);
+                    if (RegisterActivity.this.userpwd.equals(obj)) {
+                        RegisterActivity.this.toRegister(RegisterActivity.this.username, RegisterActivity.this.userpwd);
                         return;
                     }
                     context = RegisterActivity.this.getApplicationContext();
@@ -84,8 +84,8 @@ public class RegisterActivity extends BaseActivity {
     };
 
     /* renamed from: com.hopetruly.ecg.activity.RegisterActivity$a */
-    class C0678a extends AsyncTask<String, Void, String> {
-        C0678a() {
+    class Register_ajaxAsynTask extends AsyncTask<String, Void, String> {
+        Register_ajaxAsynTask() {
         }
 
         /* access modifiers changed from: protected */
@@ -102,15 +102,15 @@ public class RegisterActivity extends BaseActivity {
         public void onPostExecute(String str) {
             Toast makeText;
             if (!isCancelled()) {
-                RegisterActivity.this.m2496b();
+                RegisterActivity.this.dismissLoadProgressDialog();
                 if (str != null) {
                     Log.i("RegisterActivity", "result>>" + str);
                     try {
                         JSONArray jSONArray = new JSONArray(str);
                         if (jSONArray.getInt(0) == 0) {
                             Intent intent = new Intent();
-                            intent.putExtra("name", RegisterActivity.this.f2518h);
-                            intent.putExtra("pwd", RegisterActivity.this.f2519i);
+                            intent.putExtra("name", RegisterActivity.this.username);
+                            intent.putExtra("pwd", RegisterActivity.this.userpwd);
                             RegisterActivity.this.setResult(1000, intent);
                             RegisterActivity.this.finish();
                         } else {
@@ -135,34 +135,34 @@ public class RegisterActivity extends BaseActivity {
 
         /* access modifiers changed from: protected */
         public void onPreExecute() {
-            RegisterActivity.this.m2494a(RegisterActivity.this.getResources().getString(R.string.registering));
+            RegisterActivity.this.showMessageProgress(RegisterActivity.this.getResources().getString(R.string.registering));
             super.onPreExecute();
         }
     }
 
     /* renamed from: a */
-    private void m2490a() {
-        this.f2513c = (EditText) findViewById(R.id.regiter_username);
-        this.f2514d = (EditText) findViewById(R.id.register_password);
-        this.f2515e = (EditText) findViewById(R.id.register_password_confirm);
-        this.f2516f = (Button) findViewById(R.id.register_button);
-        this.f2516f.setOnClickListener(this.f2522l);
+    private void initView() {
+        this.edt_regiter_username = (EditText) findViewById(R.id.regiter_username);
+        this.edt_register_password = (EditText) findViewById(R.id.register_password);
+        this.edt_register_password_confirm = (EditText) findViewById(R.id.register_password_confirm);
+        this.btn_register_button = (Button) findViewById(R.id.register_button);
+        this.btn_register_button.setOnClickListener(this.f2522l);
     }
 
     /* access modifiers changed from: private */
     /* renamed from: a */
-    public void m2494a(String str) {
-        this.f2521k = new ProgressDialog(this);
-        this.f2521k.setMessage(str);
-        this.f2521k.show();
+    public void showMessageProgress(String str) {
+        this.loadProgressDialog = new ProgressDialog(this);
+        this.loadProgressDialog.setMessage(str);
+        this.loadProgressDialog.show();
     }
 
     /* access modifiers changed from: private */
     /* renamed from: a */
-    public void m2495a(String str, String str2) {
-        if (this.f2520j == null || this.f2520j.getStatus() != AsyncTask.Status.RUNNING) {
-            this.f2520j = new C0678a();
-            this.f2520j.execute(new String[]{this.f2518h, this.f2519i});
+    public void toRegister(String str, String str2) {
+        if (this.register_ajaxAsynTask == null || this.register_ajaxAsynTask.getStatus() != AsyncTask.Status.RUNNING) {
+            this.register_ajaxAsynTask = new Register_ajaxAsynTask();
+            this.register_ajaxAsynTask.execute(new String[]{this.username, this.userpwd});
             return;
         }
         Toast.makeText(getApplicationContext(), getString(R.string.registering), Toast.LENGTH_LONG).show();
@@ -170,8 +170,8 @@ public class RegisterActivity extends BaseActivity {
 
     /* access modifiers changed from: private */
     /* renamed from: b */
-    public void m2496b() {
-        this.f2521k.dismiss();
+    public void dismissLoadProgressDialog() {
+        this.loadProgressDialog.dismiss();
     }
 
     public void onBackPressed() {
@@ -183,8 +183,8 @@ public class RegisterActivity extends BaseActivity {
     public void onCreate(Bundle bundle) {
         super.onCreate(bundle);
         setContentView(R.layout.activity_register);
-        this.f2517g = (ECGApplication) getApplication();
-        m2490a();
+        this.mECGApplication = (ECGApplication) getApplication();
+        initView();
     }
 
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -194,9 +194,9 @@ public class RegisterActivity extends BaseActivity {
 
     /* access modifiers changed from: protected */
     public void onDestroy() {
-        if (this.f2520j != null && this.f2520j.getStatus() == AsyncTask.Status.RUNNING) {
-            this.f2520j.cancel(true);
-            this.f2520j = null;
+        if (this.register_ajaxAsynTask != null && this.register_ajaxAsynTask.getStatus() == AsyncTask.Status.RUNNING) {
+            this.register_ajaxAsynTask.cancel(true);
+            this.register_ajaxAsynTask = null;
         }
         super.onDestroy();
     }

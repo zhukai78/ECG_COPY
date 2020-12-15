@@ -189,7 +189,7 @@ public class BleHelper {
         if (!this.f2942m) {
             this.f2932b.schedule(new TimerTask() {
                 public void run() {
-                    BleHelper.this.mo2808d();
+                    BleHelper.this.stopScan();
                 }
             }, (long) i);
             mbluetoothAdapter.startLeScan(this.f2943n);
@@ -368,7 +368,7 @@ public class BleHelper {
     }
 
     /* renamed from: d */
-    public void mo2808d() {
+    public void stopScan() {
         if (this.mbluetoothAdapter == null) {
             Log.w(TAG, "BluetoothAdapter not initialized or unspecified address.");
         } else if (this.f2942m) {

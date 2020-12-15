@@ -17,7 +17,7 @@ import com.hopetruly.ecg.entity.ECGEntity;
 import com.hopetruly.ecg.entity.ECGRecord;
 import com.hopetruly.ecg.p021a.MyFileListener;
 import com.hopetruly.ecg.p021a.FileListener;
-import com.hopetruly.ecg.util.C0770f;
+import com.hopetruly.ecg.util.ECGRecordUtils;
 import com.hopetruly.ecg.util.LogUtils;
 
 import java.io.File;
@@ -31,19 +31,19 @@ import java.util.Locale;
 public class FileService extends Service {
 
     /* renamed from: a */
-    ECGApplication f2835a;
+    ECGApplication mFileECGApplication;
 
     /* renamed from: b */
-    FileListener f2836b;
+    FileListener mFileListener;
 
     /* renamed from: c */
-    private final IBinder f2837c = new FileServiceBinder();
+    private final IBinder mFileServiceBinder = new FileServiceBinder();
 
     /* renamed from: d */
     private C0756b f2838d;
 
     /* renamed from: e */
-    private C0757c f2839e;
+    private SaveEcgFileAsyncTask mSaveEcgFileAsyncTask;
 
     /* renamed from: com.hopetruly.ecg.services.FileService$a */
     public class FileServiceBinder extends Binder {
@@ -84,7 +84,7 @@ public class FileService extends Service {
                 try {
                     String encode2 = URLEncoder.encode(str4, "utf-8");
                     if ("mounted".equals(Environment.getExternalStorageState())) {
-                        if (C0770f.m2782a(str2, encode, false, FileService.this.getApplicationContext(), encode2)) {
+                        if (ECGRecordUtils.m2782a(str2, encode, false, FileService.this.getApplicationContext(), encode2)) {
                             StringBuffer stringBuffer = new StringBuffer(Environment.getExternalStorageDirectory().getAbsolutePath());
                             stringBuffer.append(File.separator);
                             stringBuffer.append("hopetruly");
@@ -144,13 +144,13 @@ public class FileService extends Service {
     }
 
     /* renamed from: com.hopetruly.ecg.services.FileService$c */
-    private class C0757c extends AsyncTask<Object, Void, String> {
+    private class SaveEcgFileAsyncTask extends AsyncTask<Object, Void, String> {
 
         /* renamed from: b */
-        private boolean f2844b;
+        private boolean isbeginSave;
 
-        private C0757c() {
-            this.f2844b = false;
+        private SaveEcgFileAsyncTask() {
+            this.isbeginSave = false;
         }
 
         /* access modifiers changed from: protected */
@@ -176,12 +176,12 @@ public class FileService extends Service {
                     String stringBuffer2 = stringBuffer.toString();
                     if (fArr != null) {
                         try {
-                            C0770f.m2779a(FileService.this.getApplicationContext(), stringBuffer2, fArr, eCGRecord.getEcgEntity());
+                            ECGRecordUtils.m2779a(FileService.this.getApplicationContext(), stringBuffer2, fArr, eCGRecord.getEcgEntity());
                         } catch (Exception e) {
                             e = e;
                             str = stringBuffer2;
                             e.printStackTrace();
-                            this.f2844b = false;
+                            this.isbeginSave = false;
                             Intent intent = new Intent();
                             intent.setAction("com.holptruly.ecg.services.FileService.FILE_SAVE_FAIL");
                             LocalBroadcastManager.getInstance(FileService.this.getApplicationContext()).sendBroadcast(intent);
@@ -191,17 +191,17 @@ public class FileService extends Service {
                             return str;
                         }
                     } else {
-                        while (FileService.this.f2836b.mo2102a() == null) {
+                        while (FileService.this.mFileListener.mo2102a() == null) {
                             LogUtils.logE("FileService", "fileCache not complete wait");
                             Thread.sleep(500);
                         }
-                        C0770f.m2778a(FileService.this.getApplicationContext(), stringBuffer2, FileService.this.f2836b.mo2102a(), eCGRecord.getEcgEntity());
+                        ECGRecordUtils.m2778a(FileService.this.getApplicationContext(), stringBuffer2, FileService.this.mFileListener.mo2102a(), eCGRecord.getEcgEntity());
                     }
-                    this.f2844b = true;
+                    this.isbeginSave = true;
                     return stringBuffer2;
                 } catch (Exception e2) {
                     e2.printStackTrace();
-                    this.f2844b = false;
+                    this.isbeginSave = false;
                     Intent intent2 = new Intent();
                     intent2.setAction("com.holptruly.ecg.services.FileService.FILE_SAVE_FAIL");
                     LocalBroadcastManager.getInstance(FileService.this.getApplicationContext()).sendBroadcast(intent2);
@@ -220,7 +220,7 @@ public class FileService extends Service {
             Context applicationContext;
             FileService fileService;
             int i;
-            if (!isCancelled() && this.f2844b) {
+            if (!isCancelled() && this.isbeginSave) {
                 Intent intent = new Intent();
                 if (str != null) {
                     intent.setAction("com.holptruly.ecg.services.FileService.FILE_SAVE_SUCCESS");
@@ -253,22 +253,22 @@ public class FileService extends Service {
 
     /* renamed from: a */
     public void mo2699a() {
-        this.f2836b.mo2105b();
+        this.mFileListener.mo2105b();
     }
 
     /* renamed from: a */
-    public void mo2700a(ECGRecord eCGRecord) {
-        if (this.f2839e == null || this.f2839e.getStatus() != AsyncTask.Status.RUNNING) {
-            this.f2839e = new C0757c();
-            this.f2839e.execute(new Object[]{eCGRecord, null});
+    public void startSaveEcgFileAsyncTask(ECGRecord eCGRecord) {
+        if (this.mSaveEcgFileAsyncTask == null || this.mSaveEcgFileAsyncTask.getStatus() != AsyncTask.Status.RUNNING) {
+            this.mSaveEcgFileAsyncTask = new SaveEcgFileAsyncTask();
+            this.mSaveEcgFileAsyncTask.execute(new Object[]{eCGRecord, null});
         }
     }
 
     /* renamed from: a */
     public void mo2701a(ECGRecord eCGRecord, float[] fArr) {
-        if (this.f2839e == null || this.f2839e.getStatus() != AsyncTask.Status.RUNNING) {
-            this.f2839e = new C0757c();
-            this.f2839e.execute(new Object[]{eCGRecord, fArr});
+        if (this.mSaveEcgFileAsyncTask == null || this.mSaveEcgFileAsyncTask.getStatus() != AsyncTask.Status.RUNNING) {
+            this.mSaveEcgFileAsyncTask = new SaveEcgFileAsyncTask();
+            this.mSaveEcgFileAsyncTask.execute(new Object[]{eCGRecord, fArr});
         }
     }
 
@@ -282,27 +282,27 @@ public class FileService extends Service {
 
     /* renamed from: a */
     public void mo2703a(int[] iArr) {
-        this.f2836b.savemEcgData(iArr);
+        this.mFileListener.savemEcgData(iArr);
     }
 
     /* renamed from: b */
     public void mo2704b() {
-        this.f2836b.mo2106c();
+        this.mFileListener.mo2106c();
     }
 
     /* renamed from: c */
     public int mo2705c() {
-        return this.f2836b.mo2107d();
+        return this.mFileListener.mo2107d();
     }
 
     public IBinder onBind(Intent intent) {
-        return this.f2837c;
+        return this.mFileServiceBinder;
     }
 
     public void onCreate() {
         super.onCreate();
-        this.f2835a = (ECGApplication) getApplication();
-        this.f2836b = new MyFileListener(this);
+        this.mFileECGApplication = (ECGApplication) getApplication();
+        this.mFileListener = new MyFileListener(this);
         StringBuffer stringBuffer = new StringBuffer(Environment.getExternalStorageDirectory().getAbsolutePath());
         stringBuffer.append(File.separator);
         stringBuffer.append("hopetruly");
@@ -310,6 +310,6 @@ public class FileService extends Service {
         stringBuffer.append("cache");
         stringBuffer.append(File.separator);
         stringBuffer.append("cache.txt");
-        this.f2836b.mo2103a(stringBuffer.toString());
+        this.mFileListener.mo2103a(stringBuffer.toString());
     }
 }

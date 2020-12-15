@@ -55,10 +55,10 @@ import java.util.List;
 public class NetService extends Service {
 
     /* renamed from: a */
-    String f2947a = "NetService";
+    String TAG = "NetService";
 
     /* renamed from: b */
-    ECGApplication f2948b;
+    ECGApplication netECGApplication;
 
     /* renamed from: c */
     Thread f2949c;
@@ -70,22 +70,22 @@ public class NetService extends Service {
     AsyncTask<String, Void, Boolean> f2951e;
 
     /* renamed from: f */
-    Handler f2952f;
+    Handler mhandler;
 
     /* renamed from: g */
     C0787d f2953g;
 
     /* renamed from: h */
-    String f2954h = "http://www.bitsun.com/cloud/apps/ecg/ecg_data_realtime_upload.php";
+    String ecg_data_realtime_upload_url = "http://www.bitsun.com/cloud/apps/ecg/ecg_data_realtime_upload.php";
 
     /* renamed from: i */
-    private final IBinder f2955i = new NetSerBinder();
+    private final IBinder mNetSerBinder = new NetSerBinder();
 
     /* renamed from: j */
-    private BroadcastReceiver f2956j = new BroadcastReceiver() {
+    private BroadcastReceiver nET_CHANGEBroadcastReceiver = new BroadcastReceiver() {
         public void onReceive(Context context, Intent intent) {
             if (intent.getAction().equals("android.net.conn.CONNECTIVITY_CHANGE")) {
-                NetService.this.f2948b.f2093n = NetService.this.getNetInfoType();
+                NetService.this.netECGApplication.f2093n = NetService.this.getNetInfoType();
                 LocalBroadcastManager.getInstance(NetService.this.getApplicationContext()).sendBroadcast(new Intent("com.holptruly.ecg.services.NetService.NET_CHANGE"));
             }
         }
@@ -129,12 +129,12 @@ public class NetService extends Service {
     }
 
     /* renamed from: com.hopetruly.part.net.NetService$b */
-    class C0785b extends AsyncTask<String, Void, String> {
+    class NETecg_file_listAsycTask extends AsyncTask<String, Void, String> {
 
         /* renamed from: a */
         Intent f2964a = null;
 
-        C0785b() {
+        NETecg_file_listAsycTask() {
         }
 
         /* access modifiers changed from: protected */
@@ -151,7 +151,7 @@ public class NetService extends Service {
         public void onPostExecute(String str) {
             Toast makeText;
             if (str != null) {
-                String str2 = NetService.this.f2947a;
+                String str2 = NetService.this.TAG;
                 Log.i(str2, "result>>" + str);
                 try {
                     JSONArray jSONArray = new JSONArray(str);
@@ -162,12 +162,12 @@ public class NetService extends Service {
                         this.f2964a = new Intent("com.holptruly.ecg.services.NetService.LOGIN_FAILE");
                         int i2 = jSONArray.getInt(2);
                         if (i2 == 1) {
-                            makeText = Toast.makeText(NetService.this.getApplicationContext(), NetService.this.getString(R.string.p_username_err), 0);
+                            makeText = Toast.makeText(NetService.this.getApplicationContext(), NetService.this.getString(R.string.p_username_err), Toast.LENGTH_LONG);
                         } else if (i2 != 999) {
                             Context applicationContext = NetService.this.getApplicationContext();
-                            makeText = Toast.makeText(applicationContext, NetService.this.getString(R.string.p_err_code) + i2, 0);
+                            makeText = Toast.makeText(applicationContext, NetService.this.getString(R.string.p_err_code) + i2, Toast.LENGTH_LONG);
                         } else {
-                            makeText = Toast.makeText(NetService.this.getApplicationContext(), NetService.this.getString(R.string.p_pwd_err), 0);
+                            makeText = Toast.makeText(NetService.this.getApplicationContext(), NetService.this.getString(R.string.p_pwd_err), Toast.LENGTH_LONG);
                         }
                         makeText.show();
                     }
@@ -241,7 +241,7 @@ public class NetService extends Service {
         Looper f2979m;
 
         /* renamed from: n */
-        HttpURLConnection f2980n;
+        HttpURLConnection mHttpURLConnection;
 
         /* renamed from: o */
         public boolean f2981o;
@@ -254,18 +254,18 @@ public class NetService extends Service {
         }
 
         /* renamed from: a */
-        public void mo2853a() {
+        public void exitRealTimeupdataThread() {
             if (this.f2979m != null) {
                 this.f2981o = false;
                 this.f2979m.quitSafely();
                 this.f2979m = null;
-                Log.d(NetService.this.f2947a, "RealTimeupdataThread>exit...");
+                Log.d(NetService.this.TAG, "RealTimeupdataThread>exit...");
             }
         }
 
         /* renamed from: a */
         public void mo2854a(int i, int i2) {
-            if (isAlive() && this.f2979m != null && NetService.this.f2952f != null) {
+            if (isAlive() && this.f2979m != null && NetService.this.mhandler != null) {
                 if (this.f2977k == null) {
                     this.f2977k = new StringBuffer();
                     this.f2976j = 0;
@@ -275,12 +275,12 @@ public class NetService extends Service {
                 this.f2976j = this.f2976j + 1;
                 if (this.f2976j == 25) {
                     this.f2977k.deleteCharAt(this.f2977k.lastIndexOf(","));
-                    Message obtain = Message.obtain(NetService.this.f2952f);
+                    Message obtain = Message.obtain(NetService.this.mhandler);
                     obtain.what = 2;
                     obtain.arg1 = i2;
                     obtain.arg2 = this.f2976j;
                     obtain.obj = this.f2977k.toString();
-                    NetService.this.f2952f.sendMessage(obtain);
+                    NetService.this.mhandler.sendMessage(obtain);
                     this.f2977k = null;
                 }
             }
@@ -290,7 +290,7 @@ public class NetService extends Service {
         public void mo2855b() {
             int i;
             if (isAlive()) {
-                Message obtain = Message.obtain(NetService.this.f2952f);
+                Message obtain = Message.obtain(NetService.this.mhandler);
                 obtain.what = 1;
                 if (this.f2976j <= 0 || this.f2977k == null) {
                     obtain.obj = "0";
@@ -303,7 +303,7 @@ public class NetService extends Service {
                     i = this.f2976j;
                 }
                 obtain.arg2 = i;
-                NetService.this.f2952f.sendMessageDelayed(obtain, 1000);
+                NetService.this.mhandler.sendMessageDelayed(obtain, 1000);
                 this.f2977k = null;
             }
         }
@@ -311,14 +311,14 @@ public class NetService extends Service {
         public void run() {
             Looper.prepare();
             this.f2979m = Looper.myLooper();
-            NetService.this.f2952f = new Handler(this.f2979m) {
+            NetService.this.mhandler = new Handler(this.f2979m) {
                 /* JADX WARNING: Removed duplicated region for block: B:82:? A[RETURN, SYNTHETIC] */
                 public void handleMessage(Message message) {
                     String str;
                     String str2;
                     switch (message.what) {
                         case 2:
-                            Log.e(NetService.this.f2947a, "RealTimeupdataThread > addData~~~~");
+                            Log.e(NetService.this.TAG, "RealTimeupdataThread > addData~~~~");
                             HashMap hashMap = new HashMap();
                             hashMap.put("data", (String) message.obj);
                             hashMap.put("heartrate", message.arg1 + "");
@@ -331,45 +331,45 @@ public class NetService extends Service {
                                 return;
                             }
                         case 3:
-                            Log.e(NetService.this.f2947a, "RealTimeupdataThread > reUpload~~~~");
+                            Log.e(NetService.this.TAG, "RealTimeupdataThread > reUpload~~~~");
                             if (C0787d.this.f2973g < 2) {
                                 C0787d.this.f2973g++;
-                                Message obtain = Message.obtain(NetService.this.f2952f);
+                                Message obtain = Message.obtain(NetService.this.mhandler);
                                 obtain.copyFrom(message);
                                 obtain.what = 0;
-                                NetService.this.f2952f.sendMessage(obtain);
+                                NetService.this.mhandler.sendMessage(obtain);
                                 return;
                             }
                             break;
                         case 4:
-                            Log.e(NetService.this.f2947a, "RealTimeupdataThread > getNext~~~~");
+                            Log.e(NetService.this.TAG, "RealTimeupdataThread > getNext~~~~");
                             if (!C0787d.this.f2982p.isEmpty()) {
                                 C0787d.this.f2973g = 0;
-                                Message obtain2 = Message.obtain(NetService.this.f2952f);
+                                Message obtain2 = Message.obtain(NetService.this.mhandler);
                                 HashMap hashMap2 = C0787d.this.f2982p.get(0);
                                 obtain2.what = 0;
                                 obtain2.arg1 = Integer.valueOf((String) hashMap2.get("heartrate")).intValue();
                                 obtain2.arg2 = Integer.valueOf((String) hashMap2.get("len")).intValue();
                                 obtain2.obj = hashMap2.get("data");
-                                NetService.this.f2952f.sendMessage(obtain2);
+                                NetService.this.mhandler.sendMessage(obtain2);
                                 C0787d.this.f2982p.remove(0);
                                 return;
                             }
-                            Log.e(NetService.this.f2947a, "MyMsgList.isEmpty()");
+                            Log.e(NetService.this.TAG, "MyMsgList.isEmpty()");
                             C0787d.this.f2972f = true;
                             return;
                         default:
-                            Log.e(NetService.this.f2947a, "RealTimeupdataThread > default~~~~");
+                            Log.e(NetService.this.TAG, "RealTimeupdataThread > default~~~~");
                             Intent intent = new Intent();
                             try {
-                                C0787d.this.f2980n = (HttpURLConnection) new URL(C0787d.this.f2978l).openConnection();
-                                C0787d.this.f2980n.setReadTimeout(3000);
-                                C0787d.this.f2980n.setConnectTimeout(3000);
-                                C0787d.this.f2980n.setDoInput(true);
-                                C0787d.this.f2980n.setDoOutput(true);
-                                C0787d.this.f2980n.setUseCaches(false);
-                                C0787d.this.f2980n.setRequestMethod("POST");
-                                C0787d.this.f2980n.setRequestProperty("Connection", "Keep-Alive");
+                                C0787d.this.mHttpURLConnection = (HttpURLConnection) new URL(C0787d.this.f2978l).openConnection();
+                                C0787d.this.mHttpURLConnection.setReadTimeout(3000);
+                                C0787d.this.mHttpURLConnection.setConnectTimeout(3000);
+                                C0787d.this.mHttpURLConnection.setDoInput(true);
+                                C0787d.this.mHttpURLConnection.setDoOutput(true);
+                                C0787d.this.mHttpURLConnection.setUseCaches(false);
+                                C0787d.this.mHttpURLConnection.setRequestMethod("POST");
+                                C0787d.this.mHttpURLConnection.setRequestProperty("Connection", "Keep-Alive");
                                 List<Cookie> cookies = MyHttpClient.initMyHttpClient().getCookieStore().getCookies();
                                 StringBuffer stringBuffer = new StringBuffer();
                                 for (Cookie cookie : cookies) {
@@ -381,7 +381,7 @@ public class NetService extends Service {
                                 if (stringBuffer.length() > 0) {
                                     stringBuffer.deleteCharAt(stringBuffer.lastIndexOf(";"));
                                 }
-                                C0787d.this.f2980n.setRequestProperty("Cookie", stringBuffer.toString());
+                                C0787d.this.mHttpURLConnection.setRequestProperty("Cookie", stringBuffer.toString());
                                 String str3 = (String) message.obj;
                                 int i = message.arg1;
                                 StringBuffer stringBuffer2 = new StringBuffer();
@@ -391,12 +391,12 @@ public class NetService extends Service {
                                 stringBuffer2.append("&");
                                 stringBuffer2.append("userId");
                                 stringBuffer2.append("=");
-                                stringBuffer2.append(NetService.this.f2948b.mUserInfo.getId());
-                                if (NetService.this.f2948b.appMachine != null) {
+                                stringBuffer2.append(NetService.this.netECGApplication.mUserInfo.getId());
+                                if (NetService.this.netECGApplication.appMachine != null) {
                                     stringBuffer2.append("&");
                                     stringBuffer2.append("machineId");
                                     stringBuffer2.append("=");
-                                    stringBuffer2.append(NetService.this.f2948b.appMachine.getId());
+                                    stringBuffer2.append(NetService.this.netECGApplication.appMachine.getId());
                                 }
                                 stringBuffer2.append("&");
                                 stringBuffer2.append("heartRate");
@@ -410,14 +410,14 @@ public class NetService extends Service {
                                 stringBuffer2.append("length");
                                 stringBuffer2.append("=");
                                 stringBuffer2.append(message.arg2 + "");
-                                C0787d.this.f2980n.connect();
-                                OutputStream outputStream = C0787d.this.f2980n.getOutputStream();
+                                C0787d.this.mHttpURLConnection.connect();
+                                OutputStream outputStream = C0787d.this.mHttpURLConnection.getOutputStream();
                                 outputStream.write(stringBuffer2.toString().getBytes());
                                 outputStream.flush();
-                                Log.i(NetService.this.f2947a, "post>" + stringBuffer2.toString());
-                                if (C0787d.this.f2980n.getResponseCode() == 200) {
-                                    String str4 = new String(StreamToByteUtils.stoBytes(C0787d.this.f2980n.getInputStream()), Charset.forName("utf-8"));
-                                    Log.e(NetService.this.f2947a, "RealTimeupdataThread>>" + str4);
+                                Log.i(NetService.this.TAG, "post>" + stringBuffer2.toString());
+                                if (C0787d.this.mHttpURLConnection.getResponseCode() == 200) {
+                                    String str4 = new String(StreamToByteUtils.stoBytes(C0787d.this.mHttpURLConnection.getInputStream()), Charset.forName("utf-8"));
+                                    Log.e(NetService.this.TAG, "RealTimeupdataThread>>" + str4);
                                     JSONArray jSONArray = new JSONArray(str4);
                                     int i2 = jSONArray.getInt(0);
                                     if (i2 == 0) {
@@ -425,35 +425,35 @@ public class NetService extends Service {
                                             sendEmptyMessage(4);
                                             intent.setAction("com.holptruly.ecg.services.NetService.CONNECT_REMOTE_HOST_SUCCESS");
                                             LocalBroadcastManager.getInstance(NetService.this.getApplicationContext()).sendBroadcast(intent);
-                                            Log.i(NetService.this.f2947a, "RealTimeupdataThread>code:" + C0787d.this.f2980n.getResponseCode() + "\ninfo:(getnext) ----- code>" + i2);
+                                            Log.i(NetService.this.TAG, "RealTimeupdataThread>code:" + C0787d.this.mHttpURLConnection.getResponseCode() + "\ninfo:(getnext) ----- code>" + i2);
                                         } else {
                                             int i3 = message.what;
                                         }
-                                        C0787d.this.f2980n.disconnect();
+                                        C0787d.this.mHttpURLConnection.disconnect();
                                         if (message.what != 1) {
                                             return;
                                         }
-                                        C0787d.this.mo2853a();
+                                        C0787d.this.exitRealTimeupdataThread();
                                         return;
                                     }
-                                    Message obtain3 = Message.obtain(NetService.this.f2952f);
+                                    Message obtain3 = Message.obtain(NetService.this.mhandler);
                                     obtain3.copyFrom(message);
                                     obtain3.what = 3;
                                     sendMessage(obtain3);
-                                    str = NetService.this.f2947a;
-                                    str2 = "RealTimeupdataThread>code:" + C0787d.this.f2980n.getResponseCode() + "\ninfo:(reUpload) ----- code>" + jSONArray.getInt(0);
+                                    str = NetService.this.TAG;
+                                    str2 = "RealTimeupdataThread>code:" + C0787d.this.mHttpURLConnection.getResponseCode() + "\ninfo:(reUpload) ----- code>" + jSONArray.getInt(0);
                                 } else {
-                                    Message obtain4 = Message.obtain(NetService.this.f2952f);
+                                    Message obtain4 = Message.obtain(NetService.this.mhandler);
                                     obtain4.copyFrom(message);
                                     obtain4.what = 3;
                                     sendMessage(obtain4);
                                     intent.setAction("com.holptruly.ecg.services.NetService.CONNECT_REMOTE_HOST_FAIL");
                                     LocalBroadcastManager.getInstance(NetService.this.getApplicationContext()).sendBroadcast(intent);
-                                    str = NetService.this.f2947a;
-                                    str2 = "RealTimeupdataThread>code:" + C0787d.this.f2980n.getResponseCode() + "\ninfo:";
+                                    str = NetService.this.TAG;
+                                    str2 = "RealTimeupdataThread>code:" + C0787d.this.mHttpURLConnection.getResponseCode() + "\ninfo:";
                                 }
                                 Log.w(str, str2);
-                                C0787d.this.f2980n.disconnect();
+                                C0787d.this.mHttpURLConnection.disconnect();
                                 if (message.what != 1) {
                                 }
                             } catch (MalformedURLException e) {
@@ -466,11 +466,11 @@ public class NetService extends Service {
                             } catch (UnknownHostException e2) {
                                 intent.setAction("com.holptruly.ecg.services.NetService.CONNECT_REMOTE_HOST_FAIL");
                                 LocalBroadcastManager.getInstance(NetService.this.getApplicationContext()).sendBroadcast(intent);
-                                Message obtain5 = Message.obtain(NetService.this.f2952f);
+                                Message obtain5 = Message.obtain(NetService.this.mhandler);
                                 obtain5.copyFrom(message);
                                 obtain5.what = 3;
                                 sendMessage(obtain5);
-                                Log.w(NetService.this.f2947a, "RealTimeupdataThread> UnknownHostException");
+                                Log.w(NetService.this.TAG, "RealTimeupdataThread> UnknownHostException");
                                 e2.printStackTrace();
                                 if (message.what != 1) {
                                     return;
@@ -478,11 +478,11 @@ public class NetService extends Service {
                             } catch (SocketTimeoutException e3) {
                                 intent.setAction("com.holptruly.ecg.services.NetService.CONNECT_REMOTE_HOST_FAIL");
                                 LocalBroadcastManager.getInstance(NetService.this.getApplicationContext()).sendBroadcast(intent);
-                                Message obtain6 = Message.obtain(NetService.this.f2952f);
+                                Message obtain6 = Message.obtain(NetService.this.mhandler);
                                 obtain6.copyFrom(message);
                                 obtain6.what = 3;
                                 sendMessage(obtain6);
-                                Log.w(NetService.this.f2947a, "RealTimeupdataThread> SocketTimeoutException");
+                                Log.w(NetService.this.TAG, "RealTimeupdataThread> SocketTimeoutException");
                                 e3.printStackTrace();
                                 if (message.what != 1) {
                                     return;
@@ -501,14 +501,14 @@ public class NetService extends Service {
                                 }
                             } catch (Throwable th) {
                                 if (message.what == 1) {
-                                    C0787d.this.mo2853a();
+                                    C0787d.this.exitRealTimeupdataThread();
                                 }
                                 throw th;
                             }
-                            C0787d.this.mo2853a();
+                            C0787d.this.exitRealTimeupdataThread();
                             return;
                     }
-                    NetService.this.f2952f.sendEmptyMessage(4);
+                    NetService.this.mhandler.sendEmptyMessage(4);
                 }
             };
             this.f2981o = true;
@@ -525,7 +525,7 @@ public class NetService extends Service {
         /* renamed from: a */
         public String doInBackground(String... strArr) {
             if (isCancelled()) {
-                Log.e(NetService.this.f2947a, "isCancelled()");
+                Log.e(NetService.this.TAG, "isCancelled()");
                 return null;
             } else if (strArr[0] == null || strArr[1] == null) {
                 return null;
@@ -538,28 +538,28 @@ public class NetService extends Service {
         /* renamed from: a */
         public void onPostExecute(String str) {
             if (str != null) {
-                String str2 = NetService.this.f2947a;
+                String str2 = NetService.this.TAG;
                 Log.i(str2, "result>>" + str);
                 try {
                     JSONArray jSONArray = new JSONArray(str);
                     int i = jSONArray.getInt(0);
                     if (i == 0) {
-                        Log.e(NetService.this.f2947a, "Device Id upload successed");
+                        Log.e(NetService.this.TAG, "Device Id upload successed");
                         LocalBroadcastManager.getInstance(NetService.this.getApplicationContext()).sendBroadcast(new Intent("com.holptruly.ecg.services.NetService.UPLOAD_ID_SUCCESS"));
                     } else if (i == 1) {
                         int i2 = jSONArray.getInt(2);
                         if (i2 != 999) {
-                            String str3 = NetService.this.f2947a;
+                            String str3 = NetService.this.TAG;
                             Log.e(str3, NetService.this.getString(R.string.p_err_code) + i2);
                             return;
                         }
-                        Log.e(NetService.this.f2947a, "Device Id upload failed");
+                        Log.e(NetService.this.TAG, "Device Id upload failed");
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
             } else {
-                Log.e(NetService.this.f2947a, "result is null");
+                Log.e(NetService.this.TAG, "result is null");
             }
         }
 
@@ -653,7 +653,7 @@ public class NetService extends Service {
                         return;
                     }
                     try {
-                        String str = NetService.this.f2947a;
+                        String str = NetService.this.TAG;
                         Log.i(str, "response>" + b);
                         JSONArray jSONArray = new JSONArray(b);
                         int i = jSONArray.getInt(0);
@@ -701,7 +701,7 @@ public class NetService extends Service {
                 String str = "";
                 String a = MyHttpHelper.m2873a(strArr[0]);
                 if (a != null) {
-                    LogUtils.logI(NetService.this.f2947a, "json>>" + a);
+                    LogUtils.logI(NetService.this.TAG, "json>>" + a);
                     try {
                         JSONArray jSONArray = new JSONArray(a);
                         int i = jSONArray.getInt(0);
@@ -723,10 +723,10 @@ public class NetService extends Service {
                                 if (!bVar.selectEcgRecodBynum(eCGRecord2.getFileName())) {
                                     File a2 = NetService.this.m2844d(eCGRecord2.getFileName(), eCGRecord2.getNetPath());
                                     if (a2 != null) {
-                                        LogUtils.logI(NetService.this.f2947a, "local file Name >>" + a2.getAbsolutePath());
+                                        LogUtils.logI(NetService.this.TAG, "local file Name >>" + a2.getAbsolutePath());
                                         eCGRecord2.setFilePath(a2.getAbsolutePath());
-                                        eCGRecord2.setUser(NetService.this.f2948b.mUserInfo);
-                                        eCGRecord2.setMachine(NetService.this.f2948b.appMachine);
+                                        eCGRecord2.setUser(NetService.this.netECGApplication.mUserInfo);
+                                        eCGRecord2.setMachine(NetService.this.netECGApplication.appMachine);
                                         eCGRecord2.setTime("接口返回");
                                         eCGRecord2.setPeriod("接口返回");
                                         arrayList2.add(eCGRecord2);
@@ -749,7 +749,7 @@ public class NetService extends Service {
                             intent = this.f2961a;
                             str = "com.holptruly.ecg.services.NetService.NEED_LOGIN";
                         } else if (i == 1) {
-                            LogUtils.logD(NetService.this.f2947a, "error code : " + jSONArray.getInt(2));
+                            LogUtils.logD(NetService.this.TAG, "error code : " + jSONArray.getInt(2));
                             intent = this.f2961a;
                             str = "com.holptruly.ecg.services.NetService.SYNC_DATA_FAIL_ACTION";
                         }
@@ -807,21 +807,21 @@ public class NetService extends Service {
         String str3;
         String str4;
         Boolean.valueOf(false);
-        String string = this.f2948b.spSw_conf.getString("MacAddress", (String) null);
-        String string2 = this.f2948b.spSw_conf.getString("DEVICE_ID", this.f2948b.mSwConf.mo2690e());
+        String string = this.netECGApplication.spSw_conf.getString("MacAddress", (String) null);
+        String string2 = this.netECGApplication.spSw_conf.getString("DEVICE_ID", this.netECGApplication.mSwConf.mo2690e());
         if (string2 == null || str == null || string == null) {
-            Log.i(this.f2947a, "oldId or newId or mac is null");
+            Log.i(this.TAG, "oldId or newId or mac is null");
             return false;
         }
         String replaceAll = string.replaceAll(":", "");
         if (replaceAll.equals(str) && string2.equalsIgnoreCase(str)) {
-            str3 = this.f2947a;
+            str3 = this.TAG;
             str4 = "MAC与新旧设备id一致";
         } else if (replaceAll.equals(str)) {
-            str3 = this.f2947a;
+            str3 = this.TAG;
             str4 = "MAC与新设备id一致";
         } else {
-            Log.i(this.f2947a, "不上传设备id");
+            Log.i(this.TAG, "不上传设备id");
             bool = false;
             if (bool.booleanValue()) {
                 mo2827b(str, str2);
@@ -855,19 +855,19 @@ public class NetService extends Service {
     /* renamed from: c */
     public void startNetServiceTheard() {
         if (!isNetRun()) {
-            this.f2953g = new C0787d(this.f2954h);
+            this.f2953g = new C0787d(this.ecg_data_realtime_upload_url);
             this.f2953g.start();
         }
     }
 
     /* renamed from: c */
-    public void mo2829c(String str, String str2) {
+    public void getEcgFilesAsyn(String str, String str2) {
         if (str == null || str2 == null) {
 //            C0140d.m485a(getApplicationContext()).mo390a(new Intent("com.holptruly.ecg.services.NetService.LOGIN_FAILE"));
             LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(new Intent("com.holptruly.ecg.services.NetService.LOGIN_FAILE"));
             return;
         }
-        new C0785b().execute(new String[]{str, str2});
+        new NETecg_file_listAsycTask().execute(new String[]{str, str2});
     }
 
     /* renamed from: d */
@@ -883,19 +883,19 @@ public class NetService extends Service {
     }
 
     public IBinder onBind(Intent intent) {
-        return this.f2955i;
+        return this.mNetSerBinder;
     }
 
     public void onCreate() {
         super.onCreate();
-        this.f2948b = (ECGApplication) getApplication();
-        this.f2948b.f2093n = getNetInfoType();
-//        C0140d.m485a(getApplicationContext()).mo389a(this.f2956j, new IntentFilter("android.net.conn.CONNECTIVITY_CHANGE"));
+        this.netECGApplication = (ECGApplication) getApplication();
+        this.netECGApplication.f2093n = getNetInfoType();
+//        C0140d.m485a(getApplicationContext()).mo389a(this.nET_CHANGEBroadcastReceiver, new IntentFilter("android.net.conn.CONNECTIVITY_CHANGE"));
         LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(new Intent("android.net.conn.CONNECTIVITY_CHANGE"));
     }
 
     public void onDestroy() {
-        LocalBroadcastManager.getInstance(getApplicationContext()).unregisterReceiver(this.f2956j);
+        LocalBroadcastManager.getInstance(getApplicationContext()).unregisterReceiver(this.nET_CHANGEBroadcastReceiver);
         super.onDestroy();
     }
 }

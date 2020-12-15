@@ -183,7 +183,7 @@ public class GpsManager {
     }
 
     /* renamed from: a */
-    public void mo2868a() {
+    public void removeGpsStatusUpdate() {
         this.locationManager.removeGpsStatusListener(this.mGpsStatusListener);
         this.locationManager.removeUpdates(this.mLocationListener);
         this.locationManager.removeUpdates(this.f2999f);
@@ -207,7 +207,7 @@ public class GpsManager {
     }
 
     /* renamed from: b */
-    public boolean mo2870b() {
+    public boolean isProviderEnabled() {
         return this.locationManager.isProviderEnabled("gps");
     }
 }

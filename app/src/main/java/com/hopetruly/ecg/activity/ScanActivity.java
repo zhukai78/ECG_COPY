@@ -131,7 +131,7 @@ public class ScanActivity extends BaseActivity implements AdapterView.OnItemClic
             int i;
             String action = intent.getAction();
             if (action.equals("com.hopetruly.ec.services.ACTION_CATCH_DEVICE")) {
-                ScanActivity.this.f2542d.setVisibility(8);
+                ScanActivity.this.f2542d.setVisibility(View.GONE);
                 BluetoothDevice bluetoothDevice = (BluetoothDevice) intent.getParcelableExtra("device");
                 String str = ScanActivity.this.f2540a;
                 Log.d(str, "Found device [" + bluetoothDevice.getName() + "]");
@@ -280,7 +280,7 @@ public class ScanActivity extends BaseActivity implements AdapterView.OnItemClic
         this.f2541c.clear();
         this.f2563y.notifyDataSetChanged();
         if (this.f2547i != null) {
-            this.f2547i.mo2720a(i);
+            this.f2547i.startScanBLE(i);
         }
     }
 
@@ -335,7 +335,7 @@ public class ScanActivity extends BaseActivity implements AdapterView.OnItemClic
     /* renamed from: b */
     private void m2519b() {
         if (this.f2547i != null) {
-            this.f2547i.mo2729c();
+            this.f2547i.stopScanBLE();
         }
     }
 
@@ -548,7 +548,7 @@ public class ScanActivity extends BaseActivity implements AdapterView.OnItemClic
             this.f2549k.setName((String) hashMap.get("name"));
             this.f2549k.setMacAddress((String) hashMap.get("address"));
             this.f2548j.appMachine = this.f2549k;
-            this.f2547i.mo2723a((String) hashMap.get("address"));
+            this.f2547i.connectBLE((String) hashMap.get("address"));
             this.f2550l = 0;
             m2524d();
             this.f2552n = new Timer();

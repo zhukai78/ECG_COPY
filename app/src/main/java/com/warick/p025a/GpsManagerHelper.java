@@ -157,14 +157,14 @@ public class GpsManagerHelper {
         if (mGpsManagerHelper == null) {
             mGpsManagerHelper = new GpsManagerHelper(context);
         }
-        return mGpsManagerHelper.mGpsManager.mo2870b();
+        return mGpsManagerHelper.mGpsManager.isProviderEnabled();
     }
 
     /* renamed from: b */
     public static void m2912b() {
         if (mGpsManagerHelper != null) {
 //            mGpsManagerHelper.f3013h.mo2866b();
-            mGpsManagerHelper.mGpsManager.mo2868a();
+            mGpsManagerHelper.mGpsManager.removeGpsStatusUpdate();
         }
     }
 

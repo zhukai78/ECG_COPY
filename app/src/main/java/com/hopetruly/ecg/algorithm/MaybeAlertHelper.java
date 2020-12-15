@@ -58,7 +58,7 @@ public class MaybeAlertHelper {
     /* renamed from: k */
     private void m2587k() {
         if (!this.f2742k) {
-            switch (this.mECGApplication.appECGConf.mo2656h()) {
+            switch (this.mECGApplication.appECGConf.getECG_ALARM_TYPE()) {
                 case 0:
                     VibratorUtils.goVibrator(this.mContext, 1, 100);
                     break;
@@ -80,7 +80,7 @@ public class MaybeAlertHelper {
     /* renamed from: a */
     public void mo2449a() {
         if (this.f2742k) {
-            switch (this.mECGApplication.appECGConf.mo2656h()) {
+            switch (this.mECGApplication.appECGConf.getECG_ALARM_TYPE()) {
                 case 0:
                     VibratorUtils.canvelVibrator();
                     break;
@@ -109,7 +109,7 @@ public class MaybeAlertHelper {
             } else {
                 this.f2741j = date.getTime();
             }
-            if (this.f2740i != 0 && this.f2741j != 0 && this.f2741j - this.f2740i >= ((long) (this.mECGApplication.appECGConf.mo2664l() * 1000))) {
+            if (this.f2740i != 0 && this.f2741j != 0 && this.f2741j - this.f2740i >= ((long) (this.mECGApplication.appECGConf.getECG_ALARM_DELAY() * 1000))) {
                 this.f2740i = 0;
                 this.f2741j = 0;
                 m2587k();
@@ -124,7 +124,7 @@ public class MaybeAlertHelper {
 
     /* renamed from: b */
     public boolean mo2451b() {
-        return this.mECGApplication.appECGConf.mo2655g();
+        return this.mECGApplication.appECGConf.getECG_ALARM_ENABLE();
     }
 
     /* renamed from: c */
@@ -163,16 +163,16 @@ public class MaybeAlertHelper {
 
     /* renamed from: h */
     public boolean mo2457h() {
-        if (!this.mECGApplication.appECGConf.mo2655g() || this.f2743l) {
+        if (!this.mECGApplication.appECGConf.getECG_ALARM_ENABLE() || this.f2743l) {
             return false;
         }
         int i = 0;
         int i2 = 0;
         for (int i3 = 0; i3 < f2732c; i3++) {
-            if (this.f2739h[i3] > this.mECGApplication.appECGConf.mo2650e()) {
+            if (this.f2739h[i3] > this.mECGApplication.appECGConf.getECG_ALARM_RATE_MAX()) {
                 i++;
             }
-            if (this.f2739h[i3] < this.mECGApplication.appECGConf.mo2652f()) {
+            if (this.f2739h[i3] < this.mECGApplication.appECGConf.getECG_ALARM_RATE_MIN()) {
                 i2++;
             }
         }

@@ -33,7 +33,7 @@ public class MainHomeFragment extends Fragment {
     /* access modifiers changed from: private */
 
     /* renamed from: b */
-    public Resources f2693b;
+    public Resources str_res;
 
     /* renamed from: c */
     private RelativeLayout rl_ecg_rec_list_btn;
@@ -43,18 +43,18 @@ public class MainHomeFragment extends Fragment {
     /* access modifiers changed from: private */
 
     /* renamed from: e */
-    public ImageView f2696e;
+    public ImageView iv_ecg_start;
     /* access modifiers changed from: private */
 
     /* renamed from: f */
-    public ImageView f2697f;
+    public ImageView iv_step_start;
     /* access modifiers changed from: private */
 
     /* renamed from: g */
-    public ImageView f2698g;
+    public ImageView iv_ecg_conn_btn;
 
     /* renamed from: h */
-    private TextView f2699h;
+    private TextView tv_home_rec_num;
     /* access modifiers changed from: private */
 
     /* renamed from: i */
@@ -69,32 +69,32 @@ public class MainHomeFragment extends Fragment {
     public ImageView iv_dev_icon_img;
 
     /* renamed from: l */
-    private boolean f2703l = true;
+    private boolean isdestroy = true;
     /* access modifiers changed from: private */
 
     /* renamed from: m */
-    public FunChooseActivity f2704m = null;
+    public FunChooseActivity mFunChooseActivity = null;
 
     /* renamed from: n */
-    private BroadcastReceiver f2705n = new BroadcastReceiver() {
+    private BroadcastReceiver updataUiBroadcastReceiver = new BroadcastReceiver() {
         public void onReceive(Context context, Intent intent) {
             String action = intent.getAction();
             if (action.equals("com.hopetruly.ec.services.ACTION_GATT_DISCONNECTED")) {
-                MainHomeFragment.this.tv_dev_bar_title.setText(MainHomeFragment.this.f2693b.getString(R.string.l_scan_dev));
-                MainHomeFragment.this.tv_home_dev_status.setText(MainHomeFragment.this.f2693b.getString(R.string.l_status_disconnect));
+                MainHomeFragment.this.tv_dev_bar_title.setText(MainHomeFragment.this.str_res.getString(R.string.l_scan_dev));
+                MainHomeFragment.this.tv_home_dev_status.setText(MainHomeFragment.this.str_res.getString(R.string.l_status_disconnect));
                 MainHomeFragment.this.iv_dev_icon_img.setImageResource(R.drawable.dev_note);
-                MainHomeFragment.this.f2698g.setVisibility(View.VISIBLE);
-                MainHomeFragment.this.f2696e.setVisibility(View.GONE);
-                MainHomeFragment.this.f2697f.setVisibility(View.GONE);
+                MainHomeFragment.this.iv_ecg_conn_btn.setVisibility(View.VISIBLE);
+                MainHomeFragment.this.iv_ecg_start.setVisibility(View.GONE);
+                MainHomeFragment.this.iv_step_start.setVisibility(View.GONE);
             } else if (action.equals("com.hopetruly.ec.services.ACTION_GATT_DATA_NOTIFY") && intent.getStringExtra("com.hopetruly.ec.services.EXTRA_UUID").equals(Sensor.BATTERY.getData().toString())) {
-                MainHomeFragment.this.m2567a(Sensor.BATTERY.convertBAT(intent.getByteArrayExtra("com.hopetruly.ec.services.EXTRA_DATA")));
+                MainHomeFragment.this.assertBattery(Sensor.BATTERY.convertBAT(intent.getByteArrayExtra("com.hopetruly.ec.services.EXTRA_DATA")));
             }
         }
     };
 
     /* access modifiers changed from: private */
     /* renamed from: a */
-    public void m2567a(int i) {
+    public void assertBattery(int i) {
         ImageView imageView;
         int i2;
         if (i > 80) {
@@ -125,90 +125,90 @@ public class MainHomeFragment extends Fragment {
 
     public void onDestroy() {
         Log.d(TAG, "onDestroy");
-        if (!this.f2703l) {
-            this.f2703l = true;
-            LocalBroadcastManager.getInstance(getActivity().getApplicationContext()).unregisterReceiver(this.f2705n);
+        if (!this.isdestroy) {
+            this.isdestroy = true;
+            LocalBroadcastManager.getInstance(getActivity().getApplicationContext()).unregisterReceiver(this.updataUiBroadcastReceiver);
         }
         super.onDestroy();
     }
 
     public void onStart() {
         Log.d(TAG, "onStart");
-        this.f2703l = false;
-        this.f2704m = (FunChooseActivity) getActivity();
+        this.isdestroy = false;
+        this.mFunChooseActivity = (FunChooseActivity) getActivity();
         int d = new SqlManager(getActivity()).rawQueryEcgRecord(((ECGApplication) getActivity().getApplication()).mUserInfo.getId());
-        this.f2699h = (TextView) getView().findViewById(R.id.home_rec_num);
-        this.f2699h.setText(String.valueOf(d));
+        this.tv_home_rec_num = (TextView) getView().findViewById(R.id.home_rec_num);
+        this.tv_home_rec_num.setText(String.valueOf(d));
         this.rl_ecg_rec_list_btn = (RelativeLayout) getView().findViewById(R.id.ecg_rec_list_btn);
         this.rl_ecg_rec_list_btn.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
-                MainHomeFragment.this.f2704m.startActivity(new Intent(MainHomeFragment.this.f2704m, EcgRecListActivity.class));
+                MainHomeFragment.this.mFunChooseActivity.startActivity(new Intent(MainHomeFragment.this.mFunChooseActivity, EcgRecListActivity.class));
             }
         });
-        this.f2693b = getView().getResources();
+        this.str_res = getView().getResources();
         this.tv_dev_bar_title = (TextView) getView().findViewById(R.id.dev_bar_title);
         this.tv_home_dev_status = (TextView) getView().findViewById(R.id.home_dev_status);
         this.iv_dev_icon_img = (ImageView) getView().findViewById(R.id.dev_icon_img);
-        if (this.f2704m.mo2181a()) {
-            this.tv_dev_bar_title.setText(this.f2693b.getString(R.string.l_close_dev));
-            this.tv_home_dev_status.setText(this.f2693b.getString(R.string.l_status_connected));
-            m2567a(this.f2704m.mo2182b());
+        if (this.mFunChooseActivity.isBleConn()) {
+            this.tv_dev_bar_title.setText(this.str_res.getString(R.string.l_close_dev));
+            this.tv_home_dev_status.setText(this.str_res.getString(R.string.l_status_connected));
+            assertBattery(this.mFunChooseActivity.getgetbatterylevel());
         } else {
-            this.tv_dev_bar_title.setText(this.f2693b.getString(R.string.l_scan_dev));
-            this.tv_home_dev_status.setText(this.f2693b.getString(R.string.l_status_disconnect));
+            this.tv_dev_bar_title.setText(this.str_res.getString(R.string.l_scan_dev));
+            this.tv_home_dev_status.setText(this.str_res.getString(R.string.l_status_disconnect));
             this.iv_dev_icon_img.setImageResource(R.drawable.dev_note);
         }
         this.rl_dev_status = (RelativeLayout) getView().findViewById(R.id.dev_status);
         this.rl_dev_status.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
-                if (MainHomeFragment.this.f2704m.mo2181a()) {
-                    MainHomeFragment.this.f2704m.showdisconnectedBleDialog();
+                if (MainHomeFragment.this.mFunChooseActivity.isBleConn()) {
+                    MainHomeFragment.this.mFunChooseActivity.showdisconnectedBleDialog();
                     return;
                 }
-                MainHomeFragment.this.f2704m.startActivity(new Intent(MainHomeFragment.this.f2704m, ScanActivity.class));
+                MainHomeFragment.this.mFunChooseActivity.startActivity(new Intent(MainHomeFragment.this.mFunChooseActivity, ScanActivity.class));
             }
         });
-        this.f2698g = (ImageView) getView().findViewById(R.id.ecg_conn_btn);
-        this.f2698g.setOnClickListener(new View.OnClickListener() {
+        this.iv_ecg_conn_btn = (ImageView) getView().findViewById(R.id.ecg_conn_btn);
+        this.iv_ecg_conn_btn.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
-                if (!MainHomeFragment.this.f2704m.mo2181a()) {
-                    MainHomeFragment.this.startActivity(new Intent(MainHomeFragment.this.f2704m, ScanActivity.class));
+                if (!MainHomeFragment.this.mFunChooseActivity.isBleConn()) {
+                    MainHomeFragment.this.startActivity(new Intent(MainHomeFragment.this.mFunChooseActivity, ScanActivity.class));
                 }
             }
         });
-        this.f2696e = (ImageView) getView().findViewById(R.id.ecg_start);
-        this.f2696e.setOnClickListener(new View.OnClickListener() {
+        this.iv_ecg_start = (ImageView) getView().findViewById(R.id.ecg_start);
+        this.iv_ecg_start.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
-                if (MainHomeFragment.this.f2704m.mo2181a()) {
-                    if (MainHomeFragment.this.f2704m.fcECGApplication != null && MainHomeFragment.this.f2704m.fcECGApplication.appMainService != null && MainHomeFragment.this.f2704m.fcECGApplication.appMainService.mo2741o() && !MainHomeFragment.this.f2704m.fcECGApplication.appMainService.mo2739m()) {
+                if (MainHomeFragment.this.mFunChooseActivity.isBleConn()) {
+                    if (MainHomeFragment.this.mFunChooseActivity.fcECGApplication != null && MainHomeFragment.this.mFunChooseActivity.fcECGApplication.appMainService != null && MainHomeFragment.this.mFunChooseActivity.fcECGApplication.appMainService.getisGattStop() && !MainHomeFragment.this.mFunChooseActivity.fcECGApplication.appMainService.mo2739m()) {
                         Log.e(MainHomeFragment.TAG, "stopStep failed..");
                     }
-                    MainHomeFragment.this.f2704m.startActivity(new Intent(MainHomeFragment.this.f2704m, EcgTypeSelectActivity.class));
+                    MainHomeFragment.this.mFunChooseActivity.startActivity(new Intent(MainHomeFragment.this.mFunChooseActivity, EcgTypeSelectActivity.class));
                 }
             }
         });
-        this.f2697f = (ImageView) getView().findViewById(R.id.step_start);
-        this.f2697f.setOnClickListener(new View.OnClickListener() {
+        this.iv_step_start = (ImageView) getView().findViewById(R.id.step_start);
+        this.iv_step_start.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
-                if (MainHomeFragment.this.f2704m.mo2181a()) {
-                    MainHomeFragment.this.f2704m.fcECGApplication.appPedometerConf.mo2673b(1);
-                    ((RadioButton) MainHomeFragment.this.f2704m.findViewById(R.id.nav_step)).setChecked(true);
+                if (MainHomeFragment.this.mFunChooseActivity.isBleConn()) {
+                    MainHomeFragment.this.mFunChooseActivity.fcECGApplication.appPedometerConf.mo2673b(1);
+                    ((RadioButton) MainHomeFragment.this.mFunChooseActivity.findViewById(R.id.nav_step)).setChecked(true);
                 }
             }
         });
-        if (this.f2704m.mo2181a()) {
-            this.f2698g.setVisibility(View.GONE);
-            this.f2696e.setVisibility(View.VISIBLE);
-            this.f2697f.setVisibility(View.VISIBLE);
+        if (this.mFunChooseActivity.isBleConn()) {
+            this.iv_ecg_conn_btn.setVisibility(View.GONE);
+            this.iv_ecg_start.setVisibility(View.VISIBLE);
+            this.iv_step_start.setVisibility(View.VISIBLE);
         } else {
-            this.f2698g.setVisibility(View.VISIBLE);
-            this.f2696e.setVisibility(View.GONE);
-            this.f2697f.setVisibility(View.GONE);
+            this.iv_ecg_conn_btn.setVisibility(View.VISIBLE);
+            this.iv_ecg_start.setVisibility(View.GONE);
+            this.iv_step_start.setVisibility(View.GONE);
         }
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction("com.hopetruly.ec.services.ACTION_GATT_DISCONNECTED");
         intentFilter.addAction("com.hopetruly.ec.services.ACTION_GATT_DATA_NOTIFY");
-        LocalBroadcastManager.getInstance(getActivity().getApplicationContext()).registerReceiver(this.f2705n, intentFilter);
+        LocalBroadcastManager.getInstance(getActivity().getApplicationContext()).registerReceiver(this.updataUiBroadcastReceiver, intentFilter);
         super.onStart();
     }
 }

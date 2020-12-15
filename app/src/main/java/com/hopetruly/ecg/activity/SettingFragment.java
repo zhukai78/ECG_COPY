@@ -42,13 +42,13 @@ import java.io.File;
 public class SettingFragment extends Fragment {
 
     /* renamed from: A */
-    RelativeLayout f2585A;
+    RelativeLayout rv_setting_update_sw;
 
     /* renamed from: B */
-    RelativeLayout f2586B;
+    RelativeLayout rv_sos_setting;
 
     /* renamed from: C */
-    RelativeLayout f2587C;
+    RelativeLayout rv_login_out;
 
     /* renamed from: D */
     AlertDialog logout_titleDialog;
@@ -69,16 +69,16 @@ public class SettingFragment extends Fragment {
     SharedPreferences.Editor SetFragSpEditor;
 
     /* renamed from: J */
-    String f2594J;
+    String mversionName;
 
     /* renamed from: K */
-    private BroadcastReceiver f2595K = new BroadcastReceiver() {
+    private BroadcastReceiver mBatteryBroadcastReceiver = new BroadcastReceiver() {
         public void onReceive(Context context, Intent intent) {
             if (intent.getAction().equals("com.hopetruly.ec.services.ACTION_GATT_CHARACTERISTIC_READ") && intent.getStringExtra("com.hopetruly.ec.services.EXTRA_UUID").equals(Sensor.BATTERY.getData().toString())) {
                 int convertBAT = Sensor.BATTERY.convertBAT(intent.getByteArrayExtra("com.hopetruly.ec.services.EXTRA_DATA"));
-                if (SettingFragment.this.SetFragApp.appMachine != null && SettingFragment.this.f2623y.getVisibility() == 0) {
+                if (SettingFragment.this.SetFragApp.appMachine != null && SettingFragment.this.ll_setting_device_info.getVisibility() == 0) {
                     SettingFragment.this.SetFragApp.appMachine.setBatteryLevel(convertBAT);
-                    TextView textView = SettingFragment.this.f2621w;
+                    TextView textView = SettingFragment.this.tv_setting_machine_battery;
                     textView.setText(SettingFragment.this.SetFragApp.appMachine.getBatteryLevel() + " %");
                 }
             }
@@ -86,7 +86,7 @@ public class SettingFragment extends Fragment {
     };
 
     /* renamed from: L */
-    private RadioGroup.OnCheckedChangeListener f2596L = new RadioGroup.OnCheckedChangeListener() {
+    private RadioGroup.OnCheckedChangeListener mRadioGroupOnCheckedListener = new RadioGroup.OnCheckedChangeListener() {
         public void onCheckedChanged(RadioGroup radioGroup, int i) {
             String str = "";
             int a = 0;
@@ -97,28 +97,28 @@ public class SettingFragment extends Fragment {
             if (id != R.id.setting_time) {
                 switch (id) {
                     case R.id.setting_alarm_delay /*2131165429*/:
-                        if (i == SettingFragment.this.f2610l.getId()) {
+                        if (i == SettingFragment.this.rb_time_10s.getId()) {
                             SettingFragment.this.SetFragApp.appECGConf.setECG_ALARM_DELAY(10);
                         } else {
                             if (i == SettingFragment.this.rb_time_20s.getId()) {
                                 SettingFragment.this.SetFragApp.appECGConf.setECG_ALARM_DELAY(20);
-                            } else if (i == SettingFragment.this.f2612n.getId()) {
+                            } else if (i == SettingFragment.this.rb_time_30s.getId()) {
                                 SettingFragment.this.SetFragApp.appECGConf.setECG_ALARM_DELAY(30);
                             }
                         }
                         str = "ECG_ALARM_DELAY";
-                        a = SettingFragment.this.SetFragApp.appECGConf.mo2664l();
+                        a = SettingFragment.this.SetFragApp.appECGConf.getECG_ALARM_DELAY();
                         break;
                     case R.id.setting_alarm_type /*2131165430*/:
-                        if (i != SettingFragment.this.f2607i.getId()) {
-                            if (i == SettingFragment.this.f2608j.getId()) {
+                        if (i != SettingFragment.this.rb_setting_alarm_type_vibration.getId()) {
+                            if (i == SettingFragment.this.rb_setting_alarm_type_sound.getId()) {
                                 SettingFragment.this.SetFragApp.appECGConf.setECG_ALARM_TYPE(1);
-                            } else if (i == SettingFragment.this.f2609k.getId()) {
+                            } else if (i == SettingFragment.this.rb_setting_alarm_type_vibration_sound.getId()) {
                                 aVar3 = SettingFragment.this.SetFragApp.appECGConf;
                                 i4 = 2;
                             }
                             str = "ECG_ALARM_TYPE";
-                            a = SettingFragment.this.SetFragApp.appECGConf.mo2656h();
+                            a = SettingFragment.this.SetFragApp.appECGConf.getECG_ALARM_TYPE();
                             break;
                         } else {
                             aVar3 = SettingFragment.this.SetFragApp.appECGConf;
@@ -126,24 +126,24 @@ public class SettingFragment extends Fragment {
                         }
                         aVar3.setECG_ALARM_TYPE(i4);
                         str = "ECG_ALARM_TYPE";
-                        a = SettingFragment.this.SetFragApp.appECGConf.mo2656h();
+                        a = SettingFragment.this.SetFragApp.appECGConf.getECG_ALARM_TYPE();
                 }
             } else {
-                if (i == SettingFragment.this.f2603e.getId()) {
+                if (i == SettingFragment.this.rb_time_unlimit.getId()) {
                     SettingFragment.this.SetFragApp.appECGConf.setECG_MESURE_TIME(-1);
                 } else {
-                    if (i == SettingFragment.this.f2604f.getId()) {
+                    if (i == SettingFragment.this.rb_time_1m.getId()) {
                         SettingFragment.this.SetFragApp.appECGConf.setECG_MESURE_TIME(1);
-                    } else if (i == SettingFragment.this.f2605g.getId()) {
+                    } else if (i == SettingFragment.this.rb_time_5m.getId()) {
                         SettingFragment.this.SetFragApp.appECGConf.setECG_MESURE_TIME(5);
-                    } else if (i == SettingFragment.this.f2606h.getId()) {
+                    } else if (i == SettingFragment.this.rb_time_10m.getId()) {
                         SettingFragment.this.SetFragApp.appECGConf.setECG_MESURE_TIME(10);
                     }
                     str = "ECG_MESURE_TIME";
-                    a = SettingFragment.this.SetFragApp.appECGConf.mo2641a();
+                    a = SettingFragment.this.SetFragApp.appECGConf.getECG_MESURE_TIME();
                 }
                 str = "ECG_MESURE_TIME";
-                a = SettingFragment.this.SetFragApp.appECGConf.mo2641a();
+                a = SettingFragment.this.SetFragApp.appECGConf.getECG_MESURE_TIME();
             }
             edit.putInt(str, a);
             edit.commit();
@@ -151,7 +151,7 @@ public class SettingFragment extends Fragment {
     };
 
     /* renamed from: M */
-    private View.OnClickListener f2597M = new View.OnClickListener() {
+    private View.OnClickListener settingOnClickListener = new View.OnClickListener() {
         public void onClick(View view) {
             Activity activity = new Activity();
             Class cls = null;
@@ -166,7 +166,7 @@ public class SettingFragment extends Fragment {
                     cls = PersonInfoSettingActivity.class;
                     break;
                 case R.id.setting_check_update /*2131165436*/:
-                    SettingFragment.this.m2539b();
+                    SettingFragment.this.checkupdate();
                     return;
                 case R.id.setting_update_sw /*2131165451*/:
                     intent.setClass(SettingFragment.this.getActivity(), FwUpdateActivity.class);
@@ -185,89 +185,89 @@ public class SettingFragment extends Fragment {
     };
 
     /* renamed from: N */
-    private C0710a f2598N;
+    private CheckUpdataAsyncTask mCheckUpdataAsyncTask;
 
     /* renamed from: a */
-    final String f2599a = "SettingFragment";
+    final String TAG = "SettingFragment";
 
     /* renamed from: b */
-    RadioGroup f2600b;
+    RadioGroup rg_setting_time;
 
     /* renamed from: c */
-    RadioGroup f2601c;
+    RadioGroup rg_setting_alarm_delay;
 
     /* renamed from: d */
-    RadioGroup f2602d;
+    RadioGroup rg_setting_alarm_type;
 
     /* renamed from: e */
-    RadioButton f2603e;
+    RadioButton rb_time_unlimit;
 
     /* renamed from: f */
-    RadioButton f2604f;
+    RadioButton rb_time_1m;
 
     /* renamed from: g */
-    RadioButton f2605g;
+    RadioButton rb_time_5m;
 
     /* renamed from: h */
-    RadioButton f2606h;
+    RadioButton rb_time_10m;
 
     /* renamed from: i */
-    RadioButton f2607i;
+    RadioButton rb_setting_alarm_type_vibration;
 
     /* renamed from: j */
-    RadioButton f2608j;
+    RadioButton rb_setting_alarm_type_sound;
 
     /* renamed from: k */
-    RadioButton f2609k;
+    RadioButton rb_setting_alarm_type_vibration_sound;
 
     /* renamed from: l */
-    RadioButton f2610l;
+    RadioButton rb_time_10s;
 
     /* renamed from: m */
     RadioButton rb_time_20s;
 
     /* renamed from: n */
-    RadioButton f2612n;
+    RadioButton rb_time_30s;
 
     /* renamed from: o */
-    CheckBox f2613o;
+    CheckBox cb_setting_auto_record;
 
     /* renamed from: p */
-    CheckBox f2614p;
+    CheckBox cb_setting_auto_upload;
 
     /* renamed from: q */
-    CheckBox f2615q;
+    CheckBox cb_setting_realtime_upload;
 
     /* renamed from: r */
     CheckBox cb_set_ecg_alarm;
 
     /* renamed from: s */
-    CheckBox f2617s;
+    CheckBox cb_setting_ecg_waveform_analysis;
 
     /* renamed from: t */
-    TextView f2618t;
+    TextView tv_setting_machine_id;
 
     /* renamed from: u */
-    TextView f2619u;
+    TextView tv_setting_machine_name;
 
     /* renamed from: v */
-    TextView f2620v;
+    TextView tv_setting_machine_ver;
 
     /* renamed from: w */
-    TextView f2621w;
+    TextView tv_setting_machine_battery;
 
     /* renamed from: x */
-    TextView f2622x;
+    TextView tv_setting_ver_info;
 
     /* renamed from: y */
-    LinearLayout f2623y;
+    LinearLayout ll_setting_device_info;
 
     /* renamed from: z */
     RelativeLayout rv_setting_check_update;
 
     /* renamed from: com.hopetruly.ecg.activity.SettingFragment$a */
-    class C0710a extends AsyncTask<String, Void, APPUploadFile> {
-        C0710a() {
+    class CheckUpdataAsyncTask extends AsyncTask<String, Void, APPUploadFile> {
+        CheckUpdataAsyncTask() {
         }
 
         /* access modifiers changed from: protected */
@@ -287,8 +287,8 @@ public class SettingFragment extends Fragment {
                     Toast.makeText(SettingFragment.this.getActivity().getApplicationContext(), SettingFragment.this.getString(R.string.net_connection_fail),Toast.LENGTH_LONG).show();
                     return;
                 }
-                if (fVar.compareVersion(SettingFragment.this.f2594J)) {
-                    SettingFragment.this.mo2363a(SettingFragment.this.f2594J, fVar.mo2694a(), fVar.mo2696b());
+                if (fVar.compareVersion(SettingFragment.this.mversionName)) {
+                    SettingFragment.this.showNewVersionDialog(SettingFragment.this.mversionName, fVar.mo2694a(), fVar.mo2696b());
                 } else {
                     Toast.makeText(SettingFragment.this.getActivity().getApplicationContext(), SettingFragment.this.getString(R.string.p_is_lastest),Toast.LENGTH_LONG).show();
                 }
@@ -303,57 +303,42 @@ public class SettingFragment extends Fragment {
         }
     }
 
-    /* JADX WARNING: Removed duplicated region for block: B:13:0x00c3  */
-    /* JADX WARNING: Removed duplicated region for block: B:19:0x00d2  */
-    /* JADX WARNING: Removed duplicated region for block: B:23:0x00fb  */
-    /* JADX WARNING: Removed duplicated region for block: B:24:0x0101  */
-    /* JADX WARNING: Removed duplicated region for block: B:27:0x0134  */
-    /* JADX WARNING: Removed duplicated region for block: B:28:0x013f  */
-    /* JADX WARNING: Removed duplicated region for block: B:31:0x0178  */
-    /* JADX WARNING: Removed duplicated region for block: B:32:0x017e  */
-    /* JADX WARNING: Removed duplicated region for block: B:35:0x01a6  */
-    /* JADX WARNING: Removed duplicated region for block: B:36:0x01ac  */
-    /* JADX WARNING: Removed duplicated region for block: B:39:0x0274  */
-    /* JADX WARNING: Removed duplicated region for block: B:57:0x03a3  */
-    /* JADX WARNING: Removed duplicated region for block: B:58:0x03a9  */
-    /* JADX WARNING: Removed duplicated region for block: B:61:0x03fc  */
-    /* JADX WARNING: Removed duplicated region for block: B:63:0x0402  */
-    /* JADX WARNING: Removed duplicated region for block: B:64:0x0405  */
+
     /* renamed from: a */
-    private void m2537a() throws PackageManager.NameNotFoundException {
+    private void initView() throws PackageManager.NameNotFoundException {
         int l;
         RadioButton radioButton = null;
         RadioButton radioButton2 = null;
         RadioButton radioButton3 = null;
-        this.f2600b = (RadioGroup) getActivity().findViewById(R.id.setting_time);
-        this.f2600b.setOnCheckedChangeListener(this.f2596L);
-        this.f2603e = (RadioButton) getActivity().findViewById(R.id.time_unlimit);
-        this.f2604f = (RadioButton) getActivity().findViewById(R.id.time_1m);
-        this.f2605g = (RadioButton) getActivity().findViewById(R.id.time_5m);
-        this.f2606h = (RadioButton) getActivity().findViewById(R.id.time_10m);
-        int a = this.SetFragApp.appECGConf.mo2641a();
+        this.rg_setting_time = (RadioGroup) getActivity().findViewById(R.id.setting_time);
+        this.rg_setting_time.setOnCheckedChangeListener(this.mRadioGroupOnCheckedListener);
+        this.rb_time_unlimit = (RadioButton) getActivity().findViewById(R.id.time_unlimit);
+        this.rb_time_1m = (RadioButton) getActivity().findViewById(R.id.time_1m);
+        this.rb_time_5m = (RadioButton) getActivity().findViewById(R.id.time_5m);
+        this.rb_time_10m = (RadioButton) getActivity().findViewById(R.id.time_10m);
+        int a = this.SetFragApp.appECGConf.getECG_MESURE_TIME();
         if (a == -1) {
-            radioButton3 = this.f2603e;
+            radioButton3 = this.rb_time_unlimit;
         } else if (a == 1) {
-            radioButton3 = this.f2604f;
+            radioButton3 = this.rb_time_1m;
         } else if (a != 5) {
             if (a == 10) {
-                radioButton3 = this.f2606h;
+                radioButton3 = this.rb_time_10m;
             }
-            this.f2601c = (RadioGroup) getActivity().findViewById(R.id.setting_alarm_delay);
-            this.f2601c.setOnCheckedChangeListener(this.f2596L);
-            this.f2610l = (RadioButton) getActivity().findViewById(R.id.time_10s);
+            this.rg_setting_alarm_delay = (RadioGroup) getActivity().findViewById(R.id.setting_alarm_delay);
+            this.rg_setting_alarm_delay.setOnCheckedChangeListener(this.mRadioGroupOnCheckedListener);
+            this.rb_time_10s = (RadioButton) getActivity().findViewById(R.id.time_10s);
             this.rb_time_20s = (RadioButton) getActivity().findViewById(R.id.time_20s);
-            this.f2612n = (RadioButton) getActivity().findViewById(R.id.time_30s);
-            l = this.SetFragApp.appECGConf.mo2664l();
+            this.rb_time_30s = (RadioButton) getActivity().findViewById(R.id.time_30s);
+            l = this.SetFragApp.appECGConf.getECG_ALARM_DELAY();
             if (l != 10) {
-                radioButton2 = this.f2610l;
+                radioButton2 = this.rb_time_10s;
             } else if (l != 20) {
                 if (l == 30) {
-                    radioButton2 = this.f2612n;
+                    radioButton2 = this.rb_time_30s;
                 }
-                this.f2614p = (CheckBox) getActivity().findViewById(R.id.setting_auto_upload);
-                this.f2614p.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                this.cb_setting_auto_upload = (CheckBox) getActivity().findViewById(R.id.setting_auto_upload);
+                this.cb_setting_auto_upload.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                     public void onCheckedChanged(CompoundButton compoundButton, boolean z) {
                         ECGConf aVar;
                         int i;
@@ -365,44 +350,44 @@ public class SettingFragment extends Fragment {
                             i = 0;
                         }
                         aVar.setECG_AUTO_UPLOAD(i);
-                        SettingFragment.this.SetFragSpEditor.putInt("ECG_AUTO_UPLOAD", SettingFragment.this.SetFragApp.appECGConf.mo2646c());
+                        SettingFragment.this.SetFragSpEditor.putInt("ECG_AUTO_UPLOAD", SettingFragment.this.SetFragApp.appECGConf.getECG_AUTO_UPLOAD());
                         SettingFragment.this.SetFragSpEditor.commit();
                     }
                 });
-                if (this.SetFragApp.appECGConf.mo2646c() == 1) {
-                    this.f2614p.setChecked(true);
+                if (this.SetFragApp.appECGConf.getECG_AUTO_UPLOAD() == 1) {
+                    this.cb_setting_auto_upload.setChecked(true);
                 } else {
-                    this.f2614p.setChecked(false);
+                    this.cb_setting_auto_upload.setChecked(false);
                 }
-                this.f2614p.findViewById(R.id.setting_auto_upload).setVisibility(8);
-                this.f2613o = (CheckBox) getActivity().findViewById(R.id.setting_auto_record);
-                this.f2613o.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                this.cb_setting_auto_upload.findViewById(R.id.setting_auto_upload).setVisibility(View.GONE);
+                this.cb_setting_auto_record = (CheckBox) getActivity().findViewById(R.id.setting_auto_record);
+                this.cb_setting_auto_record.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                     public void onCheckedChanged(CompoundButton compoundButton, boolean z) {
                         if (z) {
                             SettingFragment.this.SetFragApp.appECGConf.setECG_AUTO_SAVE(1);
-                            SettingFragment.this.f2614p.setEnabled(true);
+                            SettingFragment.this.cb_setting_auto_upload.setEnabled(true);
                         } else {
                             SettingFragment.this.SetFragApp.appECGConf.setECG_AUTO_SAVE(0);
-                            SettingFragment.this.f2614p.setEnabled(false);
+                            SettingFragment.this.cb_setting_auto_upload.setEnabled(false);
                             SettingFragment.this.SetFragApp.appECGConf.setECG_AUTO_UPLOAD(0);
-                            SettingFragment.this.f2614p.setChecked(false);
+                            SettingFragment.this.cb_setting_auto_upload.setChecked(false);
                         }
-                        SettingFragment.this.SetFragSpEditor.putInt("ECG_AUTO_UPLOAD", SettingFragment.this.SetFragApp.appECGConf.mo2646c());
-                        SettingFragment.this.SetFragSpEditor.putInt("ECG_AUTO_SAVE", SettingFragment.this.SetFragApp.appECGConf.mo2644b());
+                        SettingFragment.this.SetFragSpEditor.putInt("ECG_AUTO_UPLOAD", SettingFragment.this.SetFragApp.appECGConf.getECG_AUTO_UPLOAD());
+                        SettingFragment.this.SetFragSpEditor.putInt("ECG_AUTO_SAVE", SettingFragment.this.SetFragApp.appECGConf.getsetECG_AUTO_SAVE());
                         SettingFragment.this.SetFragSpEditor.commit();
                     }
                 });
-                if (this.SetFragApp.appECGConf.mo2644b() == 1) {
-                    this.f2613o.setChecked(true);
-                    this.f2614p.setEnabled(true);
+                if (this.SetFragApp.appECGConf.getsetECG_AUTO_SAVE() == 1) {
+                    this.cb_setting_auto_record.setChecked(true);
+                    this.cb_setting_auto_upload.setEnabled(true);
                 } else {
-                    this.f2613o.setChecked(false);
-                    this.f2614p.setEnabled(false);
+                    this.cb_setting_auto_record.setChecked(false);
+                    this.cb_setting_auto_upload.setEnabled(false);
                     this.SetFragApp.appECGConf.setECG_AUTO_UPLOAD(0);
-                    this.f2614p.setChecked(false);
+                    this.cb_setting_auto_upload.setChecked(false);
                 }
-                this.f2615q = (CheckBox) getActivity().findViewById(R.id.setting_realtime_upload);
-                this.f2615q.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                this.cb_setting_realtime_upload = (CheckBox) getActivity().findViewById(R.id.setting_realtime_upload);
+                this.cb_setting_realtime_upload.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                     public void onCheckedChanged(CompoundButton compoundButton, boolean z) {
                         ECGConf aVar;
                         int i;
@@ -414,17 +399,17 @@ public class SettingFragment extends Fragment {
                             i = 0;
                         }
                         aVar.setECG_REALTIME_UPLOAD(i);
-                        SettingFragment.this.SetFragSpEditor.putInt("ECG_REALTIME_UPLOAD", SettingFragment.this.SetFragApp.appECGConf.mo2648d());
+                        SettingFragment.this.SetFragSpEditor.putInt("ECG_REALTIME_UPLOAD", SettingFragment.this.SetFragApp.appECGConf.getECG_REALTIME_UPLOAD());
                         SettingFragment.this.SetFragSpEditor.commit();
                     }
                 });
-                if (this.SetFragApp.appECGConf.mo2648d() == 1) {
-                    this.f2615q.setChecked(true);
+                if (this.SetFragApp.appECGConf.getECG_REALTIME_UPLOAD() == 1) {
+                    this.cb_setting_realtime_upload.setChecked(true);
                 } else {
-                    this.f2615q.setChecked(false);
+                    this.cb_setting_realtime_upload.setChecked(false);
                 }
-                this.f2617s = (CheckBox) getActivity().findViewById(R.id.setting_ecg_waveform_analysis);
-                this.f2617s.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                this.cb_setting_ecg_waveform_analysis = (CheckBox) getActivity().findViewById(R.id.setting_ecg_waveform_analysis);
+                this.cb_setting_ecg_waveform_analysis.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                     public void onCheckedChanged(CompoundButton compoundButton, boolean z) {
                         ECGConf aVar;
                         int i;
@@ -436,66 +421,67 @@ public class SettingFragment extends Fragment {
                             i = 0;
                         }
                         aVar.setECG_WAVEFORM_ANALYSIS(i);
-                        SettingFragment.this.SetFragSpEditor.putInt("ECG_WAVEFORM_ANALYSIS", SettingFragment.this.SetFragApp.appECGConf.mo2658i());
+                        SettingFragment.this.SetFragSpEditor.putInt("ECG_WAVEFORM_ANALYSIS", SettingFragment.this.SetFragApp.appECGConf.getECG_WAVEFORM_ANALYSIS());
                         SettingFragment.this.SetFragSpEditor.commit();
                     }
                 });
-                if (this.SetFragApp.appECGConf.mo2658i() == 1) {
-                    this.f2617s.setChecked(true);
+                if (this.SetFragApp.appECGConf.getECG_WAVEFORM_ANALYSIS() == 1) {
+                    this.cb_setting_ecg_waveform_analysis.setChecked(true);
                 } else {
-                    this.f2617s.setChecked(false);
+                    this.cb_setting_ecg_waveform_analysis.setChecked(false);
                 }
-                this.f2617s.findViewById(R.id.setting_ecg_waveform_analysis).setVisibility(8);
-                ((RelativeLayout) getActivity().findViewById(R.id.person_info_setting)).setOnClickListener(this.f2597M);
-                ((RelativeLayout) getActivity().findViewById(R.id.pedometer_setting_rl)).setOnClickListener(this.f2597M);
-                this.f2586B = (RelativeLayout) getActivity().findViewById(R.id.sos_setting);
-                this.f2586B.setOnClickListener(this.f2597M);
-                this.f2623y = (LinearLayout) getActivity().findViewById(R.id.setting_device_info_ll);
-                this.f2587C = (RelativeLayout) getActivity().findViewById(R.id.login_out);
-                this.f2587C.setOnClickListener(new View.OnClickListener() {
+
+                this.cb_setting_ecg_waveform_analysis.findViewById(R.id.setting_ecg_waveform_analysis).setVisibility(View.GONE);
+                ((RelativeLayout) getActivity().findViewById(R.id.person_info_setting)).setOnClickListener(this.settingOnClickListener);
+                ((RelativeLayout) getActivity().findViewById(R.id.pedometer_setting_rl)).setOnClickListener(this.settingOnClickListener);
+                this.rv_sos_setting = (RelativeLayout) getActivity().findViewById(R.id.sos_setting);
+                this.rv_sos_setting.setOnClickListener(this.settingOnClickListener);
+                this.ll_setting_device_info = (LinearLayout) getActivity().findViewById(R.id.setting_device_info_ll);
+                this.rv_login_out = (RelativeLayout) getActivity().findViewById(R.id.login_out);
+                this.rv_login_out.setOnClickListener(new View.OnClickListener() {
                     public void onClick(View view) {
                         SettingFragment.this.showlogout_titleDialog();
                     }
                 });
-                this.f2619u = (TextView) getActivity().findViewById(R.id.setting_machine_name);
-                this.f2618t = (TextView) getActivity().findViewById(R.id.setting_machine_id);
-                this.f2620v = (TextView) getActivity().findViewById(R.id.setting_machine_ver);
-                this.f2621w = (TextView) getActivity().findViewById(R.id.setting_machine_battery);
-                this.f2585A = (RelativeLayout) getActivity().findViewById(R.id.setting_update_sw);
-                this.f2585A.setOnClickListener(this.f2597M);
+                this.tv_setting_machine_name = (TextView) getActivity().findViewById(R.id.setting_machine_name);
+                this.tv_setting_machine_id = (TextView) getActivity().findViewById(R.id.setting_machine_id);
+                this.tv_setting_machine_ver = (TextView) getActivity().findViewById(R.id.setting_machine_ver);
+                this.tv_setting_machine_battery = (TextView) getActivity().findViewById(R.id.setting_machine_battery);
+                this.rv_setting_update_sw = (RelativeLayout) getActivity().findViewById(R.id.setting_update_sw);
+                this.rv_setting_update_sw.setOnClickListener(this.settingOnClickListener);
                 if (this.SetFragApp.appMachine != null) {
-                    this.f2623y.setVisibility(0);
-                    this.f2585A.setVisibility(0);
+                    this.ll_setting_device_info.setVisibility(View.VISIBLE);
+                    this.rv_setting_update_sw.setVisibility(View.VISIBLE);
                     if (!(this.SetFragApp.appMachine == null || this.SetFragApp.appMachine.getName() == null)) {
-                        this.f2619u.setText(this.SetFragApp.appMachine.getName());
+                        this.tv_setting_machine_name.setText(this.SetFragApp.appMachine.getName());
                     }
                     if (!(this.SetFragApp.appMachine == null || this.SetFragApp.appMachine.getId() == null)) {
-                        this.f2618t.setText(this.SetFragApp.appMachine.getId());
+                        this.tv_setting_machine_id.setText(this.SetFragApp.appMachine.getId());
                     }
                     if (!(this.SetFragApp.appMachine == null || this.SetFragApp.appMachine.getFwRev() == null)) {
-                        this.f2620v.setText(this.SetFragApp.appMachine.getFwRev());
+                        this.tv_setting_machine_ver.setText(this.SetFragApp.appMachine.getFwRev());
                     }
-                    TextView textView = this.f2621w;
+                    TextView textView = this.tv_setting_machine_battery;
                     textView.setText(this.SetFragApp.appMachine.getBatteryLevel() + " %");
                 }
                 getActivity().invalidateOptionsMenu();
                 this.rv_setting_check_update = (RelativeLayout) getActivity().findViewById(R.id.setting_check_update);
-                this.rv_setting_check_update.setOnClickListener(this.f2597M);
+                this.rv_setting_check_update.setOnClickListener(this.settingOnClickListener);
                 this.edt_ecg_warn_rate_max = (EditText) getActivity().findViewById(R.id.ecg_warn_rate_max);
-                this.edt_ecg_warn_rate_max.setText(String.valueOf(this.SetFragApp.appECGConf.mo2650e()));
+                this.edt_ecg_warn_rate_max.setText(String.valueOf(this.SetFragApp.appECGConf.getECG_ALARM_RATE_MAX()));
                 this.edt_ecg_warn_rate_max.setOnFocusChangeListener(new View.OnFocusChangeListener() {
 
                     /* renamed from: b */
-                    private boolean f2629b = false;
+                    private boolean isEditFocus = false;
 
                     public void onFocusChange(View view, boolean z) {
                         Context applicationContext;
                         Resources resources;
                         int i = 0;
-                        if (z && !this.f2629b) {
-                            this.f2629b = true;
+                        if (z && !this.isEditFocus) {
+                            this.isEditFocus = true;
                         }
-                        if (!z && this.f2629b) {
+                        if (!z && this.isEditFocus) {
                             EditText editText = (EditText) view;
                             if (editText.getText().toString().length() == 0) {
                                 applicationContext = SettingFragment.this.getActivity().getApplicationContext();
@@ -504,7 +490,7 @@ public class SettingFragment extends Fragment {
                             } else {
                                 Log.d("SettingFragment", editText.getText().toString());
                                 int parseInt = Integer.parseInt(editText.getText().toString());
-                                if (parseInt <= SettingFragment.this.SetFragApp.appECGConf.mo2652f()) {
+                                if (parseInt <= SettingFragment.this.SetFragApp.appECGConf.getECG_ALARM_RATE_MIN()) {
                                     applicationContext = SettingFragment.this.getActivity().getApplicationContext();
                                     resources = SettingFragment.this.getResources();
                                     i = R.string.p_ha_less_min;
@@ -517,27 +503,27 @@ public class SettingFragment extends Fragment {
                                 }
                             }
                             Toast.makeText(SettingFragment.this.getActivity().getApplicationContext(), SettingFragment.this.getResources().getString(i), Toast.LENGTH_LONG).show();
-                            editText.setText(String.valueOf(SettingFragment.this.SetFragApp.appECGConf.mo2650e()));
+                            editText.setText(String.valueOf(SettingFragment.this.SetFragApp.appECGConf.getECG_ALARM_RATE_MAX()));
                         }
-                        SettingFragment.this.SetFragSpEditor.putInt("ECG_ALARM_RATE_MAX", SettingFragment.this.SetFragApp.appECGConf.mo2650e());
+                        SettingFragment.this.SetFragSpEditor.putInt("ECG_ALARM_RATE_MAX", SettingFragment.this.SetFragApp.appECGConf.getECG_ALARM_RATE_MAX());
                         SettingFragment.this.SetFragSpEditor.commit();
                     }
                 });
                 this.edt_ecg_warn_rate_min = (EditText) getActivity().findViewById(R.id.ecg_warn_rate_min);
-                this.edt_ecg_warn_rate_min.setText(String.valueOf(this.SetFragApp.appECGConf.mo2652f()));
+                this.edt_ecg_warn_rate_min.setText(String.valueOf(this.SetFragApp.appECGConf.getECG_ALARM_RATE_MIN()));
                 this.edt_ecg_warn_rate_min.setOnFocusChangeListener(new View.OnFocusChangeListener() {
 
                     /* renamed from: b */
-                    private boolean f2631b = false;
+                    private boolean isedt_ecg_warn_rate_minFocus = false;
 
                     public void onFocusChange(View view, boolean z) {
                         Context applicationContext;
                         Resources resources;
                         int i;
-                        if (z && !this.f2631b) {
-                            this.f2631b = true;
+                        if (z && !this.isedt_ecg_warn_rate_minFocus) {
+                            this.isedt_ecg_warn_rate_minFocus = true;
                         }
-                        if (!z && this.f2631b) {
+                        if (!z && this.isedt_ecg_warn_rate_minFocus) {
                             EditText editText = (EditText) view;
                             if (editText.getText().toString().length() == 0) {
                                 applicationContext = SettingFragment.this.getActivity().getApplicationContext();
@@ -546,7 +532,7 @@ public class SettingFragment extends Fragment {
                             } else {
                                 Log.d("SettingFragment", editText.getText().toString());
                                 int parseInt = Integer.parseInt(editText.getText().toString());
-                                if (parseInt >= SettingFragment.this.SetFragApp.appECGConf.mo2650e()) {
+                                if (parseInt >= SettingFragment.this.SetFragApp.appECGConf.getECG_ALARM_RATE_MAX()) {
                                     applicationContext = SettingFragment.this.getActivity().getApplicationContext();
                                     resources = SettingFragment.this.getResources();
                                     i = R.string.p_ha_bigger_max;
@@ -556,13 +542,13 @@ public class SettingFragment extends Fragment {
                                     i = R.string.p_ha_zero;
                                 } else {
                                     SettingFragment.this.SetFragApp.appECGConf.setECG_ALARM_RATE_MIN(parseInt);
-                                    SettingFragment.this.SetFragSpEditor.putInt("ECG_ALARM_RATE_MIN", SettingFragment.this.SetFragApp.appECGConf.mo2652f());
+                                    SettingFragment.this.SetFragSpEditor.putInt("ECG_ALARM_RATE_MIN", SettingFragment.this.SetFragApp.appECGConf.getECG_ALARM_RATE_MIN());
                                     SettingFragment.this.SetFragSpEditor.commit();
                                     return;
                                 }
                             }
                             Toast.makeText(applicationContext, resources.getString(i), Toast.LENGTH_LONG).show();
-                            editText.setText(String.valueOf(SettingFragment.this.SetFragApp.appECGConf.mo2652f()));
+                            editText.setText(String.valueOf(SettingFragment.this.SetFragApp.appECGConf.getECG_ALARM_RATE_MIN()));
                         }
                     }
                 });
@@ -581,46 +567,46 @@ public class SettingFragment extends Fragment {
                         }
                         linearLayout.setVisibility(i);
                         SettingFragment.this.SetFragApp.appECGConf.setECG_ALARM_ENABLE(z);
-                        SettingFragment.this.SetFragSpEditor.putBoolean("ECG_ALARM_ENABLE", SettingFragment.this.SetFragApp.appECGConf.mo2655g());
+                        SettingFragment.this.SetFragSpEditor.putBoolean("ECG_ALARM_ENABLE", SettingFragment.this.SetFragApp.appECGConf.getECG_ALARM_ENABLE());
                         SettingFragment.this.SetFragSpEditor.commit();
                     }
                 });
-                this.cb_set_ecg_alarm.setChecked(this.SetFragApp.appECGConf.mo2655g());
-                if (this.SetFragApp.appECGConf.mo2655g()) {
-                    this.ll_set_ecg_alarm_div.setVisibility(0);
+                this.cb_set_ecg_alarm.setChecked(this.SetFragApp.appECGConf.getECG_ALARM_ENABLE());
+                if (this.SetFragApp.appECGConf.getECG_ALARM_ENABLE()) {
+                    this.ll_set_ecg_alarm_div.setVisibility(View.VISIBLE);
                 } else {
-                    this.ll_set_ecg_alarm_div.setVisibility(8);
+                    this.ll_set_ecg_alarm_div.setVisibility(View.GONE);
                 }
-                this.f2602d = (RadioGroup) getActivity().findViewById(R.id.setting_alarm_type);
-                this.f2602d.setOnCheckedChangeListener(this.f2596L);
-                this.f2607i = (RadioButton) getActivity().findViewById(R.id.setting_alarm_type_vibration);
-                this.f2608j = (RadioButton) getActivity().findViewById(R.id.setting_alarm_type_sound);
-                this.f2609k = (RadioButton) getActivity().findViewById(R.id.setting_alarm_type_vibration_sound);
-                switch (this.SetFragApp.appECGConf.mo2656h()) {
+                this.rg_setting_alarm_type = (RadioGroup) getActivity().findViewById(R.id.setting_alarm_type);
+                this.rg_setting_alarm_type.setOnCheckedChangeListener(this.mRadioGroupOnCheckedListener);
+                this.rb_setting_alarm_type_vibration = (RadioButton) getActivity().findViewById(R.id.setting_alarm_type_vibration);
+                this.rb_setting_alarm_type_sound = (RadioButton) getActivity().findViewById(R.id.setting_alarm_type_sound);
+                this.rb_setting_alarm_type_vibration_sound = (RadioButton) getActivity().findViewById(R.id.setting_alarm_type_vibration_sound);
+                switch (this.SetFragApp.appECGConf.getECG_ALARM_TYPE()) {
                     case 0:
-                        radioButton = this.f2607i;
+                        radioButton = this.rb_setting_alarm_type_vibration;
                         break;
                     case 1:
-                        radioButton = this.f2608j;
+                        radioButton = this.rb_setting_alarm_type_sound;
                         break;
                     default:
-                        radioButton = this.f2609k;
+                        radioButton = this.rb_setting_alarm_type_vibration_sound;
                         break;
                 }
                 radioButton.setChecked(true);
-                this.f2622x = (TextView) getActivity().findViewById(R.id.setting_ver_info);
-                this.f2594J = getActivity().getPackageManager().getPackageInfo(getActivity().getApplicationContext().getPackageName(), 0).versionName;
+                this.tv_setting_ver_info = (TextView) getActivity().findViewById(R.id.setting_ver_info);
+                this.mversionName = getActivity().getPackageManager().getPackageInfo(getActivity().getApplicationContext().getPackageName(), 0).versionName;
                 StringBuffer stringBuffer = new StringBuffer();
                 stringBuffer.append(getString(R.string.app_name));
                 stringBuffer.append(" V");
-                stringBuffer.append(this.f2594J);
-                this.f2622x.setText(stringBuffer.toString());
+                stringBuffer.append(this.mversionName);
+                this.tv_setting_ver_info.setText(stringBuffer.toString());
             } else {
                 radioButton2 = this.rb_time_20s;
             }
             radioButton2.setChecked(true);
-            this.f2614p = (CheckBox) getActivity().findViewById(R.id.setting_auto_upload);
-            this.f2614p.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            this.cb_setting_auto_upload = (CheckBox) getActivity().findViewById(R.id.setting_auto_upload);
+            this.cb_setting_auto_upload.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 public void onCheckedChanged(CompoundButton compoundButton, boolean z) {
                     ECGConf aVar;
                     int i;
@@ -632,34 +618,34 @@ public class SettingFragment extends Fragment {
                         i = 0;
                     }
                     aVar.setECG_AUTO_UPLOAD(i);
-                    SettingFragment.this.SetFragSpEditor.putInt("ECG_AUTO_UPLOAD", SettingFragment.this.SetFragApp.appECGConf.mo2646c());
+                    SettingFragment.this.SetFragSpEditor.putInt("ECG_AUTO_UPLOAD", SettingFragment.this.SetFragApp.appECGConf.getECG_AUTO_UPLOAD());
                     SettingFragment.this.SetFragSpEditor.commit();
                 }
             });
-            if (this.SetFragApp.appECGConf.mo2646c() == 1) {
+            if (this.SetFragApp.appECGConf.getECG_AUTO_UPLOAD() == 1) {
             }
-            this.f2614p.findViewById(R.id.setting_auto_upload).setVisibility(8);
-            this.f2613o = (CheckBox) getActivity().findViewById(R.id.setting_auto_record);
-            this.f2613o.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            this.cb_setting_auto_upload.findViewById(R.id.setting_auto_upload).setVisibility(View.GONE);
+            this.cb_setting_auto_record = (CheckBox) getActivity().findViewById(R.id.setting_auto_record);
+            this.cb_setting_auto_record.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 public void onCheckedChanged(CompoundButton compoundButton, boolean z) {
                     if (z) {
                         SettingFragment.this.SetFragApp.appECGConf.setECG_AUTO_SAVE(1);
-                        SettingFragment.this.f2614p.setEnabled(true);
+                        SettingFragment.this.cb_setting_auto_upload.setEnabled(true);
                     } else {
                         SettingFragment.this.SetFragApp.appECGConf.setECG_AUTO_SAVE(0);
-                        SettingFragment.this.f2614p.setEnabled(false);
+                        SettingFragment.this.cb_setting_auto_upload.setEnabled(false);
                         SettingFragment.this.SetFragApp.appECGConf.setECG_AUTO_UPLOAD(0);
-                        SettingFragment.this.f2614p.setChecked(false);
+                        SettingFragment.this.cb_setting_auto_upload.setChecked(false);
                     }
-                    SettingFragment.this.SetFragSpEditor.putInt("ECG_AUTO_UPLOAD", SettingFragment.this.SetFragApp.appECGConf.mo2646c());
-                    SettingFragment.this.SetFragSpEditor.putInt("ECG_AUTO_SAVE", SettingFragment.this.SetFragApp.appECGConf.mo2644b());
+                    SettingFragment.this.SetFragSpEditor.putInt("ECG_AUTO_UPLOAD", SettingFragment.this.SetFragApp.appECGConf.getECG_AUTO_UPLOAD());
+                    SettingFragment.this.SetFragSpEditor.putInt("ECG_AUTO_SAVE", SettingFragment.this.SetFragApp.appECGConf.getsetECG_AUTO_SAVE());
                     SettingFragment.this.SetFragSpEditor.commit();
                 }
             });
-            if (this.SetFragApp.appECGConf.mo2644b() == 1) {
+            if (this.SetFragApp.appECGConf.getsetECG_AUTO_SAVE() == 1) {
             }
-            this.f2615q = (CheckBox) getActivity().findViewById(R.id.setting_realtime_upload);
-            this.f2615q.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            this.cb_setting_realtime_upload = (CheckBox) getActivity().findViewById(R.id.setting_realtime_upload);
+            this.cb_setting_realtime_upload.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 public void onCheckedChanged(CompoundButton compoundButton, boolean z) {
                     ECGConf aVar;
                     int i;
@@ -671,14 +657,14 @@ public class SettingFragment extends Fragment {
                         i = 0;
                     }
                     aVar.setECG_REALTIME_UPLOAD(i);
-                    SettingFragment.this.SetFragSpEditor.putInt("ECG_REALTIME_UPLOAD", SettingFragment.this.SetFragApp.appECGConf.mo2648d());
+                    SettingFragment.this.SetFragSpEditor.putInt("ECG_REALTIME_UPLOAD", SettingFragment.this.SetFragApp.appECGConf.getECG_REALTIME_UPLOAD());
                     SettingFragment.this.SetFragSpEditor.commit();
                 }
             });
-            if (this.SetFragApp.appECGConf.mo2648d() == 1) {
+            if (this.SetFragApp.appECGConf.getECG_REALTIME_UPLOAD() == 1) {
             }
-            this.f2617s = (CheckBox) getActivity().findViewById(R.id.setting_ecg_waveform_analysis);
-            this.f2617s.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            this.cb_setting_ecg_waveform_analysis = (CheckBox) getActivity().findViewById(R.id.setting_ecg_waveform_analysis);
+            this.cb_setting_ecg_waveform_analysis.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 public void onCheckedChanged(CompoundButton compoundButton, boolean z) {
                     ECGConf aVar;
                     int i;
@@ -690,50 +676,50 @@ public class SettingFragment extends Fragment {
                         i = 0;
                     }
                     aVar.setECG_WAVEFORM_ANALYSIS(i);
-                    SettingFragment.this.SetFragSpEditor.putInt("ECG_WAVEFORM_ANALYSIS", SettingFragment.this.SetFragApp.appECGConf.mo2658i());
+                    SettingFragment.this.SetFragSpEditor.putInt("ECG_WAVEFORM_ANALYSIS", SettingFragment.this.SetFragApp.appECGConf.getECG_WAVEFORM_ANALYSIS());
                     SettingFragment.this.SetFragSpEditor.commit();
                 }
             });
-            if (this.SetFragApp.appECGConf.mo2658i() == 1) {
+            if (this.SetFragApp.appECGConf.getECG_WAVEFORM_ANALYSIS() == 1) {
             }
-            this.f2617s.findViewById(R.id.setting_ecg_waveform_analysis).setVisibility(8);
-            ((RelativeLayout) getActivity().findViewById(R.id.person_info_setting)).setOnClickListener(this.f2597M);
-            ((RelativeLayout) getActivity().findViewById(R.id.pedometer_setting_rl)).setOnClickListener(this.f2597M);
-            this.f2586B = (RelativeLayout) getActivity().findViewById(R.id.sos_setting);
-            this.f2586B.setOnClickListener(this.f2597M);
-            this.f2623y = (LinearLayout) getActivity().findViewById(R.id.setting_device_info_ll);
-            this.f2587C = (RelativeLayout) getActivity().findViewById(R.id.login_out);
-            this.f2587C.setOnClickListener(new View.OnClickListener() {
+            this.cb_setting_ecg_waveform_analysis.findViewById(R.id.setting_ecg_waveform_analysis).setVisibility(View.GONE);
+            ((RelativeLayout) getActivity().findViewById(R.id.person_info_setting)).setOnClickListener(this.settingOnClickListener);
+            ((RelativeLayout) getActivity().findViewById(R.id.pedometer_setting_rl)).setOnClickListener(this.settingOnClickListener);
+            this.rv_sos_setting = (RelativeLayout) getActivity().findViewById(R.id.sos_setting);
+            this.rv_sos_setting.setOnClickListener(this.settingOnClickListener);
+            this.ll_setting_device_info = (LinearLayout) getActivity().findViewById(R.id.setting_device_info_ll);
+            this.rv_login_out = (RelativeLayout) getActivity().findViewById(R.id.login_out);
+            this.rv_login_out.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View view) {
                     SettingFragment.this.showlogout_titleDialog();
                 }
             });
-            this.f2619u = (TextView) getActivity().findViewById(R.id.setting_machine_name);
-            this.f2618t = (TextView) getActivity().findViewById(R.id.setting_machine_id);
-            this.f2620v = (TextView) getActivity().findViewById(R.id.setting_machine_ver);
-            this.f2621w = (TextView) getActivity().findViewById(R.id.setting_machine_battery);
-            this.f2585A = (RelativeLayout) getActivity().findViewById(R.id.setting_update_sw);
-            this.f2585A.setOnClickListener(this.f2597M);
+            this.tv_setting_machine_name = (TextView) getActivity().findViewById(R.id.setting_machine_name);
+            this.tv_setting_machine_id = (TextView) getActivity().findViewById(R.id.setting_machine_id);
+            this.tv_setting_machine_ver = (TextView) getActivity().findViewById(R.id.setting_machine_ver);
+            this.tv_setting_machine_battery = (TextView) getActivity().findViewById(R.id.setting_machine_battery);
+            this.rv_setting_update_sw = (RelativeLayout) getActivity().findViewById(R.id.setting_update_sw);
+            this.rv_setting_update_sw.setOnClickListener(this.settingOnClickListener);
             if (this.SetFragApp.appMachine != null) {
             }
             getActivity().invalidateOptionsMenu();
             this.rv_setting_check_update = (RelativeLayout) getActivity().findViewById(R.id.setting_check_update);
-            this.rv_setting_check_update.setOnClickListener(this.f2597M);
+            this.rv_setting_check_update.setOnClickListener(this.settingOnClickListener);
             this.edt_ecg_warn_rate_max = (EditText) getActivity().findViewById(R.id.ecg_warn_rate_max);
-            this.edt_ecg_warn_rate_max.setText(String.valueOf(this.SetFragApp.appECGConf.mo2650e()));
+            this.edt_ecg_warn_rate_max.setText(String.valueOf(this.SetFragApp.appECGConf.getECG_ALARM_RATE_MAX()));
             this.edt_ecg_warn_rate_max.setOnFocusChangeListener(new View.OnFocusChangeListener() {
 
                 /* renamed from: b */
-                private boolean f2629b = false;
+                private boolean isEditFocus = false;
 
                 public void onFocusChange(View view, boolean z) {
                     Context applicationContext;
                     Resources resources;
                     int i = 0;
-                    if (z && !this.f2629b) {
-                        this.f2629b = true;
+                    if (z && !this.isEditFocus) {
+                        this.isEditFocus = true;
                     }
-                    if (!z && this.f2629b) {
+                    if (!z && this.isEditFocus) {
                         EditText editText = (EditText) view;
                         if (editText.getText().toString().length() == 0) {
                             applicationContext = SettingFragment.this.getActivity().getApplicationContext();
@@ -742,7 +728,7 @@ public class SettingFragment extends Fragment {
                         } else {
                             Log.d("SettingFragment", editText.getText().toString());
                             int parseInt = Integer.parseInt(editText.getText().toString());
-                            if (parseInt <= SettingFragment.this.SetFragApp.appECGConf.mo2652f()) {
+                            if (parseInt <= SettingFragment.this.SetFragApp.appECGConf.getECG_ALARM_RATE_MIN()) {
                                 applicationContext = SettingFragment.this.getActivity().getApplicationContext();
                                 resources = SettingFragment.this.getResources();
                                 i = R.string.p_ha_less_min;
@@ -755,27 +741,27 @@ public class SettingFragment extends Fragment {
                             }
                         }
                         Toast.makeText(getActivity().getApplicationContext(), SettingFragment.this.getResources().getString(i), Toast.LENGTH_LONG).show();
-                        editText.setText(String.valueOf(SettingFragment.this.SetFragApp.appECGConf.mo2650e()));
+                        editText.setText(String.valueOf(SettingFragment.this.SetFragApp.appECGConf.getECG_ALARM_RATE_MAX()));
                     }
-                    SettingFragment.this.SetFragSpEditor.putInt("ECG_ALARM_RATE_MAX", SettingFragment.this.SetFragApp.appECGConf.mo2650e());
+                    SettingFragment.this.SetFragSpEditor.putInt("ECG_ALARM_RATE_MAX", SettingFragment.this.SetFragApp.appECGConf.getECG_ALARM_RATE_MAX());
                     SettingFragment.this.SetFragSpEditor.commit();
                 }
             });
             this.edt_ecg_warn_rate_min = (EditText) getActivity().findViewById(R.id.ecg_warn_rate_min);
-            this.edt_ecg_warn_rate_min.setText(String.valueOf(this.SetFragApp.appECGConf.mo2652f()));
+            this.edt_ecg_warn_rate_min.setText(String.valueOf(this.SetFragApp.appECGConf.getECG_ALARM_RATE_MIN()));
             this.edt_ecg_warn_rate_min.setOnFocusChangeListener(new View.OnFocusChangeListener() {
 
                 /* renamed from: b */
-                private boolean f2631b = false;
+                private boolean isedt_ecg_warn_rate_minFocus = false;
 
                 public void onFocusChange(View view, boolean z) {
                     Context applicationContext;
                     Resources resources;
                     int i;
-                    if (z && !this.f2631b) {
-                        this.f2631b = true;
+                    if (z && !this.isedt_ecg_warn_rate_minFocus) {
+                        this.isedt_ecg_warn_rate_minFocus = true;
                     }
-                    if (!z && this.f2631b) {
+                    if (!z && this.isedt_ecg_warn_rate_minFocus) {
                         EditText editText = (EditText) view;
                         if (editText.getText().toString().length() == 0) {
                             applicationContext = SettingFragment.this.getActivity().getApplicationContext();
@@ -784,7 +770,7 @@ public class SettingFragment extends Fragment {
                         } else {
                             Log.d("SettingFragment", editText.getText().toString());
                             int parseInt = Integer.parseInt(editText.getText().toString());
-                            if (parseInt >= SettingFragment.this.SetFragApp.appECGConf.mo2650e()) {
+                            if (parseInt >= SettingFragment.this.SetFragApp.appECGConf.getECG_ALARM_RATE_MAX()) {
                                 applicationContext = SettingFragment.this.getActivity().getApplicationContext();
                                 resources = SettingFragment.this.getResources();
                                 i = R.string.p_ha_bigger_max;
@@ -794,13 +780,13 @@ public class SettingFragment extends Fragment {
                                 i = R.string.p_ha_zero;
                             } else {
                                 SettingFragment.this.SetFragApp.appECGConf.setECG_ALARM_RATE_MIN(parseInt);
-                                SettingFragment.this.SetFragSpEditor.putInt("ECG_ALARM_RATE_MIN", SettingFragment.this.SetFragApp.appECGConf.mo2652f());
+                                SettingFragment.this.SetFragSpEditor.putInt("ECG_ALARM_RATE_MIN", SettingFragment.this.SetFragApp.appECGConf.getECG_ALARM_RATE_MIN());
                                 SettingFragment.this.SetFragSpEditor.commit();
                                 return;
                             }
                         }
                         Toast.makeText(applicationContext, resources.getString(i), Toast.LENGTH_LONG).show();
-                        editText.setText(String.valueOf(SettingFragment.this.SetFragApp.appECGConf.mo2652f()));
+                        editText.setText(String.valueOf(SettingFragment.this.SetFragApp.appECGConf.getECG_ALARM_RATE_MIN()));
                     }
                 }
             });
@@ -819,50 +805,50 @@ public class SettingFragment extends Fragment {
                     }
                     linearLayout.setVisibility(i);
                     SettingFragment.this.SetFragApp.appECGConf.setECG_ALARM_ENABLE(z);
-                    SettingFragment.this.SetFragSpEditor.putBoolean("ECG_ALARM_ENABLE", SettingFragment.this.SetFragApp.appECGConf.mo2655g());
+                    SettingFragment.this.SetFragSpEditor.putBoolean("ECG_ALARM_ENABLE", SettingFragment.this.SetFragApp.appECGConf.getECG_ALARM_ENABLE());
                     SettingFragment.this.SetFragSpEditor.commit();
                 }
             });
-            this.cb_set_ecg_alarm.setChecked(this.SetFragApp.appECGConf.mo2655g());
-            if (this.SetFragApp.appECGConf.mo2655g()) {
+            this.cb_set_ecg_alarm.setChecked(this.SetFragApp.appECGConf.getECG_ALARM_ENABLE());
+            if (this.SetFragApp.appECGConf.getECG_ALARM_ENABLE()) {
             }
-            this.f2602d = (RadioGroup) getActivity().findViewById(R.id.setting_alarm_type);
-            this.f2602d.setOnCheckedChangeListener(this.f2596L);
-            this.f2607i = (RadioButton) getActivity().findViewById(R.id.setting_alarm_type_vibration);
-            this.f2608j = (RadioButton) getActivity().findViewById(R.id.setting_alarm_type_sound);
-            this.f2609k = (RadioButton) getActivity().findViewById(R.id.setting_alarm_type_vibration_sound);
-            switch (this.SetFragApp.appECGConf.mo2656h()) {
+            this.rg_setting_alarm_type = (RadioGroup) getActivity().findViewById(R.id.setting_alarm_type);
+            this.rg_setting_alarm_type.setOnCheckedChangeListener(this.mRadioGroupOnCheckedListener);
+            this.rb_setting_alarm_type_vibration = (RadioButton) getActivity().findViewById(R.id.setting_alarm_type_vibration);
+            this.rb_setting_alarm_type_sound = (RadioButton) getActivity().findViewById(R.id.setting_alarm_type_sound);
+            this.rb_setting_alarm_type_vibration_sound = (RadioButton) getActivity().findViewById(R.id.setting_alarm_type_vibration_sound);
+            switch (this.SetFragApp.appECGConf.getECG_ALARM_TYPE()) {
                 case 0:
                     break;
                 case 1:
                     break;
             }
             radioButton.setChecked(true);
-            this.f2622x = (TextView) getActivity().findViewById(R.id.setting_ver_info);
-            this.f2594J = getActivity().getPackageManager().getPackageInfo(getActivity().getApplicationContext().getPackageName(), 0).versionName;
+            this.tv_setting_ver_info = (TextView) getActivity().findViewById(R.id.setting_ver_info);
+            this.mversionName = getActivity().getPackageManager().getPackageInfo(getActivity().getApplicationContext().getPackageName(), 0).versionName;
             StringBuffer stringBuffer2 = new StringBuffer();
             stringBuffer2.append(getString(R.string.app_name));
             stringBuffer2.append(" V");
-            stringBuffer2.append(this.f2594J);
-            this.f2622x.setText(stringBuffer2.toString());
+            stringBuffer2.append(this.mversionName);
+            this.tv_setting_ver_info.setText(stringBuffer2.toString());
         } else {
-            radioButton3 = this.f2605g;
+            radioButton3 = this.rb_time_5m;
         }
         radioButton3.setChecked(true);
-        this.f2601c = (RadioGroup) getActivity().findViewById(R.id.setting_alarm_delay);
-        this.f2601c.setOnCheckedChangeListener(this.f2596L);
-        this.f2610l = (RadioButton) getActivity().findViewById(R.id.time_10s);
+        this.rg_setting_alarm_delay = (RadioGroup) getActivity().findViewById(R.id.setting_alarm_delay);
+        this.rg_setting_alarm_delay.setOnCheckedChangeListener(this.mRadioGroupOnCheckedListener);
+        this.rb_time_10s = (RadioButton) getActivity().findViewById(R.id.time_10s);
         this.rb_time_20s = (RadioButton) getActivity().findViewById(R.id.time_20s);
-        this.f2612n = (RadioButton) getActivity().findViewById(R.id.time_30s);
-        l = this.SetFragApp.appECGConf.mo2664l();
+        this.rb_time_30s = (RadioButton) getActivity().findViewById(R.id.time_30s);
+        l = this.SetFragApp.appECGConf.getECG_ALARM_DELAY();
         if (l != 10) {
             radioButton2 = rb_time_20s;
         }
         if (radioButton2 != null) {
             radioButton2.setChecked(true);
         }
-        this.f2614p = (CheckBox) getActivity().findViewById(R.id.setting_auto_upload);
-        this.f2614p.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        this.cb_setting_auto_upload = (CheckBox) getActivity().findViewById(R.id.setting_auto_upload);
+        this.cb_setting_auto_upload.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             public void onCheckedChanged(CompoundButton compoundButton, boolean z) {
                 ECGConf aVar;
                 int i;
@@ -874,34 +860,34 @@ public class SettingFragment extends Fragment {
                     i = 0;
                 }
                 aVar.setECG_AUTO_UPLOAD(i);
-                SettingFragment.this.SetFragSpEditor.putInt("ECG_AUTO_UPLOAD", SettingFragment.this.SetFragApp.appECGConf.mo2646c());
+                SettingFragment.this.SetFragSpEditor.putInt("ECG_AUTO_UPLOAD", SettingFragment.this.SetFragApp.appECGConf.getECG_AUTO_UPLOAD());
                 SettingFragment.this.SetFragSpEditor.commit();
             }
         });
-        if (this.SetFragApp.appECGConf.mo2646c() == 1) {
+        if (this.SetFragApp.appECGConf.getECG_AUTO_UPLOAD() == 1) {
         }
-        this.f2614p.findViewById(R.id.setting_auto_upload).setVisibility(8);
-        this.f2613o = (CheckBox) getActivity().findViewById(R.id.setting_auto_record);
-        this.f2613o.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        this.cb_setting_auto_upload.findViewById(R.id.setting_auto_upload).setVisibility(View.GONE);
+        this.cb_setting_auto_record = (CheckBox) getActivity().findViewById(R.id.setting_auto_record);
+        this.cb_setting_auto_record.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             public void onCheckedChanged(CompoundButton compoundButton, boolean z) {
                 if (z) {
                     SettingFragment.this.SetFragApp.appECGConf.setECG_AUTO_SAVE(1);
-                    SettingFragment.this.f2614p.setEnabled(true);
+                    SettingFragment.this.cb_setting_auto_upload.setEnabled(true);
                 } else {
                     SettingFragment.this.SetFragApp.appECGConf.setECG_AUTO_SAVE(0);
-                    SettingFragment.this.f2614p.setEnabled(false);
+                    SettingFragment.this.cb_setting_auto_upload.setEnabled(false);
                     SettingFragment.this.SetFragApp.appECGConf.setECG_AUTO_UPLOAD(0);
-                    SettingFragment.this.f2614p.setChecked(false);
+                    SettingFragment.this.cb_setting_auto_upload.setChecked(false);
                 }
-                SettingFragment.this.SetFragSpEditor.putInt("ECG_AUTO_UPLOAD", SettingFragment.this.SetFragApp.appECGConf.mo2646c());
-                SettingFragment.this.SetFragSpEditor.putInt("ECG_AUTO_SAVE", SettingFragment.this.SetFragApp.appECGConf.mo2644b());
+                SettingFragment.this.SetFragSpEditor.putInt("ECG_AUTO_UPLOAD", SettingFragment.this.SetFragApp.appECGConf.getECG_AUTO_UPLOAD());
+                SettingFragment.this.SetFragSpEditor.putInt("ECG_AUTO_SAVE", SettingFragment.this.SetFragApp.appECGConf.getsetECG_AUTO_SAVE());
                 SettingFragment.this.SetFragSpEditor.commit();
             }
         });
-        if (this.SetFragApp.appECGConf.mo2644b() == 1) {
+        if (this.SetFragApp.appECGConf.getsetECG_AUTO_SAVE() == 1) {
         }
-        this.f2615q = (CheckBox) getActivity().findViewById(R.id.setting_realtime_upload);
-        this.f2615q.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        this.cb_setting_realtime_upload = (CheckBox) getActivity().findViewById(R.id.setting_realtime_upload);
+        this.cb_setting_realtime_upload.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             public void onCheckedChanged(CompoundButton compoundButton, boolean z) {
                 ECGConf aVar;
                 int i;
@@ -913,14 +899,14 @@ public class SettingFragment extends Fragment {
                     i = 0;
                 }
                 aVar.setECG_REALTIME_UPLOAD(i);
-                SettingFragment.this.SetFragSpEditor.putInt("ECG_REALTIME_UPLOAD", SettingFragment.this.SetFragApp.appECGConf.mo2648d());
+                SettingFragment.this.SetFragSpEditor.putInt("ECG_REALTIME_UPLOAD", SettingFragment.this.SetFragApp.appECGConf.getECG_REALTIME_UPLOAD());
                 SettingFragment.this.SetFragSpEditor.commit();
             }
         });
-        if (this.SetFragApp.appECGConf.mo2648d() == 1) {
+        if (this.SetFragApp.appECGConf.getECG_REALTIME_UPLOAD() == 1) {
         }
-        this.f2617s = (CheckBox) getActivity().findViewById(R.id.setting_ecg_waveform_analysis);
-        this.f2617s.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        this.cb_setting_ecg_waveform_analysis = (CheckBox) getActivity().findViewById(R.id.setting_ecg_waveform_analysis);
+        this.cb_setting_ecg_waveform_analysis.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             public void onCheckedChanged(CompoundButton compoundButton, boolean z) {
                 ECGConf aVar;
                 int i;
@@ -932,50 +918,50 @@ public class SettingFragment extends Fragment {
                     i = 0;
                 }
                 aVar.setECG_WAVEFORM_ANALYSIS(i);
-                SettingFragment.this.SetFragSpEditor.putInt("ECG_WAVEFORM_ANALYSIS", SettingFragment.this.SetFragApp.appECGConf.mo2658i());
+                SettingFragment.this.SetFragSpEditor.putInt("ECG_WAVEFORM_ANALYSIS", SettingFragment.this.SetFragApp.appECGConf.getECG_WAVEFORM_ANALYSIS());
                 SettingFragment.this.SetFragSpEditor.commit();
             }
         });
-        if (this.SetFragApp.appECGConf.mo2658i() == 1) {
+        if (this.SetFragApp.appECGConf.getECG_WAVEFORM_ANALYSIS() == 1) {
         }
-        this.f2617s.findViewById(R.id.setting_ecg_waveform_analysis).setVisibility(8);
-        ((RelativeLayout) getActivity().findViewById(R.id.person_info_setting)).setOnClickListener(this.f2597M);
-        ((RelativeLayout) getActivity().findViewById(R.id.pedometer_setting_rl)).setOnClickListener(this.f2597M);
-        this.f2586B = (RelativeLayout) getActivity().findViewById(R.id.sos_setting);
-        this.f2586B.setOnClickListener(this.f2597M);
-        this.f2623y = (LinearLayout) getActivity().findViewById(R.id.setting_device_info_ll);
-        this.f2587C = (RelativeLayout) getActivity().findViewById(R.id.login_out);
-        this.f2587C.setOnClickListener(new View.OnClickListener() {
+        this.cb_setting_ecg_waveform_analysis.findViewById(R.id.setting_ecg_waveform_analysis).setVisibility(View.GONE);
+        ((RelativeLayout) getActivity().findViewById(R.id.person_info_setting)).setOnClickListener(this.settingOnClickListener);
+        ((RelativeLayout) getActivity().findViewById(R.id.pedometer_setting_rl)).setOnClickListener(this.settingOnClickListener);
+        this.rv_sos_setting = (RelativeLayout) getActivity().findViewById(R.id.sos_setting);
+        this.rv_sos_setting.setOnClickListener(this.settingOnClickListener);
+        this.ll_setting_device_info = (LinearLayout) getActivity().findViewById(R.id.setting_device_info_ll);
+        this.rv_login_out = (RelativeLayout) getActivity().findViewById(R.id.login_out);
+        this.rv_login_out.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
                 SettingFragment.this.showlogout_titleDialog();
             }
         });
-        this.f2619u = (TextView) getActivity().findViewById(R.id.setting_machine_name);
-        this.f2618t = (TextView) getActivity().findViewById(R.id.setting_machine_id);
-        this.f2620v = (TextView) getActivity().findViewById(R.id.setting_machine_ver);
-        this.f2621w = (TextView) getActivity().findViewById(R.id.setting_machine_battery);
-        this.f2585A = (RelativeLayout) getActivity().findViewById(R.id.setting_update_sw);
-        this.f2585A.setOnClickListener(this.f2597M);
+        this.tv_setting_machine_name = (TextView) getActivity().findViewById(R.id.setting_machine_name);
+        this.tv_setting_machine_id = (TextView) getActivity().findViewById(R.id.setting_machine_id);
+        this.tv_setting_machine_ver = (TextView) getActivity().findViewById(R.id.setting_machine_ver);
+        this.tv_setting_machine_battery = (TextView) getActivity().findViewById(R.id.setting_machine_battery);
+        this.rv_setting_update_sw = (RelativeLayout) getActivity().findViewById(R.id.setting_update_sw);
+        this.rv_setting_update_sw.setOnClickListener(this.settingOnClickListener);
         if (this.SetFragApp.appMachine != null) {
         }
         getActivity().invalidateOptionsMenu();
         this.rv_setting_check_update = (RelativeLayout) getActivity().findViewById(R.id.setting_check_update);
-        this.rv_setting_check_update.setOnClickListener(this.f2597M);
+        this.rv_setting_check_update.setOnClickListener(this.settingOnClickListener);
         this.edt_ecg_warn_rate_max = (EditText) getActivity().findViewById(R.id.ecg_warn_rate_max);
-        this.edt_ecg_warn_rate_max.setText(String.valueOf(this.SetFragApp.appECGConf.mo2650e()));
+        this.edt_ecg_warn_rate_max.setText(String.valueOf(this.SetFragApp.appECGConf.getECG_ALARM_RATE_MAX()));
         this.edt_ecg_warn_rate_max.setOnFocusChangeListener(new View.OnFocusChangeListener() {
 
             /* renamed from: b */
-            private boolean f2629b = false;
+            private boolean isEditFocus = false;
 
             public void onFocusChange(View view, boolean z) {
                 Context applicationContext;
                 Resources resources;
                 int i = 0;
-                if (z && !this.f2629b) {
-                    this.f2629b = true;
+                if (z && !this.isEditFocus) {
+                    this.isEditFocus = true;
                 }
-                if (!z && this.f2629b) {
+                if (!z && this.isEditFocus) {
                     EditText editText = (EditText) view;
                     if (editText.getText().toString().length() == 0) {
                         applicationContext = SettingFragment.this.getActivity().getApplicationContext();
@@ -984,7 +970,7 @@ public class SettingFragment extends Fragment {
                     } else {
                         Log.d("SettingFragment", editText.getText().toString());
                         int parseInt = Integer.parseInt(editText.getText().toString());
-                        if (parseInt <= SettingFragment.this.SetFragApp.appECGConf.mo2652f()) {
+                        if (parseInt <= SettingFragment.this.SetFragApp.appECGConf.getECG_ALARM_RATE_MIN()) {
                             applicationContext = SettingFragment.this.getActivity().getApplicationContext();
                             resources = SettingFragment.this.getResources();
                             i = R.string.p_ha_less_min;
@@ -997,27 +983,27 @@ public class SettingFragment extends Fragment {
                         }
                     }
                     Toast.makeText(SettingFragment.this.getActivity().getApplicationContext(), SettingFragment.this.getResources().getString(i), Toast.LENGTH_LONG).show();
-                    editText.setText(String.valueOf(SettingFragment.this.SetFragApp.appECGConf.mo2650e()));
+                    editText.setText(String.valueOf(SettingFragment.this.SetFragApp.appECGConf.getECG_ALARM_RATE_MAX()));
                 }
-                SettingFragment.this.SetFragSpEditor.putInt("ECG_ALARM_RATE_MAX", SettingFragment.this.SetFragApp.appECGConf.mo2650e());
+                SettingFragment.this.SetFragSpEditor.putInt("ECG_ALARM_RATE_MAX", SettingFragment.this.SetFragApp.appECGConf.getECG_ALARM_RATE_MAX());
                 SettingFragment.this.SetFragSpEditor.commit();
             }
         });
         this.edt_ecg_warn_rate_min = (EditText) getActivity().findViewById(R.id.ecg_warn_rate_min);
-        this.edt_ecg_warn_rate_min.setText(String.valueOf(this.SetFragApp.appECGConf.mo2652f()));
+        this.edt_ecg_warn_rate_min.setText(String.valueOf(this.SetFragApp.appECGConf.getECG_ALARM_RATE_MIN()));
         this.edt_ecg_warn_rate_min.setOnFocusChangeListener(new View.OnFocusChangeListener() {
 
             /* renamed from: b */
-            private boolean f2631b = false;
+            private boolean isedt_ecg_warn_rate_minFocus = false;
 
             public void onFocusChange(View view, boolean z) {
                 Context applicationContext;
                 Resources resources;
                 int i;
-                if (z && !this.f2631b) {
-                    this.f2631b = true;
+                if (z && !this.isedt_ecg_warn_rate_minFocus) {
+                    this.isedt_ecg_warn_rate_minFocus = true;
                 }
-                if (!z && this.f2631b) {
+                if (!z && this.isedt_ecg_warn_rate_minFocus) {
                     EditText editText = (EditText) view;
                     if (editText.getText().toString().length() == 0) {
                         applicationContext = SettingFragment.this.getActivity().getApplicationContext();
@@ -1026,7 +1012,7 @@ public class SettingFragment extends Fragment {
                     } else {
                         Log.d("SettingFragment", editText.getText().toString());
                         int parseInt = Integer.parseInt(editText.getText().toString());
-                        if (parseInt >= SettingFragment.this.SetFragApp.appECGConf.mo2650e()) {
+                        if (parseInt >= SettingFragment.this.SetFragApp.appECGConf.getECG_ALARM_RATE_MAX()) {
                             applicationContext = SettingFragment.this.getActivity().getApplicationContext();
                             resources = SettingFragment.this.getResources();
                             i = R.string.p_ha_bigger_max;
@@ -1036,13 +1022,13 @@ public class SettingFragment extends Fragment {
                             i = R.string.p_ha_zero;
                         } else {
                             SettingFragment.this.SetFragApp.appECGConf.setECG_ALARM_RATE_MIN(parseInt);
-                            SettingFragment.this.SetFragSpEditor.putInt("ECG_ALARM_RATE_MIN", SettingFragment.this.SetFragApp.appECGConf.mo2652f());
+                            SettingFragment.this.SetFragSpEditor.putInt("ECG_ALARM_RATE_MIN", SettingFragment.this.SetFragApp.appECGConf.getECG_ALARM_RATE_MIN());
                             SettingFragment.this.SetFragSpEditor.commit();
                             return;
                         }
                     }
                     Toast.makeText(applicationContext, resources.getString(i), Toast.LENGTH_LONG).show();
-                    editText.setText(String.valueOf(SettingFragment.this.SetFragApp.appECGConf.mo2652f()));
+                    editText.setText(String.valueOf(SettingFragment.this.SetFragApp.appECGConf.getECG_ALARM_RATE_MIN()));
                 }
             }
         });
@@ -1061,19 +1047,19 @@ public class SettingFragment extends Fragment {
                 }
                 linearLayout.setVisibility(i);
                 SettingFragment.this.SetFragApp.appECGConf.setECG_ALARM_ENABLE(z);
-                SettingFragment.this.SetFragSpEditor.putBoolean("ECG_ALARM_ENABLE", SettingFragment.this.SetFragApp.appECGConf.mo2655g());
+                SettingFragment.this.SetFragSpEditor.putBoolean("ECG_ALARM_ENABLE", SettingFragment.this.SetFragApp.appECGConf.getECG_ALARM_ENABLE());
                 SettingFragment.this.SetFragSpEditor.commit();
             }
         });
-        this.cb_set_ecg_alarm.setChecked(this.SetFragApp.appECGConf.mo2655g());
-        if (this.SetFragApp.appECGConf.mo2655g()) {
+        this.cb_set_ecg_alarm.setChecked(this.SetFragApp.appECGConf.getECG_ALARM_ENABLE());
+        if (this.SetFragApp.appECGConf.getECG_ALARM_ENABLE()) {
         }
-        this.f2602d = (RadioGroup) getActivity().findViewById(R.id.setting_alarm_type);
-        this.f2602d.setOnCheckedChangeListener(this.f2596L);
-        this.f2607i = (RadioButton) getActivity().findViewById(R.id.setting_alarm_type_vibration);
-        this.f2608j = (RadioButton) getActivity().findViewById(R.id.setting_alarm_type_sound);
-        this.f2609k = (RadioButton) getActivity().findViewById(R.id.setting_alarm_type_vibration_sound);
-        switch (this.SetFragApp.appECGConf.mo2656h()) {
+        this.rg_setting_alarm_type = (RadioGroup) getActivity().findViewById(R.id.setting_alarm_type);
+        this.rg_setting_alarm_type.setOnCheckedChangeListener(this.mRadioGroupOnCheckedListener);
+        this.rb_setting_alarm_type_vibration = (RadioButton) getActivity().findViewById(R.id.setting_alarm_type_vibration);
+        this.rb_setting_alarm_type_sound = (RadioButton) getActivity().findViewById(R.id.setting_alarm_type_sound);
+        this.rb_setting_alarm_type_vibration_sound = (RadioButton) getActivity().findViewById(R.id.setting_alarm_type_vibration_sound);
+        switch (this.SetFragApp.appECGConf.getECG_ALARM_TYPE()) {
             case 0:
                 break;
             case 1:
@@ -1082,25 +1068,25 @@ public class SettingFragment extends Fragment {
         if (radioButton != null) {
             radioButton.setChecked(true);
         }
-        this.f2622x = (TextView) getActivity().findViewById(R.id.setting_ver_info);
+        this.tv_setting_ver_info = (TextView) getActivity().findViewById(R.id.setting_ver_info);
         try {
-            this.f2594J = getActivity().getPackageManager().getPackageInfo(getActivity().getApplicationContext().getPackageName(), 0).versionName;
+            this.mversionName = getActivity().getPackageManager().getPackageInfo(getActivity().getApplicationContext().getPackageName(), 0).versionName;
         } catch (PackageManager.NameNotFoundException e) {
             e.printStackTrace();
         }
         StringBuffer stringBuffer22 = new StringBuffer();
         stringBuffer22.append(getString(R.string.app_name));
         stringBuffer22.append(" V");
-        stringBuffer22.append(this.f2594J);
-        this.f2622x.setText(stringBuffer22.toString());
+        stringBuffer22.append(this.mversionName);
+        this.tv_setting_ver_info.setText(stringBuffer22.toString());
     }
 
     /* access modifiers changed from: private */
     /* renamed from: b */
-    public void m2539b() {
-        if (this.f2598N == null || this.f2598N.getStatus() != AsyncTask.Status.RUNNING) {
-            this.f2598N = new C0710a();
-            this.f2598N.execute(new String[0]);
+    public void checkupdate() {
+        if (this.mCheckUpdataAsyncTask == null || this.mCheckUpdataAsyncTask.getStatus() != AsyncTask.Status.RUNNING) {
+            this.mCheckUpdataAsyncTask = new CheckUpdataAsyncTask();
+            this.mCheckUpdataAsyncTask.execute(new String[0]);
         }
     }
 
@@ -1131,7 +1117,7 @@ public class SettingFragment extends Fragment {
     }
 
     /* renamed from: a */
-    public void mo2363a(String str, String str2, final String str3) {
+    public void showNewVersionDialog(String str, String str2, final String str3) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setTitle(getString(R.string.new_version));
         StringBuffer stringBuffer = new StringBuffer();
@@ -1173,7 +1159,7 @@ public class SettingFragment extends Fragment {
         super.onCreate(bundle);
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction("com.hopetruly.ec.services.ACTION_GATT_CHARACTERISTIC_READ");
-        LocalBroadcastManager.getInstance(getActivity().getApplicationContext()).registerReceiver(this.f2595K, intentFilter);
+        LocalBroadcastManager.getInstance(getActivity().getApplicationContext()).registerReceiver(this.mBatteryBroadcastReceiver, intentFilter);
     }
 
     public View onCreateView(LayoutInflater layoutInflater, ViewGroup viewGroup, Bundle bundle) {
@@ -1182,10 +1168,10 @@ public class SettingFragment extends Fragment {
 
     public void onDestroy() {
         LogUtils.logE("SettingFragment", "onDestroy~~~~");
-        LocalBroadcastManager.getInstance(getActivity().getApplicationContext()).unregisterReceiver(this.f2595K);
-        if (this.f2598N != null && this.f2598N.getStatus() == AsyncTask.Status.RUNNING) {
-            this.f2598N.cancel(true);
-            this.f2598N = null;
+        LocalBroadcastManager.getInstance(getActivity().getApplicationContext()).unregisterReceiver(this.mBatteryBroadcastReceiver);
+        if (this.mCheckUpdataAsyncTask != null && this.mCheckUpdataAsyncTask.getStatus() == AsyncTask.Status.RUNNING) {
+            this.mCheckUpdataAsyncTask.cancel(true);
+            this.mCheckUpdataAsyncTask = null;
         }
         if (this.logout_titleDialog != null) {
             this.logout_titleDialog.dismiss();
@@ -1197,12 +1183,12 @@ public class SettingFragment extends Fragment {
         this.SetFragApp = (ECGApplication) getActivity().getApplication();
         this.SetFragSpEditor = this.SetFragApp.spECG_conf.edit();
         try {
-            m2537a();
+            initView();
         } catch (PackageManager.NameNotFoundException e) {
             e.printStackTrace();
         }
         if (!(this.SetFragApp == null || this.SetFragApp.appMainService == null || !this.SetFragApp.appMainService.isMBleConn())) {
-            this.SetFragApp.appMainService.mo2732f();
+            this.SetFragApp.appMainService.GetDeviceBattery();
         }
         super.onStart();
     }

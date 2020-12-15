@@ -35,7 +35,7 @@ import com.hopetruly.ecg.entity.ECGEntity;
 import com.hopetruly.ecg.entity.ECGRecord;
 import com.hopetruly.ecg.p022b.SqlManager;
 import com.hopetruly.ecg.services.FileService;
-import com.hopetruly.ecg.util.C0770f;
+import com.hopetruly.ecg.util.ECGRecordUtils;
 import com.hopetruly.part.net.NetService;
 
 import org.xml.sax.SAXException;
@@ -91,7 +91,7 @@ public class EcgRecListActivity extends BaseActivity implements AdapterView.OnIt
     public EditText edt_login_user_pwd;
 
     /* renamed from: n */
-    private ServiceConnection f2156n = new ServiceConnection() {
+    private ServiceConnection ecgrecNetServiceConn = new ServiceConnection() {
         public void onServiceConnected(ComponentName componentName, IBinder iBinder) {
             EcgRecListActivity.this.ecgrecNetService = ((NetService.NetSerBinder) iBinder).getNetSerBinder();
         }
@@ -102,7 +102,7 @@ public class EcgRecListActivity extends BaseActivity implements AdapterView.OnIt
     };
 
     /* renamed from: o */
-    private ServiceConnection f2157o = new ServiceConnection() {
+    private ServiceConnection ecgrecFileServiceConn = new ServiceConnection() {
         public void onServiceConnected(ComponentName componentName, IBinder iBinder) {
             EcgRecListActivity.this.ecgrecFileService = ((FileService.FileServiceBinder) iBinder).getFileService();
         }
@@ -113,7 +113,7 @@ public class EcgRecListActivity extends BaseActivity implements AdapterView.OnIt
     };
 
     /* renamed from: p */
-    private BroadcastReceiver f2158p = new BroadcastReceiver() {
+    private BroadcastReceiver fileImportBroadcastReceiver = new BroadcastReceiver() {
         public void onReceive(Context context, Intent intent) {
             Context applicationContext;
             EcgRecListActivity ecgRecListActivity;
@@ -122,15 +122,15 @@ public class EcgRecListActivity extends BaseActivity implements AdapterView.OnIt
             if (action.equals("com.holptruly.ecg.services.FileService.FILE_IMPORT_START")) {
                 EcgRecListActivity.this.showmProgressDialog(EcgRecListActivity.this.getString(R.string.p_importing_file));
             } else if (action.equals("com.holptruly.ecg.services.FileService.FILE_IMPORT_SUCCESS")) {
-                ECGRecord a = C0770f.m2774a((Context) EcgRecListActivity.this, intent.getStringExtra("com.holptruly.ecg.services.FileService.EXTRA_FILE"));
+                ECGRecord a = ECGRecordUtils.m2774a((Context) EcgRecListActivity.this, intent.getStringExtra("com.holptruly.ecg.services.FileService.EXTRA_FILE"));
                 if (a != null) {
                     EcgRecListActivity.this.ecgrecSqlManager.insertEcgRecord(a);
-                    EcgRecListActivity.this.m2262d();
+                    EcgRecListActivity.this.dismissProgressDialog();
                     applicationContext = EcgRecListActivity.this.getApplicationContext();
                     ecgRecListActivity = EcgRecListActivity.this;
                     i = R.string.p_import_success;
                 } else {
-                    EcgRecListActivity.this.m2262d();
+                    EcgRecListActivity.this.dismissProgressDialog();
                     applicationContext = EcgRecListActivity.this.getApplicationContext();
                     ecgRecListActivity = EcgRecListActivity.this;
                     i = R.string.p_import_error;
@@ -138,7 +138,7 @@ public class EcgRecListActivity extends BaseActivity implements AdapterView.OnIt
                 Toast.makeText(applicationContext, ecgRecListActivity.getString(i), Toast.LENGTH_SHORT).show();
                 EcgRecListActivity.this.startAcyn();
             } else if (action.equals("com.holptruly.ecg.services.FileService.FILE_IMPORT_FAIL")) {
-                EcgRecListActivity.this.m2262d();
+                EcgRecListActivity.this.dismissProgressDialog();
                 Toast.makeText(EcgRecListActivity.this.getApplicationContext(), EcgRecListActivity.this.getString(R.string.p_import_failed), Toast.LENGTH_SHORT).show();
             }
         }
@@ -159,7 +159,7 @@ public class EcgRecListActivity extends BaseActivity implements AdapterView.OnIt
                     for (int i2 = 0; i2 < list.size(); i2++) {
                         ECGRecord eCGRecord = (ECGRecord) list.get(i2);
                         try {
-                            ECGEntity a = C0770f.m2773a(eCGRecord.getFilePath());
+                            ECGEntity a = ECGRecordUtils.m2773a(eCGRecord.getFilePath());
                             eCGRecord.setMark_time(a.getMark_time());
                             if (a.getLeadExten().equals(ECGEntity.LEAD_PART_HAND)) {
                                 eCGRecord.setLeadType(0);
@@ -173,27 +173,27 @@ public class EcgRecListActivity extends BaseActivity implements AdapterView.OnIt
                         }
                     }
                 }
-                EcgRecListActivity.this.m2262d();
+                EcgRecListActivity.this.dismissProgressDialog();
                 EcgRecListActivity.this.startAcyn();
             } else {
                 if (action.equals("com.holptruly.ecg.services.NetService.SYNC_DATA_FAIL_ACTION")) {
-                    EcgRecListActivity.this.m2262d();
+                    EcgRecListActivity.this.dismissProgressDialog();
                     EcgRecListActivity.this.startAcyn();
                     applicationContext = EcgRecListActivity.this.getApplicationContext();
                     ecgRecListActivity = EcgRecListActivity.this;
                     i = R.string.l_no_data;
                 } else if (action.equals("com.holptruly.ecg.services.NetService.NEED_LOGIN")) {
                     Log.d(EcgRecListActivity.TAG, "Receive need log message");
-                    EcgRecListActivity.this.m2262d();
+                    EcgRecListActivity.this.dismissProgressDialog();
                     EcgRecListActivity.this.pupop_login.showAtLocation(EcgRecListActivity.this.findViewById(R.id.ecg_rec_list), 17, 0, 0);
                     return;
                 } else if (action.equals("com.holptruly.ecg.services.NetService.LOGIN_SUCCESSFUL")) {
-                    EcgRecListActivity.this.m2262d();
+                    EcgRecListActivity.this.dismissProgressDialog();
                     EcgRecListActivity.this.pupop_login.dismiss();
                     EcgRecListActivity.this.ecgrecNetService.mo2821a(EcgRecListActivity.this.ecgrecApp.mUserInfo.getId());
                     return;
                 } else if (action.equals("com.holptruly.ecg.services.NetService.LOGIN_FAILE")) {
-                    EcgRecListActivity.this.m2262d();
+                    EcgRecListActivity.this.dismissProgressDialog();
                     applicationContext = EcgRecListActivity.this.getApplicationContext();
                     ecgRecListActivity = EcgRecListActivity.this;
                     i = R.string.p_login_fail;
@@ -248,47 +248,47 @@ public class EcgRecListActivity extends BaseActivity implements AdapterView.OnIt
     private class EcgListAdapter extends BaseAdapter {
 
         /* renamed from: a */
-        final int f2173a;
+        final int int2;
 
         /* renamed from: b */
-        final int f2174b;
+        final int int0;
 
         /* renamed from: c */
-        final int f2175c;
+        final int int1;
 
         /* renamed from: com.hopetruly.ecg.activity.EcgRecListActivity$b$a */
-        private class C0590a {
+        private class ViewHolder {
 
             /* renamed from: a */
-            TextView f2177a;
+            TextView tv_ecg_rec_date;
 
             /* renamed from: b */
-            TextView f2178b;
+            TextView tv_ecg_rec_period;
 
             /* renamed from: c */
-            TextView f2179c;
+            TextView tv_ecg_rec_comment;
 
             /* renamed from: d */
-            TextView f2180d;
+            TextView tv_ecg_rec_avg_hr;
 
             /* renamed from: e */
-            TextView f2181e;
+            TextView tv_ecg_rec_name;
 
             /* renamed from: f */
-            TextView f2182f;
+            TextView tv_ecg_lead_type;
 
-            private C0590a() {
+            private ViewHolder() {
             }
         }
 
         private EcgListAdapter() {
-            this.f2173a = 2;
-            this.f2174b = 0;
-            this.f2175c = 1;
+            this.int2 = 2;
+            this.int0 = 0;
+            this.int1 = 1;
         }
 
         /* renamed from: a */
-        private String m2267a(String str, int i) {
+        private String appendTip(String str, int i) {
             if (str == null || str.length() == 0 || i < 0) {
                 return "";
             }
@@ -323,7 +323,7 @@ public class EcgRecListActivity extends BaseActivity implements AdapterView.OnIt
         /* JADX WARNING: Removed duplicated region for block: B:15:0x00d9  */
         /* JADX WARNING: Removed duplicated region for block: B:18:0x00e8  */
         public View getView(int i, View view, ViewGroup viewGroup) {
-            C0590a aVar;
+            ViewHolder aVar;
             View view2;
             TextView textView;
             int i2 = 0;
@@ -333,57 +333,57 @@ public class EcgRecListActivity extends BaseActivity implements AdapterView.OnIt
             ECGRecord eCGRecord = EcgRecListActivity.this.mErecords.get(i);
             int itemViewType = getItemViewType(i);
             if (view == null) {
-                aVar = new C0590a();
+                aVar = new ViewHolder();
                 view2 = LayoutInflater.from(EcgRecListActivity.this.getApplicationContext()).inflate(R.layout.ecg_rec_list_item, (ViewGroup) null);
-                aVar.f2181e = (TextView) view2.findViewById(R.id.ecg_rec_name);
-                aVar.f2177a = (TextView) view2.findViewById(R.id.ecg_rec_date);
-                aVar.f2178b = (TextView) view2.findViewById(R.id.ecg_rec_period);
-                aVar.f2180d = (TextView) view2.findViewById(R.id.ecg_rec_avg_hr);
-                aVar.f2182f = (TextView) view2.findViewById(R.id.ecg_lead_type);
-                aVar.f2179c = (TextView) view2.findViewById(R.id.ecg_rec_comment);
+                aVar.tv_ecg_rec_name = (TextView) view2.findViewById(R.id.ecg_rec_name);
+                aVar.tv_ecg_rec_date = (TextView) view2.findViewById(R.id.ecg_rec_date);
+                aVar.tv_ecg_rec_period = (TextView) view2.findViewById(R.id.ecg_rec_period);
+                aVar.tv_ecg_rec_avg_hr = (TextView) view2.findViewById(R.id.ecg_rec_avg_hr);
+                aVar.tv_ecg_lead_type = (TextView) view2.findViewById(R.id.ecg_lead_type);
+                aVar.tv_ecg_rec_comment = (TextView) view2.findViewById(R.id.ecg_rec_comment);
                 view2.setTag(aVar);
             } else {
                 view2 = view;
-                aVar = (C0590a) view.getTag();
+                aVar = (ViewHolder) view.getTag();
             }
             try {
-                aVar.f2181e.setText(URLDecoder.decode(eCGRecord.getFileName(), "utf-8"));
+                aVar.tv_ecg_rec_name.setText(URLDecoder.decode(eCGRecord.getFileName(), "utf-8"));
             } catch (UnsupportedEncodingException e) {
                 e.printStackTrace();
             }
-            aVar.f2177a.setText(eCGRecord.getTime());
-            aVar.f2178b.setText(eCGRecord.getPeriod());
-            aVar.f2180d.setText(String.valueOf(eCGRecord.getHeartRate()));
+            aVar.tv_ecg_rec_date.setText(eCGRecord.getTime());
+            aVar.tv_ecg_rec_period.setText(eCGRecord.getPeriod());
+            aVar.tv_ecg_rec_avg_hr.setText(String.valueOf(eCGRecord.getHeartRate()));
             switch (eCGRecord.getLeadType()) {
                 case 0:
-                    textView2 = aVar.f2182f;
+                    textView2 = aVar.tv_ecg_lead_type;
                     ecgRecListActivity = EcgRecListActivity.this;
                     i3 = R.string.l_with_hand;
                     break;
                 case 1:
-                    textView2 = aVar.f2182f;
+                    textView2 = aVar.tv_ecg_lead_type;
                     ecgRecListActivity = EcgRecListActivity.this;
                     i3 = R.string.l_with_chest;
                     break;
                 default:
-                    aVar.f2179c.setText(m2267a(eCGRecord.getDescription(), 25));
+                    aVar.tv_ecg_rec_comment.setText(appendTip(eCGRecord.getDescription(), 25));
                     if (itemViewType != 1) {
-                        textView = aVar.f2181e;
+                        textView = aVar.tv_ecg_rec_name;
                         i2 = Color.rgb(255, 165, 0);
                     } else if (itemViewType != 0) {
                         return view2;
                     } else {
-                        textView = aVar.f2181e;
+                        textView = aVar.tv_ecg_rec_name;
                         i2 = -16777216;
                     }
                     textView.setTextColor(i2);
                     return view2;
             }
             textView2.setText(ecgRecListActivity.getString(i3));
-            aVar.f2179c.setText(m2267a(eCGRecord.getDescription(), 25));
+            aVar.tv_ecg_rec_comment.setText(appendTip(eCGRecord.getDescription(), 25));
             if (itemViewType != 1) {
             }
-            aVar.f2181e.setTextColor(i2);
+            aVar.tv_ecg_rec_name.setTextColor(i2);
             return view2;
         }
 
@@ -444,9 +444,9 @@ public class EcgRecListActivity extends BaseActivity implements AdapterView.OnIt
     }
 
     /* renamed from: a */
-    private boolean dismissmProgressDialog(File file) {
+    private boolean annotatedECG(File file) {
         try {
-            C0770f.m2775a(file, "AnnotatedECG");
+            ECGRecordUtils.annotatedECG(file, "AnnotatedECG");
             return true;
         } catch (ParserConfigurationException e) {
             e.printStackTrace();
@@ -477,7 +477,7 @@ public class EcgRecListActivity extends BaseActivity implements AdapterView.OnIt
             ((Button) inflate.findViewById(R.id.login_btn_login)).setOnClickListener(new View.OnClickListener() {
                 public void onClick(View view) {
                     try {
-                        EcgRecListActivity.this.ecgrecNetService.mo2829c(EcgRecListActivity.this.edt_login_user_name.getText().toString(), EcgRecListActivity.this.edt_login_user_pwd.getText().toString());
+                        EcgRecListActivity.this.ecgrecNetService.getEcgFilesAsyn(EcgRecListActivity.this.edt_login_user_name.getText().toString(), EcgRecListActivity.this.edt_login_user_pwd.getText().toString());
                         EcgRecListActivity.this.showmProgressDialog(EcgRecListActivity.this.getString(R.string.p_login_login));
                     } catch (Exception e) {
                         e.printStackTrace();
@@ -502,7 +502,7 @@ public class EcgRecListActivity extends BaseActivity implements AdapterView.OnIt
 
     /* access modifiers changed from: private */
     /* renamed from: d */
-    public void m2262d() {
+    public void dismissProgressDialog() {
         if (this.mProgressDialog != null && this.mProgressDialog.isShowing()) {
             this.mProgressDialog.dismiss();
         }
@@ -516,7 +516,7 @@ public class EcgRecListActivity extends BaseActivity implements AdapterView.OnIt
             File file = new File(stringExtra);
             if (file.isDirectory()) {
                 string = getResources().getString(R.string.p_file_not_exist);
-            } else if (!file.isFile() || !dismissmProgressDialog(file)) {
+            } else if (!file.isFile() || !annotatedECG(file)) {
                 string = getResources().getString(R.string.p_not_valid_ecg_rec_file);
             } else {
                 String[] split = stringExtra.split("/");
@@ -531,12 +531,12 @@ public class EcgRecListActivity extends BaseActivity implements AdapterView.OnIt
     public void onCreate(Bundle bundle) {
         setContentView(R.layout.activity_ecg_rec_list);
         super.onCreate(bundle);
-        bindService(new Intent(this, FileService.class), this.f2157o, Context.BIND_AUTO_CREATE);
+        bindService(new Intent(this, FileService.class), this.ecgrecFileServiceConn, Context.BIND_AUTO_CREATE);
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction("com.holptruly.ecg.services.FileService.FILE_IMPORT_START");
         intentFilter.addAction("com.holptruly.ecg.services.FileService.FILE_IMPORT_SUCCESS");
         intentFilter.addAction("com.holptruly.ecg.services.FileService.FILE_IMPORT_FAIL");
-        LocalBroadcastManager.getInstance(getApplicationContext()).registerReceiver(this.f2158p, intentFilter);
+        LocalBroadcastManager.getInstance(getApplicationContext()).registerReceiver(this.fileImportBroadcastReceiver, intentFilter);
     }
 
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -547,10 +547,10 @@ public class EcgRecListActivity extends BaseActivity implements AdapterView.OnIt
     public void onDestroy() {
         if (this.ecgrecFileService != null) {
             Log.d(TAG, "fileService unbindService");
-            unbindService(this.f2157o);
+            unbindService(this.ecgrecFileServiceConn);
             this.ecgrecFileService = null;
         }
-        LocalBroadcastManager.getInstance(getApplicationContext()).unregisterReceiver(this.f2158p);
+        LocalBroadcastManager.getInstance(getApplicationContext()).unregisterReceiver(this.fileImportBroadcastReceiver);
         if (this.mEcgrecAsyncTask != null && this.mEcgrecAsyncTask.getStatus() == AsyncTask.Status.RUNNING) {
             this.mEcgrecAsyncTask.cancel(true);
             this.mEcgrecAsyncTask = null;
@@ -588,7 +588,7 @@ public class EcgRecListActivity extends BaseActivity implements AdapterView.OnIt
         LocalBroadcastManager.getInstance(getApplicationContext()).unregisterReceiver(this.f2159q);
         if (this.ecgrecNetService != null) {
             Log.d(TAG, "netService unbindService");
-            unbindService(this.f2156n);
+            unbindService(this.ecgrecNetServiceConn);
             this.ecgrecNetService = null;
         }
         super.onPause();
@@ -603,7 +603,7 @@ public class EcgRecListActivity extends BaseActivity implements AdapterView.OnIt
         Log.d(TAG, "OnStart");
         getActionBar().setDisplayHomeAsUpEnabled(true);
         this.ecgrecApp = (ECGApplication) getApplication();
-        bindService(new Intent(this, NetService.class), this.f2156n, Context.BIND_AUTO_CREATE);
+        bindService(new Intent(this, NetService.class), this.ecgrecNetServiceConn, Context.BIND_AUTO_CREATE);
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction("com.holptruly.ecg.services.NetService.SYNC_DATA_BEGIN_ACTION");
         intentFilter.addAction("com.holptruly.ecg.services.NetService.SYNC_DATA_SUCCESS_ACTION");

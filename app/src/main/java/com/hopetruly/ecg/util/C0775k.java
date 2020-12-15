@@ -121,7 +121,7 @@ public class C0775k {
         float f3 = this.f2925c * 5.0f;
         ECGApplication eCGApplication = (ECGApplication) this.mctx.getApplicationContext();
         canvas.drawText((TextUtils.isEmpty(eCGApplication.mUserInfo.getLastName()) ? "" : eCGApplication.mUserInfo.getLastName()) + (TextUtils.isEmpty(eCGApplication.mUserInfo.getFirstName()) ? "" : eCGApplication.mUserInfo.getFirstName()), f, f2, paint);
-        m2809a(canvas, C0770f.m2775a(new File(eCGRecord.getFilePath()), "text"), f, f2 + f3, f3, paint);
+        m2809a(canvas, ECGRecordUtils.annotatedECG(new File(eCGRecord.getFilePath()), "text"), f, f2 + f3, f3, paint);
         switch (eCGRecord.getLeadType()) {
             case 0:
                 i = R.string.l_with_hand;
@@ -298,7 +298,7 @@ public class C0775k {
         if (eCGRecord2 == null) {
             return null;
         }
-        m2805a(C0770f.m2775a(new File(eCGRecord.getFilePath()), "text"));
+        m2805a(ECGRecordUtils.annotatedECG(new File(eCGRecord.getFilePath()), "text"));
         int[] a = mo2795a(fArr2, i);
         if (a == null) {
             return null;

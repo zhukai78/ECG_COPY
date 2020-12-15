@@ -176,7 +176,7 @@ public class StepRECActivity extends BaseActivity {
         this.f2667c.setAdapter(this.f2668d);
         this.f2667c.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long j) {
-                boolean unused = StepRECActivity.this.f2674j = StepRECActivity.this.f2671g.appMainService.mo2741o();
+                boolean unused = StepRECActivity.this.f2674j = StepRECActivity.this.f2671g.appMainService.getisGattStop();
                 if (StepRECActivity.this.f2674j) {
                     StepRECActivity.this.m2561b();
                     return false;

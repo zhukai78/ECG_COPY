@@ -50,7 +50,7 @@ public class FwUpdateActivity extends BaseActivity {
     /* access modifiers changed from: private */
 
     /* renamed from: a */
-    public static String f2246a = "FwUpdateActivity";
+    public static String TAG = "FwUpdateActivity";
 
     /* renamed from: c */
     private static final String f2247c = Environment.DIRECTORY_DOWNLOADS;
@@ -85,28 +85,28 @@ public class FwUpdateActivity extends BaseActivity {
     private int f2255H = 0;
 
     /* renamed from: I */
-    private IntentFilter f2256I;
+    private IntentFilter mIntentFilter;
 
     /* renamed from: J */
     private ServiceConnection f2257J = new ServiceConnection() {
         public void onServiceConnected(ComponentName componentName, IBinder iBinder) {
-            NetService unused = FwUpdateActivity.this.f2279w = ((NetService.NetSerBinder) iBinder).getNetSerBinder();
+            NetService unused = FwUpdateActivity.this.NetiBinder = ((NetService.NetSerBinder) iBinder).getNetSerBinder();
         }
 
         public void onServiceDisconnected(ComponentName componentName) {
-            NetService unused = FwUpdateActivity.this.f2279w = null;
+            NetService unused = FwUpdateActivity.this.NetiBinder = null;
         }
     };
 
     /* renamed from: K */
-    private ServiceConnection f2258K = new ServiceConnection() {
+    private ServiceConnection MainBinderSerConn = new ServiceConnection() {
         public void onServiceConnected(ComponentName componentName, IBinder iBinder) {
-            MainService unused = FwUpdateActivity.this.f2278v = ((MainService.MainBinder) iBinder).getMainBinder();
-            if (!FwUpdateActivity.this.f2278v.isMBleConn()) {
+            MainService unused = FwUpdateActivity.this.mMainService = ((MainService.MainBinder) iBinder).getMainBinder();
+            if (!FwUpdateActivity.this.mMainService.isMBleConn()) {
                 FwUpdateActivity.this.m2346o();
                 return;
             }
-            BleHelper unused2 = FwUpdateActivity.this.f2277u = FwUpdateActivity.this.f2278v.mo2733g();
+            BleHelper unused2 = FwUpdateActivity.this.f2277u = FwUpdateActivity.this.mMainService.getMainbleHelper();
             BluetoothGattService unused3 = FwUpdateActivity.this.f2270n = FwUpdateActivity.this.f2277u.mo2796a(ECGUUIDS.f2787t);
             BluetoothGattService unused4 = FwUpdateActivity.this.f2271o = FwUpdateActivity.this.f2277u.mo2796a(ECGUUIDS.f2790w);
             if ((FwUpdateActivity.this.f2270n == null) || (FwUpdateActivity.this.f2271o == null)) {
@@ -135,7 +135,7 @@ public class FwUpdateActivity extends BaseActivity {
         }
 
         public void onServiceDisconnected(ComponentName componentName) {
-            MainService unused = FwUpdateActivity.this.f2278v = null;
+            MainService unused = FwUpdateActivity.this.mMainService = null;
         }
     };
 
@@ -143,7 +143,7 @@ public class FwUpdateActivity extends BaseActivity {
     private final BroadcastReceiver f2259L = new BroadcastReceiver() {
         public void onReceive(Context context, Intent intent) {
             String action = intent.getAction();
-            String d = FwUpdateActivity.f2246a;
+            String d = FwUpdateActivity.TAG;
             Log.d(d, "action: " + action);
             if ("com.hopetruly.ec.services.ACTION_GATT_DATA_NOTIFY".equals(action)) {
                 byte[] byteArrayExtra = intent.getByteArrayExtra("com.hopetruly.ec.services.EXTRA_DATA");
@@ -169,7 +169,7 @@ public class FwUpdateActivity extends BaseActivity {
             } else if ("com.hopetruly.ec.services.ACTION_GATT_CHARACTERISTIC_WRITE".equals(action)) {
                 int intExtra = intent.getIntExtra("com.hopetruly.ec.services.EXTRA_STATUS", 0);
                 if (intExtra != 0) {
-                    String d2 = FwUpdateActivity.f2246a;
+                    String d2 = FwUpdateActivity.TAG;
                     Log.e(d2, "Write failed: " + intExtra);
                     Toast.makeText(context, "GATT error: status=" + intExtra, Toast.LENGTH_SHORT).show();
                 }
@@ -248,11 +248,11 @@ public class FwUpdateActivity extends BaseActivity {
     /* access modifiers changed from: private */
 
     /* renamed from: v */
-    public MainService f2278v;
+    public MainService mMainService;
     /* access modifiers changed from: private */
 
     /* renamed from: w */
-    public NetService f2279w;
+    public NetService NetiBinder;
 
     /* renamed from: x */
     private final byte[] f2280x = new byte[262144];
@@ -344,7 +344,7 @@ public class FwUpdateActivity extends BaseActivity {
     /* access modifiers changed from: private */
     /* renamed from: a */
     public void m2310a(TextView textView, C0621a aVar) {
-        String str = f2246a;
+        String str = TAG;
         LogUtils.logE(str, "h.len>>" + aVar.f2291b);
         textView.setText(Html.fromHtml(String.format("%s %c %s %d %s %d", new Object[]{getString(R.string.l_type), aVar.f2292c, getString(R.string.l_version), Integer.valueOf(aVar.f2290a >> 1), getString(R.string.l_size), Integer.valueOf(aVar.f2291b * 4)})));
     }
@@ -397,11 +397,11 @@ public class FwUpdateActivity extends BaseActivity {
 
     /* renamed from: e */
     private void m2326e() {
-        this.f2256I = new IntentFilter();
-        this.f2256I.addAction("com.hopetruly.ec.services.ACTION_GATT_DATA_NOTIFY");
-        this.f2256I.addAction("com.hopetruly.ec.services.ACTION_GATT_CHARACTERISTIC_WRITE");
-        this.f2256I.addAction("com.hopetruly.ec.services.ACTION_GATT_DISCONNECTED");
-        this.f2256I.addAction("com.holptruly.ecg.services.NetService.NET_CHANGE");
+        this.mIntentFilter = new IntentFilter();
+        this.mIntentFilter.addAction("com.hopetruly.ec.services.ACTION_GATT_DATA_NOTIFY");
+        this.mIntentFilter.addAction("com.hopetruly.ec.services.ACTION_GATT_CHARACTERISTIC_WRITE");
+        this.mIntentFilter.addAction("com.hopetruly.ec.services.ACTION_GATT_DISCONNECTED");
+        this.mIntentFilter.addAction("com.holptruly.ecg.services.NetService.NET_CHANGE");
     }
 
     /* renamed from: f */
@@ -606,7 +606,7 @@ public class FwUpdateActivity extends BaseActivity {
     /* access modifiers changed from: protected */
     /* renamed from: a */
     public Boolean mo2203a() {
-        return Boolean.valueOf(this.f2279w.getNetInfoType() != -1);
+        return Boolean.valueOf(this.NetiBinder.getNetInfoType() != -1);
     }
 
     /* access modifiers changed from: protected */
@@ -625,7 +625,7 @@ public class FwUpdateActivity extends BaseActivity {
     public void onActivityResult(int i, int i2, Intent intent) {
         if (i == 3001 && i2 == -1) {
             String stringExtra = intent.getStringExtra("file_path");
-            String str = f2246a;
+            String str = TAG;
             Log.d(str, "return: " + stringExtra);
             try {
                 m2315a(stringExtra, false);
@@ -636,27 +636,27 @@ public class FwUpdateActivity extends BaseActivity {
     }
 
     public void onBackPressed() {
-        Log.d(f2246a, "onBackPressed");
+        Log.d(TAG, "onBackPressed");
         if (this.f2253F) {
             Toast.makeText(this, getResources().getString(R.string.Device_is_programming), Toast.LENGTH_LONG).show();
         } else if (!this.f2254G) {
             super.onBackPressed();
-        } else if (this.f2278v.isMBleConn()) {
-            this.f2278v.disconnectMainBLE();
+        } else if (this.mMainService.isMBleConn()) {
+            this.mMainService.disconnectMainBLE();
         }
     }
 
     public void onCreate(Bundle bundle) {
-        Log.d(f2246a, "onCreate");
+        Log.d(TAG, "onCreate");
         super.onCreate(bundle);
         setContentView(R.layout.activity_fwupdate);
         getActionBar().setDisplayHomeAsUpEnabled(true);
         String stringExtra = getIntent().getStringExtra("update");
         if (stringExtra.equals("Auto")) {
-            Log.i(f2246a, "Auto");
+            Log.i(TAG, "Auto");
             this.f2254G = true;
         } else if (stringExtra.equals("Manual")) {
-            Log.i(f2246a, "Manual");
+            Log.i(TAG, "Manual");
             this.f2254G = false;
         }
         ((ImageView) findViewById(16908332)).setPadding(10, 0, 20, 10);
@@ -677,14 +677,14 @@ public class FwUpdateActivity extends BaseActivity {
         this.f2266j.setVisibility(View.INVISIBLE);
         this.f2267k.setVisibility(View.INVISIBLE);
         m2326e();
-        bindService(new Intent(this, MainService.class), this.f2258K, Context.BIND_AUTO_CREATE);
+        bindService(new Intent(this, MainService.class), this.MainBinderSerConn, Context.BIND_AUTO_CREATE);
         bindService(new Intent(this, NetService.class), this.f2257J, Context.BIND_AUTO_CREATE);
     }
 
     public void onDestroy() {
-        Log.d(f2246a, "onDestroy");
+        Log.d(TAG, "onDestroy");
         super.onDestroy();
-        unbindService(this.f2258K);
+        unbindService(this.MainBinderSerConn);
         unbindService(this.f2257J);
         if (this.f2251D != null) {
             this.f2251D.cancel();
@@ -710,16 +710,16 @@ public class FwUpdateActivity extends BaseActivity {
 
     /* access modifiers changed from: protected */
     public void onPause() {
-        Log.d(f2246a, "onPause");
+        Log.d(TAG, "onPause");
         super.onPause();
         LocalBroadcastManager.getInstance(getApplicationContext()).unregisterReceiver(this.f2259L);
     }
 
     /* access modifiers changed from: protected */
     public void onResume() {
-        Log.d(f2246a, "onResume");
+        Log.d(TAG, "onResume");
         super.onResume();
-        LocalBroadcastManager.getInstance(getApplicationContext()).registerReceiver(this.f2259L, this.f2256I);
+        LocalBroadcastManager.getInstance(getApplicationContext()).registerReceiver(this.f2259L, this.mIntentFilter);
     }
 
     public void onStart(View view) {

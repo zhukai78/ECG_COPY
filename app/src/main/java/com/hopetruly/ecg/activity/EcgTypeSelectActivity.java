@@ -34,111 +34,111 @@ import org.json.JSONException;
 public class EcgTypeSelectActivity extends BaseActivity implements View.OnClickListener {
 
     /* renamed from: a */
-    ECGApplication f2184a;
+    ECGApplication mECGApplication;
 
     /* renamed from: c */
-    private ImageView f2185c;
+    private ImageView btn_ect_type_hand;
 
     /* renamed from: d */
-    private ImageView f2186d;
+    private ImageView btn_ect_type_heart;
     /* access modifiers changed from: private */
 
     /* renamed from: e */
-    public NetService f2187e;
+    public NetService mNetSerBinder;
     /* access modifiers changed from: private */
 
     /* renamed from: f */
-    public PopupWindow f2188f;
+    public PopupWindow pupop_login;
     /* access modifiers changed from: private */
 
     /* renamed from: g */
-    public EditText f2189g;
+    public EditText edt_login_user_name;
     /* access modifiers changed from: private */
 
     /* renamed from: h */
-    public EditText f2190h;
+    public EditText edt_login_user_pwd;
 
     /* renamed from: i */
     private BroadcastReceiver f2191i = new BroadcastReceiver() {
         public void onReceive(Context context, Intent intent) {
             String action = intent.getAction();
             if (action.equals("com.holptruly.ecg.services.NetService.LOGIN_SUCCESSFUL")) {
-                EcgTypeSelectActivity.this.m2277d();
-                EcgTypeSelectActivity.this.f2188f.dismiss();
+                EcgTypeSelectActivity.this.dismisscheck_loginDialog();
+                EcgTypeSelectActivity.this.pupop_login.dismiss();
             } else if (action.equals("com.holptruly.ecg.services.NetService.LOGIN_FAILE")) {
-                EcgTypeSelectActivity.this.m2277d();
+                EcgTypeSelectActivity.this.dismisscheck_loginDialog();
                 Toast.makeText(EcgTypeSelectActivity.this.getApplicationContext(), EcgTypeSelectActivity.this.getString(R.string.p_login_fail), Toast.LENGTH_SHORT).show();
             }
         }
     };
 
     /* renamed from: j */
-    private ServiceConnection f2192j = new ServiceConnection() {
+    private ServiceConnection NetSerConn = new ServiceConnection() {
         public void onServiceConnected(ComponentName componentName, IBinder iBinder) {
-            NetService unused = EcgTypeSelectActivity.this.f2187e = ((NetService.NetSerBinder) iBinder).getNetSerBinder();
+            NetService unused = EcgTypeSelectActivity.this.mNetSerBinder = ((NetService.NetSerBinder) iBinder).getNetSerBinder();
         }
 
         public void onServiceDisconnected(ComponentName componentName) {
-            NetService unused = EcgTypeSelectActivity.this.f2187e = null;
+            NetService unused = EcgTypeSelectActivity.this.mNetSerBinder = null;
         }
     };
     /* access modifiers changed from: private */
 
     /* renamed from: k */
-    public Handler f2193k = new Handler() {
+    public Handler mHandler = new Handler() {
         public void handleMessage(Message message) {
             if (message.what == 0) {
-                EcgTypeSelectActivity.this.m2278e();
+                EcgTypeSelectActivity.this.showNeed_loginDialog();
             }
             if (message.what == 1) {
-                EcgTypeSelectActivity.this.mo2160a();
+                EcgTypeSelectActivity.this.showcheck_networkDialog();
             }
             super.handleMessage(message);
         }
     };
 
     /* renamed from: l */
-    private ProgressDialog f2194l;
+    private ProgressDialog messageProgressDialog;
 
     /* access modifiers changed from: private */
     /* renamed from: a */
-    public void m2271a(String str) {
-        if (this.f2194l == null) {
-            this.f2194l = new ProgressDialog(this);
-            this.f2194l.setCanceledOnTouchOutside(false);
+    public void showLoginDialog(String str) {
+        if (this.messageProgressDialog == null) {
+            this.messageProgressDialog = new ProgressDialog(this);
+            this.messageProgressDialog.setCanceledOnTouchOutside(false);
         }
-        this.f2194l.setMessage(str);
-        if (!this.f2194l.isShowing()) {
-            this.f2194l.show();
+        this.messageProgressDialog.setMessage(str);
+        if (!this.messageProgressDialog.isShowing()) {
+            this.messageProgressDialog.show();
         }
     }
 
     /* renamed from: b */
-    private void m2273b() {
+    private void initView() {
         View inflate = LayoutInflater.from(this).inflate(R.layout.pupop_login, (ViewGroup) null);
-        this.f2188f = new PopupWindow(inflate, -2, -2, true);
-        this.f2188f.setOutsideTouchable(false);
-        this.f2188f.setFocusable(true);
-        this.f2189g = (EditText) inflate.findViewById(R.id.login_user_name);
-        this.f2189g.setText(((ECGApplication) getApplication()).mUserInfo.getName());
-        this.f2190h = (EditText) inflate.findViewById(R.id.login_user_pwd);
-        this.f2190h.requestFocus();
+        this.pupop_login = new PopupWindow(inflate, -2, -2, true);
+        this.pupop_login.setOutsideTouchable(false);
+        this.pupop_login.setFocusable(true);
+        this.edt_login_user_name = (EditText) inflate.findViewById(R.id.login_user_name);
+        this.edt_login_user_name.setText(((ECGApplication) getApplication()).mUserInfo.getName());
+        this.edt_login_user_pwd = (EditText) inflate.findViewById(R.id.login_user_pwd);
+        this.edt_login_user_pwd.requestFocus();
         ((Button) inflate.findViewById(R.id.login_btn_login)).setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
-                EcgTypeSelectActivity.this.f2187e.mo2829c(EcgTypeSelectActivity.this.f2189g.getText().toString(), EcgTypeSelectActivity.this.f2190h.getText().toString());
-                EcgTypeSelectActivity.this.m2271a(EcgTypeSelectActivity.this.getString(R.string.p_login_login));
+                EcgTypeSelectActivity.this.mNetSerBinder.getEcgFilesAsyn(EcgTypeSelectActivity.this.edt_login_user_name.getText().toString(), EcgTypeSelectActivity.this.edt_login_user_pwd.getText().toString());
+                EcgTypeSelectActivity.this.showLoginDialog(EcgTypeSelectActivity.this.getString(R.string.p_login_login));
             }
         });
         ((Button) inflate.findViewById(R.id.login_btn_cancel)).setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
-                EcgTypeSelectActivity.this.f2188f.dismiss();
+                EcgTypeSelectActivity.this.pupop_login.dismiss();
             }
         });
     }
 
     /* renamed from: c */
-    private void m2275c() {
-        m2271a(getString(R.string.p_check_login));
+    private void p_check_loginDialog() {
+        showLoginDialog(getString(R.string.p_check_login));
         new Thread() {
             public void run() {
                 String a = MyHttpHelper.checkLogin();
@@ -147,15 +147,15 @@ public class EcgTypeSelectActivity extends BaseActivity implements View.OnClickL
                     try {
                         JSONArray jSONArray = new JSONArray(a);
                         if (jSONArray.getInt(0) == 1 && jSONArray.getInt(2) == 998) {
-                            EcgTypeSelectActivity.this.f2193k.sendEmptyMessage(0);
+                            EcgTypeSelectActivity.this.mHandler.sendEmptyMessage(0);
                         }
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
                 } else {
-                    EcgTypeSelectActivity.this.f2193k.sendEmptyMessage(1);
+                    EcgTypeSelectActivity.this.mHandler.sendEmptyMessage(1);
                 }
-                EcgTypeSelectActivity.this.m2277d();
+                EcgTypeSelectActivity.this.dismisscheck_loginDialog();
                 super.run();
             }
         }.start();
@@ -163,22 +163,22 @@ public class EcgTypeSelectActivity extends BaseActivity implements View.OnClickL
 
     /* access modifiers changed from: private */
     /* renamed from: d */
-    public void m2277d() {
-        if (this.f2194l != null && this.f2194l.isShowing()) {
-            this.f2194l.dismiss();
+    public void dismisscheck_loginDialog() {
+        if (this.messageProgressDialog != null && this.messageProgressDialog.isShowing()) {
+            this.messageProgressDialog.dismiss();
         }
     }
 
     /* access modifiers changed from: private */
     /* renamed from: e */
-    public void m2278e() {
+    public void showNeed_loginDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle(getString(R.string.Tip));
         builder.setMessage(getString(R.string.p_realtime_ecg_need_login));
         builder.setPositiveButton(getString(R.string.yes), new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialogInterface, int i) {
                 dialogInterface.dismiss();
-                EcgTypeSelectActivity.this.f2188f.showAtLocation(EcgTypeSelectActivity.this.findViewById(R.id.btn_ect_type_hand), 17, 0, 0);
+                EcgTypeSelectActivity.this.pupop_login.showAtLocation(EcgTypeSelectActivity.this.findViewById(R.id.btn_ect_type_hand), 17, 0, 0);
             }
         });
         builder.setNegativeButton(getString(R.string.cancle), new DialogInterface.OnClickListener() {
@@ -191,7 +191,7 @@ public class EcgTypeSelectActivity extends BaseActivity implements View.OnClickL
 
     /* access modifiers changed from: protected */
     /* renamed from: a */
-    public void mo2160a() {
+    public void showcheck_networkDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle(getString(R.string.Tip));
         builder.setMessage(getString(R.string.p_realtime_ecg_check_network));
@@ -229,27 +229,27 @@ public class EcgTypeSelectActivity extends BaseActivity implements View.OnClickL
     public void onCreate(Bundle bundle) {
         setContentView(R.layout.activity_ecg_type_select);
         getActionBar().setDisplayHomeAsUpEnabled(true);
-        this.f2185c = (ImageView) findViewById(R.id.btn_ect_type_hand);
-        this.f2186d = (ImageView) findViewById(R.id.btn_ect_type_heart);
-        this.f2186d.setOnClickListener(this);
-        this.f2185c.setOnClickListener(this);
-        this.f2184a = (ECGApplication) getApplication();
-        if (this.f2184a.appECGConf.mo2648d() == 1) {
-            bindService(new Intent(this, NetService.class), this.f2192j, Context.BIND_AUTO_CREATE);
+        this.btn_ect_type_hand = (ImageView) findViewById(R.id.btn_ect_type_hand);
+        this.btn_ect_type_heart = (ImageView) findViewById(R.id.btn_ect_type_heart);
+        this.btn_ect_type_heart.setOnClickListener(this);
+        this.btn_ect_type_hand.setOnClickListener(this);
+        this.mECGApplication = (ECGApplication) getApplication();
+        if (this.mECGApplication.appECGConf.getECG_REALTIME_UPLOAD() == 1) {
+            bindService(new Intent(this, NetService.class), this.NetSerConn, Context.BIND_AUTO_CREATE);
             IntentFilter intentFilter = new IntentFilter();
             intentFilter.addAction("com.holptruly.ecg.services.NetService.LOGIN_SUCCESSFUL");
             intentFilter.addAction("com.holptruly.ecg.services.NetService.LOGIN_FAILE");
             LocalBroadcastManager.getInstance(getApplicationContext()).registerReceiver(this.f2191i, intentFilter);
-            m2273b();
-            m2275c();
+            initView();
+            p_check_loginDialog();
         }
         super.onCreate(bundle);
     }
 
     /* access modifiers changed from: protected */
     public void onDestroy() {
-        if (this.f2184a.appECGConf.mo2648d() == 1) {
-            unbindService(this.f2192j);
+        if (this.mECGApplication.appECGConf.getECG_REALTIME_UPLOAD() == 1) {
+            unbindService(this.NetSerConn);
             LocalBroadcastManager.getInstance(getApplicationContext()).unregisterReceiver(this.f2191i);
         }
         super.onDestroy();

@@ -32,7 +32,7 @@ import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
 /* renamed from: com.hopetruly.ecg.util.f */
-public class C0770f {
+public class ECGRecordUtils {
     /* renamed from: a */
     public static ECGEntity m2773a(String str) throws ParserConfigurationException, IOException, SAXException {
         String str2;
@@ -113,7 +113,7 @@ public class C0770f {
     }
 
     /* renamed from: a */
-    public static String m2775a(File file, String str) throws ParserConfigurationException, IOException, SAXException {
+    public static String annotatedECG(File file, String str) throws ParserConfigurationException, IOException, SAXException {
         return DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(new FileInputStream(file)).getElementsByTagName(str).item(0).getTextContent();
     }
 
@@ -258,7 +258,7 @@ public class C0770f {
     }
 
     /* renamed from: a */
-    public static void m2780a(File file, String str, String str2) throws ParserConfigurationException, IOException, SAXException, TransformerException {
+    public static void getDescriptionFile(File file, String str, String str2) throws ParserConfigurationException, IOException, SAXException, TransformerException {
         Document parse = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(new FileInputStream(file));
         parse.getElementsByTagName(str).item(0).setTextContent(str2);
         TransformerFactory.newInstance().newTransformer().transform(new DOMSource(parse), new StreamResult(new PrintWriter(file)));

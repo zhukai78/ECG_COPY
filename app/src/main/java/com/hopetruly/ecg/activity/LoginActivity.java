@@ -108,7 +108,7 @@ public class LoginActivity extends BaseActivity {
                             LoginActivity.this.put_in_login(LoginActivity.this.muserName, LoginActivity.this.muserPassword);
                             return;
                         } else {
-                            LoginActivity.this.m2411d();
+                            LoginActivity.this.startDeclareActivity();
                             return;
                         }
                     }
@@ -330,7 +330,7 @@ public class LoginActivity extends BaseActivity {
 
     /* access modifiers changed from: private */
     /* renamed from: d */
-    public void m2411d() {
+    public void startDeclareActivity() {
         startActivityForResult(new Intent(this, DeclareActivity.class), 1);
     }
 

@@ -23,39 +23,39 @@ import java.util.Map;
 public class FileExploreActivity extends BaseActivity implements AdapterView.OnItemClickListener {
 
     /* renamed from: a */
-    String f2211a = "FileExplore";
+    String TAG = "FileExplore";
 
     /* renamed from: c */
-    ListView f2212c;
+    ListView lv_file_explore;
 
     /* renamed from: d */
-    List<Map<String, Object>> f2213d;
+    List<Map<String, Object>> files;
 
     /* renamed from: e */
-    String f2214e;
+    String sdPath;
 
     /* renamed from: a */
-    private void m2285a() {
-        File parentFile = new File(this.f2214e).getParentFile();
+    private void isroot_dir() {
+        File parentFile = new File(this.sdPath).getParentFile();
         if (parentFile == null) {
             Toast.makeText(this, getString(R.string.p_is_root_dir), Toast.LENGTH_SHORT).show();
         } else {
-            this.f2214e = parentFile.getAbsolutePath();
+            this.sdPath = parentFile.getAbsolutePath();
         }
-        m2286b(this.f2214e);
+        openDIr(this.sdPath);
     }
 
     /* renamed from: b */
-    private void m2286b(String str) {
+    private void openDIr(String str) {
         setTitle("文件浏览器 > " + str);
-        this.f2213d = m2287c(str);
-        this.f2212c.setAdapter(new SimpleAdapter(this, this.f2213d, R.layout.flile_explore_lv_item, new String[]{"name", "path"}, new int[]{R.id.file_name, R.id.file_path}));
-        this.f2212c.setOnItemClickListener(this);
-        this.f2212c.setSelection(0);
+        this.files = getFiles(str);
+        this.lv_file_explore.setAdapter(new SimpleAdapter(this, this.files, R.layout.flile_explore_lv_item, new String[]{"name", "path"}, new int[]{R.id.file_name, R.id.file_path}));
+        this.lv_file_explore.setOnItemClickListener(this);
+        this.lv_file_explore.setSelection(0);
     }
 
     /* renamed from: c */
-    private List<Map<String, Object>> m2287c(String str) {
+    private List<Map<String, Object>> getFiles(String str) {
         String str2;
         String name;
         if (new File(str).canRead()) {
@@ -103,7 +103,7 @@ public class FileExploreActivity extends BaseActivity implements AdapterView.OnI
     }
 
     /* renamed from: a */
-    public void mo2178a(String str) {
+    public void pick_file_resume(String str) {
         Intent intent = new Intent();
         intent.setAction("com.hopetruly.ecg.FileExplore.PICK_FILE_RESUME");
         intent.putExtra("file_path", str);
@@ -116,31 +116,31 @@ public class FileExploreActivity extends BaseActivity implements AdapterView.OnI
         getActionBar().setDisplayHomeAsUpEnabled(true);
         super.onCreate(bundle);
         setContentView(R.layout.activity_file_explore);
-        this.f2212c = (ListView) findViewById(R.id.file_explore_lv);
+        this.lv_file_explore = (ListView) findViewById(R.id.file_explore_lv);
         if (Environment.getExternalStorageState().equals("mounted")) {
-            this.f2214e = new StringBuilder(Environment.getExternalStorageDirectory().getAbsolutePath()).toString();
-            m2286b(this.f2214e);
+            this.sdPath = new StringBuilder(Environment.getExternalStorageDirectory().getAbsolutePath()).toString();
+            openDIr(this.sdPath);
         }
     }
 
     public void onItemClick(AdapterView<?> adapterView, View view, int i, long j) {
-        String str = this.f2211a;
+        String str = this.TAG;
         Log.i(str, "item clicked! [" + i + "]");
         if (i == 0) {
-            this.f2214e = "/";
+            this.sdPath = "/";
         } else if (i == 1) {
-            m2285a();
+            isroot_dir();
             return;
         } else {
-            this.f2214e = (String) this.f2213d.get(i).get("path");
-            if (!new File(this.f2214e).isDirectory()) {
-                Toast.makeText(this, this.f2214e, Toast.LENGTH_SHORT).show();
-                mo2178a(this.f2214e);
+            this.sdPath = (String) this.files.get(i).get("path");
+            if (!new File(this.sdPath).isDirectory()) {
+                Toast.makeText(this, this.sdPath, Toast.LENGTH_SHORT).show();
+                pick_file_resume(this.sdPath);
                 finish();
                 return;
             }
         }
-        m2286b(this.f2214e);
+        openDIr(this.sdPath);
     }
 
     public boolean onOptionsItemSelected(MenuItem menuItem) {

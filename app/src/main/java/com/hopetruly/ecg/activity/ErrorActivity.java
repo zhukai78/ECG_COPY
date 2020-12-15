@@ -16,55 +16,55 @@ import com.hopetruly.part.net.MyHttpHelper;
 public class ErrorActivity extends Activity {
 
     /* renamed from: a */
-    String f2204a = "ErrorActivity";
+    String TAG = "ErrorActivity";
 
     /* renamed from: b */
-    TextView f2205b;
+    TextView tv_err_info;
 
     /* renamed from: c */
-    EditText f2206c;
+    EditText edt_err_desc;
 
     /* renamed from: d */
-    Button f2207d;
+    Button btn_err_ok;
 
     /* renamed from: e */
-    ErrorInfo f2208e;
+    ErrorInfo errorInfo;
 
     /* renamed from: b */
-    private void m2283b() {
+    private void initView() {
         TextView textView;
         String string;
-        this.f2205b = (TextView) findViewById(R.id.err_info);
-        if (this.f2208e != null) {
-            textView = this.f2205b;
-            string = this.f2208e.getErrorInfo();
+        this.tv_err_info = (TextView) findViewById(R.id.err_info);
+        if (this.errorInfo != null) {
+            textView = this.tv_err_info;
+            string = this.errorInfo.getErrorInfo();
         } else {
-            textView = this.f2205b;
+            textView = this.tv_err_info;
             string = getString(R.string.unknow_error);
         }
         textView.setText(string);
-        this.f2206c = (EditText) findViewById(R.id.err_desc);
-        this.f2207d = (Button) findViewById(R.id.err_ok_btn);
-        this.f2207d.setOnClickListener(new View.OnClickListener() {
+        this.edt_err_desc = (EditText) findViewById(R.id.err_desc);
+        this.btn_err_ok = (Button) findViewById(R.id.err_ok_btn);
+        this.btn_err_ok.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
-                ErrorActivity.this.mo2173a();
+                ErrorActivity.this.sendErrorInfo();
             }
         });
     }
 
     /* access modifiers changed from: protected */
     /* renamed from: a */
-    public void mo2173a() {
-        String obj = this.f2206c.getText().toString();
-        if (this.f2208e == null) {
-            this.f2208e = new ErrorInfo();
+    public void sendErrorInfo() {
+        String obj = this.edt_err_desc.getText().toString();
+        if (this.errorInfo == null) {
+            this.errorInfo = new ErrorInfo();
         }
         if (!TextUtils.isEmpty(obj)) {
-            this.f2208e.setOpDesc(obj);
+            this.errorInfo.setOpDesc(obj);
         }
         new Thread(new Runnable() {
             public void run() {
-                MyHttpHelper.get_error_report(ErrorActivity.this.f2208e);
+                MyHttpHelper.get_error_report(ErrorActivity.this.errorInfo);
             }
         }).start();
         finish();
@@ -73,15 +73,15 @@ public class ErrorActivity extends Activity {
     /* access modifiers changed from: protected */
     public void onCreate(Bundle bundle) {
         super.onCreate(bundle);
-        LogUtils.logI(this.f2204a, "onCreate~~~");
-        this.f2208e = (ErrorInfo) getIntent().getSerializableExtra("error");
+        LogUtils.logI(this.TAG, "onCreate~~~");
+        this.errorInfo = (ErrorInfo) getIntent().getSerializableExtra("error");
         setContentView(R.layout.activity_error);
-        m2283b();
+        initView();
     }
 
     /* access modifiers changed from: protected */
     public void onDestroy() {
-        LogUtils.logI(this.f2204a, "onDestroy~~~");
+        LogUtils.logI(this.TAG, "onDestroy~~~");
         super.onDestroy();
     }
 }

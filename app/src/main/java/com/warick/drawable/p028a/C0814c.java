@@ -6,7 +6,7 @@ import android.graphics.Paint;
 import android.graphics.Path;
 import android.util.Log;
 
-import com.hopetruly.ecg.util.C0772h;
+import com.hopetruly.ecg.util.EcgParserUtils;
 import com.warick.drawable.WarickSurfaceView;
 import com.warick.jni.filter.Fir;
 
@@ -69,7 +69,7 @@ public class C0814c implements WarickSurfaceView.C0809a {
     private int[] f3063r;
 
     /* renamed from: s */
-    private C0772h f3064s;
+    private EcgParserUtils f3064s;
 
     /* renamed from: t */
     private boolean f3065t = true;
@@ -246,7 +246,7 @@ public class C0814c implements WarickSurfaceView.C0809a {
     }
 
     /* renamed from: a */
-    public void mo2910a(C0772h hVar) {
+    public void mo2910a(EcgParserUtils hVar) {
         this.f3064s = hVar;
     }
 

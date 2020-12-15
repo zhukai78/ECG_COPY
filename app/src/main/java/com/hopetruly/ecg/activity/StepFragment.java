@@ -85,7 +85,7 @@ public class StepFragment extends Fragment {
                 }
             } else if (action.equals("com.hopetruly.ecg.services.MainService.REFRESH_STEP")) {
                 if (StepFragment.this.f2653g != null || StepFragment.this.f2653g.appMainService != null) {
-                    StepFragment.this.f2654h = StepFragment.this.f2653g.appMainService.mo2745p();
+                    StepFragment.this.f2654h = StepFragment.this.f2653g.appMainService.getmainPedometerRecord();
                     if (StepFragment.this.f2654h != null) {
                         StepFragment.this.f2648b.setText(String.valueOf(StepFragment.this.f2654h.getCurStep()));
                         StepFragment.this.f2652f.setText(String.valueOf(StepFragment.this.f2654h.getCount() + StepFragment.this.f2654h.getCurStep()));
@@ -97,7 +97,7 @@ public class StepFragment extends Fragment {
                 }
             } else if (action.equals("com.hopetruly.ecg.services.MainService.REFRESH_CAL")) {
                 if (StepFragment.this.f2653g != null || StepFragment.this.f2653g.appMainService != null) {
-                    StepFragment.this.f2654h = StepFragment.this.f2653g.appMainService.mo2745p();
+                    StepFragment.this.f2654h = StepFragment.this.f2653g.appMainService.getmainPedometerRecord();
                     if (StepFragment.this.f2654h != null) {
                         StepFragment.this.f2649c.setText(String.valueOf((int) StepFragment.this.f2654h.getCal()));
                     }
@@ -140,7 +140,7 @@ public class StepFragment extends Fragment {
                 b = this.f2654h.getTarget();
             }
             this.f2660n = this.f2653g.appMainService.isMBleConn();
-            this.f2658l = this.f2653g.appMainService.mo2741o();
+            this.f2658l = this.f2653g.appMainService.getisGattStop();
             this.f2657k = (TextView) getView().findViewById(R.id.step_start_l);
             this.f2655i = (RelativeLayout) getView().findViewById(R.id.step_start);
             if (!this.f2660n) {
@@ -187,7 +187,7 @@ public class StepFragment extends Fragment {
             b = this.f2653g.appPedometerConf.mo2672b();
         }
         this.f2660n = this.f2653g.appMainService.isMBleConn();
-        this.f2658l = this.f2653g.appMainService.mo2741o();
+        this.f2658l = this.f2653g.appMainService.getisGattStop();
         this.f2657k = (TextView) getView().findViewById(R.id.step_start_l);
         this.f2655i = (RelativeLayout) getView().findViewById(R.id.step_start);
         if (!this.f2660n) {
@@ -219,7 +219,7 @@ public class StepFragment extends Fragment {
         });
         f2650d.setText(String.valueOf(b));
         this.f2660n = this.f2653g.appMainService.isMBleConn();
-        this.f2658l = this.f2653g.appMainService.mo2741o();
+        this.f2658l = this.f2653g.appMainService.getisGattStop();
         this.f2657k = (TextView) getView().findViewById(R.id.step_start_l);
         this.f2655i = (RelativeLayout) getView().findViewById(R.id.step_start);
         if (!this.f2660n) {

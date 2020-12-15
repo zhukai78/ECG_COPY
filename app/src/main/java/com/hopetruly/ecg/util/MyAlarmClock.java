@@ -68,7 +68,7 @@ public class MyAlarmClock {
     }
 
     /* renamed from: b */
-    public void mo2789b(boolean z) {
+    public void setIsClock(boolean z) {
         this.f2918e = z;
         mo2787a(z);
         this.f2920g = 0;

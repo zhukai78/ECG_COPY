@@ -3,7 +3,7 @@ package com.hopetruly.ecg.util;
 import java.util.Arrays;
 
 /* renamed from: com.hopetruly.ecg.util.h */
-public class C0772h {
+public class EcgParserUtils {
 
     /* renamed from: a */
     private int f2911a;
