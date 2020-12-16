@@ -9,13 +9,13 @@ import com.warick.drawable.WarickSurfaceView;
 
 
 /* renamed from: com.warick.drawable.a.b */
-public class C0813b implements WarickSurfaceView.C0809a {
+public class GrideDrawListener implements WarickSurfaceView.DrawListener {
 
     /* renamed from: a */
-    private Bitmap f3045a = null;
+    private Bitmap mdrawBitMap = null;
 
     /* renamed from: a */
-    private void m2948a(Canvas canvas) {
+    private void drawGride(Canvas canvas) {
         float f;
         float f2;
         float f3;
@@ -25,8 +25,8 @@ public class C0813b implements WarickSurfaceView.C0809a {
         Paint paint = new Paint();
         Paint paint2 = new Paint();
         paint2.setColor(Color.rgb(85, 235, 243));
-        this.f3045a = Bitmap.createBitmap(width, height, Bitmap.Config.RGB_565);
-        Canvas canvas2 = new Canvas(this.f3045a);
+        this.mdrawBitMap = Bitmap.createBitmap(width, height, Bitmap.Config.RGB_565);
+        Canvas canvas2 = new Canvas(this.mdrawBitMap);
         canvas2.drawColor(-1);
         int i2 = 0;
         float f4 = (float) i;
@@ -70,24 +70,24 @@ public class C0813b implements WarickSurfaceView.C0809a {
             f2 = f2;
         }
         float f9 = f3;
-        canvas.drawBitmap(this.f3045a, f9, f9, paint);
+        canvas.drawBitmap(this.mdrawBitMap, f9, f9, paint);
     }
 
     /* renamed from: a */
-    public void mo2905a() {
-        if (this.f3045a != null && !this.f3045a.isRecycled()) {
-            this.f3045a.recycle();
-            this.f3045a = null;
+    public void recycleDrawBitMap() {
+        if (this.mdrawBitMap != null && !this.mdrawBitMap.isRecycled()) {
+            this.mdrawBitMap.recycle();
+            this.mdrawBitMap = null;
         }
     }
 
     /* renamed from: a */
-    public void mo2900a(Canvas canvas, Paint paint) {
+    public void onMyDraw(Canvas canvas, Paint paint) {
         if (canvas != null) {
-            if (this.f3045a == null) {
-                m2948a(canvas);
+            if (this.mdrawBitMap == null) {
+                drawGride(canvas);
             }
-            canvas.drawBitmap(this.f3045a, 0.0f, 0.0f, paint);
+            canvas.drawBitmap(this.mdrawBitMap, 0.0f, 0.0f, paint);
         }
     }
 }

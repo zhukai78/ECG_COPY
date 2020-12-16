@@ -45,7 +45,7 @@ public class WarickSurfaceView extends SurfaceView {
     /* access modifiers changed from: private */
 
     /* renamed from: g */
-    public List<C0809a> f3027g;
+    public List<DrawListener> mDrawListenerlist;
     /* access modifiers changed from: private */
 
     /* renamed from: h */
@@ -66,9 +66,9 @@ public class WarickSurfaceView extends SurfaceView {
     private SurfaceHolder.Callback f3032l;
 
     /* renamed from: com.warick.drawable.WarickSurfaceView$a */
-    public interface C0809a {
+    public interface DrawListener {
         /* renamed from: a */
-        void mo2900a(Canvas canvas, Paint paint);
+        void onMyDraw(Canvas canvas, Paint paint);
     }
 
     /* renamed from: com.warick.drawable.WarickSurfaceView$b */
@@ -96,8 +96,8 @@ public class WarickSurfaceView extends SurfaceView {
                                     WarickSurfaceView.this.f3026f.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.CLEAR));
                                     WarickSurfaceView.this.f3024d.drawPaint(WarickSurfaceView.this.f3026f);
                                     WarickSurfaceView.this.f3026f.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC));
-                                    for (int i = 0; i < f3027g.size(); i++) {
-                                        ((C0809a) WarickSurfaceView.this.f3027g.get(i)).mo2900a(f3024d, f3026f);
+                                    for (int i = 0; i < mDrawListenerlist.size(); i++) {
+                                        ((DrawListener) WarickSurfaceView.this.mDrawListenerlist.get(i)).onMyDraw(f3024d, f3026f);
                                     }
                                     if (WarickSurfaceView.this.f3024d != null) {
                                         d = WarickSurfaceView.this.f3023c;
@@ -181,7 +181,7 @@ public class WarickSurfaceView extends SurfaceView {
         this.f3022b = context;
         this.f3023c = getHolder();
         this.f3023c.addCallback(this.f3032l);
-        this.f3027g = new ArrayList();
+        this.mDrawListenerlist = new ArrayList();
         m2934b();
     }
 
@@ -206,7 +206,7 @@ public class WarickSurfaceView extends SurfaceView {
     }
 
     /* renamed from: a */
-    public void mo2892a(int i) {
+    public void setSpeed(int i) {
         if (this.f3029i == null) {
             this.f3029i = new Timer();
             this.f3029i.schedule(new TimerTask() {
@@ -218,8 +218,8 @@ public class WarickSurfaceView extends SurfaceView {
     }
 
     /* renamed from: a */
-    public void mo2893a(C0809a aVar) {
-        this.f3027g.add(aVar);
+    public void addDrawListener(DrawListener aVar) {
+        this.mDrawListenerlist.add(aVar);
     }
 
     public int getCanvasHeight() {

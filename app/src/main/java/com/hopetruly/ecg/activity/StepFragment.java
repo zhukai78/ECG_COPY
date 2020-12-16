@@ -182,9 +182,9 @@ public class StepFragment extends Fragment {
         this.f2648b.setText("0");
         this.f2651e.setText("0");
         this.f2649c.setText("0");
-        if (this.f2653g.appPedometerConf.mo2672b() > 0) {
+        if (this.f2653g.appPedometerConf.getSTEP_TARGET() > 0) {
             textView2 = this.f2650d;
-            b = this.f2653g.appPedometerConf.mo2672b();
+            b = this.f2653g.appPedometerConf.getSTEP_TARGET();
         }
         this.f2660n = this.f2653g.appMainService.isMBleConn();
         this.f2658l = this.f2653g.appMainService.getisGattStop();

@@ -50,7 +50,7 @@ public class ScanActivity extends BaseActivity implements AdapterView.OnItemClic
     ArrayList<HashMap<String, String>> f2541c = new ArrayList<>();
 
     /* renamed from: d */
-    ProgressBar f2542d;
+    ProgressBar pb_search_device;
 
     /* renamed from: e */
     boolean f2543e = false;
@@ -59,19 +59,19 @@ public class ScanActivity extends BaseActivity implements AdapterView.OnItemClic
     boolean f2544f = false;
 
     /* renamed from: g */
-    boolean f2545g = false;
+    boolean isScan = false;
 
     /* renamed from: h */
     boolean f2546h = false;
 
     /* renamed from: i */
-    MainService f2547i;
+    MainService miBinder;
 
     /* renamed from: j */
-    ECGApplication f2548j;
+    ECGApplication mApplication;
 
     /* renamed from: k */
-    Machine f2549k;
+    Machine mMachine;
 
     /* renamed from: l */
     int f2550l = 0;
@@ -97,7 +97,7 @@ public class ScanActivity extends BaseActivity implements AdapterView.OnItemClic
     public boolean f2556r = false;
 
     /* renamed from: s */
-    private SharedPreferences.Editor f2557s;
+    private SharedPreferences.Editor mSpSw_conf;
 
     /* renamed from: t */
     private int f2558t = 10000;
@@ -110,28 +110,28 @@ public class ScanActivity extends BaseActivity implements AdapterView.OnItemClic
     public AlertDialog f2560v;
 
     /* renamed from: w */
-    private ServiceConnection f2561w = new ServiceConnection() {
+    private ServiceConnection mScanServiceConnection = new ServiceConnection() {
         public void onServiceConnected(ComponentName componentName, IBinder iBinder) {
-            ScanActivity.this.f2547i = ((MainService.MainBinder) iBinder).getMainBinder();
+            ScanActivity.this.miBinder = ((MainService.MainBinder) iBinder).getMainBinder();
             ScanActivity.this.f2546h = true;
             boolean unused = ScanActivity.this.m2511a();
         }
 
         public void onServiceDisconnected(ComponentName componentName) {
-            ScanActivity.this.f2547i = null;
+            ScanActivity.this.miBinder = null;
             ScanActivity.this.f2546h = false;
         }
     };
 
     /* renamed from: x */
-    private BroadcastReceiver f2562x = new BroadcastReceiver() {
+    private BroadcastReceiver mScanBroadcastReceiver = new BroadcastReceiver() {
         public void onReceive(Context context, Intent intent) {
             ProgressDialog progressDialog;
             Resources resources;
             int i;
             String action = intent.getAction();
             if (action.equals("com.hopetruly.ec.services.ACTION_CATCH_DEVICE")) {
-                ScanActivity.this.f2542d.setVisibility(View.GONE);
+                ScanActivity.this.pb_search_device.setVisibility(View.GONE);
                 BluetoothDevice bluetoothDevice = (BluetoothDevice) intent.getParcelableExtra("device");
                 String str = ScanActivity.this.f2540a;
                 Log.d(str, "Found device [" + bluetoothDevice.getName() + "]");
@@ -147,13 +147,13 @@ public class ScanActivity extends BaseActivity implements AdapterView.OnItemClic
                     HashMap b = ScanActivity.this.m2518b(bluetoothDevice.getAddress());
                     b.put("rssi", intent.getIntExtra("deviceRSSI", 0) + "db");
                 }
-                ScanActivity.this.f2563y.notifyDataSetChanged();
+                ScanActivity.this.mScanBaseAdapter.notifyDataSetChanged();
                 return;
             }
             if (action.equals("com.hopetruly.ec.services.ACTION_BLE_STOP_SCAN")) {
-                ScanActivity.this.f2545g = false;
+                ScanActivity.this.isScan = false;
             } else if (action.equals("com.hopetruly.ec.services.ACTION_BLE_START_SCAN")) {
-                ScanActivity.this.f2545g = true;
+                ScanActivity.this.isScan = true;
             } else {
                 if (action.equals("com.hopetruly.ec.services.ACTION_GATT_CONNECTED")) {
                     if (ScanActivity.this.f2554p != null) {
@@ -200,9 +200,9 @@ public class ScanActivity extends BaseActivity implements AdapterView.OnItemClic
                     ScanActivity.this.f2551m = false;
                     ScanActivity.this.m2525e();
                     f2555q = false;
-                    Log.d("ScanActivity", "onReceive: f2548j.appMachine.getFwRev(): " + f2548j.appMachine.getFwRev());
-                    Log.d("ScanActivity", "onReceive: f2548j.mSwConf.mo2693g(): " + f2548j.mSwConf.mo2693g());
-                    if (f2548j.appMachine.getFwRev().equalsIgnoreCase(f2548j.mSwConf.mo2693g())) {
+                    Log.d("ScanActivity", "onReceive: mApplication.appMachine.getFwRev(): " + mApplication.appMachine.getFwRev());
+                    Log.d("ScanActivity", "onReceive: mApplication.mSwConf.mo2693g(): " + mApplication.mSwConf.mo2693g());
+                    if (mApplication.appMachine.getFwRev().equalsIgnoreCase(mApplication.mSwConf.mo2693g())) {
                         ScanActivity.this.finish();
                         return;
                     }
@@ -218,8 +218,8 @@ public class ScanActivity extends BaseActivity implements AdapterView.OnItemClic
                         return;
                     } else if (intExtra == 10) {
                         ScanActivity.this.f2543e = false;
-                        if (ScanActivity.this.f2549k != null) {
-                            ScanActivity.this.f2549k = null;
+                        if (ScanActivity.this.mMachine != null) {
+                            ScanActivity.this.mMachine = null;
                             Toast.makeText(ScanActivity.this.getApplicationContext(), ScanActivity.this.getString(R.string.Connecting_bluetooth_outtime), Toast.LENGTH_LONG).show();
                             return;
                         }
@@ -239,7 +239,7 @@ public class ScanActivity extends BaseActivity implements AdapterView.OnItemClic
     /* access modifiers changed from: private */
 
     /* renamed from: y */
-    public BaseAdapter f2563y = new BaseAdapter() {
+    public BaseAdapter mScanBaseAdapter = new BaseAdapter() {
         public int getCount() {
             return ScanActivity.this.f2541c.size();
         }
@@ -270,7 +270,7 @@ public class ScanActivity extends BaseActivity implements AdapterView.OnItemClic
             if (ScanActivity.this.f2552n != null) {
                 ScanActivity.this.f2552n.cancel();
             }
-            ScanActivity.this.f2547i.disconnectMainBLE();
+            ScanActivity.this.miBinder.disconnectMainBLE();
             boolean unused = ScanActivity.this.f2555q = false;
         }
     };
@@ -278,9 +278,9 @@ public class ScanActivity extends BaseActivity implements AdapterView.OnItemClic
     /* renamed from: a */
     private void m2510a(int i) {
         this.f2541c.clear();
-        this.f2563y.notifyDataSetChanged();
-        if (this.f2547i != null) {
-            this.f2547i.startScanBLE(i);
+        this.mScanBaseAdapter.notifyDataSetChanged();
+        if (this.miBinder != null) {
+            this.miBinder.startScanBLE(i);
         }
     }
 
@@ -334,8 +334,8 @@ public class ScanActivity extends BaseActivity implements AdapterView.OnItemClic
 
     /* renamed from: b */
     private void m2519b() {
-        if (this.f2547i != null) {
-            this.f2547i.stopScanBLE();
+        if (this.miBinder != null) {
+            this.miBinder.stopScanBLE();
         }
     }
 
@@ -480,11 +480,11 @@ public class ScanActivity extends BaseActivity implements AdapterView.OnItemClic
         super.onCreate(bundle);
         getActionBar().setDisplayHomeAsUpEnabled(true);
         setContentView(R.layout.activity_scan);
-        this.f2548j = (ECGApplication) getApplication();
-        this.f2557s = this.f2548j.spSw_conf.edit();
+        this.mApplication = (ECGApplication) getApplication();
+        this.mSpSw_conf = this.mApplication.spSw_conf.edit();
         ListView listView = (ListView) findViewById(R.id.scan_device_lv);
-        this.f2542d = (ProgressBar) findViewById(R.id.search_device_pb);
-        listView.setAdapter(this.f2563y);
+        this.pb_search_device = (ProgressBar) findViewById(R.id.search_device_pb);
+        listView.setAdapter(this.mScanBaseAdapter);
         listView.setOnItemClickListener(this);
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction("com.hopetruly.ec.services.ACTION_CATCH_DEVICE");
@@ -496,8 +496,8 @@ public class ScanActivity extends BaseActivity implements AdapterView.OnItemClic
         intentFilter.addAction("com.hopetruly.ecg.services.MainService.GET_DEVICE_INFO_BEGIN");
         intentFilter.addAction("com.hopetruly.ecg.services.MainService.GET_DEVICE_INFO_END");
         intentFilter.addAction("android.bluetooth.adapter.action.STATE_CHANGED");
-        LocalBroadcastManager.getInstance(getApplicationContext()).registerReceiver(this.f2562x, intentFilter);
-        bindService(new Intent(this, MainService.class), this.f2561w, Context.BIND_AUTO_CREATE);
+        LocalBroadcastManager.getInstance(getApplicationContext()).registerReceiver(this.mScanBroadcastReceiver, intentFilter);
+        bindService(new Intent(this, MainService.class), this.mScanServiceConnection, Context.BIND_AUTO_CREATE);
     }
 
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -505,7 +505,7 @@ public class ScanActivity extends BaseActivity implements AdapterView.OnItemClic
         Resources resources;
         int i;
         getMenuInflater().inflate(R.menu.scan, menu);
-        if (this.f2545g) {
+        if (this.isScan) {
             menu.findItem(R.id.action_pb).setVisible(true);
             findItem = menu.findItem(R.id.action_onoff);
             resources = getResources();
@@ -532,30 +532,30 @@ public class ScanActivity extends BaseActivity implements AdapterView.OnItemClic
             this.f2552n.purge();
             this.f2552n = null;
         }
-        LocalBroadcastManager.getInstance(getApplicationContext()).unregisterReceiver(this.f2562x);
+        LocalBroadcastManager.getInstance(getApplicationContext()).unregisterReceiver(this.mScanBroadcastReceiver);
         if (this.f2546h) {
-            unbindService(this.f2561w);
+            unbindService(this.mScanServiceConnection);
         }
         super.onDestroy();
     }
 
     public void onItemClick(AdapterView<?> adapterView, View view, int i, long j) {
-        if (this.f2547i != null && !this.f2555q) {
+        if (this.miBinder != null && !this.f2555q) {
             this.f2555q = true;
             HashMap hashMap = this.f2541c.get(i);
-            this.f2563y.notifyDataSetChanged();
-            this.f2549k = new Machine();
-            this.f2549k.setName((String) hashMap.get("name"));
-            this.f2549k.setMacAddress((String) hashMap.get("address"));
-            this.f2548j.appMachine = this.f2549k;
-            this.f2547i.connectBLE((String) hashMap.get("address"));
+            this.mScanBaseAdapter.notifyDataSetChanged();
+            this.mMachine = new Machine();
+            this.mMachine.setName((String) hashMap.get("name"));
+            this.mMachine.setMacAddress((String) hashMap.get("address"));
+            this.mApplication.appMachine = this.mMachine;
+            this.miBinder.connectBLE((String) hashMap.get("address"));
             this.f2550l = 0;
             m2524d();
             this.f2552n = new Timer();
             this.f2553o = new TimerTask() {
                 public void run() {
                     ScanActivity.this.f2551m = true;
-                    ScanActivity.this.f2548j.appMachine = null;
+                    ScanActivity.this.mApplication.appMachine = null;
                     ScanActivity.this.m2525e();
                     boolean unused = ScanActivity.this.f2555q = false;
                     ScanActivity.this.m2521c();
@@ -582,7 +582,7 @@ public class ScanActivity extends BaseActivity implements AdapterView.OnItemClic
             } else if (!this.f2543e) {
                 startActivityForResult(new Intent("android.bluetooth.adapter.action.REQUEST_ENABLE"), 10001);
                 return true;
-            } else if (this.f2545g) {
+            } else if (this.isScan) {
                 m2519b();
                 return true;
             } else {

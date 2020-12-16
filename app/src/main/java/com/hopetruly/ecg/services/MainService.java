@@ -106,9 +106,6 @@ public class MainService extends Service {
     /* renamed from: k */
     Timer refreshTIMER = null;
 
-    /* renamed from: l */
-    TimerTask f2860l = null;
-    /* access modifiers changed from: private */
 
     /* renamed from: m */
     public BleHelper mainbleHelper;
@@ -118,7 +115,7 @@ public class MainService extends Service {
     public boolean isConn = false;
 
     /* renamed from: o */
-    private String f2863o;
+    private String mMacAdrr;
     /* access modifiers changed from: private */
 
     /* renamed from: p */
@@ -133,7 +130,7 @@ public class MainService extends Service {
     /* access modifiers changed from: private */
 
     /* renamed from: s */
-    public long f2867s = 5;
+    public long INT_5 = 5;
     /* access modifiers changed from: private */
 
     /* renamed from: t */
@@ -141,7 +138,7 @@ public class MainService extends Service {
     /* access modifiers changed from: private */
 
     /* renamed from: u */
-    public EcgParserUtils f2869u;
+    public EcgParserUtils mEcgParserUtils;
 
     /* renamed from: v */
     private final IBinder mMainBinder = new MainBinder();
@@ -309,9 +306,9 @@ public class MainService extends Service {
                                     return;
                                 }
                                 return;
-                            } else if (stringExtra2.equals(Sensor.ECG.getData().toString()) && MainService.this.f2874z) {
+                            } else if (stringExtra2.equals(Sensor.ECG.getData().toString()) && MainService.this.isStartEcg) {
                                 ConvertECG convertECG = Sensor.ECG.convertECG(intent.getByteArrayExtra("com.hopetruly.ec.services.EXTRA_DATA"));
-                                MainService.this.mmainFileService.mo2703a(convertECG.ecgArr);
+                                MainService.this.mmainFileService.savemRealEcgData(convertECG.ecgArr);
                                 if (MainService.this.mmainNetService.isNetRun()) {
                                     MainService.this.mmainNetService.mo2823a(convertECG.ecgArr, 75);
                                     return;
@@ -326,7 +323,7 @@ public class MainService extends Service {
                                         GPSSosHelper.sendMultipartTextMessageSmsGPS(MainService.this.mmainecggApp);
                                         jVar.toBatteryNotify("SOS", "Send SMS");
                                     }
-                                    if (MainService.this.mmainecggApp.appECGConf.getECG_ENABLE_MARK() == 1 && MainService.this.f2874z && (c = MainService.this.mmainFileService.mo2705c()) > 0 && MainService.this.f2869u.mo2779a(c, MainService.this.mmainecggApp.appECGConf.getECG_MARKING_PERIOD())) {
+                                    if (MainService.this.mmainecggApp.appECGConf.getECG_ENABLE_MARK() == 1 && MainService.this.isStartEcg && (c = MainService.this.mmainFileService.mo2705c()) > 0 && MainService.this.mEcgParserUtils.mo2779a(c, MainService.this.mmainecggApp.appECGConf.getECG_MARKING_PERIOD())) {
                                         Log.e(MainService.this.TAG, "Mark time..");
                                         a = LocalBroadcastManager.getInstance(MainService.this.getApplicationContext());
                                         intent2 = new Intent("com.hopetruly.ecg.services.MainService.MARK_TIME_START");
@@ -360,7 +357,7 @@ public class MainService extends Service {
                                 MainService.this.mSqlManager.insertEcgRecord(MainService.this.mSaveECGRecord);
                                 MainService.this.mSqlManager.closeDatabase();
                                 if (MainService.this.mmainecggApp.appECGConf.getECG_AUTO_UPLOAD() == 1) {
-                                    MainService.this.mmainNetService.mo2820a(MainService.this.mSaveECGRecord);
+                                    MainService.this.mmainNetService.uploadingRecord(MainService.this.mSaveECGRecord);
                                 }
                                 intent3 = new Intent("com.hopetruly.ecg.services.MainService.FILE_SAVE_SUCCESS");
                                 a2 = LocalBroadcastManager.getInstance(MainService.this.getApplicationContext());
@@ -370,8 +367,8 @@ public class MainService extends Service {
                             } else if (action.equals("com.hopetruly.part.StepCounter.STEP")) {
                                 if (MainService.this.mainPedometerRecord != null) {
                                     long longExtra = intent.getLongExtra("step_value", MainService.this.mainPedometerRecord.getCurStep());
-                                    if (longExtra > MainService.this.f2867s) {
-                                        MainService.this.mainPedometerRecord.setCurStep(longExtra - MainService.this.f2867s);
+                                    if (longExtra > MainService.this.INT_5) {
+                                        MainService.this.mainPedometerRecord.setCurStep(longExtra - MainService.this.INT_5);
                                         boolean unused5 = MainService.this.isBeginStep = true;
                                     }
                                 }
@@ -395,8 +392,8 @@ public class MainService extends Service {
                                     }
                                 }
                                 if (MainService.this.isGattStop) {
-                                    MainService.this.m2710x();
-                                    MainService.this.m2711y();
+                                    MainService.this.stopStep();
+                                    MainService.this.insertStepRecord();
                                     return;
                                 }
                                 return;
@@ -453,7 +450,7 @@ public class MainService extends Service {
     /* access modifiers changed from: private */
 
     /* renamed from: z */
-    public boolean f2874z = false;
+    public boolean isStartEcg = false;
 
     /* renamed from: com.hopetruly.ecg.services.MainService$a */
     public class MainBinder extends Binder {
@@ -502,21 +499,21 @@ public class MainService extends Service {
         return notificationCompat.getNotification();
     }
 
-    public void m2710x() {
-        this.mainmStepCounter.mo2462b();
-        this.mainmStepCounter.mo2460a();
+    public void stopStep() {
+        this.mainmStepCounter.clearStep_value();
+        this.mainmStepCounter.clearStep();
         this.isBeginStep = false;
     }
 
     /* access modifiers changed from: private */
     /* renamed from: y */
-    public void m2711y() {
+    public void insertStepRecord() {
         Calendar instance = Calendar.getInstance();
         getSqlPedometerRecord();
         if (this.mainPedometerRecord == null) {
             this.mainPedometerRecord = new PedometerRecord();
             this.mainPedometerRecord.setUserId(this.mmainecggApp.mUserInfo.getId());
-            this.mainPedometerRecord.setTarget(this.mmainecggApp.appPedometerConf.mo2672b());
+            this.mainPedometerRecord.setTarget(this.mmainecggApp.appPedometerConf.getSTEP_TARGET());
             this.mainPedometerRecord.setYear(instance.get(1));
             this.mainPedometerRecord.setMonth(instance.get(2) + 1);
             this.mainPedometerRecord.setDay(instance.get(5));
@@ -528,7 +525,7 @@ public class MainService extends Service {
     public void exitService() {
         LogUtils.logI(this.TAG, "ExitService~~");
         stopECG();
-        mo2737k();
+        closeACCELEROMETER();
         this.myAlarmClock.cancelAlarmManager();
         MyHttpClient.initMyHttpClient().closeHttpClient();
         stopSelf();
@@ -547,7 +544,7 @@ public class MainService extends Service {
     public void startMyECG(ECGRecord eCGRecord) {
         LogUtils.logI(this.TAG, "StartECG~~~~~");
         if (this.isConn) {
-            this.f2874z = true;
+            this.isStartEcg = true;
             this.saveTimeSec = 0;
             startTimer();
             this.mSaveECGRecord = eCGRecord;
@@ -579,13 +576,13 @@ public class MainService extends Service {
     public void saveEcgFile(ECGRecord eCGRecord, float[] fArr) {
         setmSaveECGRecord(eCGRecord);
         LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(new Intent("com.hopetruly.ecg.services.MainService.FILE_SAVE_START"));
-        this.mmainFileService.mo2701a(eCGRecord, fArr);
+        this.mmainFileService.startSaveEcgFileAsyncTask(eCGRecord, fArr);
     }
 
     /* renamed from: a */
     public void connectBLE(String str) {
         if (this.mainbleHelper != null) {
-            this.f2863o = str;
+            this.mMacAdrr = str;
             this.mainbleHelper.stopScan();
             this.mainbleHelper.connectbLE(str);
             return;
@@ -699,15 +696,15 @@ public class MainService extends Service {
     /* renamed from: h */
     public void stopECG() {
         LogUtils.logI(this.TAG, "StopECG~~~~~");
-        if (this.f2874z) {
-            this.f2874z = false;
+        if (this.isStartEcg) {
+            this.isStartEcg = false;
             if (this.isConn) {
                 writeCharacteristicBoolean(Sensor.ECG, false);
             } else {
                 LogUtils.logW(this.TAG, "StartECG>蓝牙未连接错误！");
             }
             stopTimer();
-            this.f2869u.mo2777a(this.mmainFileService.mo2705c());
+            this.mEcgParserUtils.mo2777a(this.mmainFileService.mo2705c());
             this.mmainFileService.mo2704b();
             this.mmainNetService.mo2830d();
             String str = this.TAG;
@@ -717,29 +714,29 @@ public class MainService extends Service {
             ECGRecord eCGRecord = this.mSaveECGRecord;
             eCGRecord.setPeriod(String.format("%02d", new Object[]{Integer.valueOf((int) (this.saveTimeSec / 3600))}) + ":" + String.format("%02d", new Object[]{Integer.valueOf((int) (this.saveTimeSec / 60))}) + ":" + String.format("%02d", new Object[]{Integer.valueOf(i)}));
             this.mSaveECGRecord.getEcgEntity().setEndTime(new SimpleDateFormat("yyyyMMddHHmmss", Locale.CHINA).format(new Date(System.currentTimeMillis())));
-            this.mSaveECGRecord.getEcgEntity().setMark_time(this.f2869u.mo2785c());
+            this.mSaveECGRecord.getEcgEntity().setMark_time(this.mEcgParserUtils.mo2785c());
             int[] iArr = null;
             if (this.mSaveECGRecord.getEcgEntity().getMark_time() != null) {
-                iArr = this.f2869u.mo2780a();
+                iArr = this.mEcgParserUtils.mo2780a();
             }
             this.mSaveECGRecord.getEcgEntity().setMark_period(iArr);
-            this.f2869u.mo2782b();
+            this.mEcgParserUtils.mo2782b();
         }
     }
 
     /* renamed from: i */
-    public void mo2735i() {
+    public void fileSaveStart() {
         LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(new Intent("com.hopetruly.ecg.services.MainService.FILE_SAVE_START"));
         this.mmainFileService.startSaveEcgFileAsyncTask(this.mSaveECGRecord);
     }
 
     /* renamed from: j */
-    public boolean mo2736j() {
-        return this.f2874z;
+    public boolean getIsStartEcg() {
+        return this.isStartEcg;
     }
 
     /* renamed from: k */
-    public boolean mo2737k() {
+    public boolean closeACCELEROMETER() {
         if (!this.isConn) {
             return false;
         }
@@ -752,7 +749,7 @@ public class MainService extends Service {
         if (!initACCELEROMETER()) {
             return false;
         }
-        m2711y();
+        insertStepRecord();
         this.mainPedometerRecord.setCurStep(0);
         this.isGattStop = true;
         return true;
@@ -761,7 +758,7 @@ public class MainService extends Service {
     /* renamed from: m */
     public boolean mo2739m() {
         this.mmainecggApp.appPedometerConf.setSTEP_ENABLE_STEP(0);
-        if (!mo2737k()) {
+        if (!closeACCELEROMETER()) {
             return false;
         }
         this.isGattStop = false;
@@ -774,7 +771,7 @@ public class MainService extends Service {
         } else {
             this.mSqlManager.writeStepRec(this.mainPedometerRecord);
         }
-        m2710x();
+        stopStep();
         return true;
     }
 
@@ -794,7 +791,7 @@ public class MainService extends Service {
         } else {
             this.mSqlManager.writeStepRec(this.mainPedometerRecord);
         }
-        m2710x();
+        stopStep();
         return true;
     }
 
@@ -825,7 +822,7 @@ public class MainService extends Service {
         if (GpsManagerHelper.mGpsManagerHelper() != null) {
             GpsManagerHelper.mGpsManagerHelper().setOnGpsListener(this.monGpsListener);
         }
-        this.f2869u = new EcgParserUtils();
+        this.mEcgParserUtils = new EcgParserUtils();
         this.mainmStepCounter = new StepCounter(this, 0, 0);
         this.mFallDownAlgorithm = new FallDownAlgorithm(this);
         this.myAlarmClock = MyAlarmClock.getInstance((Context) this);

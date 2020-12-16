@@ -265,7 +265,7 @@ public class FileService extends Service {
     }
 
     /* renamed from: a */
-    public void mo2701a(ECGRecord eCGRecord, float[] fArr) {
+    public void startSaveEcgFileAsyncTask(ECGRecord eCGRecord, float[] fArr) {
         if (this.mSaveEcgFileAsyncTask == null || this.mSaveEcgFileAsyncTask.getStatus() != AsyncTask.Status.RUNNING) {
             this.mSaveEcgFileAsyncTask = new SaveEcgFileAsyncTask();
             this.mSaveEcgFileAsyncTask.execute(new Object[]{eCGRecord, fArr});
@@ -281,7 +281,7 @@ public class FileService extends Service {
     }
 
     /* renamed from: a */
-    public void mo2703a(int[] iArr) {
+    public void savemRealEcgData(int[] iArr) {
         this.mFileListener.savemEcgData(iArr);
     }
 
@@ -310,6 +310,6 @@ public class FileService extends Service {
         stringBuffer.append("cache");
         stringBuffer.append(File.separator);
         stringBuffer.append("cache.txt");
-        this.mFileListener.mo2103a(stringBuffer.toString());
+        this.mFileListener.shareCachePath(stringBuffer.toString());
     }
 }

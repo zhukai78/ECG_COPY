@@ -12,10 +12,10 @@ import java.sql.Date;
 public class MaybeAlertHelper {
 
     /* renamed from: c */
-    private static int f2732c = 10;
+    private static int INT_10 = 10;
 
     /* renamed from: d */
-    private static int f2733d = 60;
+    private static int INT_60 = 60;
 
     /* renamed from: a */
     ECGApplication mECGApplication;
@@ -24,7 +24,7 @@ public class MaybeAlertHelper {
     AlertUtils mAlertUtils;
 
     /* renamed from: e */
-    private int f2736e = f2733d;
+    private int f2736e = INT_60;
 
     /* renamed from: f */
     private Context mContext;
@@ -123,12 +123,12 @@ public class MaybeAlertHelper {
     }
 
     /* renamed from: b */
-    public boolean mo2451b() {
+    public boolean getECG_ALARM_ENABLE() {
         return this.mECGApplication.appECGConf.getECG_ALARM_ENABLE();
     }
 
     /* renamed from: c */
-    public void mo2452c() {
+    public void stopAlarm() {
         pauseVibrator();
         this.f2743l = true;
         this.f2740i = 0;
@@ -146,7 +146,7 @@ public class MaybeAlertHelper {
             this.f2736e--;
             if (this.f2736e == 0) {
                 this.f2743l = false;
-                this.f2736e = f2733d;
+                this.f2736e = INT_60;
             }
         }
     }
@@ -168,7 +168,7 @@ public class MaybeAlertHelper {
         }
         int i = 0;
         int i2 = 0;
-        for (int i3 = 0; i3 < f2732c; i3++) {
+        for (int i3 = 0; i3 < INT_10; i3++) {
             if (this.f2739h[i3] > this.mECGApplication.appECGConf.getECG_ALARM_RATE_MAX()) {
                 i++;
             }
@@ -176,12 +176,12 @@ public class MaybeAlertHelper {
                 i2++;
             }
         }
-        return ((double) i) > ((double) f2732c) * 0.7d || ((double) i2) > ((double) f2732c) * 0.7d;
+        return ((double) i) > ((double) INT_10) * 0.7d || ((double) i2) > ((double) INT_10) * 0.7d;
     }
 
     /* renamed from: i */
     public int mo2458i() {
-        if (this.f2738g >= f2732c) {
+        if (this.f2738g >= INT_10) {
             this.f2738g = 0;
             return 0;
         }
@@ -191,7 +191,7 @@ public class MaybeAlertHelper {
     }
 
     /* renamed from: j */
-    public void mo2459j() {
+    public void stopeVibrator() {
         pauseVibrator();
         this.mAlertUtils.clearAndRelease();
     }

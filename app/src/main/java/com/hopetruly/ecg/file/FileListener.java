@@ -6,7 +6,7 @@ public interface FileListener {
     String mo2102a();
 
     /* renamed from: a */
-    void mo2103a(String str);
+    void shareCachePath(String str);
 
     /* renamed from: a */
     void savemEcgData(int[] iArr);

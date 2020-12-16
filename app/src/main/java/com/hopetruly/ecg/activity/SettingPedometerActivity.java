@@ -27,7 +27,7 @@ public class SettingPedometerActivity extends BaseActivity {
     /* renamed from: a */
     private void m2545a() {
         this.edt_pedometer_target = (EditText) findViewById(R.id.pedometer_target);
-        this.edt_pedometer_target.setText(String.valueOf(this.settingECGApplication.appPedometerConf.mo2672b()));
+        this.edt_pedometer_target.setText(String.valueOf(this.settingECGApplication.appPedometerConf.getSTEP_TARGET()));
     }
 
     /* access modifiers changed from: protected */
@@ -63,7 +63,7 @@ public class SettingPedometerActivity extends BaseActivity {
                 edit.commit();
                 PedometerRecord q = this.settingECGApplication.appMainService.getSqlPedometerRecord();
                 if (q != null) {
-                    q.setTarget(this.settingECGApplication.appPedometerConf.mo2672b());
+                    q.setTarget(this.settingECGApplication.appPedometerConf.getSTEP_TARGET());
                     new SqlManager(getApplicationContext()).writeStepRec(q);
                 }
                 setResult(-1);

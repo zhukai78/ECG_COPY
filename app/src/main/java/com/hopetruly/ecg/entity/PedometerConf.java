@@ -13,7 +13,7 @@ public class PedometerConf {
     private int f2820c = 0;
 
     /* renamed from: d */
-    private long f2821d = 0;
+    private long step_target = 0;
 
     /* renamed from: a */
     public int mo2669a() {
@@ -27,12 +27,12 @@ public class PedometerConf {
 
     /* renamed from: a */
     public void setSTEP_TARGET(long j) {
-        this.f2821d = j;
+        this.step_target = j;
     }
 
     /* renamed from: b */
-    public long mo2672b() {
-        return this.f2821d;
+    public long getSTEP_TARGET() {
+        return this.step_target;
     }
 
     /* renamed from: b */

@@ -7,7 +7,7 @@ import com.warick.drawable.WarickSurfaceView;
 
 
 /* renamed from: com.warick.drawable.a.a */
-public class C0812a implements WarickSurfaceView.C0809a {
+public class C0812a implements WarickSurfaceView.DrawListener {
 
     /* renamed from: a */
     private static Paint f3039a;
@@ -38,7 +38,7 @@ public class C0812a implements WarickSurfaceView.C0809a {
     }
 
     /* renamed from: a */
-    public void mo2900a(Canvas canvas, Paint paint) {
+    public void onMyDraw(Canvas canvas, Paint paint) {
         if (this.f3044f) {
             if (f3039a == null) {
                 m2944a((float) canvas.getHeight());

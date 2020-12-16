@@ -7,7 +7,7 @@ import com.warick.drawable.WarickSurfaceView;
 
 
 /* renamed from: com.warick.drawable.a.d */
-public class C0815d implements WarickSurfaceView.C0809a {
+public class HistoryRecordDrawListener implements WarickSurfaceView.DrawListener {
 
     /* renamed from: a */
     private static final String f3066a = "d";
@@ -24,7 +24,7 @@ public class C0815d implements WarickSurfaceView.C0809a {
     /* renamed from: e */
     private Paint f3070e = new Paint();
 
-    public C0815d() {
+    public HistoryRecordDrawListener() {
         this.f3070e.setColor(-16711936);
         this.f3070e.setTextSize(20.0f);
         this.f3070e.setTextAlign(Paint.Align.CENTER);
@@ -53,7 +53,7 @@ public class C0815d implements WarickSurfaceView.C0809a {
     }
 
     /* renamed from: a */
-    public void mo2900a(Canvas canvas, Paint paint) {
+    public void onMyDraw(Canvas canvas, Paint paint) {
         if (this.f3068c[0]) {
             canvas.drawText(this.f3069d[0], this.f3067b[0], 30.0f, this.f3070e);
             canvas.drawLine(this.f3067b[0], 40.0f, this.f3067b[0], (float) (canvas.getHeight() - 20), this.f3070e);

@@ -216,7 +216,7 @@ public class MyFileListener implements FileListener {
     }
 
     /* renamed from: a */
-    public void mo2103a(String str) {
+    public void shareCachePath(String str) {
         if (Environment.getExternalStorageState().equals("mounted")) {
             this.f2100e = new File(str);
             if (!this.f2100e.getParentFile().exists()) {

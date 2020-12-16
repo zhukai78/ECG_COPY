@@ -61,7 +61,7 @@ public class NetService extends Service {
     ECGApplication netECGApplication;
 
     /* renamed from: c */
-    Thread f2949c;
+    Thread uploadingRecordThread;
 
     /* renamed from: d */
     boolean f2950d = false;
@@ -85,7 +85,7 @@ public class NetService extends Service {
     private BroadcastReceiver nET_CHANGEBroadcastReceiver = new BroadcastReceiver() {
         public void onReceive(Context context, Intent intent) {
             if (intent.getAction().equals("android.net.conn.CONNECTIVITY_CHANGE")) {
-                NetService.this.netECGApplication.f2093n = NetService.this.getNetInfoType();
+                NetService.this.netECGApplication.wifi_status = NetService.this.getNetInfoType();
                 LocalBroadcastManager.getInstance(NetService.this.getApplicationContext()).sendBroadcast(new Intent("com.holptruly.ecg.services.NetService.NET_CHANGE"));
             }
         }
@@ -630,17 +630,17 @@ public class NetService extends Service {
     }
 
     /* renamed from: a */
-    public void mo2820a(final ECGRecord eCGRecord) {
+    public void uploadingRecord(final ECGRecord eCGRecord) {
         if (this.f2950d) {
             Toast.makeText(getApplicationContext(), getString(R.string.uploading), Toast.LENGTH_LONG).show();
         }
         LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(new Intent("com.holptruly.ecg.services.NetService.BEGIN_UPLOAD_ACTION"));
-        this.f2949c = new Thread(new Runnable() {
+        this.uploadingRecordThread = new Thread(new Runnable() {
             public void run() {
                 LocalBroadcastManager a;
                 NetService.this.f2950d = true;
                 Intent intent = new Intent();
-                if (NetService.this.mo2824a()) {
+                if (NetService.this.haveSDcard()) {
                     String b = null;
                     try {
                         b = MyHttpHelper.upload_file("ecg", eCGRecord.getFilePath(), "001");
@@ -684,7 +684,7 @@ public class NetService extends Service {
                 NetService.this.f2950d = false;
             }
         });
-        this.f2949c.start();
+        this.uploadingRecordThread.start();
     }
 
     /* renamed from: a */
@@ -705,7 +705,7 @@ public class NetService extends Service {
                     try {
                         JSONArray jSONArray = new JSONArray(a);
                         int i = jSONArray.getInt(0);
-                        if (i == 0 && NetService.this.mo2824a()) {
+                        if (i == 0 && NetService.this.haveSDcard()) {
                             JSONArray jSONArray2 = jSONArray.getJSONArray(2);
                             ArrayList arrayList = new ArrayList();
                             for (int i2 = 0; i2 < jSONArray2.length(); i2++) {
@@ -796,7 +796,7 @@ public class NetService extends Service {
     }
 
     /* renamed from: a */
-    public boolean mo2824a() {
+    public boolean haveSDcard() {
         return Environment.getExternalStorageState().equals("mounted");
     }
 
@@ -889,7 +889,7 @@ public class NetService extends Service {
     public void onCreate() {
         super.onCreate();
         this.netECGApplication = (ECGApplication) getApplication();
-        this.netECGApplication.f2093n = getNetInfoType();
+        this.netECGApplication.wifi_status = getNetInfoType();
 //        C0140d.m485a(getApplicationContext()).mo389a(this.nET_CHANGEBroadcastReceiver, new IntentFilter("android.net.conn.CONNECTIVITY_CHANGE"));
         LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(new Intent("android.net.conn.CONNECTIVITY_CHANGE"));
     }

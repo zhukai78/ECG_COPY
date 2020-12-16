@@ -48,7 +48,7 @@ public class ECGApplication extends Application {
     public SharedPreferences spSos_sms_conf;
 
     /* renamed from: n */
-    public int f2093n = -1;
+    public int wifi_status = -1;
 
     /* renamed from: o */
     public MainService appMainService;

@@ -217,24 +217,24 @@ public class C0775k {
 
     /* renamed from: a */
     private float[] m2811a(float[] fArr) {
-        double[] dArr = new double[Fir.getOrder(Fir.f3076f)];
-        Fir.m2980a(Fir.getOrder(Fir.f3076f), dArr);
+        double[] dArr = new double[Fir.getOrder(Fir.Fir_5)];
+        Fir.setDoubles_0(Fir.getOrder(Fir.Fir_5), dArr);
         float[] fArr2 = new float[fArr.length];
         int i = 0;
         for (int i2 = 0; i2 < fArr.length; i2++) {
             if (this.f2926d) {
-                if (i2 > Fir.getOrder(Fir.f3076f) / 2) {
+                if (i2 > Fir.getOrder(Fir.Fir_5) / 2) {
                     i++;
                 }
-                fArr2[i] = ((float) Fir.RealtimeFir(fArr[i2], Fir.f3076f, dArr)) * ((float) this.f2927e);
+                fArr2[i] = ((float) Fir.RealtimeFir(fArr[i2], Fir.Fir_5, dArr)) * ((float) this.f2927e);
             } else {
                 fArr2[i2] = fArr[i2] * ((float) this.f2927e);
             }
         }
         if (this.f2926d) {
-            for (int i3 = 0; i3 < Fir.getOrder(Fir.f3076f) / 2; i3++) {
+            for (int i3 = 0; i3 < Fir.getOrder(Fir.Fir_5) / 2; i3++) {
                 i++;
-                fArr2[i] = ((float) Fir.RealtimeFir(0, Fir.f3076f, dArr)) * ((float) this.f2927e);
+                fArr2[i] = ((float) Fir.RealtimeFir(0, Fir.Fir_5, dArr)) * ((float) this.f2927e);
             }
         }
         return fArr2;
