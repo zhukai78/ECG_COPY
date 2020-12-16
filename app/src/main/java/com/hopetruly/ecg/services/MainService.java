@@ -183,7 +183,7 @@ public class MainService extends Service {
                 String action = intent.getAction();
                 if ("com.hopetruly.ec.services.ACTION_GATT_CONNECTED".equals(action)) {
                     boolean unused = MainService.this.isConn = true;
-                    MainService.this.startForeground(101, MainService.this.getMainNotification());
+//                    MainService.this.startForeground(101, MainService.this.getMainNotification());
                     return;
                 }
                 int i = 0;
