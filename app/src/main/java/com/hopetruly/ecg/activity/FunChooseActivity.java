@@ -20,7 +20,7 @@ import com.hopetruly.ecg.R;
 import com.hopetruly.ecg.services.MainService;
 import com.hopetruly.ecg.util.LogUtils;
 import com.hopetruly.part.net.NetService;
-import com.warick.p025a.GpsManagerHelper;
+import com.warick.gps.GpsManagerHelper;
 
 
 public class FunChooseActivity extends BaseActivity {

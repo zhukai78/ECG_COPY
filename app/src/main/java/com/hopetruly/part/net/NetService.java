@@ -22,7 +22,7 @@ import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import com.hopetruly.ecg.ECGApplication;
 import com.hopetruly.ecg.R;
 import com.hopetruly.ecg.entity.ECGRecord;
-import com.hopetruly.ecg.p022b.SqlManager;
+import com.hopetruly.ecg.sql.SqlManager;
 import com.hopetruly.ecg.util.LogUtils;
 import com.hopetruly.ecg.util.StreamToByteUtils;
 

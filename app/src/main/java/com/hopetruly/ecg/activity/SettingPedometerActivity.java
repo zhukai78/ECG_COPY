@@ -11,7 +11,7 @@ import android.widget.EditText;
 import com.hopetruly.ecg.ECGApplication;
 import com.hopetruly.ecg.R;
 import com.hopetruly.ecg.entity.PedometerRecord;
-import com.hopetruly.ecg.p022b.SqlManager;
+import com.hopetruly.ecg.sql.SqlManager;
 
 public class SettingPedometerActivity extends BaseActivity {
 

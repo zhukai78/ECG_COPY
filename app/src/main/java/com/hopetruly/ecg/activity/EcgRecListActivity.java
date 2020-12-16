@@ -33,7 +33,7 @@ import com.hopetruly.ecg.ECGApplication;
 import com.hopetruly.ecg.R;
 import com.hopetruly.ecg.entity.ECGEntity;
 import com.hopetruly.ecg.entity.ECGRecord;
-import com.hopetruly.ecg.p022b.SqlManager;
+import com.hopetruly.ecg.sql.SqlManager;
 import com.hopetruly.ecg.services.FileService;
 import com.hopetruly.ecg.util.ECGRecordUtils;
 import com.hopetruly.part.net.NetService;

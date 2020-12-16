@@ -1,10 +1,9 @@
-package com.hopetruly.ecg.p023ui;
+package com.hopetruly.ecg.widget;
 
 import android.content.Context;
 import android.util.AttributeSet;
 import android.widget.RelativeLayout;
 
-/* renamed from: com.hopetruly.ecg.ui.SquareBaseOnWidthLayout */
 public class SquareBaseOnWidthLayout extends RelativeLayout {
     public SquareBaseOnWidthLayout(Context context) {
         this(context, (AttributeSet) null);

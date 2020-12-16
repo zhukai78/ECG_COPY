@@ -13,11 +13,11 @@ public class SosConf {
     private boolean[] f2824c = new boolean[4];
 
     /* renamed from: d */
-    private String f2825d;
+    private String sos_custom_content;
 
     /* renamed from: a */
     public void setSOS_CUSTOM_CONTENT(String str) {
-        this.f2825d = str;
+        this.sos_custom_content = str;
     }
 
     /* renamed from: a */
@@ -43,7 +43,7 @@ public class SosConf {
     }
 
     /* renamed from: c */
-    public String mo2680c() {
-        return this.f2825d;
+    public String getSOS_CUSTOM_CONTENT() {
+        return this.sos_custom_content;
     }
 }

@@ -1,4 +1,4 @@
-package com.warick.p025a;
+package com.warick.gps;
 
 import android.content.Context;
 

@@ -1,13 +1,13 @@
-package com.warick.p026b.p027a;
+package com.warick.sms.utils;
 
 import android.telephony.SmsManager;
 
 import java.util.ArrayList;
 
 /* renamed from: com.warick.b.a.a */
-public class C0805a {
+public class SmsManagerUtils {
     /* renamed from: a */
-    public static void m2926a(String str, String[] strArr) {
+    public static void sendMultipartTextMessageSms(String str, String[] strArr) {
         SmsManager smsManager = SmsManager.getDefault();
         ArrayList<String> divideMessage = smsManager.divideMessage(str);
         for (String sendMultipartTextMessage : strArr) {

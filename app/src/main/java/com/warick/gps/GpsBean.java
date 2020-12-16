@@ -1,4 +1,4 @@
-package com.warick.p025a;
+package com.warick.gps;
 
 /* renamed from: com.warick.a.c */
 public class GpsBean {

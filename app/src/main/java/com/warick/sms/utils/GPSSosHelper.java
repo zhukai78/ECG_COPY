@@ -1,21 +1,21 @@
-package com.warick.p026b.p027a;
+package com.warick.sms.utils;
 
 import com.hopetruly.ecg.ECGApplication;
-import com.warick.p025a.GpsBean;
-import com.warick.p025a.GpsManagerHelper;
+import com.warick.gps.GpsBean;
+import com.warick.gps.GpsManagerHelper;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
 /* renamed from: com.warick.b.a.b */
-public class C0806b {
+public class GPSSosHelper {
     /* renamed from: a */
-    public static void m2927a(ECGApplication eCGApplication) {
+    public static void sendMultipartTextMessageSmsGPS(ECGApplication eCGApplication) {
         String str;
         if (GpsManagerHelper.mGpsManagerHelper() != null) {
             StringBuffer stringBuffer = new StringBuffer();
-            stringBuffer.append(eCGApplication.appSosConf.mo2680c());
+            stringBuffer.append(eCGApplication.appSosConf.getSOS_CUSTOM_CONTENT());
             stringBuffer.append(" [ECG Air info:");
             GpsBean g = GpsManagerHelper.mGpsManagerHelper().getGpsBean();
             stringBuffer.append(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.CHINA).format(new Date(System.currentTimeMillis())));
@@ -47,7 +47,7 @@ public class C0806b {
                     i2++;
                 }
             }
-            C0805a.m2926a(stringBuffer.toString(), strArr);
+            SmsManagerUtils.sendMultipartTextMessageSms(stringBuffer.toString(), strArr);
         }
     }
 }

@@ -1,4 +1,4 @@
-package com.hopetruly.ecg.p021a;
+package com.hopetruly.ecg.file;
 
 /* renamed from: com.hopetruly.ecg.a.b */
 public interface FileListener {

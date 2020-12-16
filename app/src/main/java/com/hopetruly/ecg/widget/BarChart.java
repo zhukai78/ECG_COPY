@@ -1,4 +1,4 @@
-package com.hopetruly.ecg.p023ui;
+package com.hopetruly.ecg.widget;
 
 import android.content.Context;
 import android.graphics.Canvas;

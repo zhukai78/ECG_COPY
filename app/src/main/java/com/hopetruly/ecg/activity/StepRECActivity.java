@@ -19,7 +19,7 @@ import android.widget.Toast;
 import com.hopetruly.ecg.ECGApplication;
 import com.hopetruly.ecg.R;
 import com.hopetruly.ecg.entity.PedometerRecord;
-import com.hopetruly.ecg.p022b.SqlManager;
+import com.hopetruly.ecg.sql.SqlManager;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -27,42 +27,42 @@ import java.util.Calendar;
 public class StepRECActivity extends BaseActivity {
 
     /* renamed from: a */
-    final String f2666a = "StepRECActivity";
+    final String TAG = "StepRECActivity";
 
     /* renamed from: c */
-    ListView f2667c;
+    ListView lv_step_rec;
 
     /* renamed from: d */
-    C0719b f2668d;
+    RecBaseAdapter mRecBaseAdapter;
 
     /* renamed from: e */
-    ArrayList<PedometerRecord> f2669e = new ArrayList<>();
+    ArrayList<PedometerRecord> mPedometerRecords = new ArrayList<>();
 
     /* renamed from: f */
-    Calendar f2670f;
+    Calendar mCalendar;
 
     /* renamed from: g */
-    ECGApplication f2671g;
+    ECGApplication mECGApplication;
 
     /* renamed from: h */
-    SqlManager f2672h;
+    SqlManager mSqlManager;
 
     /* renamed from: i */
-    C0718a f2673i;
+    GetPedometerRecordAsyncTask mGetPedometerRecordAsyncTask;
     /* access modifiers changed from: private */
 
     /* renamed from: j */
-    public boolean f2674j;
+    public boolean isGattStop;
 
     /* renamed from: com.hopetruly.ecg.activity.StepRECActivity$a */
-    class C0718a extends AsyncTask<String, Void, ArrayList<PedometerRecord>> {
-        C0718a() {
+    class GetPedometerRecordAsyncTask extends AsyncTask<String, Void, ArrayList<PedometerRecord>> {
+        GetPedometerRecordAsyncTask() {
         }
 
         /* access modifiers changed from: protected */
         /* renamed from: a */
         public ArrayList<PedometerRecord> doInBackground(String... strArr) {
-            return StepRECActivity.this.f2672h.getPedometerRecord(strArr[0]);
+            return StepRECActivity.this.mSqlManager.getPedometerRecord(strArr[0]);
         }
 
         /* access modifiers changed from: protected */
@@ -72,8 +72,8 @@ public class StepRECActivity extends BaseActivity {
                 return;
             }
             if (arrayList.size() > 0) {
-                StepRECActivity.this.f2669e = arrayList;
-                StepRECActivity.this.f2668d.notifyDataSetChanged();
+                StepRECActivity.this.mPedometerRecords = arrayList;
+                StepRECActivity.this.mRecBaseAdapter.notifyDataSetChanged();
                 return;
             }
             Toast.makeText(StepRECActivity.this.getApplicationContext(), StepRECActivity.this.getString(R.string.l_no_data), Toast.LENGTH_LONG).show();
@@ -86,42 +86,42 @@ public class StepRECActivity extends BaseActivity {
     }
 
     /* renamed from: com.hopetruly.ecg.activity.StepRECActivity$b */
-    class C0719b extends BaseAdapter {
+    class RecBaseAdapter extends BaseAdapter {
 
         /* renamed from: com.hopetruly.ecg.activity.StepRECActivity$b$a */
-        class C0720a {
+        class ViewHolder {
 
             /* renamed from: a */
-            TextView f2682a;
+            TextView tv_step_rec_year_month;
 
             /* renamed from: b */
-            TextView f2683b;
+            TextView tv_step_rec_day;
 
             /* renamed from: c */
-            TextView f2684c;
+            TextView step_rec_cal;
 
             /* renamed from: d */
-            TextView f2685d;
+            TextView tv_step_rec_step_count;
 
             /* renamed from: e */
-            TextView f2686e;
+            TextView tv_step_rec_finish_rate;
 
             /* renamed from: f */
-            TextView f2687f;
+            TextView tv_step_rec_target;
 
-            C0720a() {
+            ViewHolder() {
             }
         }
 
-        C0719b() {
+        RecBaseAdapter() {
         }
 
         public int getCount() {
-            return StepRECActivity.this.f2669e.size();
+            return StepRECActivity.this.mPedometerRecords.size();
         }
 
         public Object getItem(int i) {
-            return StepRECActivity.this.f2669e.get(i);
+            return StepRECActivity.this.mPedometerRecords.get(i);
         }
 
         public long getItemId(int i) {
@@ -129,38 +129,38 @@ public class StepRECActivity extends BaseActivity {
         }
 
         public View getView(int i, View view, ViewGroup viewGroup) {
-            C0720a aVar;
+            ViewHolder aVar;
             TextView textView;
             String str;
-            PedometerRecord pedometerRecord = StepRECActivity.this.f2669e.get(i);
+            PedometerRecord pedometerRecord = StepRECActivity.this.mPedometerRecords.get(i);
             if (view == null) {
                 view = LayoutInflater.from(StepRECActivity.this.getApplicationContext()).inflate(R.layout.step_rec_lv_item, (ViewGroup) null);
-                aVar = new C0720a();
-                aVar.f2682a = (TextView) view.findViewById(R.id.step_rec_year_month);
-                aVar.f2683b = (TextView) view.findViewById(R.id.step_rec_day);
-                aVar.f2684c = (TextView) view.findViewById(R.id.step_rec_cal);
-                aVar.f2685d = (TextView) view.findViewById(R.id.step_rec_step_count);
-                aVar.f2686e = (TextView) view.findViewById(R.id.step_rec_finish_rate);
-                aVar.f2687f = (TextView) view.findViewById(R.id.step_rec_target);
+                aVar = new ViewHolder();
+                aVar.tv_step_rec_year_month = (TextView) view.findViewById(R.id.step_rec_year_month);
+                aVar.tv_step_rec_day = (TextView) view.findViewById(R.id.step_rec_day);
+                aVar.step_rec_cal = (TextView) view.findViewById(R.id.step_rec_cal);
+                aVar.tv_step_rec_step_count = (TextView) view.findViewById(R.id.step_rec_step_count);
+                aVar.tv_step_rec_finish_rate = (TextView) view.findViewById(R.id.step_rec_finish_rate);
+                aVar.tv_step_rec_target = (TextView) view.findViewById(R.id.step_rec_target);
                 view.setTag(aVar);
             } else {
-                aVar = (C0720a) view.getTag();
+                aVar = (ViewHolder) view.getTag();
             }
             StringBuffer stringBuffer = new StringBuffer();
             stringBuffer.append(pedometerRecord.getYear());
             stringBuffer.append("-");
             stringBuffer.append(pedometerRecord.getMonth());
             stringBuffer.append("-");
-            aVar.f2682a.setText(stringBuffer.toString());
-            aVar.f2683b.setText(String.valueOf(pedometerRecord.getDay()));
-            aVar.f2684c.setText(String.valueOf(pedometerRecord.getCal()));
-            aVar.f2685d.setText(String.valueOf(pedometerRecord.getCount()));
-            aVar.f2687f.setText(String.valueOf(pedometerRecord.getTarget()));
+            aVar.tv_step_rec_year_month.setText(stringBuffer.toString());
+            aVar.tv_step_rec_day.setText(String.valueOf(pedometerRecord.getDay()));
+            aVar.step_rec_cal.setText(String.valueOf(pedometerRecord.getCal()));
+            aVar.tv_step_rec_step_count.setText(String.valueOf(pedometerRecord.getCount()));
+            aVar.tv_step_rec_target.setText(String.valueOf(pedometerRecord.getTarget()));
             if (pedometerRecord.getTarget() > 0) {
-                textView = aVar.f2686e;
+                textView = aVar.tv_step_rec_finish_rate;
                 str = ((pedometerRecord.getCount() * 100) / pedometerRecord.getTarget()) + "";
             } else {
-                textView = aVar.f2686e;
+                textView = aVar.tv_step_rec_finish_rate;
                 str = "0";
             }
             textView.setText(str);
@@ -169,36 +169,36 @@ public class StepRECActivity extends BaseActivity {
     }
 
     /* renamed from: a */
-    private void m2555a() {
+    private void initView() {
         Log.d("StepRECActivity", "initView");
-        this.f2667c = (ListView) findViewById(R.id.step_rec_lv);
-        this.f2668d = new C0719b();
-        this.f2667c.setAdapter(this.f2668d);
-        this.f2667c.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+        this.lv_step_rec = (ListView) findViewById(R.id.step_rec_lv);
+        this.mRecBaseAdapter = new RecBaseAdapter();
+        this.lv_step_rec.setAdapter(this.mRecBaseAdapter);
+        this.lv_step_rec.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long j) {
-                boolean unused = StepRECActivity.this.f2674j = StepRECActivity.this.f2671g.appMainService.getisGattStop();
-                if (StepRECActivity.this.f2674j) {
-                    StepRECActivity.this.m2561b();
+                boolean unused = StepRECActivity.this.isGattStop = StepRECActivity.this.mECGApplication.appMainService.getisGattStop();
+                if (StepRECActivity.this.isGattStop) {
+                    StepRECActivity.this.showRunStepAlertDialog();
                     return false;
                 }
-                StepRECActivity.this.m2556a(i);
+                StepRECActivity.this.showDeleteRecAlertDialog(i);
                 return false;
             }
         });
-        m2558a(this.f2671g.mUserInfo.getId());
+        startPedometerRecordAsyncTask(this.mECGApplication.mUserInfo.getId());
     }
 
     /* access modifiers changed from: private */
     /* renamed from: a */
-    public void m2556a(final int i) {
+    public void showDeleteRecAlertDialog(final int i) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle(getResources().getString(R.string.delete));
         builder.setMessage(getResources().getString(R.string.delete_rec));
         builder.setPositiveButton(getResources().getString(R.string.delete), new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialogInterface, int i) {
-                StepRECActivity.this.f2672h.deleteStepRecord(StepRECActivity.this.f2669e.get(i));
-                StepRECActivity.this.f2669e.remove(i);
-                StepRECActivity.this.f2668d.notifyDataSetChanged();
+                StepRECActivity.this.mSqlManager.deleteStepRecord(StepRECActivity.this.mPedometerRecords.get(i));
+                StepRECActivity.this.mPedometerRecords.remove(i);
+                StepRECActivity.this.mRecBaseAdapter.notifyDataSetChanged();
                 dialogInterface.dismiss();
             }
         });
@@ -211,16 +211,16 @@ public class StepRECActivity extends BaseActivity {
     }
 
     /* renamed from: a */
-    private void m2558a(String str) {
-        if (this.f2673i == null || this.f2673i.getStatus() != AsyncTask.Status.RUNNING) {
-            this.f2673i = new C0718a();
-            this.f2673i.execute(new String[]{str});
+    private void startPedometerRecordAsyncTask(String str) {
+        if (this.mGetPedometerRecordAsyncTask == null || this.mGetPedometerRecordAsyncTask.getStatus() != AsyncTask.Status.RUNNING) {
+            this.mGetPedometerRecordAsyncTask = new GetPedometerRecordAsyncTask();
+            this.mGetPedometerRecordAsyncTask.execute(new String[]{str});
         }
     }
 
     /* access modifiers changed from: private */
     /* renamed from: b */
-    public void m2561b() {
+    public void showRunStepAlertDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle(getResources().getString(R.string.Tip));
         builder.setMessage(getResources().getString(R.string.runing_step));
@@ -237,10 +237,10 @@ public class StepRECActivity extends BaseActivity {
         super.onCreate(bundle);
         setContentView(R.layout.activity_step_rec);
         getActionBar().setDisplayHomeAsUpEnabled(true);
-        this.f2671g = (ECGApplication) getApplication();
-        this.f2670f = Calendar.getInstance();
-        this.f2672h = new SqlManager(getApplicationContext());
-        m2555a();
+        this.mECGApplication = (ECGApplication) getApplication();
+        this.mCalendar = Calendar.getInstance();
+        this.mSqlManager = new SqlManager(getApplicationContext());
+        initView();
     }
 
     public boolean onCreateOptionsMenu(Menu menu) {

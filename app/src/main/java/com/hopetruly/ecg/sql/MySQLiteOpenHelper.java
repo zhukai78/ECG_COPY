@@ -1,4 +1,4 @@
-package com.hopetruly.ecg.p022b;
+package com.hopetruly.ecg.sql;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;

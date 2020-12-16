@@ -39,8 +39,8 @@ import com.hopetruly.ecg.algorithm.HeartRateCounter3;
 import com.hopetruly.ecg.device.ConvertECG;
 import com.hopetruly.ecg.device.Sensor;
 import com.hopetruly.ecg.entity.ECGRecord;
-import com.hopetruly.ecg.p022b.SqlManager;
-import com.hopetruly.ecg.p023ui.C0764a;
+import com.hopetruly.ecg.sql.SqlManager;
+import com.hopetruly.ecg.widget.HrAlphaAnimation;
 import com.hopetruly.ecg.services.MainService;
 import com.hopetruly.ecg.util.ECGRecordUtils;
 import com.warick.drawable.WarickSurfaceView;
@@ -160,13 +160,13 @@ public class RealtimeECGDisplayActivity extends BaseActivity {
                                 if (!stringExtra.equals("NaN")) {
                                     RealtimeECGDisplayActivity.this.f2493v.mo2450a(Integer.parseInt(stringExtra));
                                 } else {
-                                    RealtimeECGDisplayActivity.this.f2493v.mo2449a();
+                                    RealtimeECGDisplayActivity.this.f2493v.pauseVibrator();
                                 }
-                                if (RealtimeECGDisplayActivity.this.f2493v.mo2456g()) {
+                                if (RealtimeECGDisplayActivity.this.f2493v.getisVibrator()) {
                                     RealtimeECGDisplayActivity.this.btn_ecg_bt_disable_alarm.setVisibility(View.VISIBLE);
-                                    C0764a.m2746a(RealtimeECGDisplayActivity.this.btn_ecg_bt_disable_alarm);
+                                    HrAlphaAnimation.startAnimation(RealtimeECGDisplayActivity.this.btn_ecg_bt_disable_alarm);
                                 } else {
-                                    C0764a.m2747b(RealtimeECGDisplayActivity.this.btn_ecg_bt_disable_alarm);
+                                    HrAlphaAnimation.clearAnimation(RealtimeECGDisplayActivity.this.btn_ecg_bt_disable_alarm);
                                     RealtimeECGDisplayActivity.this.btn_ecg_bt_disable_alarm.setVisibility(View.GONE);
                                 }
                                 textView = RealtimeECGDisplayActivity.this.tv_heartrate;
@@ -446,13 +446,13 @@ public class RealtimeECGDisplayActivity extends BaseActivity {
                     if (!String.valueOf(this.mHeartRateCounter3.getHeartRate()).equals("NaN")) {
                         this.f2493v.mo2450a(this.mHeartRateCounter3.getHeartRate());
                     } else {
-                        this.f2493v.mo2449a();
+                        this.f2493v.pauseVibrator();
                     }
-                    if (this.f2493v.mo2456g()) {
+                    if (this.f2493v.getisVibrator()) {
                         this.btn_ecg_bt_disable_alarm.setVisibility(View.VISIBLE);
-                        C0764a.m2746a(this.btn_ecg_bt_disable_alarm);
+                        HrAlphaAnimation.startAnimation(this.btn_ecg_bt_disable_alarm);
                     } else {
-                        C0764a.m2747b(this.btn_ecg_bt_disable_alarm);
+                        HrAlphaAnimation.clearAnimation(this.btn_ecg_bt_disable_alarm);
                         this.btn_ecg_bt_disable_alarm.setVisibility(View.GONE);
                     }
                     textView = this.tv_heartrate;
@@ -483,7 +483,7 @@ public class RealtimeECGDisplayActivity extends BaseActivity {
         this.btn_ecg_bt_disable_alarm.setVisibility(View.GONE);
         this.btn_ecg_bt_disable_alarm.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
-                C0764a.m2747b(view);
+                HrAlphaAnimation.clearAnimation(view);
                 ((Button) view).setVisibility(View.GONE);
                 RealtimeECGDisplayActivity.this.f2493v.mo2452c();
                 RealtimeECGDisplayActivity.this.tv_ecg_alarm_status.setText(RealtimeECGDisplayActivity.this.getString(R.string.ecg_alarm_hand_off));
@@ -872,7 +872,7 @@ public class RealtimeECGDisplayActivity extends BaseActivity {
                 case R.id.action_ecg_stop /*2131165211*/:
                     m2476f();
                     this.f2493v.mo2452c();
-                    C0764a.m2747b(this.btn_ecg_bt_disable_alarm);
+                    HrAlphaAnimation.clearAnimation(this.btn_ecg_bt_disable_alarm);
                     this.btn_ecg_bt_disable_alarm.setVisibility(View.GONE);
                     this.menu_ecg_stop.setVisible(false);
                     this.menu_ecg_start.setVisible(true);

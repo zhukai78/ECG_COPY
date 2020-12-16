@@ -29,7 +29,7 @@ import com.hopetruly.ecg.device.SimpleKeysStatus;
 import com.hopetruly.ecg.entity.ECGEntity;
 import com.hopetruly.ecg.entity.ECGRecord;
 import com.hopetruly.ecg.entity.PedometerRecord;
-import com.hopetruly.ecg.p022b.SqlManager;
+import com.hopetruly.ecg.sql.SqlManager;
 import com.hopetruly.ecg.util.EcgParserUtils;
 import com.hopetruly.ecg.util.LogUtils;
 import com.hopetruly.ecg.util.MyAlarmClock;
@@ -37,8 +37,8 @@ import com.hopetruly.ecg.util.NotificationUtils;
 import com.hopetruly.part.net.MyHttpClient;
 import com.hopetruly.part.net.NetService;
 import com.hopetruly.part.p024a.BleHelper;
-import com.warick.p025a.GpsManagerHelper;
-import com.warick.p026b.p027a.C0806b;
+import com.warick.gps.GpsManagerHelper;
+import com.warick.sms.utils.GPSSosHelper;
 import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -323,7 +323,7 @@ public class MainService extends Service {
                                 if (convertKeys.equals(SimpleKeysStatus.ALARM_BUTTON)) {
                                     NotificationUtils jVar = new NotificationUtils(MainService.this.getApplicationContext());
                                     if (MainService.this.mmainecggApp.appECGConf.getECG_SMS_ALARM() == 1) {
-                                        C0806b.m2927a(MainService.this.mmainecggApp);
+                                        GPSSosHelper.sendMultipartTextMessageSmsGPS(MainService.this.mmainecggApp);
                                         jVar.toBatteryNotify("SOS", "Send SMS");
                                     }
                                     if (MainService.this.mmainecggApp.appECGConf.getECG_ENABLE_MARK() == 1 && MainService.this.f2874z && (c = MainService.this.mmainFileService.mo2705c()) > 0 && MainService.this.f2869u.mo2779a(c, MainService.this.mmainecggApp.appECGConf.getECG_MARKING_PERIOD())) {

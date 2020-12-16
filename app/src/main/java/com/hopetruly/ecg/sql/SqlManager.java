@@ -1,4 +1,4 @@
-package com.hopetruly.ecg.p022b;
+package com.hopetruly.ecg.sql;
 
 import android.content.ContentValues;
 import android.content.Context;
