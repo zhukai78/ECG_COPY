@@ -40,7 +40,7 @@ public class FileService extends Service {
     private final IBinder mFileServiceBinder = new FileServiceBinder();
 
     /* renamed from: d */
-    private C0756b f2838d;
+    private ImportAsyncTask mImportAsyncTask;
 
     /* renamed from: e */
     private SaveEcgFileAsyncTask mSaveEcgFileAsyncTask;
@@ -57,13 +57,13 @@ public class FileService extends Service {
     }
 
     /* renamed from: com.hopetruly.ecg.services.FileService$b */
-    private class C0756b extends AsyncTask<String, Void, String> {
+    private class ImportAsyncTask extends AsyncTask<String, Void, String> {
 
         /* renamed from: b */
-        private boolean f2842b;
+        private boolean isImportOk;
 
-        private C0756b() {
-            this.f2842b = false;
+        private ImportAsyncTask() {
+            this.isImportOk = false;
         }
 
         /* access modifiers changed from: protected */
@@ -84,7 +84,7 @@ public class FileService extends Service {
                 try {
                     String encode2 = URLEncoder.encode(str4, "utf-8");
                     if ("mounted".equals(Environment.getExternalStorageState())) {
-                        if (ECGRecordUtils.m2782a(str2, encode, false, FileService.this.getApplicationContext(), encode2)) {
+                        if (ECGRecordUtils.importFile(str2, encode, false, FileService.this.getApplicationContext(), encode2)) {
                             StringBuffer stringBuffer = new StringBuffer(Environment.getExternalStorageDirectory().getAbsolutePath());
                             stringBuffer.append(File.separator);
                             stringBuffer.append("hopetruly");
@@ -96,7 +96,7 @@ public class FileService extends Service {
                             stringBuffer.append(encode);
                             str3 = stringBuffer.toString();
                         }
-                        this.f2842b = true;
+                        this.isImportOk = true;
                     }
                     try {
                         Thread.sleep(1000);
@@ -118,7 +118,7 @@ public class FileService extends Service {
         /* access modifiers changed from: protected */
         /* renamed from: a */
         public void onPostExecute(String str) {
-            if (isCancelled() || !this.f2842b) {
+            if (isCancelled() || !this.isImportOk) {
                 Intent intent = new Intent();
                 intent.setAction("com.holptruly.ecg.services.FileService.FILE_IMPORT_FAIL");
                 LocalBroadcastManager.getInstance(FileService.this.getApplicationContext()).sendBroadcast(intent);
@@ -176,7 +176,7 @@ public class FileService extends Service {
                     String stringBuffer2 = stringBuffer.toString();
                     if (fArr != null) {
                         try {
-                            ECGRecordUtils.m2779a(FileService.this.getApplicationContext(), stringBuffer2, fArr, eCGRecord.getEcgEntity());
+                            ECGRecordUtils.mkdirsAndFile(FileService.this.getApplicationContext(), stringBuffer2, fArr, eCGRecord.getEcgEntity());
                         } catch (Exception e) {
                             e = e;
                             str = stringBuffer2;
@@ -191,11 +191,11 @@ public class FileService extends Service {
                             return str;
                         }
                     } else {
-                        while (FileService.this.mFileListener.mo2102a() == null) {
+                        while (FileService.this.mFileListener.fileCacheStr() == null) {
                             LogUtils.logE("FileService", "fileCache not complete wait");
                             Thread.sleep(500);
                         }
-                        ECGRecordUtils.m2778a(FileService.this.getApplicationContext(), stringBuffer2, FileService.this.mFileListener.mo2102a(), eCGRecord.getEcgEntity());
+                        ECGRecordUtils.m2778a(FileService.this.getApplicationContext(), stringBuffer2, FileService.this.mFileListener.fileCacheStr(), eCGRecord.getEcgEntity());
                     }
                     this.isbeginSave = true;
                     return stringBuffer2;
@@ -252,8 +252,8 @@ public class FileService extends Service {
     }
 
     /* renamed from: a */
-    public void mo2699a() {
-        this.mFileListener.mo2105b();
+    public void onStartEvent() {
+        this.mFileListener.startEcgEvent();
     }
 
     /* renamed from: a */
@@ -273,10 +273,10 @@ public class FileService extends Service {
     }
 
     /* renamed from: a */
-    public void mo2702a(String str, String str2, String str3) {
-        if (this.f2838d == null || this.f2838d.getStatus() != AsyncTask.Status.RUNNING) {
-            this.f2838d = new C0756b();
-            this.f2838d.execute(new String[]{str, str2, str3});
+    public void startImportAsyncTask(String str, String str2, String str3) {
+        if (this.mImportAsyncTask == null || this.mImportAsyncTask.getStatus() != AsyncTask.Status.RUNNING) {
+            this.mImportAsyncTask = new ImportAsyncTask();
+            this.mImportAsyncTask.execute(new String[]{str, str2, str3});
         }
     }
 
@@ -286,8 +286,8 @@ public class FileService extends Service {
     }
 
     /* renamed from: b */
-    public void mo2704b() {
-        this.mFileListener.mo2106c();
+    public void onStopEcg() {
+        this.mFileListener.stopEcgEvent();
     }
 
     /* renamed from: c */

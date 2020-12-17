@@ -44,8 +44,8 @@ import com.hopetruly.ecg.widget.HrAlphaAnimation;
 import com.hopetruly.ecg.services.MainService;
 import com.hopetruly.ecg.util.ECGRecordUtils;
 import com.warick.drawable.WarickSurfaceView;
-import com.warick.drawable.p028a.GrideDrawListener;
-import com.warick.drawable.p028a.EcgCovertDrawListener;
+import com.warick.drawable.drawlistener.GrideDrawListener;
+import com.warick.drawable.drawlistener.EcgCovertDrawListener;
 
 import java.io.File;
 import java.util.Arrays;

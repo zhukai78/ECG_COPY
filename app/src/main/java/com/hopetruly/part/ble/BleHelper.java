@@ -1,4 +1,4 @@
-package com.hopetruly.part.p024a;
+package com.hopetruly.part.ble;
 
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;

@@ -48,10 +48,10 @@ import com.hopetruly.ecg.util.LogUtils;
 import com.hopetruly.ecg.util.HistoryDisplayUtils;
 import com.hopetruly.part.net.NetService;
 import com.warick.drawable.WarickSurfaceView;
-import com.warick.drawable.p028a.HisToryEcgProgressDrawListener;
-import com.warick.drawable.p028a.GrideDrawListener;
-import com.warick.drawable.p028a.EcgCovertDrawListener;
-import com.warick.drawable.p028a.HistoryRecordDrawListener;
+import com.warick.drawable.drawlistener.HisToryEcgProgressDrawListener;
+import com.warick.drawable.drawlistener.GrideDrawListener;
+import com.warick.drawable.drawlistener.EcgCovertDrawListener;
+import com.warick.drawable.drawlistener.HistoryRecordDrawListener;
 import com.warick.jni.filter.Fir;
 
 import org.xml.sax.SAXException;
@@ -809,7 +809,7 @@ public class HistoryECGDisplayActivity extends BaseActivity {
                 public void onClick(View view) {
                     if (HistoryECGDisplayActivity.this.ecgMakes != null && HistoryECGDisplayActivity.this.ecgCutMode != 2) {
                         int progress = HistoryECGDisplayActivity.this.sb_His.getProgress();
-                        int b = HistoryECGDisplayActivity.this.mEcgParserUtils.mo2781b(progress);
+                        int b = HistoryECGDisplayActivity.this.mEcgParserUtils.getHalfLen(progress);
                         if (b >= 2) {
                             HistoryECGDisplayActivity.this.sb_His.setProgress((int) (((double) HistoryECGDisplayActivity.this.ecgMakes[b - 2]) * 0.25d));
                         }
@@ -977,7 +977,7 @@ public class HistoryECGDisplayActivity extends BaseActivity {
             } else {
                 this.ecgMakes = iArr;
             }
-            this.mEcgParserUtils.mo2778a(this.ecgMakes);
+            this.mEcgParserUtils.addEcgMakes(this.ecgMakes);
         }
     }
 

@@ -190,7 +190,7 @@ public class EcgRecListActivity extends BaseActivity implements AdapterView.OnIt
                 } else if (action.equals("com.holptruly.ecg.services.NetService.LOGIN_SUCCESSFUL")) {
                     EcgRecListActivity.this.dismissProgressDialog();
                     EcgRecListActivity.this.pupop_login.dismiss();
-                    EcgRecListActivity.this.ecgrecNetService.mo2821a(EcgRecListActivity.this.ecgrecApp.mUserInfo.getId());
+                    EcgRecListActivity.this.ecgrecNetService.getRecordByID(EcgRecListActivity.this.ecgrecApp.mUserInfo.getId());
                     return;
                 } else if (action.equals("com.holptruly.ecg.services.NetService.LOGIN_FAILE")) {
                     EcgRecListActivity.this.dismissProgressDialog();
@@ -520,7 +520,7 @@ public class EcgRecListActivity extends BaseActivity implements AdapterView.OnIt
                 string = getResources().getString(R.string.p_not_valid_ecg_rec_file);
             } else {
                 String[] split = stringExtra.split("/");
-                this.ecgrecFileService.mo2702a(stringExtra, split[split.length - 1], this.ecgrecApp.mUserInfo.getName());
+                this.ecgrecFileService.startImportAsyncTask(stringExtra, split[split.length - 1], this.ecgrecApp.mUserInfo.getName());
                 return;
             }
             Toast.makeText(this, string, Toast.LENGTH_SHORT).show();
@@ -571,7 +571,7 @@ public class EcgRecListActivity extends BaseActivity implements AdapterView.OnIt
                     startActivityForResult(new Intent(this, FileExploreActivity.class), 3001);
                     return true;
                 case R.id.history_action_sync /*2131165328*/:
-                    this.ecgrecNetService.mo2821a(this.ecgrecApp.mUserInfo.getId());
+                    this.ecgrecNetService.getRecordByID(this.ecgrecApp.mUserInfo.getId());
                     return true;
                 default:
                     return super.onOptionsItemSelected(menuItem);

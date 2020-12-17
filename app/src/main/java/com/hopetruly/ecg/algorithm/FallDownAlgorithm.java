@@ -22,56 +22,56 @@ public class FallDownAlgorithm {
     int f2724d = 0;
 
     /* renamed from: e */
-    Context f2725e;
+    Context mCtx;
 
     /* renamed from: f */
-    private long f2726f = 0;
+    private long freefallTimeMill = 0;
 
     /* renamed from: g */
-    private long f2727g = 0;
+    private long impactTimeMill = 0;
 
     /* renamed from: h */
-    private long f2728h = 0;
+    private long checkTimeMill = 0;
 
     /* renamed from: i */
-    private boolean f2729i = false;
+    private boolean firstCheckBool = false;
 
     /* renamed from: j */
-    private boolean f2730j = false;
+    private boolean impactBool = false;
 
     /* renamed from: k */
     private boolean f2731k = false;
 
     public FallDownAlgorithm(Context context) {
-        this.f2725e = context;
+        this.mCtx = context;
     }
 
     /* renamed from: b */
     private void m2585b(int i, int i2, int i3, int i4) {
-        this.f2728h = System.currentTimeMillis();
-        if (!this.f2729i && i4 < 50) {
+        this.checkTimeMill = System.currentTimeMillis();
+        if (!this.firstCheckBool && i4 < 50) {
             Log.e("#####################", "free fall !!!!!!!!!!!");
-            this.f2729i = true;
-            this.f2726f = this.f2728h;
+            this.firstCheckBool = true;
+            this.freefallTimeMill = this.checkTimeMill;
         }
-        if (!this.f2730j && this.f2729i) {
-            int i5 = (int) (this.f2728h - this.f2726f);
+        if (!this.impactBool && this.firstCheckBool) {
+            int i5 = (int) (this.checkTimeMill - this.freefallTimeMill);
             if (i5 >= 400) {
                 Log.e("#####################", "impact timeout !!!!!!!!!!!" + i5 + ":" + i4);
-                this.f2729i = false;
-                this.f2730j = false;
+                this.firstCheckBool = false;
+                this.impactBool = false;
             } else if (i4 > 500) {
                 Log.e("#####################", "impact !!!!!!!!!!!" + i5 + ":" + i4);
-                this.f2730j = true;
-                this.f2727g = this.f2728h;
+                this.impactBool = true;
+                this.impactTimeMill = this.checkTimeMill;
                 this.f2722b = i4;
                 this.f2723c = i4;
             } else {
                 Log.e("#####################", "impact < limit!!!!!!!!!!!" + i5 + ":" + i4);
             }
         }
-        if (this.f2729i && this.f2730j) {
-            int i6 = (int) (this.f2728h - this.f2727g);
+        if (this.firstCheckBool && this.impactBool) {
+            int i6 = (int) (this.checkTimeMill - this.impactTimeMill);
             if (i6 < 3000) {
                 if (Math.abs(this.f2723c - i4) < 25) {
                     Log.e("#####################", "stable!!!!!!!!!!!" + i6 + ">>" + this.f2723c + ":" + i4);
@@ -83,19 +83,19 @@ public class FallDownAlgorithm {
                 this.f2723c = i4;
                 if (this.f2724d > 3) {
                     this.f2731k = true;
-//                    C0140d.m485a(this.f2725e).mo390a(new Intent("com.holptruly.part.FallDetection.FALLDOWN"));
-                    LocalBroadcastManager.getInstance(f2725e).sendBroadcast(new Intent("com.holptruly.part.FallDetection.FALLDOWN"));
+//                    C0140d.m485a(this.mCtx).mo390a(new Intent("com.holptruly.part.FallDetection.FALLDOWN"));
+                    LocalBroadcastManager.getInstance(mCtx).sendBroadcast(new Intent("com.holptruly.part.FallDetection.FALLDOWN"));
                     Log.e("#####################", "fall down !!!!!!!!!!!");
-                    this.f2729i = false;
-                    this.f2730j = false;
+                    this.firstCheckBool = false;
+                    this.impactBool = false;
                     this.f2731k = false;
                     this.f2724d = 0;
                     return;
                 }
                 return;
             }
-            this.f2729i = false;
-            this.f2730j = false;
+            this.firstCheckBool = false;
+            this.impactBool = false;
             this.f2731k = false;
             this.f2724d = 0;
             Log.e("#####################", "timeout!!!!!!!!!!!" + i6 + ":" + i4);
@@ -103,7 +103,7 @@ public class FallDownAlgorithm {
     }
 
     /* renamed from: a */
-    public void mo2448a(int i, int i2, int i3, int i4) {
+    public void checkFall(int i, int i2, int i3, int i4) {
         m2585b(i, i2, i3, i4);
     }
 }

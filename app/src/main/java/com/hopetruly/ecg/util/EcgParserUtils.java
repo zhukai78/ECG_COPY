@@ -12,7 +12,7 @@ public class EcgParserUtils {
     private int f2912b;
 
     /* renamed from: c */
-    private int[] f2913c;
+    private int[] mEcgMakes;
 
     /* renamed from: b */
     private int[] m2788b(int[] iArr) {
@@ -32,20 +32,20 @@ public class EcgParserUtils {
 
     /* renamed from: a */
     public void mo2777a(int i) {
-        if (this.f2913c != null) {
+        if (this.mEcgMakes != null) {
             this.f2911a = (int) (((double) i) / 0.25d);
-            for (int i2 = 0; i2 < this.f2913c.length; i2 += 2) {
+            for (int i2 = 0; i2 < this.mEcgMakes.length; i2 += 2) {
                 int i3 = i2 + 1;
-                if (this.f2913c[i3] > this.f2911a) {
-                    this.f2913c[i3] = this.f2911a;
+                if (this.mEcgMakes[i3] > this.f2911a) {
+                    this.mEcgMakes[i3] = this.f2911a;
                 }
             }
         }
     }
 
     /* renamed from: a */
-    public void mo2778a(int[] iArr) {
-        this.f2913c = iArr;
+    public void addEcgMakes(int[] iArr) {
+        this.mEcgMakes = iArr;
     }
 
     /* renamed from: a */
@@ -61,21 +61,21 @@ public class EcgParserUtils {
             i4 = this.f2912b - i5;
         }
         int i6 = this.f2912b + i5;
-        this.f2913c = this.f2913c == null ? new int[2] : Arrays.copyOf(this.f2913c, this.f2913c.length + 2);
-        this.f2913c[this.f2913c.length - 2] = i4;
-        this.f2913c[this.f2913c.length - 1] = i6;
+        this.mEcgMakes = this.mEcgMakes == null ? new int[2] : Arrays.copyOf(this.mEcgMakes, this.mEcgMakes.length + 2);
+        this.mEcgMakes[this.mEcgMakes.length - 2] = i4;
+        this.mEcgMakes[this.mEcgMakes.length - 1] = i6;
         return true;
     }
 
     /* renamed from: a */
-    public int[] mo2780a() {
-        return this.f2913c;
+    public int[] getmEcgMakes() {
+        return this.mEcgMakes;
     }
 
     /* renamed from: b */
-    public int mo2781b(int i) {
-        for (int length = this.f2913c.length - 2; length > 0; length -= 2) {
-            if (((double) i) >= ((double) this.f2913c[length]) * 0.25d) {
+    public int getHalfLen(int i) {
+        for (int length = this.mEcgMakes.length - 2; length > 0; length -= 2) {
+            if (((double) i) >= ((double) this.mEcgMakes[length]) * 0.25d) {
                 return length;
             }
         }
@@ -83,21 +83,21 @@ public class EcgParserUtils {
     }
 
     /* renamed from: b */
-    public void mo2782b() {
+    public void clearData() {
         this.f2911a = 0;
         this.f2912b = 0;
-        this.f2913c = null;
+        this.mEcgMakes = null;
     }
 
     /* renamed from: b */
     public int[] mo2783b(int i, int i2) {
-        if (this.f2913c == null) {
+        if (this.mEcgMakes == null) {
             return null;
         }
         int[] iArr = null;
-        for (int i3 = 0; i3 < this.f2913c.length; i3 += 2) {
-            int i4 = (int) (((float) this.f2913c[i3]) * 0.25f);
-            int i5 = (int) (((float) this.f2913c[i3 + 1]) * 0.25f);
+        for (int i3 = 0; i3 < this.mEcgMakes.length; i3 += 2) {
+            int i4 = (int) (((float) this.mEcgMakes[i3]) * 0.25f);
+            int i5 = (int) (((float) this.mEcgMakes[i3 + 1]) * 0.25f);
             if (i5 > i && i4 < i2) {
                 iArr = iArr == null ? new int[2] : Arrays.copyOf(iArr, iArr.length + 2);
                 if (i >= i4) {
@@ -117,32 +117,32 @@ public class EcgParserUtils {
 
     /* renamed from: c */
     public int mo2784c(int i) {
-        for (int i2 = 0; i2 < this.f2913c.length - 2; i2 += 2) {
-            if (((double) i) < ((double) this.f2913c[i2]) * 0.25d) {
+        for (int i2 = 0; i2 < this.mEcgMakes.length - 2; i2 += 2) {
+            if (((double) i) < ((double) this.mEcgMakes[i2]) * 0.25d) {
                 return i2 - 2;
             }
         }
-        return this.f2913c.length - 4;
+        return this.mEcgMakes.length - 4;
     }
 
     /* renamed from: c */
-    public String mo2785c() {
-        if (this.f2913c == null) {
+    public String creatMakeTimeStrBuff() {
+        if (this.mEcgMakes == null) {
             return null;
         }
         StringBuffer stringBuffer = new StringBuffer();
         int i = 0;
-        while (i < this.f2913c.length) {
+        while (i < this.mEcgMakes.length) {
             int i2 = i + 2;
-            if (i2 != this.f2913c.length) {
-                stringBuffer.append(this.f2913c[i]);
+            if (i2 != this.mEcgMakes.length) {
+                stringBuffer.append(this.mEcgMakes[i]);
                 stringBuffer.append(",");
-                stringBuffer.append(this.f2913c[i + 1]);
+                stringBuffer.append(this.mEcgMakes[i + 1]);
                 stringBuffer.append("|");
-            } else if (i2 == this.f2913c.length) {
-                stringBuffer.append(this.f2913c[i]);
+            } else if (i2 == this.mEcgMakes.length) {
+                stringBuffer.append(this.mEcgMakes[i]);
                 stringBuffer.append(",");
-                stringBuffer.append(this.f2913c[i + 1]);
+                stringBuffer.append(this.mEcgMakes[i + 1]);
             }
             i = i2;
         }

@@ -3,7 +3,7 @@ package com.hopetruly.ecg.file;
 /* renamed from: com.hopetruly.ecg.a.b */
 public interface FileListener {
     /* renamed from: a */
-    String mo2102a();
+    String fileCacheStr();
 
     /* renamed from: a */
     void shareCachePath(String str);
@@ -12,10 +12,10 @@ public interface FileListener {
     void savemEcgData(int[] iArr);
 
     /* renamed from: b */
-    void mo2105b();
+    void startEcgEvent();
 
     /* renamed from: c */
-    void mo2106c();
+    void stopEcgEvent();
 
     /* renamed from: d */
     int mo2107d();

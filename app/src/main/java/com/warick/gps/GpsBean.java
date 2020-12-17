@@ -10,7 +10,7 @@ public class GpsBean {
     private double latitude = 0.0d;
 
     /* renamed from: c */
-    private int f3005c = 0;
+    private int gpsCnt = 0;
 
     /* renamed from: a */
     public double getLongitude() {
@@ -24,7 +24,7 @@ public class GpsBean {
 
     /* renamed from: a */
     public void mo2884a(int i) {
-        this.f3005c = i;
+        this.gpsCnt = i;
     }
 
     /* renamed from: b */

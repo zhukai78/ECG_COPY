@@ -3,9 +3,14 @@
     <words>
       <w>bynum</w>
       <w>getgetbatterylevel</w>
+      <w>isdisconnected</w>
+      <w>isexit</w>
       <w>ispause</w>
+      <w>powerlow</w>
       <w>removegps</w>
       <w>saveingprogress</w>
+      <w>showdisconnected</w>
+      <w>tofile</w>
       <w>updata</w>
     </words>
   </dictionary>

@@ -118,7 +118,7 @@ public class ECGRecordUtils {
     }
 
     /* renamed from: a */
-    public static void m2776a(Context context, File file, File file2, ECGEntity eCGEntity) throws ParserConfigurationException, IOException, SAXException, TransformerException {
+    public static void hl7SvaefileCacheStr(Context context, File file, File file2, ECGEntity eCGEntity) throws ParserConfigurationException, IOException, SAXException, TransformerException {
         FileOutputStream fileOutputStream = new FileOutputStream(file);
         InputStream open = context.getApplicationContext().getResources().getAssets().open("hl7.xml");
         byte[] bArr = new byte[1024];
@@ -242,11 +242,11 @@ public class ECGRecordUtils {
         if (!file2.exists()) {
             file2.createNewFile();
         }
-        m2776a(context, file2, file, eCGEntity);
+        hl7SvaefileCacheStr(context, file2, file, eCGEntity);
     }
 
     /* renamed from: a */
-    public static void m2779a(Context context, String str, float[] fArr, ECGEntity eCGEntity) throws IOException, TransformerException, ParserConfigurationException, SAXException {
+    public static void mkdirsAndFile(Context context, String str, float[] fArr, ECGEntity eCGEntity) throws IOException, TransformerException, ParserConfigurationException, SAXException {
         File file = new File(str);
         if (!file.getParentFile().exists()) {
             file.getParentFile().mkdirs();
@@ -317,7 +317,7 @@ public class ECGRecordUtils {
     }
 
     /* renamed from: a */
-    public static boolean m2782a(String str, String str2, boolean z, Context context, String str3) {
+    public static boolean importFile(String str, String str2, boolean z, Context context, String str3) {
         try {
             File file = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + "/hopetruly/ECGdata/" + str3 + "_" + str2);
             if (!file.getParentFile().exists()) {

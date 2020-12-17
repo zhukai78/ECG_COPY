@@ -35,7 +35,7 @@ import com.hopetruly.ecg.services.MainService;
 import com.hopetruly.ecg.util.DataParser;
 import com.hopetruly.ecg.util.LogUtils;
 import com.hopetruly.part.net.NetService;
-import com.hopetruly.part.p024a.BleHelper;
+import com.hopetruly.part.ble.BleHelper;
 
 import java.io.File;
 import java.io.FileInputStream;

@@ -47,7 +47,7 @@ public class MyFileListener implements FileListener {
     /* access modifiers changed from: private */
 
     /* renamed from: i */
-    public Handler f2104i;
+    public Handler mFileHandler;
 
     /* renamed from: j */
     private int f2105j = 1024;
@@ -82,7 +82,7 @@ public class MyFileListener implements FileListener {
         public void run() {
             Looper.prepare();
             Looper unused = MyFileListener.this.f2103h = Looper.myLooper();
-            Handler unused2 = MyFileListener.this.f2104i = new Handler(MyFileListener.this.f2103h) {
+            Handler unused2 = MyFileListener.this.mFileHandler = new Handler(MyFileListener.this.f2103h) {
                 public void handleMessage(Message message) {
                     switch (message.what) {
                         case 0:
@@ -157,10 +157,10 @@ public class MyFileListener implements FileListener {
             for (int i2 = 0; i2 < this.f2108m; i2++) {
                 iArr[i2] = this.f2106k[(this.f2110o + i2) % this.f2106k.length];
             }
-            Message obtain = Message.obtain(this.f2104i);
+            Message obtain = Message.obtain(this.mFileHandler);
             obtain.what = 2;
             obtain.obj = iArr;
-            this.f2104i.sendMessage(obtain);
+            this.mFileHandler.sendMessage(obtain);
             this.f2108m = 0;
             this.f2110o = this.f2109n;
         }
@@ -208,7 +208,7 @@ public class MyFileListener implements FileListener {
     }
 
     /* renamed from: a */
-    public String mo2102a() {
+    public String fileCacheStr() {
         if (this.f2102g) {
             return null;
         }
@@ -236,29 +236,29 @@ public class MyFileListener implements FileListener {
 
     /* renamed from: a */
     public void savemEcgData(int[] iArr) {
-        if (this.f2104i != null) {
-            Message obtain = Message.obtain(this.f2104i);
+        if (this.mFileHandler != null) {
+            Message obtain = Message.obtain(this.mFileHandler);
             obtain.what = 3;
             obtain.obj = iArr;
-            this.f2104i.sendMessage(obtain);
+            this.mFileHandler.sendMessage(obtain);
         }
     }
 
     /* renamed from: b */
-    public void mo2105b() {
-        if (this.f2104i != null) {
-            Message obtain = Message.obtain(this.f2104i);
+    public void startEcgEvent() {
+        if (this.mFileHandler != null) {
+            Message obtain = Message.obtain(this.mFileHandler);
             obtain.what = 0;
-            this.f2104i.sendMessage(obtain);
+            this.mFileHandler.sendMessage(obtain);
         }
     }
 
     /* renamed from: c */
-    public void mo2106c() {
-        if (this.f2104i != null) {
-            Message obtain = Message.obtain(this.f2104i);
+    public void stopEcgEvent() {
+        if (this.mFileHandler != null) {
+            Message obtain = Message.obtain(this.mFileHandler);
             obtain.what = 1;
-            this.f2104i.sendMessage(obtain);
+            this.mFileHandler.sendMessage(obtain);
         }
     }
 

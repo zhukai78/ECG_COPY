@@ -86,7 +86,7 @@ public class StepCounter {
     }
 
     /* renamed from: a */
-    public void mo2461a(float f) {
+    public void sendStep(float f) {
         if (this.mMathUtil.mo2463a((float) Fir.RealtimeFir(f, Fir.Fir_6, this.f2752i))) {
             this.step_value++;
             Intent intent = new Intent("com.hopetruly.part.StepCounter.STEP");

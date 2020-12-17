@@ -1140,7 +1140,7 @@ public class SettingFragment extends Fragment {
                     stringBuffer.append("hopetruly");
                     stringBuffer.append(File.separator);
                     stringBuffer.append("update");
-                    SettingFragment.this.SetFragApp.appMainService.mmainNetService.mo2822a(str3, stringBuffer.toString(), "ecg.apk");
+                    SettingFragment.this.SetFragApp.appMainService.mmainNetService.getUpdateApkUrl(str3, stringBuffer.toString(), "ecg.apk");
                 }
             }
         });

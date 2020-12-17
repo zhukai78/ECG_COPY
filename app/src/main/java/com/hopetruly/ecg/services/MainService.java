@@ -36,7 +36,7 @@ import com.hopetruly.ecg.util.MyAlarmClock;
 import com.hopetruly.ecg.util.NotificationUtils;
 import com.hopetruly.part.net.MyHttpClient;
 import com.hopetruly.part.net.NetService;
-import com.hopetruly.part.p024a.BleHelper;
+import com.hopetruly.part.ble.BleHelper;
 import com.warick.gps.GpsManagerHelper;
 import com.warick.sms.utils.GPSSosHelper;
 import java.io.File;
@@ -202,7 +202,7 @@ public class MainService extends Service {
                             }
                             MainService.this.mmainecggApp.appMachine.setMac(stringBuffer.toString());
                             if (MainService.this.mmainNetService.getNetInfoType() != -1 && MainService.this.mmainecggApp.spSw_conf.getInt("DEVICE_ID_UPLOAD", 0) == 1) {
-                                MainService.this.mmainNetService.mo2825a(MainService.this.mmainecggApp.appMachine.getId(), MainService.this.mmainecggApp.mUserInfo.getName());
+                                MainService.this.mmainNetService.compareDEVICEID(MainService.this.mmainecggApp.appMachine.getId(), MainService.this.mmainecggApp.mUserInfo.getName());
                             }
                             d = MainService.this.mainbleHelper;
                             data = ECGUUIDS.f2772e;
@@ -299,10 +299,10 @@ public class MainService extends Service {
                                 float f3 = (((float) (((double) (-1 * byteArrayExtra2[2])) / 16.0d)) * 1000.0f) / 5.0f;
                                 double sqrt = Math.sqrt((double) ((f * f) + (f2 * f2) + (f3 * f3)));
                                 if (MainService.this.isGattStop) {
-                                    MainService.this.mainmStepCounter.mo2461a((float) sqrt);
+                                    MainService.this.mainmStepCounter.sendStep((float) sqrt);
                                 }
                                 if (MainService.this.assertFallDown) {
-                                    MainService.this.mFallDownAlgorithm.mo2448a((int) f, (int) f2, (int) f3, (int) sqrt);
+                                    MainService.this.mFallDownAlgorithm.checkFall((int) f, (int) f2, (int) f3, (int) sqrt);
                                     return;
                                 }
                                 return;
@@ -310,7 +310,7 @@ public class MainService extends Service {
                                 ConvertECG convertECG = Sensor.ECG.convertECG(intent.getByteArrayExtra("com.hopetruly.ec.services.EXTRA_DATA"));
                                 MainService.this.mmainFileService.savemRealEcgData(convertECG.ecgArr);
                                 if (MainService.this.mmainNetService.isNetRun()) {
-                                    MainService.this.mmainNetService.mo2823a(convertECG.ecgArr, 75);
+                                    MainService.this.mmainNetService.uploadEcgDatas(convertECG.ecgArr, 75);
                                     return;
                                 }
                                 return;
@@ -464,7 +464,7 @@ public class MainService extends Service {
     }
 
     /* renamed from: v */
-    private static IntentFilter m2708v() {
+    private static IntentFilter registerIntentFilter() {
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction("com.hopetruly.ec.services.ACTION_GATT_CONNECTED");
         intentFilter.addAction("com.hopetruly.ec.services.ACTION_GATT_DISCONNECTED");
@@ -558,7 +558,7 @@ public class MainService extends Service {
             eCGEntity.setLead(ECGEntity.LEAD_I);
             eCGEntity.setLeadExten(eCGRecord.getLeadType() == 1 ? ECGEntity.LEAD_PART_CHEST : ECGEntity.LEAD_PART_HAND);
             this.mSaveECGRecord.setEcgEntity(eCGEntity);
-            this.mmainFileService.mo2699a();
+            this.mmainFileService.onStartEvent();
             if (this.mmainecggApp.appECGConf.getECG_REALTIME_UPLOAD() == 1) {
                 this.mmainNetService.startNetServiceTheard();
             }
@@ -705,8 +705,8 @@ public class MainService extends Service {
             }
             stopTimer();
             this.mEcgParserUtils.mo2777a(this.mmainFileService.mo2705c());
-            this.mmainFileService.mo2704b();
-            this.mmainNetService.mo2830d();
+            this.mmainFileService.onStopEcg();
+            this.mmainNetService.uploadEcgs();
             String str = this.TAG;
             LogUtils.logI(str, "SaveECG>timeSec:" + this.saveTimeSec + "");
             this.saveTimeSec = this.saveTimeSec % 3600;
@@ -714,13 +714,13 @@ public class MainService extends Service {
             ECGRecord eCGRecord = this.mSaveECGRecord;
             eCGRecord.setPeriod(String.format("%02d", new Object[]{Integer.valueOf((int) (this.saveTimeSec / 3600))}) + ":" + String.format("%02d", new Object[]{Integer.valueOf((int) (this.saveTimeSec / 60))}) + ":" + String.format("%02d", new Object[]{Integer.valueOf(i)}));
             this.mSaveECGRecord.getEcgEntity().setEndTime(new SimpleDateFormat("yyyyMMddHHmmss", Locale.CHINA).format(new Date(System.currentTimeMillis())));
-            this.mSaveECGRecord.getEcgEntity().setMark_time(this.mEcgParserUtils.mo2785c());
+            this.mSaveECGRecord.getEcgEntity().setMark_time(this.mEcgParserUtils.creatMakeTimeStrBuff());
             int[] iArr = null;
             if (this.mSaveECGRecord.getEcgEntity().getMark_time() != null) {
-                iArr = this.mEcgParserUtils.mo2780a();
+                iArr = this.mEcgParserUtils.getmEcgMakes();
             }
             this.mSaveECGRecord.getEcgEntity().setMark_period(iArr);
-            this.mEcgParserUtils.mo2782b();
+            this.mEcgParserUtils.clearData();
         }
     }
 
@@ -809,7 +809,7 @@ public class MainService extends Service {
         LogUtils.logI(this.TAG, "onCreate ....");
         this.mmainecggApp = (ECGApplication) getApplication();
         this.mmainecggApp.appEcgUncaughtExceptionHandler.mo2770a((Service) this);
-        LocalBroadcastManager.getInstance(getApplicationContext()).registerReceiver(this.mainLocalbroadcastReceiver, m2708v());
+        LocalBroadcastManager.getInstance(getApplicationContext()).registerReceiver(this.mainLocalbroadcastReceiver, registerIntentFilter());
         this.mSqlManager = new SqlManager(getApplicationContext());
         Intent intent = new Intent();
         intent.setClass(this, FileService.class);
