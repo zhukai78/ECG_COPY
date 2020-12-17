@@ -45,10 +45,10 @@ import com.hopetruly.ecg.services.MainService;
 import com.hopetruly.ecg.util.ECGRecordUtils;
 import com.hopetruly.ecg.util.EcgParserUtils;
 import com.hopetruly.ecg.util.LogUtils;
-import com.hopetruly.ecg.util.C0775k;
+import com.hopetruly.ecg.util.HistoryDisplayUtils;
 import com.hopetruly.part.net.NetService;
 import com.warick.drawable.WarickSurfaceView;
-import com.warick.drawable.p028a.C0812a;
+import com.warick.drawable.p028a.HisToryEcgProgressDrawListener;
 import com.warick.drawable.p028a.GrideDrawListener;
 import com.warick.drawable.p028a.EcgCovertDrawListener;
 import com.warick.drawable.p028a.HistoryRecordDrawListener;
@@ -84,7 +84,7 @@ public class HistoryECGDisplayActivity extends BaseActivity {
     /* access modifiers changed from: private */
 
     /* renamed from: E */
-    public TextView f2307E;
+    public TextView tv_his_ecg_hr;
 
     /* renamed from: F */
     private PopupWindow pop_pupop_ecg_tool;
@@ -110,7 +110,7 @@ public class HistoryECGDisplayActivity extends BaseActivity {
     /* access modifiers changed from: private */
 
     /* renamed from: L */
-    public boolean f2314L = true;
+    public boolean isHandOrBody = true;
     /* access modifiers changed from: private */
 
     /* renamed from: M */
@@ -122,15 +122,15 @@ public class HistoryECGDisplayActivity extends BaseActivity {
     /* access modifiers changed from: private */
 
     /* renamed from: O */
-    public int f2317O = 0;
+    public int ecgCutMode = 0;
     /* access modifiers changed from: private */
 
     /* renamed from: P */
-    public boolean f2318P = false;
+    public boolean isStartCut = false;
     /* access modifiers changed from: private */
 
     /* renamed from: Q */
-    public boolean f2319Q = false;
+    public boolean isEndCut = false;
     /* access modifiers changed from: private */
 
     /* renamed from: R */
@@ -183,7 +183,7 @@ public class HistoryECGDisplayActivity extends BaseActivity {
             String str3;
             try {
                 DecimalFormat decimalFormat = new DecimalFormat("0.0000");
-                if (HistoryECGDisplayActivity.this.f2317O == 0) {
+                if (HistoryECGDisplayActivity.this.ecgCutMode == 0) {
                     switch (motionEvent.getAction() & 255) {
                         case 0:
                             HistoryECGDisplayActivity.m2394k(HistoryECGDisplayActivity.this);
@@ -195,9 +195,9 @@ public class HistoryECGDisplayActivity extends BaseActivity {
                             float f = (float) x2;
                             HistoryECGDisplayActivity.this.mHistoryRecordDrawListener.mo2928a(0, f);
                             float d = HistoryECGDisplayActivity.this.mEcgCovertDrawListener.mo2919d(HistoryECGDisplayActivity.this.mEcgCovertDrawListener.mo2916c(x2));
-                            HistoryECGDisplayActivity.this.f2338n[0].mo2904a(true);
-                            HistoryECGDisplayActivity.this.f2338n[1].mo2904a(false);
-                            HistoryECGDisplayActivity.this.f2338n[0].mo2903a((String) null, f, HistoryECGDisplayActivity.this.mEcgCovertDrawListener.mo2906a() * d);
+                            HistoryECGDisplayActivity.this.mHisToryEcgProgressDrawListener[0].mo2904a(true);
+                            HistoryECGDisplayActivity.this.mHisToryEcgProgressDrawListener[1].mo2904a(false);
+                            HistoryECGDisplayActivity.this.mHisToryEcgProgressDrawListener[0].mo2903a((String) null, f, HistoryECGDisplayActivity.this.mEcgCovertDrawListener.mo2906a() * d);
                             HistoryECGDisplayActivity.this.tv_record_a1.setText("A1：" + decimalFormat.format((double) (d / 1000.0f)) + " mV");
                             HistoryECGDisplayActivity.this.tv_record_a2.setText("A2：-- mV");
                             textView = HistoryECGDisplayActivity.this.tv_record_a1a2;
@@ -219,11 +219,11 @@ public class HistoryECGDisplayActivity extends BaseActivity {
                                 float f3 = (float) x4;
                                 HistoryECGDisplayActivity.this.mHistoryRecordDrawListener.mo2928a(1, f3);
                                 float d2 = HistoryECGDisplayActivity.this.mEcgCovertDrawListener.mo2919d(HistoryECGDisplayActivity.this.mEcgCovertDrawListener.mo2916c(x3));
-                                HistoryECGDisplayActivity.this.f2338n[0].mo2904a(true);
-                                HistoryECGDisplayActivity.this.f2338n[0].mo2903a((String) null, f2, HistoryECGDisplayActivity.this.mEcgCovertDrawListener.mo2906a() * d2);
+                                HistoryECGDisplayActivity.this.mHisToryEcgProgressDrawListener[0].mo2904a(true);
+                                HistoryECGDisplayActivity.this.mHisToryEcgProgressDrawListener[0].mo2903a((String) null, f2, HistoryECGDisplayActivity.this.mEcgCovertDrawListener.mo2906a() * d2);
                                 float d3 = HistoryECGDisplayActivity.this.mEcgCovertDrawListener.mo2919d(HistoryECGDisplayActivity.this.mEcgCovertDrawListener.mo2916c(x4));
-                                HistoryECGDisplayActivity.this.f2338n[1].mo2904a(true);
-                                HistoryECGDisplayActivity.this.f2338n[1].mo2903a((String) null, f3, HistoryECGDisplayActivity.this.mEcgCovertDrawListener.mo2906a() * d3);
+                                HistoryECGDisplayActivity.this.mHisToryEcgProgressDrawListener[1].mo2904a(true);
+                                HistoryECGDisplayActivity.this.mHisToryEcgProgressDrawListener[1].mo2903a((String) null, f3, HistoryECGDisplayActivity.this.mEcgCovertDrawListener.mo2906a() * d3);
                                 HistoryECGDisplayActivity.this.tv_record_a1.setText("A1：" + decimalFormat.format((double) (d2 / 1000.0f)) + " mV");
                                 HistoryECGDisplayActivity.this.tv_record_a2.setText("A2：" + decimalFormat.format((double) (d3 / 1000.0f)) + " mV");
                                 textView2 = HistoryECGDisplayActivity.this.tv_record_a1a2;
@@ -236,8 +236,8 @@ public class HistoryECGDisplayActivity extends BaseActivity {
                                 float f4 = (float) x5;
                                 HistoryECGDisplayActivity.this.mHistoryRecordDrawListener.mo2928a(0, f4);
                                 float d4 = HistoryECGDisplayActivity.this.mEcgCovertDrawListener.mo2919d(HistoryECGDisplayActivity.this.mEcgCovertDrawListener.mo2916c(x5));
-                                HistoryECGDisplayActivity.this.f2338n[0].mo2903a((String) null, f4, HistoryECGDisplayActivity.this.mEcgCovertDrawListener.mo2906a() * d4);
-                                HistoryECGDisplayActivity.this.f2338n[1].mo2904a(false);
+                                HistoryECGDisplayActivity.this.mHisToryEcgProgressDrawListener[0].mo2903a((String) null, f4, HistoryECGDisplayActivity.this.mEcgCovertDrawListener.mo2906a() * d4);
+                                HistoryECGDisplayActivity.this.mHisToryEcgProgressDrawListener[1].mo2904a(false);
                                 HistoryECGDisplayActivity.this.tv_record_a1.setText("A1：" + decimalFormat.format((double) (d4 / 1000.0f)) + " mV");
                                 HistoryECGDisplayActivity.this.tv_record_a2.setText("A2：-- mV");
                                 textView = HistoryECGDisplayActivity.this.tv_record_a1a2;
@@ -257,11 +257,11 @@ public class HistoryECGDisplayActivity extends BaseActivity {
                             float f6 = (float) x7;
                             HistoryECGDisplayActivity.this.mHistoryRecordDrawListener.mo2928a(1, f6);
                             float d5 = HistoryECGDisplayActivity.this.mEcgCovertDrawListener.mo2919d(HistoryECGDisplayActivity.this.mEcgCovertDrawListener.mo2916c(x6));
-                            HistoryECGDisplayActivity.this.f2338n[0].mo2904a(true);
-                            HistoryECGDisplayActivity.this.f2338n[0].mo2903a((String) null, f5, d5 * HistoryECGDisplayActivity.this.mEcgCovertDrawListener.mo2906a());
+                            HistoryECGDisplayActivity.this.mHisToryEcgProgressDrawListener[0].mo2904a(true);
+                            HistoryECGDisplayActivity.this.mHisToryEcgProgressDrawListener[0].mo2903a((String) null, f5, d5 * HistoryECGDisplayActivity.this.mEcgCovertDrawListener.mo2906a());
                             float d6 = HistoryECGDisplayActivity.this.mEcgCovertDrawListener.mo2919d(HistoryECGDisplayActivity.this.mEcgCovertDrawListener.mo2916c(x7));
-                            HistoryECGDisplayActivity.this.f2338n[1].mo2904a(true);
-                            HistoryECGDisplayActivity.this.f2338n[1].mo2903a((String) null, f6, HistoryECGDisplayActivity.this.mEcgCovertDrawListener.mo2906a() * d6);
+                            HistoryECGDisplayActivity.this.mHisToryEcgProgressDrawListener[1].mo2904a(true);
+                            HistoryECGDisplayActivity.this.mHisToryEcgProgressDrawListener[1].mo2903a((String) null, f6, HistoryECGDisplayActivity.this.mEcgCovertDrawListener.mo2906a() * d6);
                             float d7 = HistoryECGDisplayActivity.this.mEcgCovertDrawListener.mo2919d(HistoryECGDisplayActivity.this.mEcgCovertDrawListener.mo2916c(x6));
                             HistoryECGDisplayActivity.this.tv_record_a1.setText("A1：" + decimalFormat.format((double) (d7 / 1000.0f)) + " mV");
                             HistoryECGDisplayActivity.this.tv_record_a2.setText("A2：" + decimalFormat.format((double) (d6 / 1000.0f)) + " mV");
@@ -274,19 +274,19 @@ public class HistoryECGDisplayActivity extends BaseActivity {
                             str2 = "onTouchEvent>ACTION_POINTER_UP>mode:" + HistoryECGDisplayActivity.this.f2316N;
                             break;
                     }
-                } else if (HistoryECGDisplayActivity.this.f2317O != 1) {
+                } else if (HistoryECGDisplayActivity.this.ecgCutMode != 1) {
                     return false;
                 } else {
                     switch (motionEvent.getAction() & 255) {
                         case 0:
-                            if (HistoryECGDisplayActivity.this.f2318P || HistoryECGDisplayActivity.this.f2319Q) {
+                            if (HistoryECGDisplayActivity.this.isStartCut || HistoryECGDisplayActivity.this.isEndCut) {
                                 x = (int) motionEvent.getX();
-                                if (HistoryECGDisplayActivity.this.f2318P) {
+                                if (HistoryECGDisplayActivity.this.isStartCut) {
                                     HistoryECGDisplayActivity.this.mHistoryRecordDrawListener.mo2930a(0, true);
                                     HistoryECGDisplayActivity.this.mHistoryRecordDrawListener.mo2929a(0, HistoryECGDisplayActivity.this.getString(R.string.start));
                                     HistoryECGDisplayActivity.this.mHistoryRecordDrawListener.mo2928a(0, (float) x);
                                 }
-                                if (HistoryECGDisplayActivity.this.f2319Q) {
+                                if (HistoryECGDisplayActivity.this.isEndCut) {
                                     HistoryECGDisplayActivity.this.mHistoryRecordDrawListener.mo2930a(1, true);
                                     HistoryECGDisplayActivity.this.mHistoryRecordDrawListener.mo2929a(1, HistoryECGDisplayActivity.this.getString(R.string.end));
                                     dVar = HistoryECGDisplayActivity.this.mHistoryRecordDrawListener;
@@ -295,8 +295,8 @@ public class HistoryECGDisplayActivity extends BaseActivity {
                             break;
                         case 1:
                             int x8 = (int) motionEvent.getX();
-                            if (!HistoryECGDisplayActivity.this.f2318P) {
-                                if (HistoryECGDisplayActivity.this.f2319Q) {
+                            if (!HistoryECGDisplayActivity.this.isStartCut) {
+                                if (HistoryECGDisplayActivity.this.isEndCut) {
                                     int c = HistoryECGDisplayActivity.this.mEcgCovertDrawListener.mo2916c(x8);
                                     HistoryECGDisplayActivity.this.tv_record_a2.setText(HistoryECGDisplayActivity.this.getString(R.string.end) + "：" + (c * 4) + "ms");
                                     int unused = HistoryECGDisplayActivity.this.f2321S = c;
@@ -310,13 +310,13 @@ public class HistoryECGDisplayActivity extends BaseActivity {
                             }
                             break;
                         case 2:
-                            if (HistoryECGDisplayActivity.this.f2318P || HistoryECGDisplayActivity.this.f2319Q) {
+                            if (HistoryECGDisplayActivity.this.isStartCut || HistoryECGDisplayActivity.this.isEndCut) {
                                 x = (int) motionEvent.getX();
-                                if (HistoryECGDisplayActivity.this.f2318P) {
+                                if (HistoryECGDisplayActivity.this.isStartCut) {
                                     HistoryECGDisplayActivity.this.mHistoryRecordDrawListener.mo2930a(0, true);
                                     HistoryECGDisplayActivity.this.mHistoryRecordDrawListener.mo2928a(0, (float) x);
                                 }
-                                if (HistoryECGDisplayActivity.this.f2319Q) {
+                                if (HistoryECGDisplayActivity.this.isEndCut) {
                                     HistoryECGDisplayActivity.this.mHistoryRecordDrawListener.mo2930a(1, true);
                                     dVar = HistoryECGDisplayActivity.this.mHistoryRecordDrawListener;
                                 }
@@ -387,9 +387,9 @@ public class HistoryECGDisplayActivity extends BaseActivity {
                 i = R.string.p_exist_fail;
             } else {
                 if ("com.hopetruly.ecg.services.MainService.FILE_SAVE_SUCCESS".equals(action)) {
-                    HistoryECGDisplayActivity.this.f2346v = null;
+                    HistoryECGDisplayActivity.this.ecgMakes = null;
                     HistoryECGDisplayActivity.this.mrecord = HistoryECGDisplayActivity.this.mCutRecord;
-                    HistoryECGDisplayActivity.this.f2343s = HistoryECGDisplayActivity.this.m2374a(HistoryECGDisplayActivity.this.mrecord.getFilePath());
+                    HistoryECGDisplayActivity.this.f2343s = HistoryECGDisplayActivity.this.hisAnnotatedECG(HistoryECGDisplayActivity.this.mrecord.getFilePath());
                     HistoryECGDisplayActivity.this.mEcgCovertDrawListener.setHistoryEcgs(HistoryECGDisplayActivity.this.f2343s);
                     HistoryECGDisplayActivity.this.mEcgCovertDrawListener.setRecordProgress(0);
                     HistoryECGDisplayActivity.this.sb_His.setProgress(0);
@@ -459,7 +459,7 @@ public class HistoryECGDisplayActivity extends BaseActivity {
     HistoryRecordDrawListener mHistoryRecordDrawListener;
 
     /* renamed from: n */
-    C0812a[] f2338n = null;
+    HisToryEcgProgressDrawListener[] mHisToryEcgProgressDrawListener = null;
 
     /* renamed from: o */
     ECGApplication mECGApplication;
@@ -483,7 +483,7 @@ public class HistoryECGDisplayActivity extends BaseActivity {
     EcgParserUtils mEcgParserUtils;
 
     /* renamed from: v */
-    int[] f2346v;
+    int[] ecgMakes;
 
     /* renamed from: w */
     ECGRecord mrecord;
@@ -504,16 +504,16 @@ public class HistoryECGDisplayActivity extends BaseActivity {
     public void m2365a(Context context) throws ParserConfigurationException, SAXException, IOException {
         String a;
         float f;
-        C0775k kVar = new C0775k(context);
+        HistoryDisplayUtils kVar = new HistoryDisplayUtils(context);
         if (this.tv_ecg_scale_info.getText().toString().equals(getString(R.string.l_ecg_scale_25))) {
             f = 1.0f;
         } else {
             if (this.tv_ecg_scale_info.getText().toString().equals(getString(R.string.l_ecg_scale_50))) {
                 f = 2.0f;
             }
-            kVar.mo2794a(this.mEcgCovertDrawListener.isFiterOpen());
-            kVar.mo2793a(this.mEcgCovertDrawListener.getReverseMark());
-            a = kVar.mo2791a(this.mrecord, this.f2343s, this.sb_His.getProgress(), this.tv_ecg_scale_info.getText().toString(), 1500, 3100);
+            kVar.setFilterOpen(this.mEcgCovertDrawListener.isFiterOpen());
+            kVar.setReverseMark(this.mEcgCovertDrawListener.getReverseMark());
+            a = kVar.drawReport(this.mrecord, this.f2343s, this.sb_His.getProgress(), this.tv_ecg_scale_info.getText().toString(), 1500, 3100);
             Intent intent = new Intent("android.intent.action.SEND");
             if (a == null) {
                 File file = new File(a);
@@ -534,9 +534,9 @@ public class HistoryECGDisplayActivity extends BaseActivity {
             return;
         }
         kVar.mo2792a(f);
-        kVar.mo2794a(this.mEcgCovertDrawListener.isFiterOpen());
-        kVar.mo2793a(this.mEcgCovertDrawListener.getReverseMark());
-        a = kVar.mo2791a(this.mrecord, this.f2343s, this.sb_His.getProgress(), this.tv_ecg_scale_info.getText().toString(), 1500, 3100);
+        kVar.setFilterOpen(this.mEcgCovertDrawListener.isFiterOpen());
+        kVar.setReverseMark(this.mEcgCovertDrawListener.getReverseMark());
+        a = kVar.drawReport(this.mrecord, this.f2343s, this.sb_His.getProgress(), this.tv_ecg_scale_info.getText().toString(), 1500, 3100);
         Intent intent2 = new Intent("android.intent.action.SEND");
         if (a == null) {
         }
@@ -577,7 +577,7 @@ public class HistoryECGDisplayActivity extends BaseActivity {
 
     /* access modifiers changed from: private */
     /* renamed from: a */
-    public float[] m2374a(String str) {
+    public float[] hisAnnotatedECG(String str) {
         try {
             String[] split = ECGRecordUtils.annotatedECG(new File(str), "digits").split(" ");
             float[] fArr = new float[split.length];
@@ -600,7 +600,7 @@ public class HistoryECGDisplayActivity extends BaseActivity {
     }
 
     /* renamed from: a */
-    private float[] m2375a(float[] fArr, int i, int i2) {
+    private float[] cutDataStartEnd(float[] fArr, int i, int i2) {
         String str = TAG;
         LogUtils.logE(str, getString(R.string.start) + ":" + i + getString(R.string.end) + ":" + i2);
         if (i2 > i) {
@@ -643,38 +643,38 @@ public class HistoryECGDisplayActivity extends BaseActivity {
         switch (this.mrecord.getLeadType()) {
             case 0:
                 textView2.setText(getString(R.string.l_with_hand));
-                this.f2314L = true;
+                this.isHandOrBody = true;
                 break;
             case 1:
                 textView2.setText(getString(R.string.l_with_chest));
-                this.f2314L = false;
+                this.isHandOrBody = false;
                 break;
         }
         ((TextView) findViewById(R.id.record_heartrate)).setText(String.valueOf(this.mrecord.getHeartRate()));
         ((TextView) findViewById(R.id.record_location)).setText("");
-        this.f2307E = (TextView) findViewById(R.id.his_ecg_hr);
-        this.f2307E.setText(String.valueOf(this.mrecord.getHeartRate()));
+        this.tv_his_ecg_hr = (TextView) findViewById(R.id.his_ecg_hr);
+        this.tv_his_ecg_hr.setText(String.valueOf(this.mrecord.getHeartRate()));
         this.mHistoryWarickSurfaceView = (WarickSurfaceView) findViewById(R.id.record_heart_rate_sv);
         this.mEcgCovertDrawListener = new EcgCovertDrawListener();
         this.mEcgCovertDrawListener.setRealHisMode(1);
-        if (this.f2346v != null) {
+        if (this.ecgMakes != null) {
             this.mEcgCovertDrawListener.setEcgParserUtils(this.mEcgParserUtils);
         }
         this.mHistoryRecordDrawListener = new HistoryRecordDrawListener();
-        this.f2338n = new C0812a[2];
-        this.f2338n[0] = new C0812a();
-        this.f2338n[1] = new C0812a();
+        this.mHisToryEcgProgressDrawListener = new HisToryEcgProgressDrawListener[2];
+        this.mHisToryEcgProgressDrawListener[0] = new HisToryEcgProgressDrawListener();
+        this.mHisToryEcgProgressDrawListener[1] = new HisToryEcgProgressDrawListener();
         this.mGrideDrawListener = new GrideDrawListener();
-        this.mHistoryWarickSurfaceView.addDrawListener((WarickSurfaceView.DrawListener) this.mGrideDrawListener);
-        this.mHistoryWarickSurfaceView.addDrawListener((WarickSurfaceView.DrawListener) this.mEcgCovertDrawListener);
-        this.mHistoryWarickSurfaceView.addDrawListener((WarickSurfaceView.DrawListener) this.mHistoryRecordDrawListener);
-        this.mHistoryWarickSurfaceView.addDrawListener((WarickSurfaceView.DrawListener) this.f2338n[0]);
-        this.mHistoryWarickSurfaceView.addDrawListener((WarickSurfaceView.DrawListener) this.f2338n[1]);
+        this.mHistoryWarickSurfaceView.addDrawListener( this.mGrideDrawListener);
+        this.mHistoryWarickSurfaceView.addDrawListener( this.mEcgCovertDrawListener);
+        this.mHistoryWarickSurfaceView.addDrawListener( this.mHistoryRecordDrawListener);
+        this.mHistoryWarickSurfaceView.addDrawListener( this.mHisToryEcgProgressDrawListener[0]);
+        this.mHistoryWarickSurfaceView.addDrawListener(this.mHisToryEcgProgressDrawListener[1]);
         this.mHistoryWarickSurfaceView.setSpeed(25);
         this.mHistoryWarickSurfaceView.setOnTouchListener(this.historyOnTouchListener);
-        this.f2343s = m2374a(this.mrecord.getFilePath());
+        this.f2343s = hisAnnotatedECG(this.mrecord.getFilePath());
         if (this.f2343s != null) {
-            this.mEcgCovertDrawListener.offEcg_filter(this.f2314L);
+            this.mEcgCovertDrawListener.offEcg_filter(this.isHandOrBody);
             this.mEcgCovertDrawListener.setHistoryEcgs(this.f2343s);
             this.mHeartRateCounter3.init();
             this.mECGAnaysis.ECGAnaysisInit();
@@ -683,10 +683,10 @@ public class HistoryECGDisplayActivity extends BaseActivity {
                 this.mECGAnaysis.setECGData(this.f2343s[i]);
             }
             if (this.mHeartRateCounter3.getHeartRate() != 0) {
-                textView = this.f2307E;
+                textView = this.tv_his_ecg_hr;
                 str = String.valueOf(this.mHeartRateCounter3.getHeartRate());
             } else {
-                textView = this.f2307E;
+                textView = this.tv_his_ecg_hr;
                 str = "NaN";
             }
             textView.setText(str);
@@ -697,8 +697,8 @@ public class HistoryECGDisplayActivity extends BaseActivity {
                     TextView a;
                     String str;
                     HistoryECGDisplayActivity.this.mEcgCovertDrawListener.setRecordProgress(i);
-                    HistoryECGDisplayActivity.this.f2338n[0].mo2904a(false);
-                    HistoryECGDisplayActivity.this.f2338n[1].mo2904a(false);
+                    HistoryECGDisplayActivity.this.mHisToryEcgProgressDrawListener[0].mo2904a(false);
+                    HistoryECGDisplayActivity.this.mHisToryEcgProgressDrawListener[1].mo2904a(false);
                     HistoryECGDisplayActivity.this.mHistoryRecordDrawListener.mo2930a(0, false);
                     HistoryECGDisplayActivity.this.mHistoryRecordDrawListener.mo2930a(1, false);
                     HistoryECGDisplayActivity.this.mHeartRateCounter3.init();
@@ -721,10 +721,10 @@ public class HistoryECGDisplayActivity extends BaseActivity {
                         i3++;
                     }
                     if (HistoryECGDisplayActivity.this.mHeartRateCounter3.getHeartRate() != 0) {
-                        a = HistoryECGDisplayActivity.this.f2307E;
+                        a = HistoryECGDisplayActivity.this.tv_his_ecg_hr;
                         str = String.valueOf(HistoryECGDisplayActivity.this.mHeartRateCounter3.getHeartRate());
                     } else {
-                        a = HistoryECGDisplayActivity.this.f2307E;
+                        a = HistoryECGDisplayActivity.this.tv_his_ecg_hr;
                         str = "NaN";
                     }
                     a.setText(str);
@@ -741,11 +741,11 @@ public class HistoryECGDisplayActivity extends BaseActivity {
         this.tv_record_a2 = (TextView) findViewById(R.id.record_a2);
         this.tv_record_a1a2 = (TextView) findViewById(R.id.record_a1a2);
         this.tv_ecg_scale_info = (TextView) findViewById(R.id.ecg_scale_info);
-        m2382c();
+        initPopView();
     }
 
     /* renamed from: c */
-    private void m2382c() {
+    private void initPopView() {
         View inflate = LayoutInflater.from(this).inflate(R.layout.pupop_ecg_tool, (ViewGroup) null);
         this.pop_pupop_ecg_tool = new PopupWindow(inflate, -2, -2, false);
         this.pop_pupop_ecg_tool.setBackgroundDrawable(new BitmapDrawable());
@@ -757,14 +757,14 @@ public class HistoryECGDisplayActivity extends BaseActivity {
         this.pop_pupop_ecg_share.setOutsideTouchable(true);
         this.pop_pupop_ecg_share.setFocusable(true);
         this.sw_filter_switch = (Switch) inflate.findViewById(R.id.filter_switch);
-        this.sw_filter_switch.setChecked(this.f2314L);
+        this.sw_filter_switch.setChecked(this.isHandOrBody);
         this.sw_filter_switch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             public void onCheckedChanged(CompoundButton compoundButton, boolean z) {
-                boolean unused = HistoryECGDisplayActivity.this.f2314L = z;
-                HistoryECGDisplayActivity.this.mEcgCovertDrawListener.offEcg_filter(HistoryECGDisplayActivity.this.f2314L);
-                if (HistoryECGDisplayActivity.this.f2317O == 0) {
-                    HistoryECGDisplayActivity.this.menu_action_ecg_filter_on.setVisible(HistoryECGDisplayActivity.this.f2314L);
-                    HistoryECGDisplayActivity.this.menu_ecg_filter_off.setVisible(!HistoryECGDisplayActivity.this.f2314L);
+                boolean unused = HistoryECGDisplayActivity.this.isHandOrBody = z;
+                HistoryECGDisplayActivity.this.mEcgCovertDrawListener.offEcg_filter(HistoryECGDisplayActivity.this.isHandOrBody);
+                if (HistoryECGDisplayActivity.this.ecgCutMode == 0) {
+                    HistoryECGDisplayActivity.this.menu_action_ecg_filter_on.setVisible(HistoryECGDisplayActivity.this.isHandOrBody);
+                    HistoryECGDisplayActivity.this.menu_ecg_filter_off.setVisible(!HistoryECGDisplayActivity.this.isHandOrBody);
                 }
             }
         });
@@ -804,16 +804,16 @@ public class HistoryECGDisplayActivity extends BaseActivity {
             }
         });
         this.tv_ecg_scale_info.setText(getString(R.string.l_ecg_scale_25));
-        if (this.f2346v != null) {
+        if (this.ecgMakes != null) {
             ((Button) inflate.findViewById(R.id.btn_previous)).setOnClickListener(new View.OnClickListener() {
                 public void onClick(View view) {
-                    if (HistoryECGDisplayActivity.this.f2346v != null && HistoryECGDisplayActivity.this.f2317O != 2) {
+                    if (HistoryECGDisplayActivity.this.ecgMakes != null && HistoryECGDisplayActivity.this.ecgCutMode != 2) {
                         int progress = HistoryECGDisplayActivity.this.sb_His.getProgress();
                         int b = HistoryECGDisplayActivity.this.mEcgParserUtils.mo2781b(progress);
                         if (b >= 2) {
-                            HistoryECGDisplayActivity.this.sb_His.setProgress((int) (((double) HistoryECGDisplayActivity.this.f2346v[b - 2]) * 0.25d));
+                            HistoryECGDisplayActivity.this.sb_His.setProgress((int) (((double) HistoryECGDisplayActivity.this.ecgMakes[b - 2]) * 0.25d));
                         }
-                        if (b <= 2 && ((double) progress) >= ((double) HistoryECGDisplayActivity.this.f2346v[0]) * 0.25d) {
+                        if (b <= 2 && ((double) progress) >= ((double) HistoryECGDisplayActivity.this.ecgMakes[0]) * 0.25d) {
                             Toast.makeText(HistoryECGDisplayActivity.this, HistoryECGDisplayActivity.this.getString(R.string.p_first_exc), Toast.LENGTH_LONG).show();
                         }
                     }
@@ -821,14 +821,14 @@ public class HistoryECGDisplayActivity extends BaseActivity {
             });
             ((Button) inflate.findViewById(R.id.btn_next)).setOnClickListener(new View.OnClickListener() {
                 public void onClick(View view) {
-                    if (HistoryECGDisplayActivity.this.f2346v != null && HistoryECGDisplayActivity.this.f2317O != 2 && HistoryECGDisplayActivity.this.f2346v != null && HistoryECGDisplayActivity.this.f2317O != 2) {
+                    if (HistoryECGDisplayActivity.this.ecgMakes != null && HistoryECGDisplayActivity.this.ecgCutMode != 2 && HistoryECGDisplayActivity.this.ecgMakes != null && HistoryECGDisplayActivity.this.ecgCutMode != 2) {
                         int progress = HistoryECGDisplayActivity.this.sb_His.getProgress();
                         int c = HistoryECGDisplayActivity.this.mEcgParserUtils.mo2784c(progress);
                         double d = (double) progress;
-                        if (d < ((double) HistoryECGDisplayActivity.this.f2346v[HistoryECGDisplayActivity.this.f2346v.length - 2]) * 0.25d) {
-                            HistoryECGDisplayActivity.this.sb_His.setProgress((int) (((double) HistoryECGDisplayActivity.this.f2346v[c + 2]) * 0.25d));
+                        if (d < ((double) HistoryECGDisplayActivity.this.ecgMakes[HistoryECGDisplayActivity.this.ecgMakes.length - 2]) * 0.25d) {
+                            HistoryECGDisplayActivity.this.sb_His.setProgress((int) (((double) HistoryECGDisplayActivity.this.ecgMakes[c + 2]) * 0.25d));
                         }
-                        if (c == HistoryECGDisplayActivity.this.f2346v.length - 4 && d <= ((double) HistoryECGDisplayActivity.this.f2346v[HistoryECGDisplayActivity.this.f2346v.length - 1]) * 0.25d) {
+                        if (c == HistoryECGDisplayActivity.this.ecgMakes.length - 4 && d <= ((double) HistoryECGDisplayActivity.this.ecgMakes[HistoryECGDisplayActivity.this.ecgMakes.length - 1]) * 0.25d) {
                             Toast.makeText(HistoryECGDisplayActivity.this, HistoryECGDisplayActivity.this.getString(R.string.p_last_exc), Toast.LENGTH_LONG).show();
                         }
                     }
@@ -963,21 +963,21 @@ public class HistoryECGDisplayActivity extends BaseActivity {
                 i2 = i3;
             }
             if (iArr.length >= 4 && iArr[0] == 0 && iArr[2] == 0) {
-                this.f2346v = new int[2];
+                this.ecgMakes = new int[2];
                 for (int i4 = 0; i4 < iArr.length; i4 += 2) {
                     if (iArr[i4] == 0) {
-                        this.f2346v[0] = iArr[i4];
-                        this.f2346v[1] = iArr[i4 + 1];
+                        this.ecgMakes[0] = iArr[i4];
+                        this.ecgMakes[1] = iArr[i4 + 1];
                     } else {
-                        this.f2346v = Arrays.copyOf(this.f2346v, this.f2346v.length + 2);
-                        this.f2346v[this.f2346v.length - 2] = iArr[i4];
-                        this.f2346v[this.f2346v.length - 1] = iArr[i4 + 1];
+                        this.ecgMakes = Arrays.copyOf(this.ecgMakes, this.ecgMakes.length + 2);
+                        this.ecgMakes[this.ecgMakes.length - 2] = iArr[i4];
+                        this.ecgMakes[this.ecgMakes.length - 1] = iArr[i4 + 1];
                     }
                 }
             } else {
-                this.f2346v = iArr;
+                this.ecgMakes = iArr;
             }
-            this.mEcgParserUtils.mo2778a(this.f2346v);
+            this.mEcgParserUtils.mo2778a(this.ecgMakes);
         }
     }
 
@@ -1060,9 +1060,9 @@ public class HistoryECGDisplayActivity extends BaseActivity {
         getMenuInflater().inflate(R.menu.ecg_history_display_menu, menu2);
         this.menu_action_ecg_filter_on = menu2.findItem(R.id.action_ecg_filter_on);
         this.menu_ecg_filter_off = menu2.findItem(R.id.action_ecg_filter_off);
-        if (this.f2317O == 0) {
-            this.menu_action_ecg_filter_on.setVisible(this.f2314L);
-            this.menu_ecg_filter_off.setVisible(!this.f2314L);
+        if (this.ecgCutMode == 0) {
+            this.menu_action_ecg_filter_on.setVisible(this.isHandOrBody);
+            this.menu_ecg_filter_off.setVisible(!this.isHandOrBody);
             menu2.findItem(R.id.action_model_cut).setVisible(true);
             menu2.findItem(R.id.action_model_back).setVisible(false);
             menu2.findItem(R.id.action_ecg_reverse).setVisible(true);
@@ -1080,7 +1080,7 @@ public class HistoryECGDisplayActivity extends BaseActivity {
             this.tv_record_a1a2.setVisibility(View.VISIBLE);
             this.tv_record_a1a2.setTextColor(getResources().getColor(R.color.green1));
             return true;
-        } else if (this.f2317O == 1) {
+        } else if (this.ecgCutMode == 1) {
             this.menu_action_ecg_filter_on.setVisible(false);
             this.menu_ecg_filter_off.setVisible(false);
             menu2.findItem(R.id.action_model_cut).setVisible(false);
@@ -1102,7 +1102,7 @@ public class HistoryECGDisplayActivity extends BaseActivity {
             this.tv_record_a1a2.setVisibility(View.GONE);
             return true;
         } else {
-            if (this.f2317O == 2) {
+            if (this.ecgCutMode == 2) {
                 this.menu_action_ecg_filter_on.setVisible(false);
                 this.menu_ecg_filter_off.setVisible(false);
                 menu2.findItem(R.id.action_ecg_reverse).setVisible(false);
@@ -1157,11 +1157,11 @@ public class HistoryECGDisplayActivity extends BaseActivity {
                 this.mEcgCovertDrawListener.setRecordProgress(0);
                 this.sb_His.setProgress(0);
                 this.sb_His.setMax(this.f2343s.length);
-                this.f2318P = false;
-                this.f2319Q = false;
+                this.isStartCut = false;
+                this.isEndCut = false;
                 this.f2320R = 0;
                 this.f2321S = 0;
-                this.f2317O = 1;
+                this.ecgCutMode = 1;
                 setTitle(getString(R.string.title_cut_model));
                 invalidateOptionsMenu();
                 return true;
@@ -1171,10 +1171,10 @@ public class HistoryECGDisplayActivity extends BaseActivity {
                     i = R.string.p_ecg_rec_no_end_point;
                     break;
                 } else {
-                    this.f2317O = 2;
+                    this.ecgCutMode = 2;
                     setTitle(getString(R.string.title_rev_model));
                     invalidateOptionsMenu();
-                    this.f2344t = m2375a(this.f2343s, this.f2320R, this.f2321S);
+                    this.f2344t = cutDataStartEnd(this.f2343s, this.f2320R, this.f2321S);
                     this.mEcgCovertDrawListener.setHistoryEcgs(this.f2344t);
                     this.mEcgCovertDrawListener.setRecordProgress(0);
                     this.sb_His.setMax(this.f2344t.length);
@@ -1183,16 +1183,16 @@ public class HistoryECGDisplayActivity extends BaseActivity {
                     return true;
                 }
             case R.id.action_cut_end /*2131165202*/:
-                this.f2318P = false;
-                this.f2319Q = true;
+                this.isStartCut = false;
+                this.isEndCut = true;
                 TextView textView = this.tv_record_a2;
                 textView.setText(getString(R.string.end) + "：--ms");
                 applicationContext = getApplicationContext();
                 i = R.string.p_ecg_rec_end_cut_point;
                 break;
             case R.id.action_cut_start /*2131165203*/:
-                this.f2318P = true;
-                this.f2319Q = false;
+                this.isStartCut = true;
+                this.isEndCut = false;
                 TextView textView2 = this.tv_record_a1;
                 textView2.setText(getString(R.string.start) + "：--ms");
                 applicationContext = getApplicationContext();
@@ -1202,16 +1202,16 @@ public class HistoryECGDisplayActivity extends BaseActivity {
                 this.poppupop_ecg_comment.showAtLocation(findViewById(R.id.record_heart_rate_sv), 17, 0, 0);
                 return true;
             case R.id.action_ecg_filter_off /*2131165206*/:
-                this.f2314L = true;
-                this.mEcgCovertDrawListener.offEcg_filter(this.f2314L);
-                this.sw_filter_switch.setChecked(this.f2314L);
+                this.isHandOrBody = true;
+                this.mEcgCovertDrawListener.offEcg_filter(this.isHandOrBody);
+                this.sw_filter_switch.setChecked(this.isHandOrBody);
                 this.menu_action_ecg_filter_on.setVisible(true);
                 this.menu_ecg_filter_off.setVisible(false);
                 return true;
             case R.id.action_ecg_filter_on /*2131165207*/:
-                this.f2314L = false;
-                this.mEcgCovertDrawListener.offEcg_filter(this.f2314L);
-                this.sw_filter_switch.setChecked(this.f2314L);
+                this.isHandOrBody = false;
+                this.mEcgCovertDrawListener.offEcg_filter(this.isHandOrBody);
+                this.sw_filter_switch.setChecked(this.isHandOrBody);
                 this.menu_action_ecg_filter_on.setVisible(false);
                 this.menu_ecg_filter_off.setVisible(true);
                 return true;
@@ -1224,9 +1224,9 @@ public class HistoryECGDisplayActivity extends BaseActivity {
             case R.id.action_model_back /*2131165222*/:
                 this.mHistoryRecordDrawListener.mo2930a(0, false);
                 this.mHistoryRecordDrawListener.mo2930a(1, false);
-                this.f2338n[0].mo2904a(false);
-                this.f2338n[1].mo2904a(false);
-                this.f2317O = 0;
+                this.mHisToryEcgProgressDrawListener[0].mo2904a(false);
+                this.mHisToryEcgProgressDrawListener[1].mo2904a(false);
+                this.ecgCutMode = 0;
                 setTitle(getString(R.string.title_rev_model));
                 invalidateOptionsMenu();
                 dVar = this.mHistoryRecordDrawListener;
@@ -1235,13 +1235,13 @@ public class HistoryECGDisplayActivity extends BaseActivity {
             case R.id.action_model_cut /*2131165223*/:
                 this.mHistoryRecordDrawListener.mo2930a(0, false);
                 this.mHistoryRecordDrawListener.mo2930a(1, false);
-                this.f2338n[0].mo2904a(false);
-                this.f2338n[1].mo2904a(false);
-                this.f2317O = 1;
+                this.mHisToryEcgProgressDrawListener[0].mo2904a(false);
+                this.mHisToryEcgProgressDrawListener[1].mo2904a(false);
+                this.ecgCutMode = 1;
                 setTitle(getString(R.string.title_cut_model));
                 invalidateOptionsMenu();
-                this.f2318P = false;
-                this.f2319Q = false;
+                this.isStartCut = false;
+                this.isEndCut = false;
                 this.f2320R = 0;
                 this.f2321S = 0;
                 dVar = this.mHistoryRecordDrawListener;
@@ -1274,8 +1274,8 @@ public class HistoryECGDisplayActivity extends BaseActivity {
                     a.setMark_period((int[]) null);
                     this.mCutRecord.setEcgEntity(a);
                     this.mCutRecord.setMark_time(a.getMark_time());
-                    this.historyMainBinder.saveEcgFile(this.mCutRecord, m2375a(this.f2343s, this.f2320R, this.f2321S));
-                    this.f2317O = 0;
+                    this.historyMainBinder.saveEcgFile(this.mCutRecord, cutDataStartEnd(this.f2343s, this.f2320R, this.f2321S));
+                    this.ecgCutMode = 0;
                     setTitle(getString(R.string.title_rev_model));
                     invalidateOptionsMenu();
                     return true;

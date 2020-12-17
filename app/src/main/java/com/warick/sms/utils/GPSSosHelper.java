@@ -23,16 +23,16 @@ public class GPSSosHelper {
                 str = "(No GPS location information)]";
             } else {
                 stringBuffer.append("(longitude:");
-                stringBuffer.append(g.mo2882a());
+                stringBuffer.append(g.getLongitude());
                 stringBuffer.append(", latitude:");
-                stringBuffer.append(g.mo2885b());
+                stringBuffer.append(g.getLatitude());
                 stringBuffer.append(", address:");
-                stringBuffer.append(GpsManagerHelper.mGpsManagerHelper().mo2889f());
+                stringBuffer.append(GpsManagerHelper.mGpsManagerHelper().getTip());
                 str = ")]";
             }
             stringBuffer.append(str);
-            boolean[] b = eCGApplication.appSosConf.mo2679b();
-            String[] a = eCGApplication.appSosConf.mo2678a();
+            boolean[] b = eCGApplication.appSosConf.getPhoneEnables();
+            String[] a = eCGApplication.appSosConf.getPhoneStrs();
             int i = 0;
             for (boolean z : b) {
                 if (z) {

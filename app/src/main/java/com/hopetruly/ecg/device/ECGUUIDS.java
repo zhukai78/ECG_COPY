@@ -27,40 +27,40 @@ public class ECGUUIDS {
     public static final UUID f2774g = UUID.fromString("00002A29-0000-1000-8000-00805F9B34FB");
 
     /* renamed from: h */
-    public static final UUID f2775h = UUID.fromString("0000180f-0000-1000-8000-00805f9b34fb");
+    public static final UUID SER_BATTERY_UUID = UUID.fromString("0000180f-0000-1000-8000-00805f9b34fb");
 
     /* renamed from: i */
-    public static final UUID f2776i = UUID.fromString("00002a19-0000-1000-8000-00805f9b34fb");
+    public static final UUID CHAR_BATTERY_UUID = UUID.fromString("00002a19-0000-1000-8000-00805f9b34fb");
 
     /* renamed from: j */
-    public static final UUID f2777j = UUID.fromString("0783b03e-8535-b5a0-7140-a304d2495cb7");
+    public static final UUID SER_ACCELEROMETER_UUID = UUID.fromString("0783b03e-8535-b5a0-7140-a304d2495cb7");
 
     /* renamed from: k */
-    public static final UUID f2778k = UUID.fromString("0783b03e-8535-b5a0-7140-a304d2495cb8");
+    public static final UUID CHAR_ACCELEROMETER_UUID = UUID.fromString("0783b03e-8535-b5a0-7140-a304d2495cb8");
 
     /* renamed from: l */
-    public static final UUID f2779l = UUID.fromString("0783b03e-8535-b5a0-7140-a304d2495cb9");
+    public static final UUID DES_ACCELEROMETER_UUID = UUID.fromString("0783b03e-8535-b5a0-7140-a304d2495cb9");
 
     /* renamed from: m */
     public static final UUID f2780m = UUID.fromString("0783b03e-8535-b5a0-7140-a304d2495cba");
 
     /* renamed from: n */
-    public static final UUID f2781n = UUID.fromString("f000aa20-0451-4000-b000-000000000000");
+    public static final UUID SER_ECG_UUID = UUID.fromString("f000aa20-0451-4000-b000-000000000000");
 
     /* renamed from: o */
-    public static final UUID f2782o = UUID.fromString("0783b03e-8535-b5a0-7140-a304d2495cb8");
+    public static final UUID CHAR_ECG_UUID = UUID.fromString("0783b03e-8535-b5a0-7140-a304d2495cb8");
 
     /* renamed from: p */
-    public static final UUID f2783p = UUID.fromString("f000aa22-0451-4000-b000-000000000000");
+    public static final UUID DES_ECG_UUID = UUID.fromString("f000aa22-0451-4000-b000-000000000000");
 
     /* renamed from: q */
     public static final UUID f2784q = UUID.fromString("f000aa23-0451-4000-b000-000000000000");
 
     /* renamed from: r */
-    public static final UUID f2785r = UUID.fromString("0000ffe0-0000-1000-8000-00805f9b34fb");
+    public static final UUID SERVICE_SIMPLE_KEYS_UUID = UUID.fromString("0000ffe0-0000-1000-8000-00805f9b34fb");
 
     /* renamed from: s */
-    public static final UUID f2786s = UUID.fromString("0000ffe1-0000-1000-8000-00805f9b34fb");
+    public static final UUID CHAR_SIMPLE_KEYS_UUID = UUID.fromString("0000ffe1-0000-1000-8000-00805f9b34fb");
 
     /* renamed from: t */
     public static final UUID f2787t = UUID.fromString("f000ffc0-0451-4000-b000-000000000000");

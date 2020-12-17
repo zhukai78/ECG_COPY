@@ -24,35 +24,35 @@ public class MaybeAlertHelper {
     AlertUtils mAlertUtils;
 
     /* renamed from: e */
-    private int f2736e = INT_60;
+    private int alertCnt = INT_60;
 
     /* renamed from: f */
     private Context mContext;
 
     /* renamed from: g */
-    private int f2738g = 0;
+    private int hrIndex = 0;
 
     /* renamed from: h */
-    private int[] f2739h = {70, 70, 70, 70, 70, 70, 70, 70, 70, 70};
+    private int[] hrBuff = {70, 70, 70, 70, 70, 70, 70, 70, 70, 70};
 
     /* renamed from: i */
-    private long f2740i = 0;
+    private long firstTime = 0;
 
     /* renamed from: j */
-    private long f2741j = 0;
+    private long nextAlertTime = 0;
 
     /* renamed from: k */
     private boolean isVibrator;
 
     /* renamed from: l */
-    private boolean f2743l;
+    private boolean ispauseVibrator;
 
     public MaybeAlertHelper(Context context) {
         this.mContext = context;
         this.mECGApplication = (ECGApplication) this.mContext.getApplicationContext();
         this.mAlertUtils = new AlertUtils(this.mContext);
         this.isVibrator = false;
-        this.f2743l = false;
+        this.ispauseVibrator = false;
     }
 
     /* renamed from: k */
@@ -96,29 +96,29 @@ public class MaybeAlertHelper {
     }
 
     /* renamed from: a */
-    public void mo2450a(int i) {
+    public void checkAlert(int i) {
         if (i == 0) {
             pauseVibrator();
             return;
         }
-        this.f2739h[mo2458i()] = i;
-        if (mo2457h()) {
+        this.hrBuff[getHrInddex()] = i;
+        if (alertCheck()) {
             Date date = new Date(System.currentTimeMillis());
-            if (this.f2740i == 0) {
-                this.f2740i = date.getTime();
+            if (this.firstTime == 0) {
+                this.firstTime = date.getTime();
             } else {
-                this.f2741j = date.getTime();
+                this.nextAlertTime = date.getTime();
             }
-            if (this.f2740i != 0 && this.f2741j != 0 && this.f2741j - this.f2740i >= ((long) (this.mECGApplication.appECGConf.getECG_ALARM_DELAY() * 1000))) {
-                this.f2740i = 0;
-                this.f2741j = 0;
+            if (this.firstTime != 0 && this.nextAlertTime != 0 && this.nextAlertTime - this.firstTime >= ((long) (this.mECGApplication.appECGConf.getECG_ALARM_DELAY() * 1000))) {
+                this.firstTime = 0;
+                this.nextAlertTime = 0;
                 startVibrator();
                 return;
             }
             return;
         }
-        this.f2740i = 0;
-        this.f2741j = 0;
+        this.firstTime = 0;
+        this.nextAlertTime = 0;
         pauseVibrator();
     }
 
@@ -130,30 +130,30 @@ public class MaybeAlertHelper {
     /* renamed from: c */
     public void stopAlarm() {
         pauseVibrator();
-        this.f2743l = true;
-        this.f2740i = 0;
-        this.f2741j = 0;
+        this.ispauseVibrator = true;
+        this.firstTime = 0;
+        this.nextAlertTime = 0;
     }
 
     /* renamed from: d */
-    public void mo2453d() {
-        this.f2743l = false;
+    public void resetVibrator() {
+        this.ispauseVibrator = false;
     }
 
     /* renamed from: e */
-    public void mo2454e() {
-        if (this.f2743l) {
-            this.f2736e--;
-            if (this.f2736e == 0) {
-                this.f2743l = false;
-                this.f2736e = INT_60;
+    public void reduceAlertCnt() {
+        if (this.ispauseVibrator) {
+            this.alertCnt--;
+            if (this.alertCnt == 0) {
+                this.ispauseVibrator = false;
+                this.alertCnt = INT_60;
             }
         }
     }
 
     /* renamed from: f */
-    public boolean mo2455f() {
-        return this.f2743l;
+    public boolean getIspauseVibrator() {
+        return this.ispauseVibrator;
     }
 
     /* renamed from: g */
@@ -162,17 +162,17 @@ public class MaybeAlertHelper {
     }
 
     /* renamed from: h */
-    public boolean mo2457h() {
-        if (!this.mECGApplication.appECGConf.getECG_ALARM_ENABLE() || this.f2743l) {
+    public boolean alertCheck() {
+        if (!this.mECGApplication.appECGConf.getECG_ALARM_ENABLE() || this.ispauseVibrator) {
             return false;
         }
         int i = 0;
         int i2 = 0;
         for (int i3 = 0; i3 < INT_10; i3++) {
-            if (this.f2739h[i3] > this.mECGApplication.appECGConf.getECG_ALARM_RATE_MAX()) {
+            if (this.hrBuff[i3] > this.mECGApplication.appECGConf.getECG_ALARM_RATE_MAX()) {
                 i++;
             }
-            if (this.f2739h[i3] < this.mECGApplication.appECGConf.getECG_ALARM_RATE_MIN()) {
+            if (this.hrBuff[i3] < this.mECGApplication.appECGConf.getECG_ALARM_RATE_MIN()) {
                 i2++;
             }
         }
@@ -180,13 +180,13 @@ public class MaybeAlertHelper {
     }
 
     /* renamed from: i */
-    public int mo2458i() {
-        if (this.f2738g >= INT_10) {
-            this.f2738g = 0;
+    public int getHrInddex() {
+        if (this.hrIndex >= INT_10) {
+            this.hrIndex = 0;
             return 0;
         }
-        int i = this.f2738g;
-        this.f2738g = i + 1;
+        int i = this.hrIndex;
+        this.hrIndex = i + 1;
         return i;
     }
 

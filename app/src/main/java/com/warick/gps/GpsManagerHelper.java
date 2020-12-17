@@ -2,8 +2,7 @@ package com.warick.gps;
 
 import android.content.Context;
 
-//import com.hexin.ecg_hexin_bio.baidu.location.BDLocation;
-//import com.hexin.ecg_hexin_bio.baidu.location.C0435a1;
+
 
 
 /* renamed from: com.warick.a.d */
@@ -26,7 +25,7 @@ public class GpsManagerHelper {
     /* access modifiers changed from: private */
 
     /* renamed from: f */
-    public String f3011f;
+    public String tipStr;
 
     /* renamed from: g */
     private GpsManager mGpsManager;
@@ -53,8 +52,8 @@ public class GpsManagerHelper {
                 GpsManagerHelper.this.mGpsBeans[0] = new GpsBean();
             }
             GpsManagerHelper.this.mGpsBeans[0].mo2884a(100);
-            GpsManagerHelper.this.mGpsBeans[0].mo2886b(d2);
-            GpsManagerHelper.this.mGpsBeans[0].mo2883a(d);
+            GpsManagerHelper.this.mGpsBeans[0].setLatitude(d2);
+            GpsManagerHelper.this.mGpsBeans[0].setLongitude(d);
             GpsManagerHelper.this.arrs[1] = 10;
             GpsManagerHelper.this.arrs[2] = 5;
             GpsManagerHelper.this.arrs[3] = 0;
@@ -67,8 +66,8 @@ public class GpsManagerHelper {
                 GpsManagerHelper.this.mGpsBeans[1] = new GpsBean();
             }
 //            C0801d.this.mGpsBeans[1].mo2884a((int) C0435a1.f1319m);
-            GpsManagerHelper.this.mGpsBeans[1].mo2886b(d2);
-            GpsManagerHelper.this.mGpsBeans[1].mo2883a(d);
+            GpsManagerHelper.this.mGpsBeans[1].setLatitude(d2);
+            GpsManagerHelper.this.mGpsBeans[1].setLongitude(d);
             if (GpsManagerHelper.this.arrs[1] < 16) {
                 int[] b = GpsManagerHelper.this.arrs;
                 b[1] = b[1] + 1;
@@ -88,8 +87,8 @@ public class GpsManagerHelper {
 //                    C0801d.this.mGpsBeans[2] = new GpsBean();
 //                }
 //                C0801d.this.mGpsBeans[2].mo2884a(200);
-//                C0801d.this.mGpsBeans[2].mo2883a(bDLocation.getLongitude());
-//                C0801d.this.mGpsBeans[2].mo2886b(bDLocation.getLatitude());
+//                C0801d.this.mGpsBeans[2].setLongitude(bDLocation.getLongitude());
+//                C0801d.this.mGpsBeans[2].setLatitude(bDLocation.getLatitude());
 //                if (C0801d.this.arrs[2] < 17) {
 //                    int[] b = C0801d.this.arrs;
 //                    b[2] = b[2] + 1;
@@ -100,15 +99,15 @@ public class GpsManagerHelper {
 //                    C0801d.this.mGpsBeans[3] = new GpsBean();
 //                }
 //                C0801d.this.mGpsBeans[3].mo2884a(210);
-//                C0801d.this.mGpsBeans[3].mo2883a(bDLocation.getLongitude());
-//                C0801d.this.mGpsBeans[3].mo2886b(bDLocation.getLatitude());
+//                C0801d.this.mGpsBeans[3].setLongitude(bDLocation.getLongitude());
+//                C0801d.this.mGpsBeans[3].setLatitude(bDLocation.getLatitude());
 //                if (C0801d.this.arrs[3] < 18) {
 //                    int[] b2 = C0801d.this.arrs;
 //                    b2[3] = b2[3] + 1;
 //                }
 //            }
 //            if (bDLocation.hasAddr()) {
-//                String unused = C0801d.this.f3011f = bDLocation.getAddrStr();
+//                String unused = C0801d.this.tipStr = bDLocation.getAddrStr();
 //            }
 //            C0801d.this.setGpsBeanData();
 //        }
@@ -123,11 +122,11 @@ public class GpsManagerHelper {
     private GpsManagerHelper(Context context) {
         this.mGpsManager = new GpsManager(context);
 //        this.f3013h = new C0792a(context);
-        this.f3011f = "";
+        this.tipStr = "";
     }
 
     /* renamed from: a */
-    public static boolean m2908a() {
+    public static boolean isEnableGpsManager() {
         if (mGpsManagerHelper == null) {
             return false;
         }
@@ -161,7 +160,7 @@ public class GpsManagerHelper {
     }
 
     /* renamed from: b */
-    public static void m2912b() {
+    public static void removeGps() {
         if (mGpsManagerHelper != null) {
 //            mGpsManagerHelper.f3013h.mo2866b();
             mGpsManagerHelper.mGpsManager.removeGpsStatusUpdate();
@@ -170,7 +169,7 @@ public class GpsManagerHelper {
 
     /* renamed from: d */
     public static void removegps() {
-        m2912b();
+        removeGps();
         mGpsManagerHelper = null;
     }
 
@@ -187,7 +186,7 @@ public class GpsManagerHelper {
             return;
         }
         if (g != null) {
-            this.mOnGpsListener.sendLocationBroad(g.mo2882a(), g.mo2885b(), this.f3011f);
+            this.mOnGpsListener.sendLocationBroad(g.getLongitude(), g.getLatitude(), this.tipStr);
         } else {
             this.mOnGpsListener.sendLocationBroad(0.0d, 0.0d, (String) null);
         }
@@ -200,7 +199,7 @@ public class GpsManagerHelper {
 
     /* renamed from: c */
     public void clearGpsData() {
-        this.f3011f = "";
+        this.tipStr = "";
         this.mGpsBeans[0] = null;
         this.mGpsBeans[1] = null;
         this.mGpsBeans[2] = null;
@@ -208,8 +207,8 @@ public class GpsManagerHelper {
     }
 
     /* renamed from: f */
-    public String mo2889f() {
-        return this.f3011f;
+    public String getTip() {
+        return this.tipStr;
     }
 
     /* renamed from: g */

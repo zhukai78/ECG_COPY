@@ -158,7 +158,7 @@ public class RealtimeECGDisplayActivity extends BaseActivity {
                             } else if (action.equals("com.hopetruly.ecg.util.ACTION_HEARTRATE")) {
                                 stringExtra = intent.getStringExtra("heart_rate");
                                 if (!stringExtra.equals("NaN")) {
-                                    RealtimeECGDisplayActivity.this.mMaybeAlertHelper.mo2450a(Integer.parseInt(stringExtra));
+                                    RealtimeECGDisplayActivity.this.mMaybeAlertHelper.checkAlert(Integer.parseInt(stringExtra));
                                 } else {
                                     RealtimeECGDisplayActivity.this.mMaybeAlertHelper.pauseVibrator();
                                 }
@@ -171,8 +171,8 @@ public class RealtimeECGDisplayActivity extends BaseActivity {
                                 }
                                 textView = RealtimeECGDisplayActivity.this.tv_heartrate;
                             } else if (action.equals("com.hopetruly.ecg.util.MyAlarmClock.COUNT_SEC")) {
-                                RealtimeECGDisplayActivity.this.mMaybeAlertHelper.mo2454e();
-                                if (RealtimeECGDisplayActivity.this.mMaybeAlertHelper.getECG_ALARM_ENABLE() && !RealtimeECGDisplayActivity.this.mMaybeAlertHelper.mo2455f()) {
+                                RealtimeECGDisplayActivity.this.mMaybeAlertHelper.reduceAlertCnt();
+                                if (RealtimeECGDisplayActivity.this.mMaybeAlertHelper.getECG_ALARM_ENABLE() && !RealtimeECGDisplayActivity.this.mMaybeAlertHelper.getIspauseVibrator()) {
                                     RealtimeECGDisplayActivity.this.tv_ecg_alarm_status.setText(R.string.ecg_alarm_status_on);
                                 } else {
                                     return;
@@ -444,7 +444,7 @@ public class RealtimeECGDisplayActivity extends BaseActivity {
                     str = "NaN";
                 } else {
                     if (!String.valueOf(this.mHeartRateCounter3.getHeartRate()).equals("NaN")) {
-                        this.mMaybeAlertHelper.mo2450a(this.mHeartRateCounter3.getHeartRate());
+                        this.mMaybeAlertHelper.checkAlert(this.mHeartRateCounter3.getHeartRate());
                     } else {
                         this.mMaybeAlertHelper.pauseVibrator();
                     }
@@ -681,7 +681,7 @@ public class RealtimeECGDisplayActivity extends BaseActivity {
             this.mEcgCovertDrawListener.resetEcgDatas();
             this.realtimeMainService.startMyECG(this.realtimeECGRecord);
             this.mHeartRateCounter3.init();
-            this.mMaybeAlertHelper.mo2453d();
+            this.mMaybeAlertHelper.resetVibrator();
         }
     }
 

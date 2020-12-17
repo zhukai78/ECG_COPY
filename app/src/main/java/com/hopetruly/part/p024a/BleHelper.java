@@ -30,10 +30,10 @@ public class BleHelper {
     public static final String TAG = "a";
 
     /* renamed from: b */
-    Timer f2932b;
+    Timer bleTimer;
 
     /* renamed from: c */
-    boolean f2933c = false;
+    boolean isBleDiscovered = false;
 
     /* renamed from: d */
     Context mCtx;
@@ -45,7 +45,7 @@ public class BleHelper {
     private BluetoothAdapter mbluetoothAdapter;
 
     /* renamed from: h */
-    private String f2937h;
+    private String macid;
     /* access modifiers changed from: private */
 
     /* renamed from: i */
@@ -53,27 +53,27 @@ public class BleHelper {
     /* access modifiers changed from: private */
 
     /* renamed from: j */
-    public int f2939j = 0;
+    public int bleConnStatus = 0;
 
     /* renamed from: k */
-    private boolean f2940k = false;
+    private boolean isBleEnable = false;
 
     /* renamed from: l */
     private final BluetoothGattCallback mBluetoothGattCallback = new BluetoothGattCallback() {
         public void onCharacteristicChanged(BluetoothGatt bluetoothGatt, BluetoothGattCharacteristic bluetoothGattCharacteristic) {
-            BleHelper.this.m2825a("com.hopetruly.ec.services.ACTION_GATT_DATA_NOTIFY", 0, bluetoothGattCharacteristic);
+            BleHelper.this.sendBluetoothGattCharacteristicValue("com.hopetruly.ec.services.ACTION_GATT_DATA_NOTIFY", 0, bluetoothGattCharacteristic);
         }
 
         public void onCharacteristicRead(BluetoothGatt bluetoothGatt, BluetoothGattCharacteristic bluetoothGattCharacteristic, int i) {
             if (i == 0) {
-                BleHelper.this.m2825a("com.hopetruly.ec.services.ACTION_GATT_CHARACTERISTIC_READ", i, bluetoothGattCharacteristic);
+                BleHelper.this.sendBluetoothGattCharacteristicValue("com.hopetruly.ec.services.ACTION_GATT_CHARACTERISTIC_READ", i, bluetoothGattCharacteristic);
             }
             super.onCharacteristicRead(bluetoothGatt, bluetoothGattCharacteristic, i);
         }
 
         public void onCharacteristicWrite(BluetoothGatt bluetoothGatt, BluetoothGattCharacteristic bluetoothGattCharacteristic, int i) {
             if (i == 0) {
-                BleHelper.this.m2825a("com.hopetruly.ec.services.ACTION_GATT_CHARACTERISTIC_WRITE", i, bluetoothGattCharacteristic);
+                BleHelper.this.sendBluetoothGattCharacteristicValue("com.hopetruly.ec.services.ACTION_GATT_CHARACTERISTIC_WRITE", i, bluetoothGattCharacteristic);
             }
             super.onCharacteristicWrite(bluetoothGatt, bluetoothGattCharacteristic, i);
         }
@@ -82,13 +82,13 @@ public class BleHelper {
             String g = BleHelper.TAG;
             Log.i(g, "Status=" + i + "  newState=" + i2);
             if (i == 0 && i2 == 2) {
-                int unused = BleHelper.this.f2939j = 2;
+                int unused = BleHelper.this.bleConnStatus = 2;
                 BleHelper.this.sendBleConn("com.hopetruly.ec.services.ACTION_GATT_CONNECTED");
                 Log.i(BleHelper.TAG, "Connected to GATT server.");
                 String g2 = BleHelper.TAG;
                 Log.i(g2, "Attempting to start service discovery:" + BleHelper.this.mbluetoothGatt.discoverServices());
             } else if (i2 == 0) {
-                int unused2 = BleHelper.this.f2939j = 0;
+                int unused2 = BleHelper.this.bleConnStatus = 0;
                 Log.i(BleHelper.TAG, "Disconnected from GATT server.");
                 BleHelper.this.closeBluetoothGatt();
                 BleHelper.this.sendBleConn("com.hopetruly.ec.services.ACTION_GATT_DISCONNECTED");
@@ -114,7 +114,7 @@ public class BleHelper {
         public void onServicesDiscovered(BluetoothGatt bluetoothGatt, int i) {
             if (i == 0) {
                 Log.i(BleHelper.TAG, "onServicesDiscovered success");
-                BleHelper.this.f2933c = true;
+                BleHelper.this.isBleDiscovered = true;
                 BleHelper.this.sendBleConn("com.hopetruly.ec.services.ACTION_GATT_SERVICES_DISCOVERED");
                 return;
             }
@@ -124,37 +124,37 @@ public class BleHelper {
     };
 
     /* renamed from: m */
-    private boolean f2942m = false;
+    private boolean isStartScan = false;
 
     /* renamed from: n */
-    private BluetoothAdapter.LeScanCallback f2943n = new BluetoothAdapter.LeScanCallback() {
+    private BluetoothAdapter.LeScanCallback mLeScanCallback = new BluetoothAdapter.LeScanCallback() {
         public void onLeScan(BluetoothDevice bluetoothDevice, int i, byte[] bArr) {
             Intent intent = new Intent("com.hopetruly.ec.services.ACTION_CATCH_DEVICE");
             intent.putExtra("device", bluetoothDevice);
             intent.putExtra("scanRecord", bArr);
             intent.putExtra("deviceRSSI", i);
-            BleHelper.this.m2821a(intent);
+            BleHelper.this.sendScanIntent(intent);
         }
     };
 
     public BleHelper(Context context) {
         this.mCtx = context;
-        this.f2940k = mo2798a();
-        if (this.f2940k) {
-            this.f2932b = new Timer();
+        this.isBleEnable = checkBleEnable();
+        if (this.isBleEnable) {
+            this.bleTimer = new Timer();
         }
     }
 
     /* access modifiers changed from: private */
     /* renamed from: a */
-    public void m2821a(Intent intent) {
+    public void sendScanIntent(Intent intent) {
 //        C0140d.m485a(this.mCtx).mo390a(intent);
         LocalBroadcastManager.getInstance(mCtx).sendBroadcast(intent);
     }
 
     /* access modifiers changed from: private */
     /* renamed from: a */
-    public void m2825a(String str, int i, BluetoothGattCharacteristic bluetoothGattCharacteristic) {
+    public void sendBluetoothGattCharacteristicValue(String str, int i, BluetoothGattCharacteristic bluetoothGattCharacteristic) {
         Intent intent = new Intent(str);
         byte[] value = bluetoothGattCharacteristic.getValue();
         intent.putExtra("com.hopetruly.ec.services.EXTRA_STATUS", i);
@@ -172,7 +172,7 @@ public class BleHelper {
     }
 
     /* renamed from: a */
-    public BluetoothGattService mo2796a(UUID uuid) {
+    public BluetoothGattService getServicebyUUID(UUID uuid) {
         if (this.mbluetoothGatt != null) {
             return this.mbluetoothGatt.getService(uuid);
         }
@@ -186,20 +186,20 @@ public class BleHelper {
             return;
         }
         Log.i(TAG, "start Scan LeDevice");
-        if (!this.f2942m) {
-            this.f2932b.schedule(new TimerTask() {
+        if (!this.isStartScan) {
+            this.bleTimer.schedule(new TimerTask() {
                 public void run() {
                     BleHelper.this.stopScan();
                 }
             }, (long) i);
-            mbluetoothAdapter.startLeScan(this.f2943n);
-            this.f2942m = true;
-            m2821a(new Intent("com.hopetruly.ec.services.ACTION_BLE_START_SCAN"));
+            mbluetoothAdapter.startLeScan(this.mLeScanCallback);
+            this.isStartScan = true;
+            sendScanIntent(new Intent("com.hopetruly.ec.services.ACTION_BLE_START_SCAN"));
         }
     }
 
     /* renamed from: a */
-    public boolean mo2798a() {
+    public boolean checkBleEnable() {
         if (this.mCtx.getPackageManager().hasSystemFeature("android.hardware.bluetooth_le")) {
             sendBleConn("com.hopetruly.ec.services.ACTION_BLE_SUPPORTED");
             if (this.mBluetoothManager == null) {
@@ -226,7 +226,7 @@ public class BleHelper {
         if (this.mbluetoothAdapter == null || this.mbluetoothGatt == null) {
             Log.w(TAG, "BluetoothAdapter not initialized");
             return false;
-        } else if (this.f2933c) {
+        } else if (this.isBleDiscovered) {
             return this.mbluetoothGatt.writeCharacteristic(bluetoothGattCharacteristic);
         } else {
             Log.e(TAG, "Service is not ready");
@@ -261,8 +261,8 @@ public class BleHelper {
             } else {
                 this.mbluetoothGatt = remoteDevice.connectGatt(this.mCtx, false, this.mBluetoothGattCallback);
                 Log.d(TAG, "Trying to create a new connection.");
-                this.f2937h = str;
-                this.f2939j = 1;
+                this.macid = str;
+                this.bleConnStatus = 1;
                 return true;
             }
         }
@@ -281,7 +281,7 @@ public class BleHelper {
         if (this.mbluetoothAdapter == null || this.mbluetoothGatt == null) {
             str = TAG;
             str2 = "BluetoothAdapter not initialized";
-        } else if (!this.f2933c) {
+        } else if (!this.isBleDiscovered) {
             str = TAG;
             str2 = "GATT Service not ready";
         } else {
@@ -300,7 +300,7 @@ public class BleHelper {
         if (this.mbluetoothAdapter == null || this.mbluetoothGatt == null) {
             str = TAG;
             str2 = "BluetoothAdapter not initialized";
-        } else if (!this.f2933c) {
+        } else if (!this.isBleDiscovered) {
             str = TAG;
             str2 = "GATT Service not ready";
         } else {
@@ -328,7 +328,7 @@ public class BleHelper {
         if (this.mbluetoothAdapter == null || this.mbluetoothGatt == null) {
             Log.w(TAG, "BluetoothAdapter not initialized");
             return false;
-        } else if (!this.f2933c) {
+        } else if (!this.isBleDiscovered) {
             Log.e(TAG, "Service is not ready");
             return false;
         } else {
@@ -345,7 +345,7 @@ public class BleHelper {
         }
         Log.w(TAG, "Disconnect connection");
         this.mbluetoothGatt.disconnect();
-        this.f2937h = null;
+        this.macid = null;
     }
 
     /* renamed from: b */
@@ -371,11 +371,11 @@ public class BleHelper {
     public void stopScan() {
         if (this.mbluetoothAdapter == null) {
             Log.w(TAG, "BluetoothAdapter not initialized or unspecified address.");
-        } else if (this.f2942m) {
+        } else if (this.isStartScan) {
             Log.i(TAG, "stop Scan LeDevice");
-            this.f2942m = false;
-            this.mbluetoothAdapter.stopLeScan(this.f2943n);
-            m2821a(new Intent("com.hopetruly.ec.services.ACTION_BLE_STOP_SCAN"));
+            this.isStartScan = false;
+            this.mbluetoothAdapter.stopLeScan(this.mLeScanCallback);
+            sendScanIntent(new Intent("com.hopetruly.ec.services.ACTION_BLE_STOP_SCAN"));
         }
     }
 

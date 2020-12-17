@@ -21,16 +21,16 @@ public class MyAlarmClock {
     Context mContext;
 
     /* renamed from: d */
-    boolean f2917d = false;
+    boolean misClock = false;
 
     /* renamed from: e */
-    boolean f2918e = false;
+    boolean isClock = false;
 
     /* renamed from: f */
     boolean f2919f = false;
 
     /* renamed from: g */
-    long f2920g;
+    long clockCnt;
 
     /* renamed from: h */
     Calendar mCalendar;
@@ -58,8 +58,8 @@ public class MyAlarmClock {
     }
 
     /* renamed from: a */
-    public void mo2787a(boolean z) {
-        this.f2917d = z;
+    public void setClock(boolean z) {
+        this.misClock = z;
     }
 
     /* renamed from: b */
@@ -69,8 +69,8 @@ public class MyAlarmClock {
 
     /* renamed from: b */
     public void setIsClock(boolean z) {
-        this.f2918e = z;
-        mo2787a(z);
-        this.f2920g = 0;
+        this.isClock = z;
+        setClock(z);
+        this.clockCnt = 0;
     }
 }

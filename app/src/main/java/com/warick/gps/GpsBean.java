@@ -4,22 +4,22 @@ package com.warick.gps;
 public class GpsBean {
 
     /* renamed from: a */
-    private double f3003a = 0.0d;
+    private double longitude = 0.0d;
 
     /* renamed from: b */
-    private double f3004b = 0.0d;
+    private double latitude = 0.0d;
 
     /* renamed from: c */
     private int f3005c = 0;
 
     /* renamed from: a */
-    public double mo2882a() {
-        return this.f3003a;
+    public double getLongitude() {
+        return this.longitude;
     }
 
     /* renamed from: a */
-    public void mo2883a(double d) {
-        this.f3003a = d;
+    public void setLongitude(double d) {
+        this.longitude = d;
     }
 
     /* renamed from: a */
@@ -28,12 +28,12 @@ public class GpsBean {
     }
 
     /* renamed from: b */
-    public double mo2885b() {
-        return this.f3004b;
+    public double getLatitude() {
+        return this.latitude;
     }
 
     /* renamed from: b */
-    public void mo2886b(double d) {
-        this.f3004b = d;
+    public void setLatitude(double d) {
+        this.latitude = d;
     }
 }

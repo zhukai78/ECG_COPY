@@ -192,7 +192,7 @@ public class MainHomeFragment extends Fragment {
             public void onClick(View view) {
                 if (MainHomeFragment.this.mFunChooseActivity.isBleConn()) {
                     MainHomeFragment.this.mFunChooseActivity.fcECGApplication.appPedometerConf.mo2673b(1);
-                    ((RadioButton) MainHomeFragment.this.mFunChooseActivity.findViewById(R.id.nav_step)).setChecked(true);
+//                    ((RadioButton) MainHomeFragment.this.mFunChooseActivity.findViewById(R.id.nav_step)).setChecked(true);
                 }
             }
         });

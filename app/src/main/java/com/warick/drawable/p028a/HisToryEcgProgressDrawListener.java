@@ -7,7 +7,7 @@ import com.warick.drawable.WarickSurfaceView;
 
 
 /* renamed from: com.warick.drawable.a.a */
-public class C0812a implements WarickSurfaceView.DrawListener {
+public class HisToryEcgProgressDrawListener implements WarickSurfaceView.DrawListener {
 
     /* renamed from: a */
     private static Paint f3039a;

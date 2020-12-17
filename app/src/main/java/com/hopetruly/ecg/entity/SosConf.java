@@ -10,7 +10,7 @@ public class SosConf {
     private String[] phoneStrs = new String[4];
 
     /* renamed from: c */
-    private boolean[] f2824c = new boolean[4];
+    private boolean[] phoneEnables = new boolean[4];
 
     /* renamed from: d */
     private String sos_custom_content;
@@ -29,17 +29,17 @@ public class SosConf {
 
     /* renamed from: a */
     public void setPhonesEnable(boolean z, int i) {
-        this.f2824c[i] = z;
+        this.phoneEnables[i] = z;
     }
 
     /* renamed from: a */
-    public String[] mo2678a() {
+    public String[] getPhoneStrs() {
         return this.phoneStrs;
     }
 
     /* renamed from: b */
-    public boolean[] mo2679b() {
-        return this.f2824c;
+    public boolean[] getPhoneEnables() {
+        return this.phoneEnables;
     }
 
     /* renamed from: c */

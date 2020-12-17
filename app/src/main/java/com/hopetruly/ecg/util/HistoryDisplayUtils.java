@@ -28,7 +28,7 @@ import java.io.IOException;
 import javax.xml.parsers.ParserConfigurationException;
 
 /* renamed from: com.hopetruly.ecg.util.k */
-public class C0775k {
+public class HistoryDisplayUtils {
 
     /* renamed from: a */
     Context mctx;
@@ -40,10 +40,10 @@ public class C0775k {
     private float f2925c = 10.0f;
 
     /* renamed from: d */
-    private boolean f2926d = true;
+    private boolean isFilterOpen = true;
 
     /* renamed from: e */
-    private int f2927e = 1;
+    private int reverseMark = 1;
 
     /* renamed from: f */
     private int f2928f = 1;
@@ -51,12 +51,12 @@ public class C0775k {
     /* renamed from: g */
     private boolean f2929g = true;
 
-    public C0775k(Context context) {
+    public HistoryDisplayUtils(Context context) {
         this.mctx = context;
     }
 
     /* renamed from: a */
-    private int m2805a(String str) {
+    private int covert20Datas(String str) {
         int i = 1;
         if (!TextUtils.isEmpty(str) && !this.f2929g) {
             int length = str.length() / 20;
@@ -222,19 +222,19 @@ public class C0775k {
         float[] fArr2 = new float[fArr.length];
         int i = 0;
         for (int i2 = 0; i2 < fArr.length; i2++) {
-            if (this.f2926d) {
+            if (this.isFilterOpen) {
                 if (i2 > Fir.getOrder(Fir.Fir_5) / 2) {
                     i++;
                 }
-                fArr2[i] = ((float) Fir.RealtimeFir(fArr[i2], Fir.Fir_5, dArr)) * ((float) this.f2927e);
+                fArr2[i] = ((float) Fir.RealtimeFir(fArr[i2], Fir.Fir_5, dArr)) * ((float) this.reverseMark);
             } else {
-                fArr2[i2] = fArr[i2] * ((float) this.f2927e);
+                fArr2[i2] = fArr[i2] * ((float) this.reverseMark);
             }
         }
-        if (this.f2926d) {
+        if (this.isFilterOpen) {
             for (int i3 = 0; i3 < Fir.getOrder(Fir.Fir_5) / 2; i3++) {
                 i++;
-                fArr2[i] = ((float) Fir.RealtimeFir(0, Fir.Fir_5, dArr)) * ((float) this.f2927e);
+                fArr2[i] = ((float) Fir.RealtimeFir(0, Fir.Fir_5, dArr)) * ((float) this.reverseMark);
             }
         }
         return fArr2;
@@ -283,7 +283,7 @@ public class C0775k {
     }
 
     /* renamed from: a */
-    public String mo2791a(ECGRecord eCGRecord, float[] fArr, int i, String str, int i2, int i3) throws IOException, SAXException, ParserConfigurationException {
+    public String drawReport(ECGRecord eCGRecord, float[] fArr, int i, String str, int i2, int i3) throws IOException, SAXException, ParserConfigurationException {
         int i4;
         Paint paint;
         float f;
@@ -298,7 +298,7 @@ public class C0775k {
         if (eCGRecord2 == null) {
             return null;
         }
-        m2805a(ECGRecordUtils.annotatedECG(new File(eCGRecord.getFilePath()), "text"));
+        covert20Datas(ECGRecordUtils.annotatedECG(new File(eCGRecord.getFilePath()), "text"));
         int[] a = mo2795a(fArr2, i);
         if (a == null) {
             return null;
@@ -387,13 +387,13 @@ public class C0775k {
     }
 
     /* renamed from: a */
-    public void mo2793a(int i) {
-        this.f2927e = i;
+    public void setReverseMark(int i) {
+        this.reverseMark = i;
     }
 
     /* renamed from: a */
-    public void mo2794a(boolean z) {
-        this.f2926d = z;
+    public void setFilterOpen(boolean z) {
+        this.isFilterOpen = z;
     }
 
     /* renamed from: a */

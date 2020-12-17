@@ -57,7 +57,7 @@ public class SOSSMSActivity extends BaseActivity {
     public boolean isCanAlarm = false;
 
     /* renamed from: m */
-    private CompoundButton.OnCheckedChangeListener f2536m = new CompoundButton.OnCheckedChangeListener() {
+    private CompoundButton.OnCheckedChangeListener mOnCheckedChangeListener = new CompoundButton.OnCheckedChangeListener() {
         public void onCheckedChanged(CompoundButton compoundButton, boolean z) {
             switch (compoundButton.getId()) {
                 case R.id.sos_sel_phone1 /*2131165480*/:
@@ -89,7 +89,7 @@ public class SOSSMSActivity extends BaseActivity {
         this.tv_sos_phone1[1] = (TextView) findViewById(R.id.sos_phone2);
         this.tv_sos_phone1[2] = (TextView) findViewById(R.id.sos_phone3);
         this.tv_sos_phone1[3] = (TextView) findViewById(R.id.sos_phone4);
-        String[] a = this.mECGApplication.appSosConf.mo2678a();
+        String[] a = this.mECGApplication.appSosConf.getPhoneStrs();
         this.tv_sos_phone1[0].setText(a[0]);
         this.tv_sos_phone1[1].setText(a[1]);
         this.tv_sos_phone1[2].setText(a[2]);
@@ -98,15 +98,15 @@ public class SOSSMSActivity extends BaseActivity {
         this.cb_sos_phone0_enable[1] = (CheckBox) findViewById(R.id.sos_sel_phone2);
         this.cb_sos_phone0_enable[2] = (CheckBox) findViewById(R.id.sos_sel_phone3);
         this.cb_sos_phone0_enable[3] = (CheckBox) findViewById(R.id.sos_sel_phone4);
-        boolean[] b = this.mECGApplication.appSosConf.mo2679b();
+        boolean[] b = this.mECGApplication.appSosConf.getPhoneEnables();
         this.cb_sos_phone0_enable[0].setChecked(b[0]);
         this.cb_sos_phone0_enable[1].setChecked(b[1]);
         this.cb_sos_phone0_enable[2].setChecked(b[2]);
         this.cb_sos_phone0_enable[3].setChecked(b[3]);
-        this.cb_sos_phone0_enable[0].setOnCheckedChangeListener(this.f2536m);
-        this.cb_sos_phone0_enable[1].setOnCheckedChangeListener(this.f2536m);
-        this.cb_sos_phone0_enable[2].setOnCheckedChangeListener(this.f2536m);
-        this.cb_sos_phone0_enable[3].setOnCheckedChangeListener(this.f2536m);
+        this.cb_sos_phone0_enable[0].setOnCheckedChangeListener(this.mOnCheckedChangeListener);
+        this.cb_sos_phone0_enable[1].setOnCheckedChangeListener(this.mOnCheckedChangeListener);
+        this.cb_sos_phone0_enable[2].setOnCheckedChangeListener(this.mOnCheckedChangeListener);
+        this.cb_sos_phone0_enable[3].setOnCheckedChangeListener(this.mOnCheckedChangeListener);
         this.tv_sos_custom_content = (TextView) findViewById(R.id.sos_custom_content);
         this.tv_sos_custom_content.setText(this.mECGApplication.appSosConf.getSOS_CUSTOM_CONTENT());
         this.cb_setting_sms_alarm = (CheckBox) findViewById(R.id.setting_sms_alarm);
@@ -117,7 +117,7 @@ public class SOSSMSActivity extends BaseActivity {
                     SOSSMSActivity.this.allEnable();
                     SOSSMSActivity.this.mECGApplication.appECGConf.setECG_SMS_ALARM(1);
                     GpsManagerHelper.initGpsManagerHelper(SOSSMSActivity.this.getApplicationContext());
-                    GpsManagerHelper.m2908a();
+                    GpsManagerHelper.isEnableGpsManager();
                 } else {
                     boolean unused2 = SOSSMSActivity.this.isCanAlarm = false;
                     SOSSMSActivity.this.allDisable();

@@ -15,7 +15,6 @@ import android.content.ServiceConnection;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.os.Environment;
 import android.os.IBinder;
 import android.text.Html;
 import android.util.Log;
@@ -52,43 +51,41 @@ public class FwUpdateActivity extends BaseActivity {
     /* renamed from: a */
     public static String TAG = "FwUpdateActivity";
 
-    /* renamed from: c */
-    private static final String f2247c = Environment.DIRECTORY_DOWNLOADS;
-    /* access modifiers changed from: private */
+
 
     /* renamed from: A */
-    public C0621a f2248A = new C0621a();
+    public FwInfo notifyFwInfo = new FwInfo();
 
     /* renamed from: B */
-    private Timer f2249B = null;
+    private Timer mFwTimer = null;
     /* access modifiers changed from: private */
 
     /* renamed from: C */
     public C0622b f2250C = new C0622b();
 
     /* renamed from: D */
-    private TimerTask f2251D = null;
+    private TimerTask mFwTimerTask = null;
     /* access modifiers changed from: private */
 
     /* renamed from: E */
-    public boolean f2252E = false;
+    public boolean isDeviceSupportFw = false;
     /* access modifiers changed from: private */
 
     /* renamed from: F */
-    public boolean f2253F = false;
+    public boolean isStartFw = false;
     /* access modifiers changed from: private */
 
     /* renamed from: G */
-    public boolean f2254G = false;
+    public boolean isAuto = false;
 
     /* renamed from: H */
-    private int f2255H = 0;
+    private int fwSecond = 0;
 
     /* renamed from: I */
     private IntentFilter mIntentFilter;
 
     /* renamed from: J */
-    private ServiceConnection f2257J = new ServiceConnection() {
+    private ServiceConnection netBinderSerConn = new ServiceConnection() {
         public void onServiceConnected(ComponentName componentName, IBinder iBinder) {
             NetService unused = FwUpdateActivity.this.NetiBinder = ((NetService.NetSerBinder) iBinder).getNetSerBinder();
         }
@@ -103,34 +100,34 @@ public class FwUpdateActivity extends BaseActivity {
         public void onServiceConnected(ComponentName componentName, IBinder iBinder) {
             MainService unused = FwUpdateActivity.this.mMainService = ((MainService.MainBinder) iBinder).getMainBinder();
             if (!FwUpdateActivity.this.mMainService.isMBleConn()) {
-                FwUpdateActivity.this.m2346o();
+                FwUpdateActivity.this.showDisconnect_and_checkDialog();
                 return;
             }
-            BleHelper unused2 = FwUpdateActivity.this.f2277u = FwUpdateActivity.this.mMainService.getMainbleHelper();
-            BluetoothGattService unused3 = FwUpdateActivity.this.f2270n = FwUpdateActivity.this.f2277u.mo2796a(ECGUUIDS.f2787t);
-            BluetoothGattService unused4 = FwUpdateActivity.this.f2271o = FwUpdateActivity.this.f2277u.mo2796a(ECGUUIDS.f2790w);
-            if ((FwUpdateActivity.this.f2270n == null) || (FwUpdateActivity.this.f2271o == null)) {
-                FwUpdateActivity.this.m2343n();
-                boolean unused5 = FwUpdateActivity.this.f2252E = false;
+            BleHelper unused2 = FwUpdateActivity.this.mBleHelper = FwUpdateActivity.this.mMainService.getMainbleHelper();
+            BluetoothGattService unused3 = FwUpdateActivity.this.mBluetoothGattService = FwUpdateActivity.this.mBleHelper.getServicebyUUID(ECGUUIDS.f2787t);
+            BluetoothGattService unused4 = FwUpdateActivity.this.mBluetoothGattService1 = FwUpdateActivity.this.mBleHelper.getServicebyUUID(ECGUUIDS.f2790w);
+            if ((FwUpdateActivity.this.mBluetoothGattService == null) || (FwUpdateActivity.this.mBluetoothGattService1 == null)) {
+                FwUpdateActivity.this.showNOT_support_firmware_updataDialog();
+                boolean unused5 = FwUpdateActivity.this.isDeviceSupportFw = false;
                 return;
             }
-            List unused6 = FwUpdateActivity.this.f2272p = FwUpdateActivity.this.f2270n.getCharacteristics();
-            List unused7 = FwUpdateActivity.this.f2273q = FwUpdateActivity.this.f2271o.getCharacteristics();
-            boolean unused8 = FwUpdateActivity.this.f2252E = FwUpdateActivity.this.f2272p.size() == 2 && FwUpdateActivity.this.f2273q.size() >= 3;
-            if (FwUpdateActivity.this.f2252E) {
+            List unused6 = FwUpdateActivity.this.f2272p = FwUpdateActivity.this.mBluetoothGattService.getCharacteristics();
+            List unused7 = FwUpdateActivity.this.f2273q = FwUpdateActivity.this.mBluetoothGattService1.getCharacteristics();
+            boolean unused8 = FwUpdateActivity.this.isDeviceSupportFw = FwUpdateActivity.this.f2272p.size() == 2 && FwUpdateActivity.this.f2273q.size() >= 3;
+            if (FwUpdateActivity.this.isDeviceSupportFw) {
                 BluetoothGattCharacteristic unused9 = FwUpdateActivity.this.f2274r = (BluetoothGattCharacteristic) FwUpdateActivity.this.f2272p.get(0);
                 BluetoothGattCharacteristic unused10 = FwUpdateActivity.this.f2275s = (BluetoothGattCharacteristic) FwUpdateActivity.this.f2272p.get(1);
                 BluetoothGattCharacteristic unused11 = FwUpdateActivity.this.f2276t = (BluetoothGattCharacteristic) FwUpdateActivity.this.f2273q.get(1);
             }
-            FwUpdateActivity.this.f2265i.setEnabled(FwUpdateActivity.this.f2252E);
-            FwUpdateActivity.this.f2266j.setEnabled(FwUpdateActivity.this.f2252E);
-            FwUpdateActivity.this.f2267k.setEnabled(FwUpdateActivity.this.f2252E);
-            if (FwUpdateActivity.this.f2252E) {
+            FwUpdateActivity.this.btn_load_a.setEnabled(FwUpdateActivity.this.isDeviceSupportFw);
+            FwUpdateActivity.this.btn_load_b.setEnabled(FwUpdateActivity.this.isDeviceSupportFw);
+            FwUpdateActivity.this.btn_load_c.setEnabled(FwUpdateActivity.this.isDeviceSupportFw);
+            if (FwUpdateActivity.this.isDeviceSupportFw) {
                 FwUpdateActivity.this.m2336j();
                 FwUpdateActivity.this.m2338k();
                 return;
             }
-            FwUpdateActivity.this.m2343n();
+            FwUpdateActivity.this.showNOT_support_firmware_updataDialog();
             Toast.makeText(FwUpdateActivity.this.getApplicationContext(), FwUpdateActivity.this.getString(R.string.p_oad_init_fail), Toast.LENGTH_LONG).show();
         }
 
@@ -140,7 +137,7 @@ public class FwUpdateActivity extends BaseActivity {
     };
 
     /* renamed from: L */
-    private final BroadcastReceiver f2259L = new BroadcastReceiver() {
+    private final BroadcastReceiver fwBroadcastReceiver = new BroadcastReceiver() {
         public void onReceive(Context context, Intent intent) {
             String action = intent.getAction();
             String d = FwUpdateActivity.TAG;
@@ -148,16 +145,16 @@ public class FwUpdateActivity extends BaseActivity {
             if ("com.hopetruly.ec.services.ACTION_GATT_DATA_NOTIFY".equals(action)) {
                 byte[] byteArrayExtra = intent.getByteArrayExtra("com.hopetruly.ec.services.EXTRA_DATA");
                 if (intent.getStringExtra("com.hopetruly.ec.services.EXTRA_UUID").equals(FwUpdateActivity.this.f2274r.getUuid().toString())) {
-                    FwUpdateActivity.this.f2248A.f2290a = DataParser.m2758a(byteArrayExtra[1], byteArrayExtra[0]);
-                    FwUpdateActivity.this.f2248A.f2292c = Character.valueOf((FwUpdateActivity.this.f2248A.f2290a & 1) == 1 ? 'B' : 'A');
-                    FwUpdateActivity.this.f2248A.f2291b = DataParser.parser(byteArrayExtra[3], byteArrayExtra[2]);
-                    FwUpdateActivity.this.m2310a(FwUpdateActivity.this.f2260d, FwUpdateActivity.this.f2248A);
+                    FwUpdateActivity.this.notifyFwInfo.fwVersion = DataParser.BytesToShort(byteArrayExtra[1], byteArrayExtra[0]);
+                    FwUpdateActivity.this.notifyFwInfo.fwType = Character.valueOf((FwUpdateActivity.this.notifyFwInfo.fwVersion & 1) == 1 ? 'B' : 'A');
+                    FwUpdateActivity.this.notifyFwInfo.fwSize = DataParser.parser(byteArrayExtra[3], byteArrayExtra[2]);
+                    FwUpdateActivity.this.showFwInfo(FwUpdateActivity.this.tv_tw_target, FwUpdateActivity.this.notifyFwInfo);
                     try {
-                        FwUpdateActivity.this.mo2204b();
+                        FwUpdateActivity.this.startFwUpdate();
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
-                    if (FwUpdateActivity.this.f2254G) {
+                    if (FwUpdateActivity.this.isAuto) {
                         SharedPreferences.Editor edit = FwUpdateActivity.this.ecgApplication.spSw_conf.edit();
                         FwUpdateActivity.this.ecgApplication.mSwConf.mo2683a(FwUpdateActivity.this.ecgApplication.appMachine.getId());
                         edit.putString("DEVICE_ID", FwUpdateActivity.this.ecgApplication.mSwConf.mo2690e());
@@ -174,53 +171,53 @@ public class FwUpdateActivity extends BaseActivity {
                     Toast.makeText(context, "GATT error: status=" + intExtra, Toast.LENGTH_SHORT).show();
                 }
             } else if (action.equals("com.hopetruly.ec.services.ACTION_GATT_DISCONNECTED")) {
-                boolean unused = FwUpdateActivity.this.f2254G = false;
-                FwUpdateActivity.this.m2346o();
+                boolean unused = FwUpdateActivity.this.isAuto = false;
+                FwUpdateActivity.this.showDisconnect_and_checkDialog();
             }
         }
     };
     /* access modifiers changed from: private */
 
     /* renamed from: d */
-    public TextView f2260d;
+    public TextView tv_tw_target;
 
     /* renamed from: e */
-    private TextView f2261e;
+    private TextView tv_tw_file;
 
     /* renamed from: f */
-    private TextView f2262f;
+    private TextView tv_tw_info;
 
     /* renamed from: g */
-    private TextView f2263g;
+    private TextView tv_tw_log;
 
     /* renamed from: h */
-    private ProgressBar f2264h;
+    private ProgressBar pb_progress;
     /* access modifiers changed from: private */
 
     /* renamed from: i */
-    public Button f2265i;
+    public Button btn_load_a;
     /* access modifiers changed from: private */
 
     /* renamed from: j */
-    public Button f2266j;
+    public Button btn_load_b;
     /* access modifiers changed from: private */
 
     /* renamed from: k */
-    public Button f2267k;
+    public Button btn_load_c;
 
     /* renamed from: l */
-    private Button f2268l;
+    private Button btn_start;
 
     /* renamed from: m */
-    private LinearLayout f2269m;
+    private LinearLayout ll_file_LinearLayout;
     /* access modifiers changed from: private */
 
     /* renamed from: n */
-    public BluetoothGattService f2270n;
+    public BluetoothGattService mBluetoothGattService;
     /* access modifiers changed from: private */
 
     /* renamed from: o */
-    public BluetoothGattService f2271o;
+    public BluetoothGattService mBluetoothGattService1;
     /* access modifiers changed from: private */
 
     /* renamed from: p */
@@ -244,7 +241,7 @@ public class FwUpdateActivity extends BaseActivity {
     /* access modifiers changed from: private */
 
     /* renamed from: u */
-    public BleHelper f2277u;
+    public BleHelper mBleHelper;
     /* access modifiers changed from: private */
 
     /* renamed from: v */
@@ -262,25 +259,25 @@ public class FwUpdateActivity extends BaseActivity {
     /* access modifiers changed from: private */
 
     /* renamed from: z */
-    public C0621a f2282z = new C0621a();
+    public FwInfo mFwInfo = new FwInfo();
 
     /* renamed from: com.hopetruly.ecg.activity.FwUpdateActivity$a */
-    private class C0621a {
+    private class FwInfo {
 
         /* renamed from: a */
-        short f2290a;
+        short fwVersion;
 
         /* renamed from: b */
-        int f2291b;
+        int fwSize;
 
         /* renamed from: c */
-        Character f2292c;
+        Character fwType;
 
         /* renamed from: d */
-        byte[] f2293d;
+        byte[] mFwInfobuf;
 
-        private C0621a() {
-            this.f2293d = new byte[4];
+        private FwInfo() {
+            this.mFwInfobuf = new byte[4];
         }
     }
 
@@ -291,10 +288,10 @@ public class FwUpdateActivity extends BaseActivity {
         int f2295a;
 
         /* renamed from: b */
-        short f2296b;
+        short allSize;
 
         /* renamed from: c */
-        short f2297c;
+        short completeSize;
 
         /* renamed from: d */
         int f2298d;
@@ -304,8 +301,8 @@ public class FwUpdateActivity extends BaseActivity {
 
         private C0622b() {
             this.f2295a = 0;
-            this.f2296b = 0;
-            this.f2297c = 0;
+            this.allSize = 0;
+            this.completeSize = 0;
             this.f2298d = 0;
             this.f2299e = 0;
         }
@@ -314,26 +311,26 @@ public class FwUpdateActivity extends BaseActivity {
         /* renamed from: a */
         public void mo2223a() {
             this.f2295a = 0;
-            this.f2296b = 0;
+            this.allSize = 0;
             this.f2298d = 0;
             this.f2299e = 0;
-            this.f2297c = (short) (FwUpdateActivity.this.f2282z.f2291b / 4);
+            this.completeSize = (short) (FwUpdateActivity.this.mFwInfo.fwSize / 4);
         }
     }
 
     /* renamed from: com.hopetruly.ecg.activity.FwUpdateActivity$c */
-    private class C0623c extends TimerTask {
-        private C0623c() {
+    private class FwTimerTask extends TimerTask {
+        private FwTimerTask() {
         }
 
         public void run() {
             FwUpdateActivity.this.f2250C.f2299e++;
-            if (FwUpdateActivity.this.f2253F) {
+            if (FwUpdateActivity.this.isStartFw) {
                 FwUpdateActivity.this.m2340l();
                 if (FwUpdateActivity.this.f2250C.f2299e % 20 == 0) {
                     FwUpdateActivity.this.runOnUiThread(new Runnable() {
                         public void run() {
-                            FwUpdateActivity.this.m2333i();
+                            FwUpdateActivity.this.updateTimeProgress();
                         }
                     });
                 }
@@ -343,22 +340,22 @@ public class FwUpdateActivity extends BaseActivity {
 
     /* access modifiers changed from: private */
     /* renamed from: a */
-    public void m2310a(TextView textView, C0621a aVar) {
+    public void showFwInfo(TextView textView, FwInfo aVar) {
         String str = TAG;
-        LogUtils.logE(str, "h.len>>" + aVar.f2291b);
-        textView.setText(Html.fromHtml(String.format("%s %c %s %d %s %d", new Object[]{getString(R.string.l_type), aVar.f2292c, getString(R.string.l_version), Integer.valueOf(aVar.f2290a >> 1), getString(R.string.l_size), Integer.valueOf(aVar.f2291b * 4)})));
+        LogUtils.logE(str, "h.len>>" + aVar.fwSize);
+        textView.setText(Html.fromHtml(String.format("%s %c %s %d %s %d", new Object[]{getString(R.string.l_type), aVar.fwType, getString(R.string.l_version), Integer.valueOf(aVar.fwVersion >> 1), getString(R.string.l_size), Integer.valueOf(aVar.fwSize * 4)})));
     }
 
     /* renamed from: a */
-    private boolean m2312a(BluetoothGattCharacteristic bluetoothGattCharacteristic, byte b) {
-        boolean a = this.f2277u.writeCharacteristicBytes(new byte[]{b}, bluetoothGattCharacteristic);
-        return a ? this.f2277u.sleep10(100) : a;
+    private boolean writeMyCharacteristicByte(BluetoothGattCharacteristic bluetoothGattCharacteristic, byte b) {
+        boolean a = this.mBleHelper.writeCharacteristicBytes(new byte[]{b}, bluetoothGattCharacteristic);
+        return a ? this.mBleHelper.sleep10(100) : a;
     }
 
     /* renamed from: a */
-    private boolean m2313a(BluetoothGattCharacteristic bluetoothGattCharacteristic, boolean z) {
-        boolean a = this.f2277u.eNABLE_NOTIFICATION_VALUE(bluetoothGattCharacteristic, z);
-        return a ? this.f2277u.sleep10(100) : a;
+    private boolean enableNotification_value(BluetoothGattCharacteristic bluetoothGattCharacteristic, boolean z) {
+        boolean a = this.mBleHelper.eNABLE_NOTIFICATION_VALUE(bluetoothGattCharacteristic, z);
+        return a ? this.mBleHelper.sleep10(100) : a;
     }
 
     /* renamed from: a */
@@ -368,7 +365,7 @@ public class FwUpdateActivity extends BaseActivity {
             try {
                 inputStream = getAssets().open(str);
             } catch (IOException unused) {
-                this.f2263g.setText(getString(R.string.l_open_file_fail) + " " + str + "\n");
+                this.tv_tw_log.setText(getString(R.string.l_open_file_fail) + " " + str + "\n");
                 return false;
             }
         } else {
@@ -376,27 +373,27 @@ public class FwUpdateActivity extends BaseActivity {
         }
         inputStream.read(this.f2280x, 0, this.f2280x.length);
         inputStream.close();
-        this.f2282z.f2290a = DataParser.m2758a(this.f2280x[5], this.f2280x[4]);
-        this.f2282z.f2291b = DataParser.parser(this.f2280x[7], this.f2280x[6]);
+        this.mFwInfo.fwVersion = DataParser.BytesToShort(this.f2280x[5], this.f2280x[4]);
+        this.mFwInfo.fwSize = DataParser.parser(this.f2280x[7], this.f2280x[6]);
         boolean z2 = true;
-        this.f2282z.f2292c = Character.valueOf((this.f2282z.f2290a & 1) == 1 ? 'B' : 'A');
-        System.arraycopy(this.f2280x, 8, this.f2282z.f2293d, 0, 4);
-        m2310a(this.f2261e, this.f2282z);
-        if (this.f2282z.f2292c == this.f2248A.f2292c) {
+        this.mFwInfo.fwType = Character.valueOf((this.mFwInfo.fwVersion & 1) == 1 ? 'B' : 'A');
+        System.arraycopy(this.f2280x, 8, this.mFwInfo.mFwInfobuf, 0, 4);
+        showFwInfo(this.tv_tw_file, this.mFwInfo);
+        if (this.mFwInfo.fwType == this.notifyFwInfo.fwType) {
             z2 = false;
         }
-        this.f2261e.setTextColor(z2 ? -16777216 : Color.rgb(238, 92, 66));
-        this.f2268l.setEnabled(z2);
-        this.f2255H = (((20 * this.f2282z.f2291b) * 4) / 16) / 1000;
-        m2333i();
-        this.f2263g.setText(getString(R.string.l_img) + " " + this.f2282z.f2292c + " " + getString(R.string.l_sel) + ".\n");
-        this.f2263g.append(getString(z2 ? R.string.l_fw_ready : R.string.l_fw_incorrect_img));
+        this.tv_tw_file.setTextColor(z2 ? -16777216 : Color.rgb(238, 92, 66));
+        this.btn_start.setEnabled(z2);
+        this.fwSecond = (((20 * this.mFwInfo.fwSize) * 4) / 16) / 1000;
+        updateTimeProgress();
+        this.tv_tw_log.setText(getString(R.string.l_img) + " " + this.mFwInfo.fwType + " " + getString(R.string.l_sel) + ".\n");
+        this.tv_tw_log.append(getString(z2 ? R.string.l_fw_ready : R.string.l_fw_incorrect_img));
         m2332h();
         return false;
     }
 
     /* renamed from: e */
-    private void m2326e() {
+    private void addIntentFilter() {
         this.mIntentFilter = new IntentFilter();
         this.mIntentFilter.addAction("com.hopetruly.ec.services.ACTION_GATT_DATA_NOTIFY");
         this.mIntentFilter.addAction("com.hopetruly.ec.services.ACTION_GATT_CHARACTERISTIC_WRITE");
@@ -405,92 +402,92 @@ public class FwUpdateActivity extends BaseActivity {
     }
 
     /* renamed from: f */
-    private void m2327f() {
-        this.f2263g.append(getString(R.string.l_fw_update_start));
-        this.f2253F = true;
+    private void startFw_update() {
+        this.tv_tw_log.append(getString(R.string.l_fw_update_start));
+        this.isStartFw = true;
         m2332h();
         byte[] bArr = new byte[12];
-        bArr[0] = DataParser.m2757a(this.f2282z.f2290a);
-        bArr[1] = DataParser.m2760b(this.f2282z.f2290a);
-        bArr[2] = DataParser.m2756a(this.f2282z.f2291b);
-        bArr[3] = DataParser.m2759b(this.f2282z.f2291b);
-        System.arraycopy(this.f2282z.f2293d, 0, bArr, 4, 4);
+        bArr[0] = DataParser.shortToByte(this.mFwInfo.fwVersion);
+        bArr[1] = DataParser.m2760b(this.mFwInfo.fwVersion);
+        bArr[2] = DataParser.IntToByte(this.mFwInfo.fwSize);
+        bArr[3] = DataParser.m2759b(this.mFwInfo.fwSize);
+        System.arraycopy(this.mFwInfo.mFwInfobuf, 0, bArr, 4, 4);
         this.f2274r.setValue(bArr);
-        this.f2277u.writeCharacteristicBle(this.f2274r);
+        this.mBleHelper.writeCharacteristicBle(this.f2274r);
         this.f2250C.mo2223a();
-        this.f2249B = null;
-        this.f2249B = new Timer();
-        this.f2251D = new C0623c();
-        this.f2249B.scheduleAtFixedRate(this.f2251D, 0, 20);
+        this.mFwTimer = null;
+        this.mFwTimer = new Timer();
+        this.mFwTimerTask = new FwTimerTask();
+        this.mFwTimer.scheduleAtFixedRate(this.mFwTimerTask, 0, 20);
     }
 
     /* access modifiers changed from: private */
     /* renamed from: g */
     public void m2330g() {
-        this.f2249B.cancel();
-        this.f2249B.purge();
-        if (this.f2251D != null) {
-            this.f2251D.cancel();
+        this.mFwTimer.cancel();
+        this.mFwTimer.purge();
+        if (this.mFwTimerTask != null) {
+            this.mFwTimerTask.cancel();
         }
-        this.f2251D = null;
-        this.f2253F = false;
-        this.f2262f.setText("");
-        this.f2264h.setProgress(0);
+        this.mFwTimerTask = null;
+        this.isStartFw = false;
+        this.tv_tw_info.setText("");
+        this.pb_progress.setProgress(0);
         m2332h();
-        if (this.f2250C.f2296b == this.f2250C.f2297c) {
-            this.f2263g.setText(getString(R.string.l_fw_update_ok));
-            if (this.f2254G && mo2203a().booleanValue()) {
+        if (this.f2250C.allSize == this.f2250C.completeSize) {
+            this.tv_tw_log.setText(getString(R.string.l_fw_update_ok));
+            if (this.isAuto && getMyNetInfoType().booleanValue()) {
                 SharedPreferences.Editor edit = this.ecgApplication.spSw_conf.edit();
                 this.ecgApplication.mSwConf.setDevice_id_upload(1);
                 edit.putInt("DEVICE_ID_UPLOAD", this.ecgApplication.mSwConf.getDevice_id_upload());
                 edit.commit();
             }
-            this.f2254G = false;
-            m2341m();
+            this.isAuto = false;
+            restartBle();
             return;
         }
-        this.f2263g.append(getString(R.string.l_fw_update_cancel));
+        this.tv_tw_log.append(getString(R.string.l_fw_update_cancel));
     }
 
     /* renamed from: h */
     private void m2332h() {
-        if (this.f2253F) {
-            this.f2268l.setText(getResources().getString(R.string.cancle));
-            this.f2265i.setEnabled(false);
+        if (this.isStartFw) {
+            this.btn_start.setText(getResources().getString(R.string.cancle));
+            this.btn_load_a.setEnabled(false);
         } else {
-            this.f2264h.setProgress(0);
-            this.f2268l.setText(getResources().getString(R.string.start_programming));
-            if (this.f2282z.f2292c.charValue() == 'A') {
-                this.f2265i.setEnabled(false);
-                this.f2266j.setEnabled(true);
+            this.pb_progress.setProgress(0);
+            this.btn_start.setText(getResources().getString(R.string.start_programming));
+            if (this.mFwInfo.fwType.charValue() == 'A') {
+                this.btn_load_a.setEnabled(false);
+                this.btn_load_b.setEnabled(true);
                 return;
-            } else if (this.f2282z.f2292c.charValue() == 'B') {
-                this.f2265i.setEnabled(true);
+            } else if (this.mFwInfo.fwType.charValue() == 'B') {
+                this.btn_load_a.setEnabled(true);
             } else {
                 return;
             }
         }
-        this.f2266j.setEnabled(false);
+        this.btn_load_b.setEnabled(false);
     }
 
     /* access modifiers changed from: private */
     /* renamed from: i */
-    public void m2333i() {
+    public void updateTimeProgress() {
         int i = this.f2250C.f2298d / 1000;
         int i2 = i > 0 ? this.f2250C.f2295a / i : 0;
-        String format = String.format("%s %d / %d %s", new Object[]{getString(R.string.l_time), Integer.valueOf(i), Integer.valueOf(this.f2255H), getString(R.string.l_sec)});
-        this.f2262f.setText(format + String.format("    %s %d (%d/%s)", new Object[]{getString(R.string.l_byte), Integer.valueOf(this.f2250C.f2295a), Integer.valueOf(i2), getString(R.string.l_sec)}));
+        String format = String.format("%s %d / %d %s", new Object[]{getString(R.string.l_time), Integer.valueOf(i), Integer.valueOf(this.fwSecond), getString(R.string.l_sec)});
+        this.tv_tw_info.setText(format + String.format("    %s %d (%d/%s)", new Object[]{getString(R.string.l_byte), Integer.valueOf(this.f2250C.f2295a), Integer.valueOf(i2), getString(R.string.l_sec)}));
     }
 
     /* access modifiers changed from: private */
     /* renamed from: j */
     public void m2336j() {
-        boolean a = m2313a(this.f2274r, true);
+        boolean a = enableNotification_value(this.f2274r, true);
         if (a) {
-            a = m2312a(this.f2274r, (byte) 0);
+            a = writeMyCharacteristicByte(this.f2274r, (byte) 0);
         }
         if (a) {
-            a = m2312a(this.f2274r, (byte) 1);
+            a = writeMyCharacteristicByte(this.f2274r, (byte) 1);
         }
         if (!a) {
             Toast.makeText(this, getString(R.string.p_get_target_fail), Toast.LENGTH_LONG).show();
@@ -500,37 +497,37 @@ public class FwUpdateActivity extends BaseActivity {
     /* access modifiers changed from: private */
     /* renamed from: k */
     public void m2338k() {
-        this.f2276t.setValue(new byte[]{DataParser.m2757a((short) 10), DataParser.m2760b((short) 10), DataParser.m2757a((short) 10), DataParser.m2760b((short) 10), 0, 0, DataParser.m2757a((short) 100), DataParser.m2760b((short) 100)});
-        if (this.f2277u.writeCharacteristicBle(this.f2276t)) {
-            this.f2277u.sleep10(100);
+        this.f2276t.setValue(new byte[]{DataParser.shortToByte((short) 10), DataParser.m2760b((short) 10), DataParser.shortToByte((short) 10), DataParser.m2760b((short) 10), 0, 0, DataParser.shortToByte((short) 100), DataParser.m2760b((short) 100)});
+        if (this.mBleHelper.writeCharacteristicBle(this.f2276t)) {
+            this.mBleHelper.sleep10(100);
         }
     }
 
     /* access modifiers changed from: private */
     /* JADX WARNING: Code restructure failed: missing block: B:6:0x006b, code lost:
-        if (r7.f2277u.getBluetoothGatt() == null) goto L_0x006d;
+        if (r7.mBleHelper.getBluetoothGatt() == null) goto L_0x006d;
      */
     /* JADX WARNING: Removed duplicated region for block: B:10:0x007b  */
     /* JADX WARNING: Removed duplicated region for block: B:12:? A[RETURN, SYNTHETIC] */
     /* renamed from: l */
     public void m2340l() {
-        if (this.f2250C.f2296b < this.f2250C.f2297c) {
-            this.f2253F = true;
-            this.f2281y[0] = DataParser.m2757a(this.f2250C.f2296b);
-            this.f2281y[1] = DataParser.m2760b(this.f2250C.f2296b);
+        if (this.f2250C.allSize < this.f2250C.completeSize) {
+            this.isStartFw = true;
+            this.f2281y[0] = DataParser.shortToByte(this.f2250C.allSize);
+            this.f2281y[1] = DataParser.m2760b(this.f2250C.allSize);
             System.arraycopy(this.f2280x, this.f2250C.f2295a, this.f2281y, 2, 16);
             this.f2275s.setValue(this.f2281y);
-            if (this.f2277u.writeCharacteristicBle(this.f2275s)) {
+            if (this.mBleHelper.writeCharacteristicBle(this.f2275s)) {
                 C0622b bVar = this.f2250C;
-                bVar.f2296b = (short) (bVar.f2296b + 1);
+                bVar.allSize = (short) (bVar.allSize + 1);
                 this.f2250C.f2295a += 16;
-                this.f2264h.setProgress((this.f2250C.f2296b * 100) / this.f2250C.f2297c);
+                this.pb_progress.setProgress((this.f2250C.allSize * 100) / this.f2250C.completeSize);
             }
             this.f2250C.f2298d += 20;
-            if (this.f2253F) {
+            if (this.isStartFw) {
                 runOnUiThread(new Runnable() {
                     public void run() {
-                        FwUpdateActivity.this.m2333i();
+                        FwUpdateActivity.this.updateTimeProgress();
                         FwUpdateActivity.this.m2330g();
                     }
                 });
@@ -538,14 +535,14 @@ public class FwUpdateActivity extends BaseActivity {
             }
             return;
         }
-        this.f2253F = false;
+        this.isStartFw = false;
         this.f2250C.f2298d += 20;
-        if (this.f2253F) {
+        if (this.isStartFw) {
         }
     }
 
     /* renamed from: m */
-    private void m2341m() {
+    private void restartBle() {
         BluetoothAdapter adapter = ((BluetoothManager) getSystemService(BLUETOOTH_SERVICE)).getAdapter();
         if (adapter.isEnabled()) {
             adapter.disable();
@@ -556,7 +553,7 @@ public class FwUpdateActivity extends BaseActivity {
 
     /* access modifiers changed from: private */
     /* renamed from: n */
-    public void m2343n() {
+    public void showNOT_support_firmware_updataDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle(getResources().getString(R.string.Tip));
         builder.setMessage(getResources().getString(R.string.NOT_support_firmware_updata));
@@ -573,7 +570,7 @@ public class FwUpdateActivity extends BaseActivity {
 
     /* access modifiers changed from: private */
     /* renamed from: o */
-    public void m2346o() {
+    public void showDisconnect_and_checkDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle(getString(R.string.Tip));
         builder.setMessage(getString(R.string.Disconnect_and_check));
@@ -589,7 +586,7 @@ public class FwUpdateActivity extends BaseActivity {
     }
 
     /* renamed from: p */
-    private void m2348p() {
+    private void showFw_update_tipsDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle(getString(R.string.Tip));
         builder.setMessage(getString(R.string.fw_update_tips));
@@ -605,20 +602,20 @@ public class FwUpdateActivity extends BaseActivity {
 
     /* access modifiers changed from: protected */
     /* renamed from: a */
-    public Boolean mo2203a() {
+    public Boolean getMyNetInfoType() {
         return Boolean.valueOf(this.NetiBinder.getNetInfoType() != -1);
     }
 
     /* access modifiers changed from: protected */
     /* renamed from: b */
-    public void mo2204b() throws IOException {
-        m2348p();
-        mo2205c();
+    public void startFwUpdate() throws IOException {
+        showFw_update_tipsDialog();
+        selectFwImg();
     }
 
     /* renamed from: c */
-    public void mo2205c() throws IOException {
-        m2315a(this.f2248A.f2292c.charValue() == 'A' ? "Muirhead_ImgB.bin" : "Muirhead_ImgA.bin", true);
+    public void selectFwImg() throws IOException {
+        m2315a(this.notifyFwInfo.fwType.charValue() == 'A' ? "Muirhead_ImgB.bin" : "Muirhead_ImgA.bin", true);
     }
 
     /* access modifiers changed from: protected */
@@ -637,9 +634,9 @@ public class FwUpdateActivity extends BaseActivity {
 
     public void onBackPressed() {
         Log.d(TAG, "onBackPressed");
-        if (this.f2253F) {
+        if (this.isStartFw) {
             Toast.makeText(this, getResources().getString(R.string.Device_is_programming), Toast.LENGTH_LONG).show();
-        } else if (!this.f2254G) {
+        } else if (!this.isAuto) {
             super.onBackPressed();
         } else if (this.mMainService.isMBleConn()) {
             this.mMainService.disconnectMainBLE();
@@ -654,42 +651,42 @@ public class FwUpdateActivity extends BaseActivity {
         String stringExtra = getIntent().getStringExtra("update");
         if (stringExtra.equals("Auto")) {
             Log.i(TAG, "Auto");
-            this.f2254G = true;
+            this.isAuto = true;
         } else if (stringExtra.equals("Manual")) {
             Log.i(TAG, "Manual");
-            this.f2254G = false;
+            this.isAuto = false;
         }
         ((ImageView) findViewById(16908332)).setPadding(10, 0, 20, 10);
         setTitle(getString(R.string.Firmware_Updata));
-        this.f2262f = (TextView) findViewById(R.id.tw_info);
-        this.f2260d = (TextView) findViewById(R.id.tw_target);
-        this.f2261e = (TextView) findViewById(R.id.tw_file);
-        this.f2263g = (TextView) findViewById(R.id.tw_log);
-        this.f2264h = (ProgressBar) findViewById(R.id.pb_progress);
-        this.f2268l = (Button) findViewById(R.id.btn_start);
-        this.f2268l.setEnabled(false);
-        this.f2265i = (Button) findViewById(R.id.btn_load_a);
-        this.f2266j = (Button) findViewById(R.id.btn_load_b);
-        this.f2267k = (Button) findViewById(R.id.btn_load_c);
-        this.f2269m = (LinearLayout) findViewById(R.id.file_LinearLayout);
-        this.f2269m.setVisibility(View.INVISIBLE);
-        this.f2265i.setVisibility(View.INVISIBLE);
-        this.f2266j.setVisibility(View.INVISIBLE);
-        this.f2267k.setVisibility(View.INVISIBLE);
-        m2326e();
+        this.tv_tw_info = (TextView) findViewById(R.id.tw_info);
+        this.tv_tw_target = (TextView) findViewById(R.id.tw_target);
+        this.tv_tw_file = (TextView) findViewById(R.id.tw_file);
+        this.tv_tw_log = (TextView) findViewById(R.id.tw_log);
+        this.pb_progress = (ProgressBar) findViewById(R.id.pb_progress);
+        this.btn_start = (Button) findViewById(R.id.btn_start);
+        this.btn_start.setEnabled(false);
+        this.btn_load_a = (Button) findViewById(R.id.btn_load_a);
+        this.btn_load_b = (Button) findViewById(R.id.btn_load_b);
+        this.btn_load_c = (Button) findViewById(R.id.btn_load_c);
+        this.ll_file_LinearLayout = (LinearLayout) findViewById(R.id.file_LinearLayout);
+        this.ll_file_LinearLayout.setVisibility(View.INVISIBLE);
+        this.btn_load_a.setVisibility(View.INVISIBLE);
+        this.btn_load_b.setVisibility(View.INVISIBLE);
+        this.btn_load_c.setVisibility(View.INVISIBLE);
+        addIntentFilter();
         bindService(new Intent(this, MainService.class), this.MainBinderSerConn, Context.BIND_AUTO_CREATE);
-        bindService(new Intent(this, NetService.class), this.f2257J, Context.BIND_AUTO_CREATE);
+        bindService(new Intent(this, NetService.class), this.netBinderSerConn, Context.BIND_AUTO_CREATE);
     }
 
     public void onDestroy() {
         Log.d(TAG, "onDestroy");
         super.onDestroy();
         unbindService(this.MainBinderSerConn);
-        unbindService(this.f2257J);
-        if (this.f2251D != null) {
-            this.f2251D.cancel();
+        unbindService(this.netBinderSerConn);
+        if (this.mFwTimerTask != null) {
+            this.mFwTimerTask.cancel();
         }
-        this.f2249B = null;
+        this.mFwTimer = null;
     }
 
     public void onLoad(View view) throws IOException {
@@ -712,21 +709,21 @@ public class FwUpdateActivity extends BaseActivity {
     public void onPause() {
         Log.d(TAG, "onPause");
         super.onPause();
-        LocalBroadcastManager.getInstance(getApplicationContext()).unregisterReceiver(this.f2259L);
+        LocalBroadcastManager.getInstance(getApplicationContext()).unregisterReceiver(this.fwBroadcastReceiver);
     }
 
     /* access modifiers changed from: protected */
     public void onResume() {
         Log.d(TAG, "onResume");
         super.onResume();
-        LocalBroadcastManager.getInstance(getApplicationContext()).registerReceiver(this.f2259L, this.mIntentFilter);
+        LocalBroadcastManager.getInstance(getApplicationContext()).registerReceiver(this.fwBroadcastReceiver, this.mIntentFilter);
     }
 
     public void onStart(View view) {
-        if (this.f2253F) {
+        if (this.isStartFw) {
             m2330g();
         } else {
-            m2327f();
+            startFw_update();
         }
     }
 }

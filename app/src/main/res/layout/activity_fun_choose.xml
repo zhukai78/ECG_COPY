@@ -31,11 +31,11 @@
                 android:drawableTop="@drawable/nav_home_sel"
                 android:text="@string/l_main" />
 
-            <RadioButton
-                android:id="@+id/nav_step"
-                style="@style/MyTabButton"
-                android:drawableTop="@drawable/nav_step_sel"
-                android:text="@string/l_step" />
+<!--            <RadioButton-->
+<!--                android:id="@+id/nav_step"-->
+<!--                style="@style/MyTabButton"-->
+<!--                android:drawableTop="@drawable/nav_step_sel"-->
+<!--                android:text="@string/l_step" />-->
 
             <RadioButton
                 android:id="@+id/nav_about_ecg"

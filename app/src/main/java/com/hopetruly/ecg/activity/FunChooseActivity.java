@@ -65,9 +65,6 @@ public class FunChooseActivity extends BaseActivity {
     public MainHomeFragment mainHomeFragment = new MainHomeFragment();
     /* access modifiers changed from: private */
 
-    /* renamed from: n */
-    public StepFragment stepFragment = new StepFragment();
-    /* access modifiers changed from: private */
 
     /* renamed from: o */
     public SettingFragment settingFragment = new SettingFragment();
@@ -135,9 +132,9 @@ public class FunChooseActivity extends BaseActivity {
                 case R.id.nav_set /*2131165371*/:
                     fragment = settingFragment;
                     break;
-                case R.id.nav_step /*2131165372*/:
-                    fragment = stepFragment;
-                    break;
+//                case R.id.nav_step /*2131165372*/:
+//                    fragment = stepFragment;
+//                    break;
                 default:
                     beginTransaction.commit();
             }
@@ -288,7 +285,7 @@ public class FunChooseActivity extends BaseActivity {
         beginTransaction.replace(R.id.id_content, this.mainHomeFragment);
         beginTransaction.commit();
         TabChoice.selectRadioButton(findViewById(R.id.nav_home), 0.6f);
-        TabChoice.selectRadioButton(findViewById(R.id.nav_step), 0.6f);
+//        TabChoice.selectRadioButton(findViewById(R.id.nav_step), 0.6f);
         TabChoice.selectRadioButton(findViewById(R.id.nav_about_ecg), 0.6f);
         TabChoice.selectRadioButton(findViewById(R.id.nav_set), 0.6f);
         this.rg_nav = (RadioGroup) findViewById(R.id.nav);

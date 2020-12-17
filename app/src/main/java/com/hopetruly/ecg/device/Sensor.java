@@ -6,7 +6,7 @@ import android.util.Log;
 import java.util.UUID;
 
 public enum Sensor {
-    ACCELEROMETER(ECGUUIDS.f2777j, ECGUUIDS.f2778k, ECGUUIDS.f2779l) {
+    ACCELEROMETER(ECGUUIDS.SER_ACCELEROMETER_UUID, ECGUUIDS.CHAR_ACCELEROMETER_UUID, ECGUUIDS.DES_ACCELEROMETER_UUID) {
         public DoubleUtils convertACC(byte[] bArr) {
             Integer valueOf = Integer.valueOf(bArr[0]);
             Integer valueOf2 = Integer.valueOf(bArr[1]);
@@ -14,7 +14,7 @@ public enum Sensor {
             return new DoubleUtils(((double) valueOf.intValue()) / 64.0d, ((double) valueOf2.intValue()) / 64.0d, ((double) valueOf3.intValue()) / 64.0d);
         }
     },
-    ECG(ECGUUIDS.f2781n, ECGUUIDS.f2782o, ECGUUIDS.f2783p) {
+    ECG(ECGUUIDS.SER_ECG_UUID, ECGUUIDS.CHAR_ECG_UUID, ECGUUIDS.DES_ECG_UUID) {
         public ConvertECG convertECG(byte[] bArr) {
             float[] fArr = new float[(bArr.length / 2)];
             int i = 0;
@@ -29,12 +29,12 @@ public enum Sensor {
             return new ConvertECG(fArr);
         }
     },
-    SIMPLE_KEYS(ECGUUIDS.f2785r, ECGUUIDS.f2786s, (UUID) null) {
+    SIMPLE_KEYS(ECGUUIDS.SERVICE_SIMPLE_KEYS_UUID, ECGUUIDS.CHAR_SIMPLE_KEYS_UUID, (UUID) null) {
         public SimpleKeysStatus convertKeys(byte[] bArr) {
             return SimpleKeysStatus.values()[Integer.valueOf(bArr[0]).intValue() % 4];
         }
     },
-    BATTERY(ECGUUIDS.f2775h, ECGUUIDS.f2776i, (UUID) null) {
+    BATTERY(ECGUUIDS.SER_BATTERY_UUID, ECGUUIDS.CHAR_BATTERY_UUID, (UUID) null) {
         public int convertBAT(byte[] bArr) {
             return bArr[0];
         }

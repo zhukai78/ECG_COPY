@@ -8,7 +8,7 @@ public class Machine implements Serializable {
     private String HwRev;
 
     /* renamed from: Id */
-    private String f2800Id;
+    private String MacId;
     private String MacAddress;
     private String ManufacturerName;
     private String Model;
@@ -29,7 +29,7 @@ public class Machine implements Serializable {
     }
 
     public String getId() {
-        return this.f2800Id;
+        return this.MacId;
     }
 
     public String getMacAddress() {
@@ -64,8 +64,8 @@ public class Machine implements Serializable {
         this.HwRev = str;
     }
 
-    public void setId(String str) {
-        this.f2800Id = str;
+    public void setMac(String str) {
+        this.MacId = str;
     }
 
     public void setMacAddress(String str) {

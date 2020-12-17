@@ -188,7 +188,7 @@ public class MainService extends Service {
                     boolean unused2 = MainService.this.isConn = false;
                     MainService.this.stopForeground(true);
                     if (MainService.this.isGattStop) {
-                        MainService.this.mo2740n();
+                        MainService.this.isStopStepRecord();
                     }
                     MainService.this.mmainecggApp.appMachine = null;
                 } else if (!"com.hopetruly.ec.services.ACTION_GATT_SERVICES_DISCOVERED".equals(action)) {
@@ -200,7 +200,7 @@ public class MainService extends Service {
                             for (int i2 = 0; i2 < byteArrayExtra.length; i2++) {
                                 stringBuffer.append(String.format("%02X", new Object[]{Byte.valueOf(byteArrayExtra[i2])}));
                             }
-                            MainService.this.mmainecggApp.appMachine.setId(stringBuffer.toString());
+                            MainService.this.mmainecggApp.appMachine.setMac(stringBuffer.toString());
                             if (MainService.this.mmainNetService.getNetInfoType() != -1 && MainService.this.mmainecggApp.spSw_conf.getInt("DEVICE_ID_UPLOAD", 0) == 1) {
                                 MainService.this.mmainNetService.mo2825a(MainService.this.mmainecggApp.appMachine.getId(), MainService.this.mmainecggApp.mUserInfo.getName());
                             }
@@ -280,7 +280,7 @@ public class MainService extends Service {
                                     sensor = Sensor.BATTERY;
                                 } else {
 //                                    C0771g.logE(MainService.this.TAG, "sensor notify error.sensorlist have unknow sensor!");
-                                    MainService.this.mmainecggApp.appMachine.setId("7CEC793F53F5");
+                                    MainService.this.mmainecggApp.appMachine.setMac("7CEC793F53F5");
                                     MainService.this.mmainecggApp.appMachine.setFwRev("MUIRHEAD.A3.2.2\u0000");
                                     MainService.this.mmainecggApp.appMachine.setManufacturerName("Warick Medical");
                                     LocalBroadcastManager.getInstance(MainService.this.getApplicationContext()).sendBroadcast(new Intent("com.hopetruly.ecg.services.MainService.GET_DEVICE_INFO_END"));
@@ -594,7 +594,7 @@ public class MainService extends Service {
     public boolean writeCharacteristicBoolean(Sensor sensor, boolean z) {
         BluetoothGattService a;
         BluetoothGattCharacteristic characteristic;
-        if (this.mainbleHelper == null || (a = this.mainbleHelper.mo2796a(sensor.getService())) == null || (characteristic = a.getCharacteristic(sensor.getConfig())) == null) {
+        if (this.mainbleHelper == null || (a = this.mainbleHelper.getServicebyUUID(sensor.getService())) == null || (characteristic = a.getCharacteristic(sensor.getConfig())) == null) {
             return false;
         }
         characteristic.setValue(new byte[]{z ? (byte) 1 : 0});
@@ -605,7 +605,7 @@ public class MainService extends Service {
     public boolean writeCharacteristic(UUID uuid, UUID uuid2, int i) {
         BluetoothGattService a;
         BluetoothGattCharacteristic characteristic;
-        if (this.mainbleHelper == null || (a = this.mainbleHelper.mo2796a(uuid)) == null || (characteristic = a.getCharacteristic(uuid2)) == null) {
+        if (this.mainbleHelper == null || (a = this.mainbleHelper.getServicebyUUID(uuid)) == null || (characteristic = a.getCharacteristic(uuid2)) == null) {
             return false;
         }
         characteristic.setValue(new byte[]{(byte) i});
@@ -620,7 +620,7 @@ public class MainService extends Service {
         }
         String str = this.TAG;
         LogUtils.logE(str, "set Step peroid:" + i);
-        writeCharacteristic(ECGUUIDS.f2777j, ECGUUIDS.f2780m, i);
+        writeCharacteristic(ECGUUIDS.SER_ACCELEROMETER_UUID, ECGUUIDS.f2780m, i);
     }
 
     /* renamed from: b */
@@ -776,7 +776,7 @@ public class MainService extends Service {
     }
 
     /* renamed from: n */
-    public boolean mo2740n() {
+    public boolean isStopStepRecord() {
         this.mmainecggApp.appPedometerConf.setSTEP_ENABLE_STEP(0);
         if (this.isConn) {
             return false;
@@ -818,7 +818,7 @@ public class MainService extends Service {
         bindService(intent, this.mServiceConnection, Context.BIND_AUTO_CREATE);
         this.mainbleHelper = new BleHelper(this);
         this.mNotificationUtils = new NotificationUtils(getApplicationContext());
-        GpsManagerHelper.m2908a();
+        GpsManagerHelper.isEnableGpsManager();
         if (GpsManagerHelper.mGpsManagerHelper() != null) {
             GpsManagerHelper.mGpsManagerHelper().setOnGpsListener(this.monGpsListener);
         }
@@ -842,7 +842,7 @@ public class MainService extends Service {
         if (!(this.mainbleHelper == null && this.mmainFileService == null && this.mmainNetService == null)) {
             unbindService(this.mServiceConnection);
         }
-        GpsManagerHelper.m2912b();
+        GpsManagerHelper.removeGps();
         if (this.isConn) {
             disconnectMainBLE();
         }

@@ -11,12 +11,12 @@ import java.util.Calendar;
 public class MyAlarmClockReceiver extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
         MyAlarmClock a = MyAlarmClock.getInstance(context);
-        if (a.f2918e) {
-            a.f2920g++;
+        if (a.isClock) {
+            a.clockCnt++;
         }
-        if (a.f2917d) {
+        if (a.misClock) {
             Intent intent2 = new Intent("com.hopetruly.ecg.util.MyAlarmClock.COUNT_SEC");
-            intent2.putExtra("com.hopetruly.ecg.util.MyAlarmClock.COUNT_SEC", a.f2920g);
+            intent2.putExtra("com.hopetruly.ecg.util.MyAlarmClock.COUNT_SEC", a.clockCnt);
             LocalBroadcastManager.getInstance(context).sendBroadcast(intent2);
         }
         Calendar instance = Calendar.getInstance();

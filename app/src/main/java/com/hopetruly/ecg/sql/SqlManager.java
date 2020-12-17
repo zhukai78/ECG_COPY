@@ -61,7 +61,7 @@ public class SqlManager {
                 eCGRecord.setUser(new UserInfo());
                 eCGRecord.getUser().setId(rawQuery.getString(rawQuery.getColumnIndex("userId")));
                 eCGRecord.setMachine(new Machine());
-                eCGRecord.getMachine().setId(rawQuery.getString(rawQuery.getColumnIndex("machineId")));
+                eCGRecord.getMachine().setMac(rawQuery.getString(rawQuery.getColumnIndex("machineId")));
                 eCGRecord.getMachine().setName(rawQuery.getString(rawQuery.getColumnIndex("machineName")));
                 eCGRecord.setFileName(rawQuery.getString(rawQuery.getColumnIndex("fileName")));
                 eCGRecord.setHeartRate(rawQuery.getInt(rawQuery.getColumnIndex("heartRate")));

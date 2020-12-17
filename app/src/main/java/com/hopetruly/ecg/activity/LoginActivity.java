@@ -253,12 +253,12 @@ public class LoginActivity extends BaseActivity {
                         }
                         int i2 = jSONArray.getInt(2);
                         if (i2 == 1) {
-                            makeText = Toast.makeText(LoginActivity.this.getApplicationContext(), LoginActivity.this.getString(R.string.p_username_err), 0);
+                            makeText = Toast.makeText(LoginActivity.this.getApplicationContext(), LoginActivity.this.getString(R.string.p_username_err), Toast.LENGTH_LONG);
                         } else if (i2 != 999) {
                             Context applicationContext = LoginActivity.this.getApplicationContext();
-                            makeText = Toast.makeText(applicationContext, LoginActivity.this.getString(R.string.p_err_code) + i, 0);
+                                makeText = Toast.makeText(applicationContext, LoginActivity.this.getString(R.string.p_err_code) + i, Toast.LENGTH_LONG);
                         } else {
-                            makeText = Toast.makeText(LoginActivity.this.getApplicationContext(), LoginActivity.this.getString(R.string.p_pwd_err), 0);
+                            makeText = Toast.makeText(LoginActivity.this.getApplicationContext(), LoginActivity.this.getString(R.string.p_pwd_err), Toast.LENGTH_LONG);
                         }
                         makeText.show();
                         LoginActivity.this.dismissLogin_loginDialog();
