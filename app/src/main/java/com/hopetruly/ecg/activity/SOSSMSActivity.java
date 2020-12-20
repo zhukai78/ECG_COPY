@@ -235,9 +235,11 @@ public class SOSSMSActivity extends BaseActivity {
                     i = R.string.p_ha_zero;
                 } else {
                     if (parseInt > 300) {
-                        Toast.makeText(this, getString(R.string.p_mark_large), Toast.LENGTH_LONG).show();
+                        i = R.string.p_mark_large;
                         this.mECGApplication.appECGConf.setECG_MARKING_PERIOD(300);
                     } else {
+                        i = R.string.p_mark_large1;
+
                         this.mECGApplication.appECGConf.setECG_MARKING_PERIOD(parseInt);
                     }
                     this.SosEditor.putInt("ECG_MARKING_PERIOD", this.mECGApplication.appECGConf.getECG_MARKING_PERIOD());

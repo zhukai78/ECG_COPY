@@ -267,13 +267,14 @@
 
         <RelativeLayout
             android:id="@+id/pedometer_setting_rl"
+
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_margin="5.0dip"
             android:background="@drawable/corners_bg"
             android:orientation="horizontal"
             android:padding="5.0dip"
-            android:visibility="visible">
+            android:visibility="gone">
 
             <TextView
                 android:layout_width="wrap_content"
@@ -456,6 +457,7 @@
         <RelativeLayout
             android:id="@+id/setting_check_update"
             android:layout_width="fill_parent"
+            android:visibility="gone"
             android:layout_height="50.0dip"
             android:background="@drawable/rec_item_sel">
 

@@ -302,6 +302,8 @@
     <string name="p_login_success">登陆成功</string>
     <string name="p_login_tip">您安装ECG Air后第一次使用，需要进行登陆操作（如果没有账号，请注册账号）。</string>
     <string name="p_mark_large">标记时间设置应小于300秒</string>
+    <string name="p_mark_large1">标记时间等于15秒</string>
+
     <string name="p_no_pwd">请输入密码！</string>
     <string name="p_no_sdcard">心电记录保存失败，未发现 SD 卡</string>
     <string name="p_no_user_info">无法获取当前用户信息！</string>
