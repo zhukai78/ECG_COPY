@@ -10,10 +10,10 @@ import com.warick.drawable.WarickSurfaceView;
 public class HisToryEcgProgressDrawListener implements WarickSurfaceView.DrawListener {
 
     /* renamed from: a */
-    private static Paint f3039a;
+    private static Paint progressDrawPaint;
 
     /* renamed from: b */
-    private static float f3040b;
+    private static float halfHeight;
 
     /* renamed from: c */
     private String f3041c;
@@ -25,46 +25,46 @@ public class HisToryEcgProgressDrawListener implements WarickSurfaceView.DrawLis
     private float f3043e;
 
     /* renamed from: f */
-    private boolean f3044f = false;
+    private boolean isCanDrawEcgProgress = false;
 
     /* renamed from: a */
-    private static void m2944a(float f) {
-        f3039a = new Paint();
-        f3039a.setTextSize(40.0f);
-        f3039a.setColor(-16711936);
-        f3039a.setStrokeWidth(8.0f);
-        f3039a.setTextAlign(Paint.Align.LEFT);
-        f3040b = f / 2.0f;
+    private static void initDrawPaint(float f) {
+        progressDrawPaint = new Paint();
+        progressDrawPaint.setTextSize(40.0f);
+        progressDrawPaint.setColor(-16711936);
+        progressDrawPaint.setStrokeWidth(8.0f);
+        progressDrawPaint.setTextAlign(Paint.Align.LEFT);
+        halfHeight = f / 2.0f;
     }
 
     /* renamed from: a */
     public void onMyDraw(Canvas canvas, Paint paint) {
-        if (this.f3044f) {
-            if (f3039a == null) {
-                m2944a((float) canvas.getHeight());
+        if (this.isCanDrawEcgProgress) {
+            if (progressDrawPaint == null) {
+                initDrawPaint((float) canvas.getHeight());
             }
             if (this.f3041c != null) {
                 if (this.f3042d > ((float) ((canvas.getWidth() * 2) / 3))) {
-                    f3039a.setTextAlign(Paint.Align.RIGHT);
-                    canvas.drawText(this.f3041c, this.f3042d - 15.0f, (f3040b - this.f3043e) - 15.0f, f3039a);
-                    f3039a.setTextAlign(Paint.Align.LEFT);
+                    progressDrawPaint.setTextAlign(Paint.Align.RIGHT);
+                    canvas.drawText(this.f3041c, this.f3042d - 15.0f, (halfHeight - this.f3043e) - 15.0f, progressDrawPaint);
+                    progressDrawPaint.setTextAlign(Paint.Align.LEFT);
                 } else {
-                    canvas.drawText(this.f3041c, this.f3042d + 15.0f, (f3040b - this.f3043e) - 15.0f, f3039a);
+                    canvas.drawText(this.f3041c, this.f3042d + 15.0f, (halfHeight - this.f3043e) - 15.0f, progressDrawPaint);
                 }
             }
-            canvas.drawCircle(this.f3042d, f3040b - this.f3043e, 8.0f, f3039a);
+            canvas.drawCircle(this.f3042d, halfHeight - this.f3043e, 8.0f, progressDrawPaint);
         }
     }
 
     /* renamed from: a */
-    public void mo2903a(String str, float f, float f2) {
+    public void setDrawDatas(String str, float f, float f2) {
         this.f3041c = str;
         this.f3042d = f;
         this.f3043e = f2;
     }
 
     /* renamed from: a */
-    public void mo2904a(boolean z) {
-        this.f3044f = z;
+    public void setIsCanDrawEcgProgress(boolean z) {
+        this.isCanDrawEcgProgress = z;
     }
 }

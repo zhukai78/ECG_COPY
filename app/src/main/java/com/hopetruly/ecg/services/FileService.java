@@ -176,7 +176,7 @@ public class FileService extends Service {
                     String stringBuffer2 = stringBuffer.toString();
                     if (fArr != null) {
                         try {
-                            ECGRecordUtils.mkdirsAndFile(FileService.this.getApplicationContext(), stringBuffer2, fArr, eCGRecord.getEcgEntity());
+                            ECGRecordUtils.mkdirsAndSaveFile(FileService.this.getApplicationContext(), stringBuffer2, fArr, eCGRecord.getEcgEntity());
                         } catch (Exception e) {
                             e = e;
                             str = stringBuffer2;
@@ -195,7 +195,7 @@ public class FileService extends Service {
                             LogUtils.logE("FileService", "fileCache not complete wait");
                             Thread.sleep(500);
                         }
-                        ECGRecordUtils.m2778a(FileService.this.getApplicationContext(), stringBuffer2, FileService.this.mFileListener.fileCacheStr(), eCGRecord.getEcgEntity());
+                        ECGRecordUtils.saveFileCache(FileService.this.getApplicationContext(), stringBuffer2, FileService.this.mFileListener.fileCacheStr(), eCGRecord.getEcgEntity());
                     }
                     this.isbeginSave = true;
                     return stringBuffer2;
@@ -291,8 +291,8 @@ public class FileService extends Service {
     }
 
     /* renamed from: c */
-    public int mo2705c() {
-        return this.mFileListener.mo2107d();
+    public int getMySaveCacheMake() {
+        return this.mFileListener.getSaveCacheMake();
     }
 
     public IBinder onBind(Intent intent) {

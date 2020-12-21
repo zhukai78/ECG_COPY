@@ -159,12 +159,12 @@ public class StepFragment extends Fragment {
                     if (!StepFragment.this.f2660n) {
                         StepFragment.this.f2661o.startActivity(new Intent(StepFragment.this.f2661o, ScanActivity.class));
                     } else if (StepFragment.this.f2658l) {
-                        if (StepFragment.this.f2653g.appMainService.mo2739m()) {
+                        if (StepFragment.this.f2653g.appMainService.stopPedometerRecord()) {
                             boolean unused = StepFragment.this.f2658l = false;
                             StepFragment.this.f2657k.setText(StepFragment.this.getString(R.string.l_step_start));
                             StepFragment.this.f2653g.appPedometerConf.mo2673b(0);
                         }
-                    } else if (StepFragment.this.f2653g.appMainService.mo2738l()) {
+                    } else if (StepFragment.this.f2653g.appMainService.startPedometerRecord()) {
                         StepFragment.this.f2648b.setText("0");
                         boolean unused2 = StepFragment.this.f2658l = true;
                         StepFragment.this.f2657k.setText(StepFragment.this.getString(R.string.l_step_stop));
@@ -199,12 +199,12 @@ public class StepFragment extends Fragment {
                 if (!StepFragment.this.f2660n) {
                     StepFragment.this.f2661o.startActivity(new Intent(StepFragment.this.f2661o, ScanActivity.class));
                 } else if (StepFragment.this.f2658l) {
-                    if (StepFragment.this.f2653g.appMainService.mo2739m()) {
+                    if (StepFragment.this.f2653g.appMainService.stopPedometerRecord()) {
                         boolean unused = StepFragment.this.f2658l = false;
                         StepFragment.this.f2657k.setText(StepFragment.this.getString(R.string.l_step_start));
                         StepFragment.this.f2653g.appPedometerConf.mo2673b(0);
                     }
-                } else if (StepFragment.this.f2653g.appMainService.mo2738l()) {
+                } else if (StepFragment.this.f2653g.appMainService.startPedometerRecord()) {
                     StepFragment.this.f2648b.setText("0");
                     boolean unused2 = StepFragment.this.f2658l = true;
                     StepFragment.this.f2657k.setText(StepFragment.this.getString(R.string.l_step_stop));
@@ -231,12 +231,12 @@ public class StepFragment extends Fragment {
                 if (!StepFragment.this.f2660n) {
                     StepFragment.this.f2661o.startActivity(new Intent(StepFragment.this.f2661o, ScanActivity.class));
                 } else if (StepFragment.this.f2658l) {
-                    if (StepFragment.this.f2653g.appMainService.mo2739m()) {
+                    if (StepFragment.this.f2653g.appMainService.stopPedometerRecord()) {
                         boolean unused = StepFragment.this.f2658l = false;
                         StepFragment.this.f2657k.setText(StepFragment.this.getString(R.string.l_step_start));
                         StepFragment.this.f2653g.appPedometerConf.mo2673b(0);
                     }
-                } else if (StepFragment.this.f2653g.appMainService.mo2738l()) {
+                } else if (StepFragment.this.f2653g.appMainService.startPedometerRecord()) {
                     StepFragment.this.f2648b.setText("0");
                     boolean unused2 = StepFragment.this.f2658l = true;
                     StepFragment.this.f2657k.setText(StepFragment.this.getString(R.string.l_step_stop));
@@ -311,7 +311,7 @@ public class StepFragment extends Fragment {
             m2546a();
             if (this.f2653g.appPedometerConf.mo2674c() == 1) {
                 this.f2653g.appPedometerConf.mo2673b(0);
-                if (!this.f2658l && this.f2653g.appMainService.mo2738l()) {
+                if (!this.f2658l && this.f2653g.appMainService.startPedometerRecord()) {
                     this.f2648b.setText("0");
                     this.f2658l = true;
                     this.f2657k.setText(getString(R.string.l_step_stop));

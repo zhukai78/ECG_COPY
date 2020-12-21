@@ -6,14 +6,14 @@ import com.warick.jni.filter.Fir;
 public class HeartRateCounter3 {
 
     /* renamed from: a */
-    private double[] f2720a = new double[Fir.getOrder(Fir.Fir_4)];
+    private double[] doubles4 = new double[Fir.getOrder(Fir.Fir_4)];
 
     static {
         System.loadLibrary("com_hopetruly_ecg_algorithm_HeartRateCounter3");
     }
 
     public HeartRateCounter3() {
-        Fir.setDoubles_0(Fir.getOrder(Fir.Fir_4), this.f2720a);
+        Fir.setDoubles_0(Fir.getOrder(Fir.Fir_4), this.doubles4);
     }
 
     /* renamed from: a */
@@ -22,8 +22,8 @@ public class HeartRateCounter3 {
     }
 
     /* renamed from: a */
-    public void mo2439a(float f) {
-        setECG((float) Fir.RealtimeFir(f, Fir.Fir_4, this.f2720a));
+    public void setLibEcg(float f) {
+        setECG((float) Fir.RealtimeFir(f, Fir.Fir_4, this.doubles4));
     }
 
     public native int getAvgHr();

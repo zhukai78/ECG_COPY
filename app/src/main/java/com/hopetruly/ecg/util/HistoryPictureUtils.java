@@ -28,7 +28,7 @@ import java.io.IOException;
 import javax.xml.parsers.ParserConfigurationException;
 
 /* renamed from: com.hopetruly.ecg.util.k */
-public class HistoryDisplayUtils {
+public class HistoryPictureUtils {
 
     /* renamed from: a */
     Context mctx;
@@ -51,7 +51,7 @@ public class HistoryDisplayUtils {
     /* renamed from: g */
     private boolean f2929g = true;
 
-    public HistoryDisplayUtils(Context context) {
+    public HistoryPictureUtils(Context context) {
         this.mctx = context;
     }
 
@@ -382,7 +382,7 @@ public class HistoryDisplayUtils {
     }
 
     /* renamed from: a */
-    public void mo2792a(float f) {
+    public void setEcgScaleF(float f) {
         this.f2924b /= f;
     }
 

@@ -15,7 +15,7 @@ public class EcgParserUtils {
     private int[] mEcgMakes;
 
     /* renamed from: b */
-    private int[] m2788b(int[] iArr) {
+    private int[] twoMaxPlus10(int[] iArr) {
         if (iArr == null) {
             return null;
         }
@@ -112,11 +112,11 @@ public class EcgParserUtils {
                 }
             }
         }
-        return m2788b(iArr);
+        return twoMaxPlus10(iArr);
     }
 
     /* renamed from: c */
-    public int mo2784c(int i) {
+    public int getEcgExcNext(int i) {
         for (int i2 = 0; i2 < this.mEcgMakes.length - 2; i2 += 2) {
             if (((double) i) < ((double) this.mEcgMakes[i2]) * 0.25d) {
                 return i2 - 2;

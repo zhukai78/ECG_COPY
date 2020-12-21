@@ -47,7 +47,7 @@ public class FallDownAlgorithm {
     }
 
     /* renamed from: b */
-    private void m2585b(int i, int i2, int i3, int i4) {
+    private void checkFallDown(int i, int i2, int i3, int i4) {
         this.checkTimeMill = System.currentTimeMillis();
         if (!this.firstCheckBool && i4 < 50) {
             Log.e("#####################", "free fall !!!!!!!!!!!");
@@ -104,6 +104,6 @@ public class FallDownAlgorithm {
 
     /* renamed from: a */
     public void checkFall(int i, int i2, int i3, int i4) {
-        m2585b(i, i2, i3, i4);
+        checkFallDown(i, i2, i3, i4);
     }
 }

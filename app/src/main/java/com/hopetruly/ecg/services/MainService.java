@@ -323,7 +323,7 @@ public class MainService extends Service {
                                         GPSSosHelper.sendMultipartTextMessageSmsGPS(MainService.this.mmainecggApp);
                                         jVar.toBatteryNotify("SOS", "Send SMS");
                                     }
-                                    if (MainService.this.mmainecggApp.appECGConf.getECG_ENABLE_MARK() == 1 && MainService.this.isStartEcg && (c = MainService.this.mmainFileService.mo2705c()) > 0 && MainService.this.mEcgParserUtils.mo2779a(c, MainService.this.mmainecggApp.appECGConf.getECG_MARKING_PERIOD())) {
+                                    if (MainService.this.mmainecggApp.appECGConf.getECG_ENABLE_MARK() == 1 && MainService.this.isStartEcg && (c = MainService.this.mmainFileService.getMySaveCacheMake()) > 0 && MainService.this.mEcgParserUtils.mo2779a(c, MainService.this.mmainecggApp.appECGConf.getECG_MARKING_PERIOD())) {
                                         Log.e(MainService.this.TAG, "Mark time..");
                                         a = LocalBroadcastManager.getInstance(MainService.this.getApplicationContext());
                                         intent2 = new Intent("com.hopetruly.ecg.services.MainService.MARK_TIME_START");
@@ -704,7 +704,7 @@ public class MainService extends Service {
                 LogUtils.logW(this.TAG, "StartECG>蓝牙未连接错误！");
             }
             stopTimer();
-            this.mEcgParserUtils.mo2777a(this.mmainFileService.mo2705c());
+            this.mEcgParserUtils.mo2777a(this.mmainFileService.getMySaveCacheMake());
             this.mmainFileService.onStopEcg();
             this.mmainNetService.uploadEcgs();
             String str = this.TAG;
@@ -744,7 +744,7 @@ public class MainService extends Service {
     }
 
     /* renamed from: l */
-    public boolean mo2738l() {
+    public boolean startPedometerRecord() {
         this.mmainecggApp.appPedometerConf.setSTEP_ENABLE_STEP(1);
         if (!initACCELEROMETER()) {
             return false;
@@ -756,7 +756,7 @@ public class MainService extends Service {
     }
 
     /* renamed from: m */
-    public boolean mo2739m() {
+    public boolean stopPedometerRecord() {
         this.mmainecggApp.appPedometerConf.setSTEP_ENABLE_STEP(0);
         if (!closeACCELEROMETER()) {
             return false;
@@ -868,7 +868,7 @@ public class MainService extends Service {
             LogUtils.logW(this.TAG, "ACC 加速度 >蓝牙未连接错误！");
             return false;
         }
-        if ((this.mmainecggApp.appPedometerConf.mo2669a() == 1) || (this.mmainecggApp.appFallConf.mo2667a() == 1)) {
+        if ((this.mmainecggApp.appPedometerConf.getSTEP_ENABLE_STEP() == 1) || (this.mmainecggApp.appFallConf.getFallInt() == 1)) {
             return writeCharacteristicBoolean(Sensor.ACCELEROMETER, true);
         }
         return false;

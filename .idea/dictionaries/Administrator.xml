@@ -2,7 +2,9 @@
   <dictionary name="Administrator">
     <words>
       <w>bynum</w>
+      <w>dissmiss</w>
       <w>getgetbatterylevel</w>
+      <w>initdraw</w>
       <w>isdisconnected</w>
       <w>isexit</w>
       <w>ispause</w>

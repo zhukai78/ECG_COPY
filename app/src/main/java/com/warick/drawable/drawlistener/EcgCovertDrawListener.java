@@ -30,16 +30,16 @@ public class EcgCovertDrawListener implements WarickSurfaceView.DrawListener {
     private int mWitdh = 0;
 
     /* renamed from: f */
-    private int f3051f;
+    private int covertXWitdh;
 
     /* renamed from: g */
-    private int f3052g = 0;
+    private int lastEcgCnt = 0;
 
     /* renamed from: h */
     private Path linePath;
 
     /* renamed from: i */
-    private Path f3054i;
+    private Path linePath2;
 
     /* renamed from: j */
     private int recordProgress = 0;
@@ -60,13 +60,13 @@ public class EcgCovertDrawListener implements WarickSurfaceView.DrawListener {
     private float mheight;
 
     /* renamed from: p */
-    private double[] f3061p;
+    private double[] realtimeFirDoubles;
 
     /* renamed from: q */
     private Path f3062q;
 
     /* renamed from: r */
-    private int[] f3063r;
+    private int[] historyInts;
 
     /* renamed from: s */
     private EcgParserUtils mEcgParserUtils;
@@ -77,11 +77,11 @@ public class EcgCovertDrawListener implements WarickSurfaceView.DrawListener {
     private static String TAG = "EcgCovertDrawListener";
 
     /* renamed from: b */
-    private void m2951b(Canvas canvas, Paint paint) {
-        Log.d(TAG, "m2951b:-------- ");
+    private void drawMyPath(Canvas canvas, Paint paint) {
+        Log.d(TAG, "drawMyPath:-------- ");
         this.linePath.reset();
         this.linePath.moveTo(0.0f, this.mheight - ((this.mRealEcgs[0] * this.covertYFloat) * ((float) this.reverseMark)));
-        for (int i = 1; i < this.f3052g; i++) {
+        for (int i = 1; i < this.lastEcgCnt; i++) {
             this.linePath.lineTo(reverseXData(i), this.mheight - (this.mRealEcgs[i] * this.covertYFloat));
         }
         canvas.drawPath(this.linePath, paint);
@@ -93,12 +93,12 @@ public class EcgCovertDrawListener implements WarickSurfaceView.DrawListener {
         if (this.mRealEcgs != null && this.historyEcgs != null) {
             int i = 0;
             int i2 = 0;
-            while (i < this.f3051f && this.recordProgress + i < this.historyEcgs.length) {
+            while (i < this.covertXWitdh && this.recordProgress + i < this.historyEcgs.length) {
                 if (this.isFiter) {
                     if (i > Fir.getOrder(Fir.Fir_5) / 2) {
                         i2++;
                     }
-                    this.mRealEcgs[i2] = ((float) Fir.RealtimeFir(this.historyEcgs[this.recordProgress + i], Fir.Fir_5, this.f3061p)) * ((float) this.reverseMark);
+                    this.mRealEcgs[i2] = ((float) Fir.RealtimeFir(this.historyEcgs[this.recordProgress + i], Fir.Fir_5, this.realtimeFirDoubles)) * ((float) this.reverseMark);
                 } else {
                     this.mRealEcgs[i] = this.historyEcgs[this.recordProgress + i] * ((float) this.reverseMark);
                 }
@@ -108,15 +108,15 @@ public class EcgCovertDrawListener implements WarickSurfaceView.DrawListener {
                 int i3 = i2;
                 for (int i4 = 0; i4 < Fir.getOrder(Fir.Fir_5) / 2; i4++) {
                     i3++;
-                    this.mRealEcgs[i3] = ((float) Fir.RealtimeFir(0, Fir.Fir_5, this.f3061p)) * ((float) this.reverseMark);
+                    this.mRealEcgs[i3] = ((float) Fir.RealtimeFir(0, Fir.Fir_5, this.realtimeFirDoubles)) * ((float) this.reverseMark);
                 }
             }
-            this.f3052g = i;
+            this.lastEcgCnt = i;
         }
     }
 
     /* renamed from: a */
-    public float mo2906a() {
+    public  float getCovertYFloat() {
         return this.covertYFloat;
     }
 
@@ -126,7 +126,7 @@ public class EcgCovertDrawListener implements WarickSurfaceView.DrawListener {
         if (this.mRealEcgs != null) {
             this.covertXFloat = 1.3f * f;
             this.covertYFloat = f * 0.13f;
-            this.f3051f = ((int) (((float) this.mWitdh) / this.covertXFloat)) + 1;
+            this.covertXWitdh = ((int) (((float) this.mWitdh) / this.covertXFloat)) + 1;
             if (this.mRealEcgs != null && this.historyEcgs != null) {
                 covertEcgLib();
             }
@@ -137,7 +137,7 @@ public class EcgCovertDrawListener implements WarickSurfaceView.DrawListener {
         if (this.mRealEcgs != null) {
             this.covertXFloat = 1.3f * f;
             this.covertYFloat = f * 0.13f * 0.5f;
-            this.f3051f = ((int) (((float) this.mWitdh) / this.covertXFloat)) + 1;
+            this.covertXWitdh = ((int) (((float) this.mWitdh) / this.covertXFloat)) + 1;
             if (this.mRealEcgs != null && this.historyEcgs != null) {
                 covertEcgLib();
             }
@@ -155,13 +155,13 @@ public class EcgCovertDrawListener implements WarickSurfaceView.DrawListener {
         this.mheight = ((float) high) / 2.0f;
         this.mWitdh = width;
         this.mRealEcgs = new float[this.mWitdh];
-        this.f3051f = ((int) (((float) this.mWitdh) / 1.3f)) + 1;
+        this.covertXWitdh = ((int) (((float) this.mWitdh) / 1.3f)) + 1;
         resetEcgDatas();
-        this.f3061p = new double[Fir.getOrder(Fir.Fir_5)];
-        Fir.setDoubles_0(Fir.getOrder(Fir.Fir_5), this.f3061p);
+        this.realtimeFirDoubles = new double[Fir.getOrder(Fir.Fir_5)];
+        Fir.setDoubles_0(Fir.getOrder(Fir.Fir_5), this.realtimeFirDoubles);
         switch (this.realHisMode) {
             case 0:
-                this.f3054i = new Path();
+                this.linePath2 = new Path();
                 break;
             case 1:
                 break;
@@ -182,54 +182,56 @@ public class EcgCovertDrawListener implements WarickSurfaceView.DrawListener {
             if (this.mRealEcgs == null) {
                 initdraw(canvas.getWidth(), canvas.getHeight());
             } else if (this.realHisMode == 0) {
+                //实时模式
                 this.linePath.reset();
-                this.f3054i.reset();
+                this.linePath2.reset();
                 this.linePath.moveTo(0.0f, this.mheight - ((this.mRealEcgs[0] * this.covertYFloat) * ((float) this.reverseMark)));
 //                Log.d(TAG, "onMyDraw: mheight's value: " + mheight);
-                for (int i2 = 1; i2 < this.f3052g - 1; i2++) {
+                for (int i2 = 1; i2 < this.lastEcgCnt - 1; i2++) {
                     this.linePath.lineTo(reverseXData(i2), reverseYData(this.mRealEcgs[i2]));
                     Log.d(TAG, "onMyDraw: f3049[i2]= " + mRealEcgs[i2]);
                     Log.d(TAG, "onMyDraw: reverseYData(mRealEcgs[i2])= " + reverseYData(mRealEcgs[i2]));
                 }
-                int i3 = this.f3052g + 20;
-                this.f3054i.moveTo(((float) i3) * this.covertXFloat, this.mheight - ((this.mRealEcgs[i3] * this.covertYFloat) * ((float) this.reverseMark)));
-                for (int i4 = i3 + 1; i4 < this.f3051f - 1; i4++) {
-                    this.f3054i.lineTo(reverseXData(i4), reverseYData(this.mRealEcgs[i4]));
+                int i3 = this.lastEcgCnt + 20;
+                this.linePath2.moveTo(((float) i3) * this.covertXFloat, this.mheight - ((this.mRealEcgs[i3] * this.covertYFloat) * ((float) this.reverseMark)));
+                for (int i4 = i3 + 1; i4 < this.covertXWitdh - 1; i4++) {
+                    this.linePath2.lineTo(reverseXData(i4), reverseYData(this.mRealEcgs[i4]));
 //                    Log.d(TAG, "onMyDraw: f3049[i4]= " + mRealEcgs[i4]);
                 }
-                canvas.drawPath(this.f3054i, paint);
+                canvas.drawPath(this.linePath2, paint);
                 canvas.drawPath(this.linePath, paint);
             } else {
+                //历史模式
 //                Log.d(TAG, "onMyDraw: （3）");
                 if (this.mEcgParserUtils != null && this.IsCancelCut) {
-                    this.f3063r = this.mEcgParserUtils.mo2783b(this.recordProgress, this.recordProgress + this.f3051f);
-                    if (this.f3063r != null) {
+                    this.historyInts = this.mEcgParserUtils.mo2783b(this.recordProgress, this.recordProgress + this.covertXWitdh);
+                    if (this.historyInts != null) {
                         this.linePath.reset();
                         this.f3062q.reset();
                         this.linePath.moveTo(0.0f, this.mheight - (this.mRealEcgs[0] * this.covertYFloat));
-                        for (int i5 = 1; i5 <= this.f3063r[0]; i5++) {
+                        for (int i5 = 1; i5 <= this.historyInts[0]; i5++) {
                             this.linePath.lineTo(reverseXData(i5), this.mheight - (this.mRealEcgs[i5] * this.covertYFloat));
                         }
-                        for (int i6 = 0; i6 < this.f3063r.length; i6 += 2) {
-                            this.f3062q.moveTo(reverseXData(this.f3063r[i6]), this.mheight - (this.mRealEcgs[this.f3063r[i6]] * this.covertYFloat));
-                            int i7 = this.f3063r[i6];
+                        for (int i6 = 0; i6 < this.historyInts.length; i6 += 2) {
+                            this.f3062q.moveTo(reverseXData(this.historyInts[i6]), this.mheight - (this.mRealEcgs[this.historyInts[i6]] * this.covertYFloat));
+                            int i7 = this.historyInts[i6];
                             while (true) {
                                 i = i6 + 1;
-                                if (i7 >= this.f3063r[i]) {
+                                if (i7 >= this.historyInts[i]) {
                                     break;
                                 }
                                 this.f3062q.lineTo(reverseXData(i7), this.mheight - (this.mRealEcgs[i7] * this.covertYFloat));
                                 i7++;
                             }
-                            if (i6 < this.f3063r.length - 2) {
-                                this.linePath.moveTo(reverseXData(this.f3063r[i] - 1), this.mheight - (this.mRealEcgs[this.f3063r[i] - 1] * this.covertYFloat));
-                                for (int i8 = this.f3063r[i] - 1; i8 <= this.f3063r[i6 + 2]; i8++) {
+                            if (i6 < this.historyInts.length - 2) {
+                                this.linePath.moveTo(reverseXData(this.historyInts[i] - 1), this.mheight - (this.mRealEcgs[this.historyInts[i] - 1] * this.covertYFloat));
+                                for (int i8 = this.historyInts[i] - 1; i8 <= this.historyInts[i6 + 2]; i8++) {
                                     this.linePath.lineTo(reverseXData(i8), this.mheight - (this.mRealEcgs[i8] * this.covertYFloat));
                                 }
                             }
                         }
-                        this.linePath.moveTo(reverseXData(this.f3063r[this.f3063r.length - 1] - 1), this.mheight - (this.mRealEcgs[this.f3063r[this.f3063r.length - 1] - 1] * this.covertYFloat));
-                        for (int i9 = this.f3063r[this.f3063r.length - 1] - 1; i9 < this.f3052g; i9++) {
+                        this.linePath.moveTo(reverseXData(this.historyInts[this.historyInts.length - 1] - 1), this.mheight - (this.mRealEcgs[this.historyInts[this.historyInts.length - 1] - 1] * this.covertYFloat));
+                        for (int i9 = this.historyInts[this.historyInts.length - 1] - 1; i9 < this.lastEcgCnt; i9++) {
                             this.linePath.lineTo(reverseXData(i9), this.mheight - (this.mRealEcgs[i9] * this.covertYFloat));
                         }
                         Paint paint2 = new Paint();
@@ -240,7 +242,7 @@ public class EcgCovertDrawListener implements WarickSurfaceView.DrawListener {
                         return;
                     }
                 }
-                m2951b(canvas, paint);
+                drawMyPath(canvas, paint);
             }
         }
     }
@@ -279,12 +281,12 @@ public class EcgCovertDrawListener implements WarickSurfaceView.DrawListener {
     }
 
     /* renamed from: b */
-    public int mo2915b() {
-        return this.f3051f;
+    public int getCovertXWitdh() {
+        return this.covertXWitdh;
     }
 
     /* renamed from: c */
-    public int mo2916c(int i) {
+    public int getEcgIndexMs(int i) {
         if (this.historyEcgs == null) {
             return 0;
         }
@@ -298,28 +300,28 @@ public class EcgCovertDrawListener implements WarickSurfaceView.DrawListener {
     }
 
     /* renamed from: c */
-    public void mo2918c(float f) {
-        Log.d(TAG, "mo2918c: =======");
+    public void putRealEcgData(float f) {
+        Log.d(TAG, "putRealEcgData: =======");
         if (this.mRealEcgs != null) {
-            this.f3052g++;
-            this.f3052g %= this.f3051f;
-            Log.d(TAG, "mo2918c: f3051f's value is " + f3051f);
+            this.lastEcgCnt++;
+            this.lastEcgCnt %= this.covertXWitdh;
+            Log.d(TAG, "putRealEcgData: covertXWitdh's value is " + covertXWitdh);
 //            if (this.isFiter) {
-//                this.mRealEcgs[this.f3052g] = (float) Fir.RealtimeFir(f, Fir.Fir_5, this.f3061p);
-//                Log.d("EcgCovertDrawListener", "what is the realtimeFir return? " + mRealEcgs[f3052g]);
+//                this.mRealEcgs[this.lastEcgCnt] = (float) Fir.RealtimeFir(f, Fir.Fir_5, this.realtimeFirDoubles);
+//                Log.d("EcgCovertDrawListener", "what is the realtimeFir return? " + mRealEcgs[lastEcgCnt]);
 //            } else {
-//                this.mRealEcgs[this.f3052g] = f;
+//                this.mRealEcgs[this.lastEcgCnt] = f;
 //            }
-            mRealEcgs[f3052g] = (float) (f / 1000.0);
-//            Log.d(TAG, "mo2918c: the ecg's value is：" + mRealEcgs[f3052g]);
+            mRealEcgs[lastEcgCnt] = (float) (f / 1000.0);
+//            Log.d(TAG, "putRealEcgData: the ecg's value is：" + mRealEcgs[lastEcgCnt]);
         }else {
-            Log.d(TAG, "mo2918c: mRealEcgs is null");
+            Log.d(TAG, "putRealEcgData: mRealEcgs is null");
         }
     }
 
     /* renamed from: d */
-    public float mo2919d(int i) {
-        Log.d(TAG, "mo2919d: -------");
+    public float getEcgMv(int i) {
+        Log.d(TAG, "getEcgMv: -------");
         if (i < this.recordProgress || this.mRealEcgs == null) {
             return 0.0f;
         }
@@ -327,14 +329,14 @@ public class EcgCovertDrawListener implements WarickSurfaceView.DrawListener {
     }
 
     /* renamed from: d */
-    public void mo2920d() {
+    public void setRevModel() {
         this.IsCancelCut = false;
-        mo2921e();
+        clearHistoryInts();
     }
 
     /* renamed from: e */
-    public void mo2921e() {
-        this.f3063r = null;
+    public void clearHistoryInts() {
+        this.historyInts = null;
     }
 
     /* renamed from: e */
@@ -368,7 +370,7 @@ public class EcgCovertDrawListener implements WarickSurfaceView.DrawListener {
             for (int i = 0; i < this.mRealEcgs.length; i++) {
                 this.mRealEcgs[i] = 5000.0f;
             }
-            this.f3052g = 0;
+            this.lastEcgCnt = 0;
         }
     }
 }

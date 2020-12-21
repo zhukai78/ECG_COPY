@@ -32,18 +32,18 @@ public class MyFileListener implements FileListener {
     /* access modifiers changed from: private */
 
     /* renamed from: e */
-    public File f2100e;
+    public File cacheFile;
 
     /* renamed from: f */
     private Context f2101f;
     /* access modifiers changed from: private */
 
     /* renamed from: g */
-    public boolean f2102g = false;
+    public boolean isCanWrite = false;
     /* access modifiers changed from: private */
 
     /* renamed from: h */
-    public Looper f2103h;
+    public Looper mFileLooper;
     /* access modifiers changed from: private */
 
     /* renamed from: i */
@@ -72,21 +72,21 @@ public class MyFileListener implements FileListener {
     /* access modifiers changed from: private */
 
     /* renamed from: p */
-    public int f2111p = 0;
+    public int saveCacheMake = 0;
 
     /* renamed from: q */
     private int f2112q = 512;
 
     /* renamed from: r */
-    private Thread f2113r = new Thread() {
+    private Thread saveThread = new Thread() {
         public void run() {
             Looper.prepare();
-            Looper unused = MyFileListener.this.f2103h = Looper.myLooper();
-            Handler unused2 = MyFileListener.this.mFileHandler = new Handler(MyFileListener.this.f2103h) {
+            Looper unused = MyFileListener.this.mFileLooper = Looper.myLooper();
+            Handler unused2 = MyFileListener.this.mFileHandler = new Handler(MyFileListener.this.mFileLooper) {
                 public void handleMessage(Message message) {
                     switch (message.what) {
                         case 0:
-                            if (MyFileListener.this.f2100e == null) {
+                            if (MyFileListener.this.cacheFile == null) {
                                 LogUtils.logE("FileCache", "未有设置缓存文件的位置? SetCacheFile()");
                                 return;
                             }
@@ -94,38 +94,38 @@ public class MyFileListener implements FileListener {
                             int unused2 = MyFileListener.this.f2109n = 0;
                             int unused3 = MyFileListener.this.f2110o = 0;
                             try {
-                                if (!MyFileListener.this.f2100e.exists()) {
-                                    MyFileListener.this.f2100e.createNewFile();
+                                if (!MyFileListener.this.cacheFile.exists()) {
+                                    MyFileListener.this.cacheFile.createNewFile();
                                 } else {
-                                    FileWriter fileWriter = new FileWriter(MyFileListener.this.f2100e, false);
+                                    FileWriter fileWriter = new FileWriter(MyFileListener.this.cacheFile, false);
                                     fileWriter.write("");
                                     fileWriter.close();
                                     LogUtils.logE("FileCache", "OPEN_CACHE_FILE >> clear file ");
                                 }
-                                boolean unused4 = MyFileListener.this.f2102g = true;
+                                boolean unused4 = MyFileListener.this.isCanWrite = true;
                                 return;
                             } catch (IOException e) {
                                 e.printStackTrace();
                                 return;
                             }
                         case 1:
-                            if (MyFileListener.this.f2102g) {
+                            if (MyFileListener.this.isCanWrite) {
                                 MyFileListener.this.m2222e();
-                                boolean unused5 = MyFileListener.this.f2102g = false;
+                                boolean unused5 = MyFileListener.this.isCanWrite = false;
                                 LogUtils.logE("FileCache", "CLOSE_CACHE_FILE >> CanWrite = false; ");
                             } else {
                                 Log.e("FileCache", "文件缓存还不能写入，检查是否OpenFileCache");
                             }
-                            int unused6 = MyFileListener.this.f2111p = 0;
+                            int unused6 = MyFileListener.this.saveCacheMake = 0;
                             return;
                         case 2:
-                            if (MyFileListener.this.f2102g) {
+                            if (MyFileListener.this.isCanWrite) {
                                 MyFileListener.this.m2218c((int[]) message.obj);
                                 return;
                             }
                             break;
                         case 3:
-                            if (MyFileListener.this.f2102g) {
+                            if (MyFileListener.this.isCanWrite) {
                                 MyFileListener.this.m2216b((int[]) message.obj);
                                 return;
                             }
@@ -142,7 +142,7 @@ public class MyFileListener implements FileListener {
 
     public MyFileListener(Context context) {
         this.f2101f = context;
-        this.f2113r.start();
+        this.saveThread.start();
     }
 
     /* renamed from: a */
@@ -150,7 +150,7 @@ public class MyFileListener implements FileListener {
         this.f2106k[this.f2109n] = i;
         this.f2109n++;
         this.f2109n %= this.f2106k.length;
-        this.f2111p++;
+        this.saveCacheMake++;
         this.f2108m++;
         if (this.f2108m == this.f2112q) {
             int[] iArr = new int[this.f2108m];
@@ -177,9 +177,9 @@ public class MyFileListener implements FileListener {
     /* access modifiers changed from: private */
     /* renamed from: c */
     public void m2218c(int[] iArr) {
-        if (this.f2100e != null) {
+        if (this.cacheFile != null) {
             try {
-                FileOutputStream fileOutputStream = new FileOutputStream(this.f2100e, true);
+                FileOutputStream fileOutputStream = new FileOutputStream(this.cacheFile, true);
                 for (int i = 0; i < iArr.length; i++) {
                     fileOutputStream.write((iArr[i]/1000 + " ").getBytes());
                 }
@@ -209,22 +209,22 @@ public class MyFileListener implements FileListener {
 
     /* renamed from: a */
     public String fileCacheStr() {
-        if (this.f2102g) {
+        if (this.isCanWrite) {
             return null;
         }
-        return this.f2100e.getAbsolutePath();
+        return this.cacheFile.getAbsolutePath();
     }
 
     /* renamed from: a */
     public void shareCachePath(String str) {
         if (Environment.getExternalStorageState().equals("mounted")) {
-            this.f2100e = new File(str);
-            if (!this.f2100e.getParentFile().exists()) {
-                this.f2100e.getParentFile().mkdirs();
+            this.cacheFile = new File(str);
+            if (!this.cacheFile.getParentFile().exists()) {
+                this.cacheFile.getParentFile().mkdirs();
             }
-            if (!this.f2100e.exists()) {
+            if (!this.cacheFile.exists()) {
                 try {
-                    this.f2100e.createNewFile();
+                    this.cacheFile.createNewFile();
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -263,7 +263,7 @@ public class MyFileListener implements FileListener {
     }
 
     /* renamed from: d */
-    public int mo2107d() {
-        return this.f2111p;
+    public int getSaveCacheMake() {
+        return this.saveCacheMake;
     }
 }

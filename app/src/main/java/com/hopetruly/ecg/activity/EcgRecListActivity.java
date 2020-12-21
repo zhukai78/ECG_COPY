@@ -122,7 +122,7 @@ public class EcgRecListActivity extends BaseActivity implements AdapterView.OnIt
             if (action.equals("com.holptruly.ecg.services.FileService.FILE_IMPORT_START")) {
                 EcgRecListActivity.this.showmProgressDialog(EcgRecListActivity.this.getString(R.string.p_importing_file));
             } else if (action.equals("com.holptruly.ecg.services.FileService.FILE_IMPORT_SUCCESS")) {
-                ECGRecord a = ECGRecordUtils.m2774a((Context) EcgRecListActivity.this, intent.getStringExtra("com.holptruly.ecg.services.FileService.EXTRA_FILE"));
+                ECGRecord a = ECGRecordUtils.getHisEcgRecord((Context) EcgRecListActivity.this, intent.getStringExtra("com.holptruly.ecg.services.FileService.EXTRA_FILE"));
                 if (a != null) {
                     EcgRecListActivity.this.ecgrecSqlManager.insertEcgRecord(a);
                     EcgRecListActivity.this.dismissProgressDialog();
@@ -136,7 +136,7 @@ public class EcgRecListActivity extends BaseActivity implements AdapterView.OnIt
                     i = R.string.p_import_error;
                 }
                 Toast.makeText(applicationContext, ecgRecListActivity.getString(i), Toast.LENGTH_SHORT).show();
-                EcgRecListActivity.this.startAcyn();
+                EcgRecListActivity.this.startEcgAcyn();
             } else if (action.equals("com.holptruly.ecg.services.FileService.FILE_IMPORT_FAIL")) {
                 EcgRecListActivity.this.dismissProgressDialog();
                 Toast.makeText(EcgRecListActivity.this.getApplicationContext(), EcgRecListActivity.this.getString(R.string.p_import_failed), Toast.LENGTH_SHORT).show();
@@ -145,7 +145,7 @@ public class EcgRecListActivity extends BaseActivity implements AdapterView.OnIt
     };
 
     /* renamed from: q */
-    private BroadcastReceiver f2159q = new BroadcastReceiver() {
+    private BroadcastReceiver recBroadcastReceiver = new BroadcastReceiver() {
         public void onReceive(Context context, Intent intent) {
             Context applicationContext;
             EcgRecListActivity ecgRecListActivity;
@@ -159,7 +159,7 @@ public class EcgRecListActivity extends BaseActivity implements AdapterView.OnIt
                     for (int i2 = 0; i2 < list.size(); i2++) {
                         ECGRecord eCGRecord = (ECGRecord) list.get(i2);
                         try {
-                            ECGEntity a = ECGRecordUtils.m2773a(eCGRecord.getFilePath());
+                            ECGEntity a = ECGRecordUtils.getECGEntityByDocu(eCGRecord.getFilePath());
                             eCGRecord.setMark_time(a.getMark_time());
                             if (a.getLeadExten().equals(ECGEntity.LEAD_PART_HAND)) {
                                 eCGRecord.setLeadType(0);
@@ -174,11 +174,11 @@ public class EcgRecListActivity extends BaseActivity implements AdapterView.OnIt
                     }
                 }
                 EcgRecListActivity.this.dismissProgressDialog();
-                EcgRecListActivity.this.startAcyn();
+                EcgRecListActivity.this.startEcgAcyn();
             } else {
                 if (action.equals("com.holptruly.ecg.services.NetService.SYNC_DATA_FAIL_ACTION")) {
                     EcgRecListActivity.this.dismissProgressDialog();
-                    EcgRecListActivity.this.startAcyn();
+                    EcgRecListActivity.this.startEcgAcyn();
                     applicationContext = EcgRecListActivity.this.getApplicationContext();
                     ecgRecListActivity = EcgRecListActivity.this;
                     i = R.string.l_no_data;
@@ -494,7 +494,7 @@ public class EcgRecListActivity extends BaseActivity implements AdapterView.OnIt
 
     /* access modifiers changed from: private */
     /* renamed from: c */
-    public void startAcyn() {
+    public void startEcgAcyn() {
         this.mErecords.clear();
         this.mEcgrecAsyncTask = new EcgrecAsyncTask();
         this.mEcgrecAsyncTask.execute(new Void[0]);
@@ -585,7 +585,7 @@ public class EcgRecListActivity extends BaseActivity implements AdapterView.OnIt
     /* access modifiers changed from: protected */
     public void onPause() {
         Log.d(TAG, "onPause");
-        LocalBroadcastManager.getInstance(getApplicationContext()).unregisterReceiver(this.f2159q);
+        LocalBroadcastManager.getInstance(getApplicationContext()).unregisterReceiver(this.recBroadcastReceiver);
         if (this.ecgrecNetService != null) {
             Log.d(TAG, "netService unbindService");
             unbindService(this.ecgrecNetServiceConn);
@@ -595,7 +595,7 @@ public class EcgRecListActivity extends BaseActivity implements AdapterView.OnIt
     }
 
     public void onResume() {
-        startAcyn();
+        startEcgAcyn();
         super.onResume();
     }
 
@@ -611,7 +611,7 @@ public class EcgRecListActivity extends BaseActivity implements AdapterView.OnIt
         intentFilter.addAction("com.holptruly.ecg.services.NetService.NEED_LOGIN");
         intentFilter.addAction("com.holptruly.ecg.services.NetService.LOGIN_SUCCESSFUL");
         intentFilter.addAction("com.holptruly.ecg.services.NetService.LOGIN_FAILE");
-        LocalBroadcastManager.getInstance(getApplicationContext()).registerReceiver(this.f2159q, intentFilter);
+        LocalBroadcastManager.getInstance(getApplicationContext()).registerReceiver(this.recBroadcastReceiver, intentFilter);
         this.lv_ecg_rec = (ListView) findViewById(R.id.ecg_rec_list);
         this.mEcgListAdapter = new EcgListAdapter();
         this.mErecords = new ArrayList();

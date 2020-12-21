@@ -180,7 +180,7 @@ public class MainHomeFragment extends Fragment {
         this.iv_ecg_start.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
                 if (MainHomeFragment.this.mFunChooseActivity.isBleConn()) {
-                    if (MainHomeFragment.this.mFunChooseActivity.fcECGApplication != null && MainHomeFragment.this.mFunChooseActivity.fcECGApplication.appMainService != null && MainHomeFragment.this.mFunChooseActivity.fcECGApplication.appMainService.getisGattStop() && !MainHomeFragment.this.mFunChooseActivity.fcECGApplication.appMainService.mo2739m()) {
+                    if (MainHomeFragment.this.mFunChooseActivity.fcECGApplication != null && MainHomeFragment.this.mFunChooseActivity.fcECGApplication.appMainService != null && MainHomeFragment.this.mFunChooseActivity.fcECGApplication.appMainService.getisGattStop() && !mFunChooseActivity.fcECGApplication.appMainService.stopPedometerRecord()) {
                         Log.e(MainHomeFragment.TAG, "stopStep failed..");
                     }
                     MainHomeFragment.this.mFunChooseActivity.startActivity(new Intent(MainHomeFragment.this.mFunChooseActivity, EcgTypeSelectActivity.class));

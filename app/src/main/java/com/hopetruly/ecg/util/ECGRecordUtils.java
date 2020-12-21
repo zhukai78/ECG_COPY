@@ -34,7 +34,7 @@ import javax.xml.transform.stream.StreamResult;
 /* renamed from: com.hopetruly.ecg.util.f */
 public class ECGRecordUtils {
     /* renamed from: a */
-    public static ECGEntity m2773a(String str) throws ParserConfigurationException, IOException, SAXException {
+    public static ECGEntity getECGEntityByDocu(String str) throws ParserConfigurationException, IOException, SAXException {
         String str2;
         Object[] objArr;
         Document parse = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(new FileInputStream(new File(str)));
@@ -56,7 +56,7 @@ public class ECGRecordUtils {
         eCGEntity.setScaleUnit(element5.getAttribute("unit"));
         eCGEntity.setScaleUnitValue(element5.getAttribute("value"));
         eCGEntity.setDigits(((Element) element3.getElementsByTagName("digits").item(0)).getTextContent());
-        int[] a = m2783a(parse);
+        int[] a = getDocumentValue(parse);
         eCGEntity.setMark_period(a);
         if (a != null) {
             StringBuffer stringBuffer = new StringBuffer();
@@ -77,7 +77,7 @@ public class ECGRecordUtils {
     }
 
     /* renamed from: a */
-    public static ECGRecord m2774a(Context context, String str) {
+    public static ECGRecord getHisEcgRecord(Context context, String str) {
         ECGApplication eCGApplication = (ECGApplication) context.getApplicationContext();
         File file = new File(str);
         ECGRecord eCGRecord = new ECGRecord();
@@ -86,7 +86,7 @@ public class ECGRecordUtils {
         eCGRecord.setFileName(file.getName());
         eCGRecord.setFilePath(file.getPath());
         try {
-            ECGEntity a = m2773a(str);
+            ECGEntity a = getECGEntityByDocu(str);
             eCGRecord.setEcgEntity(a);
             eCGRecord.setMark_time(a.getMark_time());
             SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyyMMddHHmmss", Locale.CHINA);
@@ -167,7 +167,7 @@ public class ECGRecordUtils {
             } else {
                 bufferedReader.close();
                 element10.setTextContent(stringBuffer.toString());
-                m2781a(parse, eCGEntity.getMark_period());
+                createElementAppendChild(parse, eCGEntity.getMark_period());
                 TransformerFactory.newInstance().newTransformer().transform(new DOMSource(parse), new StreamResult(new PrintWriter(file)));
                 return;
             }
@@ -175,7 +175,7 @@ public class ECGRecordUtils {
     }
 
     /* renamed from: a */
-    public static void m2777a(Context context, File file, float[] fArr, ECGEntity eCGEntity) throws TransformerException, IOException, ParserConfigurationException, SAXException {
+    public static void SaveEcgFile(Context context, File file, float[] fArr, ECGEntity eCGEntity) throws TransformerException, IOException, ParserConfigurationException, SAXException {
         int i;
         FileOutputStream fileOutputStream = new FileOutputStream(file);
         InputStream open = context.getApplicationContext().getResources().getAssets().open("hl7.xml");
@@ -224,12 +224,12 @@ public class ECGRecordUtils {
             stringBuffer.deleteCharAt(stringBuffer.length() - 1);
         }
         element10.setTextContent(stringBuffer.toString());
-        m2781a(parse, eCGEntity.getMark_period());
+        createElementAppendChild(parse, eCGEntity.getMark_period());
         TransformerFactory.newInstance().newTransformer().transform(new DOMSource(parse), new StreamResult(new PrintWriter(file)));
     }
 
     /* renamed from: a */
-    public static void m2778a(Context context, String str, String str2, ECGEntity eCGEntity) throws IOException, TransformerException, SAXException, ParserConfigurationException {
+    public static void saveFileCache(Context context, String str, String str2, ECGEntity eCGEntity) throws IOException, TransformerException, SAXException, ParserConfigurationException {
         File file = new File(str2);
         if (!file.exists()) {
             Log.e("HL7Encoder", "can not find resourse file");
@@ -246,7 +246,7 @@ public class ECGRecordUtils {
     }
 
     /* renamed from: a */
-    public static void mkdirsAndFile(Context context, String str, float[] fArr, ECGEntity eCGEntity) throws IOException, TransformerException, ParserConfigurationException, SAXException {
+    public static void mkdirsAndSaveFile(Context context, String str, float[] fArr, ECGEntity eCGEntity) throws IOException, TransformerException, ParserConfigurationException, SAXException {
         File file = new File(str);
         if (!file.getParentFile().exists()) {
             file.getParentFile().mkdirs();
@@ -254,7 +254,7 @@ public class ECGRecordUtils {
         if (!file.exists()) {
             file.createNewFile();
         }
-        m2777a(context, file, fArr, eCGEntity);
+        SaveEcgFile(context, file, fArr, eCGEntity);
     }
 
     /* renamed from: a */
@@ -265,7 +265,7 @@ public class ECGRecordUtils {
     }
 
     /* renamed from: a */
-    private static void m2781a(Document document, int[] iArr) {
+    private static void createElementAppendChild(Document document, int[] iArr) {
         if (iArr != null) {
             int length = iArr.length;
             int i = length - (length % 2);
@@ -347,7 +347,7 @@ public class ECGRecordUtils {
     }
 
     /* renamed from: a */
-    private static int[] m2783a(Document document) {
+    private static int[] getDocumentValue(Document document) {
         Element element = (Element) document.getElementsByTagName("annotation").item(0);
         if (element == null) {
             return null;

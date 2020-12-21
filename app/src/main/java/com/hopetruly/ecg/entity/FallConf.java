@@ -7,15 +7,15 @@ public class FallConf {
     public static final String f2816a = null;
 
     /* renamed from: b */
-    private int f2817b = 0;
+    private int fallInt = 0;
 
     /* renamed from: a */
-    public int mo2667a() {
-        return this.f2817b;
+    public int getFallInt() {
+        return this.fallInt;
     }
 
     /* renamed from: a */
     public void setFALL_ENABLE_FALL(int i) {
-        this.f2817b = i;
+        this.fallInt = i;
     }
 }

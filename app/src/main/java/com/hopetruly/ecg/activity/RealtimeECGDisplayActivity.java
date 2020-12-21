@@ -437,8 +437,8 @@ public class RealtimeECGDisplayActivity extends BaseActivity {
             ConvertECG convertECG = Sensor.ECG.convertECG(realGattValue);
             realtimeMainService.mmainFileService.savemRealEcgData(convertECG.ecgArr);
             for (int i = 0; i < convertECG.ecgArr.length; i++) {
-                this.mEcgCovertDrawListener.mo2918c((float) convertECG.ecgArr[i]);
-                this.mHeartRateCounter3.mo2439a((float) (convertECG.ecgArr[i] * this.mEcgCovertDrawListener.getReverseMark()));
+                this.mEcgCovertDrawListener.putRealEcgData((float) convertECG.ecgArr[i]);
+                this.mHeartRateCounter3.setLibEcg((float) (convertECG.ecgArr[i] * this.mEcgCovertDrawListener.getReverseMark()));
                 if (this.mHeartRateCounter3.getHrStatus() != 2 || this.mHeartRateCounter3.getHeartRate() <= 0) {
                     textView = this.tv_heartrate;
                     str = "NaN";
@@ -571,7 +571,7 @@ public class RealtimeECGDisplayActivity extends BaseActivity {
         this.ecg_comment_pupopwindow.setBackgroundDrawable(new BitmapDrawable());
         this.ecg_comment_pupopwindow.setOutsideTouchable(false);
         this.ecg_comment_pupopwindow.setFocusable(true);
-        this.edit_ecg_content = (EditText) inflate2.findViewById(R.id.ecg_comment_content);
+        this.edit_ecg_content =  inflate2.findViewById(R.id.ecg_comment_content);
         ((Button) inflate2.findViewById(R.id.ecg_comment_ok)).setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
                 ProgressDialog unused = RealtimeECGDisplayActivity.this.progress_saving_edit = ProgressDialog.show(RealtimeECGDisplayActivity.this, (CharSequence) null, RealtimeECGDisplayActivity.this.getString(R.string.saving_edit), true, true, (DialogInterface.OnCancelListener) null);
@@ -606,7 +606,7 @@ public class RealtimeECGDisplayActivity extends BaseActivity {
                 }
             }
         });
-        ((Button) inflate2.findViewById(R.id.ecg_comment_cancel)).setOnClickListener(new View.OnClickListener() {
+        ( inflate2.findViewById(R.id.ecg_comment_cancel)).setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
                 RealtimeECGDisplayActivity.this.ecg_comment_pupopwindow.dismiss();
                 if (!RealtimeECGDisplayActivity.this.realtimeMainService.isMBleConn()) {

@@ -22,26 +22,26 @@ import java.util.TimerTask;
 public class WarickSurfaceView extends SurfaceView {
 
     /* renamed from: a */
-    private static final String f3021a = "WarickSurfaceView";
+    private static final String TAG = "WarickSurfaceView";
 
     /* renamed from: b */
-    private Context f3022b;
+    private Context mContext;
     /* access modifiers changed from: private */
 
     /* renamed from: c */
-    public SurfaceHolder f3023c;
+    public SurfaceHolder mSurfaceHolder;
     /* access modifiers changed from: private */
 
     /* renamed from: d */
-    public Canvas f3024d;
+    public Canvas mCanvas;
     /* access modifiers changed from: private */
 
     /* renamed from: e */
-    public Handler f3025e;
+    public Handler ecgHandle;
     /* access modifiers changed from: private */
 
     /* renamed from: f */
-    public Paint f3026f;
+    public Paint mPaint;
     /* access modifiers changed from: private */
 
     /* renamed from: g */
@@ -49,21 +49,21 @@ public class WarickSurfaceView extends SurfaceView {
     /* access modifiers changed from: private */
 
     /* renamed from: h */
-    public boolean f3028h;
+    public boolean isRuning;
 
     /* renamed from: i */
-    private Timer f3029i;
+    private Timer ecg20Timer;
     /* access modifiers changed from: private */
 
     /* renamed from: j */
-    public int f3030j;
+    public int mWidth;
     /* access modifiers changed from: private */
 
     /* renamed from: k */
-    public int f3031k;
+    public int mHeight;
 
     /* renamed from: l */
-    private SurfaceHolder.Callback f3032l;
+    private SurfaceHolder.Callback ecgCallback;
 
     /* renamed from: com.warick.drawable.WarickSurfaceView$a */
     public interface DrawListener {
@@ -72,52 +72,52 @@ public class WarickSurfaceView extends SurfaceView {
     }
 
     /* renamed from: com.warick.drawable.WarickSurfaceView$b */
-    class C0810b implements Runnable {
+    class ECGRunnable implements Runnable {
 
         /* renamed from: b */
-        private Looper f3037b;
+        private Looper mLooper;
 
         public void run() {
             Looper.prepare();
-            this.f3037b = Looper.myLooper();
-            f3025e = new Handler(this.f3037b) {
+            this.mLooper = Looper.myLooper();
+            ecgHandle = new Handler(this.mLooper) {
                 /* JADX WARNING: Code restructure failed: missing block: B:13:0x004f, code lost:
                     return;
                  */
                 public void handleMessage(Message message) {
                     SurfaceHolder d;
                     Canvas a;
-                    if (WarickSurfaceView.this.f3028h) {
-                        synchronized (WarickSurfaceView.this.f3025e) {
+                    if (isRuning) {
+                        synchronized (ecgHandle) {
                             try {
-                                f3024d = f3023c.lockCanvas();
-                                if (WarickSurfaceView.this.f3024d != null) {
+                                mCanvas = mSurfaceHolder.lockCanvas();
+                                if (mCanvas != null) {
                                     Log.d("WarickSurfaceView", "lockCanvas not null!");
-                                    WarickSurfaceView.this.f3026f.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.CLEAR));
-                                    WarickSurfaceView.this.f3024d.drawPaint(WarickSurfaceView.this.f3026f);
-                                    WarickSurfaceView.this.f3026f.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC));
+                                    WarickSurfaceView.this.mPaint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.CLEAR));
+                                    WarickSurfaceView.this.mCanvas.drawPaint(WarickSurfaceView.this.mPaint);
+                                    WarickSurfaceView.this.mPaint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC));
                                     for (int i = 0; i < mDrawListenerlist.size(); i++) {
-                                        ((DrawListener) WarickSurfaceView.this.mDrawListenerlist.get(i)).onMyDraw(f3024d, f3026f);
+                                        ((DrawListener) WarickSurfaceView.this.mDrawListenerlist.get(i)).onMyDraw(mCanvas, mPaint);
                                     }
-                                    if (WarickSurfaceView.this.f3024d != null) {
-                                        d = WarickSurfaceView.this.f3023c;
-                                        a = WarickSurfaceView.this.f3024d;
+                                    if (WarickSurfaceView.this.mCanvas != null) {
+                                        d = WarickSurfaceView.this.mSurfaceHolder;
+                                        a = WarickSurfaceView.this.mCanvas;
                                         d.unlockCanvasAndPost(a);
                                     }
-                                } else if (WarickSurfaceView.this.f3024d != null) {
-                                    WarickSurfaceView.this.f3023c.unlockCanvasAndPost(WarickSurfaceView.this.f3024d);
+                                } else if (mCanvas != null) {
+                                    mSurfaceHolder.unlockCanvasAndPost(WarickSurfaceView.this.mCanvas);
                                 }
                             } catch (Exception e) {
                                 try {
                                     e.printStackTrace();
-                                    if (WarickSurfaceView.this.f3024d != null) {
-                                        d = WarickSurfaceView.this.f3023c;
-                                        a = WarickSurfaceView.this.f3024d;
+                                    if (mCanvas != null) {
+                                        d = WarickSurfaceView.this.mSurfaceHolder;
+                                        a = WarickSurfaceView.this.mCanvas;
                                     }
                                     super.handleMessage(message);
                                 } catch (Throwable th) {
-                                    if (WarickSurfaceView.this.f3024d != null) {
-                                        WarickSurfaceView.this.f3023c.unlockCanvasAndPost(WarickSurfaceView.this.f3024d);
+                                    if (WarickSurfaceView.this.mCanvas != null) {
+                                        WarickSurfaceView.this.mSurfaceHolder.unlockCanvasAndPost(WarickSurfaceView.this.mCanvas);
                                     }
                                     throw th;
                                 }
@@ -140,78 +140,78 @@ public class WarickSurfaceView extends SurfaceView {
 
     public WarickSurfaceView(Context context, AttributeSet attributeSet, int i) {
         super(context, attributeSet, i);
-        this.f3024d = null;
-        this.f3026f = null;
-        this.f3028h = false;
-        this.f3029i = null;
-        this.f3030j = 0;
-        this.f3031k = 0;
-        this.f3032l = new SurfaceHolder.Callback() {
+        this.mCanvas = null;
+        this.mPaint = null;
+        this.isRuning = false;
+        this.ecg20Timer = null;
+        this.mWidth = 0;
+        this.mHeight = 0;
+        this.ecgCallback = new SurfaceHolder.Callback() {
 
             /* renamed from: a */
-            Thread f3033a = null;
+            Thread mThread = null;
 
             public void surfaceChanged(SurfaceHolder surfaceHolder, int i, int i2, int i3) {
-                int unused = WarickSurfaceView.this.f3030j = i2;
-                int unused2 = WarickSurfaceView.this.f3031k = i3;
+                int unused = WarickSurfaceView.this.mWidth = i2;
+                int unused2 = WarickSurfaceView.this.mHeight = i3;
             }
 
             public void surfaceCreated(SurfaceHolder surfaceHolder) {
-                boolean unused = WarickSurfaceView.this.f3028h = true;
-                this.f3033a = new Thread(new C0810b());
-                this.f3033a.start();
-                Canvas unused2 = WarickSurfaceView.this.f3024d = surfaceHolder.lockCanvas();
-                int unused3 = WarickSurfaceView.this.f3030j = WarickSurfaceView.this.f3024d.getWidth();
-                int unused4 = WarickSurfaceView.this.f3031k = WarickSurfaceView.this.f3024d.getHeight();
-                surfaceHolder.unlockCanvasAndPost(WarickSurfaceView.this.f3024d);
+                boolean unused = WarickSurfaceView.this.isRuning = true;
+                this.mThread = new Thread(new ECGRunnable());
+                this.mThread.start();
+                Canvas unused2 = WarickSurfaceView.this.mCanvas = surfaceHolder.lockCanvas();
+                int unused3 = WarickSurfaceView.this.mWidth = WarickSurfaceView.this.mCanvas.getWidth();
+                int unused4 = WarickSurfaceView.this.mHeight = WarickSurfaceView.this.mCanvas.getHeight();
+                surfaceHolder.unlockCanvasAndPost(WarickSurfaceView.this.mCanvas);
             }
 
             public void surfaceDestroyed(SurfaceHolder surfaceHolder) {
-                boolean unused = WarickSurfaceView.this.f3028h = false;
+                boolean unused = WarickSurfaceView.this.isRuning = false;
                 System.gc();
                 try {
-                    Thread thread = this.f3033a;
+                    Thread thread = this.mThread;
                     Thread.sleep(100);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
             }
         };
-        Log.d(f3021a, "Create WarickSurfaceView");
-        this.f3022b = context;
-        this.f3023c = getHolder();
-        this.f3023c.addCallback(this.f3032l);
+        Log.d(TAG, "Create WarickSurfaceView");
+        this.mContext = context;
+        this.mSurfaceHolder = getHolder();
+        this.mSurfaceHolder.addCallback(this.ecgCallback);
         this.mDrawListenerlist = new ArrayList();
-        m2934b();
+        initPaint();
     }
 
     /* renamed from: b */
-    private void m2934b() {
-        this.f3026f = new Paint();
-        this.f3026f.setColor(-16777216);
-        this.f3026f.setStrokeWidth(3.0f);
-        this.f3026f.setStyle(Paint.Style.STROKE);
-        this.f3026f.setStrokeCap(Paint.Cap.ROUND);
-        this.f3026f.setAntiAlias(true);
-        this.f3026f.setPathEffect(new CornerPathEffect(5.0f));
+    private void initPaint() {
+        this.mPaint = new Paint();
+        this.mPaint.setColor(-16777216);
+        this.mPaint.setStrokeWidth(3.0f);
+        this.mPaint.setStyle(Paint.Style.STROKE);
+        this.mPaint.setStrokeCap(Paint.Cap.ROUND);
+        this.mPaint.setAntiAlias(true);
+        this.mPaint.setPathEffect(new CornerPathEffect(5.0f));
     }
 
     /* renamed from: a */
-    public void mo2891a() {
-        if (this.f3025e != null) {
-            Message obtain = Message.obtain(this.f3025e);
+    public void sendMessage0() {
+        if (this.ecgHandle != null) {
+            Message obtain = Message.obtain(this.ecgHandle);
             obtain.what = 0;
-            this.f3025e.sendMessage(obtain);
+            this.ecgHandle.sendMessage(obtain);
         }
     }
 
     /* renamed from: a */
     public void setSpeed(int i) {
-        if (this.f3029i == null) {
-            this.f3029i = new Timer();
-            this.f3029i.schedule(new TimerTask() {
+        if (this.ecg20Timer == null) {
+            this.ecg20Timer = new Timer();
+            this.ecg20Timer.schedule(new TimerTask() {
                 public void run() {
-                    WarickSurfaceView.this.mo2891a();
+                    WarickSurfaceView.this.sendMessage0();
                 }
             }, 20, (long) i);
         }
@@ -223,10 +223,10 @@ public class WarickSurfaceView extends SurfaceView {
     }
 
     public int getCanvasHeight() {
-        return this.f3031k;
+        return this.mHeight;
     }
 
     public int getCanvasWidth() {
-        return this.f3030j;
+        return this.mWidth;
     }
 }

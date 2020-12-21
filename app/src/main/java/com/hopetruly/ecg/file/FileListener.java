@@ -18,5 +18,5 @@ public interface FileListener {
     void stopEcgEvent();
 
     /* renamed from: d */
-    int mo2107d();
+    int getSaveCacheMake();
 }

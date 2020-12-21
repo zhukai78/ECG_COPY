@@ -7,7 +7,7 @@ public class PedometerConf {
     public static final String f2818a = null;
 
     /* renamed from: b */
-    private int f2819b = 0;
+    private int enable_step = 0;
 
     /* renamed from: c */
     private int f2820c = 0;
@@ -16,13 +16,13 @@ public class PedometerConf {
     private long step_target = 0;
 
     /* renamed from: a */
-    public int mo2669a() {
-        return this.f2819b;
+    public int getSTEP_ENABLE_STEP() {
+        return this.enable_step;
     }
 
     /* renamed from: a */
     public void setSTEP_ENABLE_STEP(int i) {
-        this.f2819b = i;
+        this.enable_step = i;
     }
 
     /* renamed from: a */
