@@ -293,7 +293,20 @@ public class MainService extends Service {
                             MainService.this.readdeviceInfo();
                         } else if ("com.hopetruly.ec.services.ACTION_GATT_DATA_NOTIFY".equals(action)) {
                             String stringExtra2 = intent.getStringExtra("com.hopetruly.ec.services.EXTRA_UUID");
-                            if (stringExtra2.equals(Sensor.ACCELEROMETER.getData().toString())) {
+                              if (stringExtra2.equals(Sensor.ECG.getData().toString()) ) {
+                                if (isStartEcg){
+                                    ConvertECG convertECG = Sensor.ECG.convertECG(intent.getByteArrayExtra("com.hopetruly.ec.services.EXTRA_DATA"));
+                                    MainService.this.mmainFileService.savemRealEcgData(convertECG.ecgArr);
+                                    if (MainService.this.mmainNetService.isNetRun()) {
+                                        MainService.this.mmainNetService.uploadEcgDatas(convertECG.ecgArr, 75);
+                                        return;
+                                    }
+                                }else {
+                                    getMyBatt(intent.getByteArrayExtra("com.hopetruly.ec.services.EXTRA_DATA"));
+                                }
+                                return;
+                            }
+                              else  if (stringExtra2.equals(Sensor.ACCELEROMETER.getData().toString())) {
                                 byte[] byteArrayExtra2 = intent.getByteArrayExtra("com.hopetruly.ec.services.EXTRA_DATA");
                                 float f = (((float) (((double) byteArrayExtra2[0]) / 16.0d)) * 1000.0f) / 5.0f;
                                 float f2 = (((float) (((double) byteArrayExtra2[1]) / 16.0d)) * 1000.0f) / 5.0f;
@@ -307,19 +320,7 @@ public class MainService extends Service {
                                     return;
                                 }
                                 return;
-                            } else  if (stringExtra2.equals(Sensor.ECG.getData().toString()) ) {
-                                if (isStartEcg){
-                                    ConvertECG convertECG = Sensor.ECG.convertECG(intent.getByteArrayExtra("com.hopetruly.ec.services.EXTRA_DATA"));
-                                    MainService.this.mmainFileService.savemRealEcgData(convertECG.ecgArr);
-                                    if (MainService.this.mmainNetService.isNetRun()) {
-                                        MainService.this.mmainNetService.uploadEcgDatas(convertECG.ecgArr, 75);
-                                        return;
-                                    }
-                                }else {
-                                    getMyBatt(intent.getByteArrayExtra("com.hopetruly.ec.services.EXTRA_DATA"));
-                                }
-                                return;
-                            } else if (stringExtra2.equals(Sensor.SIMPLE_KEYS.getData().toString())) {
+                            }  else if (stringExtra2.equals(Sensor.SIMPLE_KEYS.getData().toString())) {
                                 SimpleKeysStatus convertKeys = Sensor.SIMPLE_KEYS.convertKeys(intent.getByteArrayExtra("com.hopetruly.ec.services.EXTRA_DATA"));
                                 LogUtils.logI(MainService.this.TAG, "simple key status : " + convertKeys.toString());
                                 if (convertKeys.equals(SimpleKeysStatus.ALARM_BUTTON)) {
