@@ -12,6 +12,7 @@ import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.os.Bundle;
 import android.os.IBinder;
+import android.util.Log;
 import android.widget.RadioGroup;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
@@ -21,6 +22,8 @@ import com.hopetruly.ecg.services.MainService;
 import com.hopetruly.ecg.util.LogUtils;
 import com.hopetruly.part.net.NetService;
 import com.warick.gps.GpsManagerHelper;
+
+import java.util.Arrays;
 
 
 public class FunChooseActivity extends BaseActivity {
@@ -114,8 +117,46 @@ public class FunChooseActivity extends BaseActivity {
                 }
                 FunChooseActivity.this.showPowerlowDialog();
             }
+                 else if (action.equals("com.hopetruly.ec.services.ACTION_GATT_DATA_NOTIFY")){
+                    covertBatteryData(intent.getByteArrayExtra("com.hopetruly.ec.services.EXTRA_DATA"));
+                }
+            }
+        };
+        private static final char[] HEX_ARRAY = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F'};
+
+        public static String bytesToHex(byte[] bytes, int start, int length, boolean add0x) {
+            if (bytes == null || bytes.length <= start || length <= 0) {
+                return "";
+            }
+            int maxLength = Math.min(length, bytes.length - start);
+            char[] hexChars = new char[(maxLength * 2)];
+            for (int j = 0; j < maxLength; j++) {
+                int v = bytes[start + j] & 255;
+                hexChars[j * 2] = HEX_ARRAY[v >>> 4];
+                hexChars[(j * 2) + 1] = HEX_ARRAY[v & 15];
+            }
+            if (!add0x) {
+                return new String(hexChars);
+            }
+            return "0x" + new String(hexChars);
         }
-    };
+
+        public void covertBatteryData(byte[] bytes) {
+            String tempdata = bytesToHex(bytes, 0, bytes.length, false);
+
+            if (tempdata.startsWith("56A1D1")) {
+                //todo
+                tempdata = tempdata.substring(34, tempdata.length());
+                int length = tempdata.length();
+                tempdata += bytesToHex(bytes, 0, bytes.length, false);
+//            System.arraycopy(gattValue, 17, gattValue, 0, length / 2);
+//            System.arraycopy(bytes, 0, gattValue, length / 2, bytes.length);
+                Log.d("batt", tempdata);
+                Log.d("batt", Arrays.toString(bytes)+"   "+bytes[15]);
+
+            }
+
+        }
 
     /* renamed from: t */
     private RadioGroup.OnCheckedChangeListener rgCheckedChangeListener = new RadioGroup.OnCheckedChangeListener() {
@@ -221,6 +262,9 @@ public class FunChooseActivity extends BaseActivity {
 
     /* renamed from: d */
     public void showPowerlowDialog() {
+        if (fcECGApplication.appMachine==null||powerlowDialog!=null){
+            return;
+        }
         String str;
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle(getResources().getString(R.string.Tip));
@@ -297,6 +341,7 @@ public class FunChooseActivity extends BaseActivity {
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction("com.hopetruly.ec.services.ACTION_GATT_DISCONNECTED");
         intentFilter.addAction("com.hopetruly.ecg.services.MainService.POWER_LOW");
+        intentFilter.addAction("com.hopetruly.ecg.services.MainService.ACTION_GATT_DATA_NOTIFY");
         LocalBroadcastManager.getInstance(getApplicationContext()).registerReceiver(this.fcBroadcastReceiver, intentFilter);
     }
 
@@ -319,6 +364,7 @@ public class FunChooseActivity extends BaseActivity {
             this.gpsAlertDialog.dismiss();
         }
         super.onPause();
+        fcMainService.stopBattery();
     }
 
     /* access modifiers changed from: protected */
@@ -332,5 +378,7 @@ public class FunChooseActivity extends BaseActivity {
             }
         }
         super.onResume();
+        if (fcMainService!=null)
+            fcMainService.startMyBattery();
     }
 }

@@ -237,6 +237,7 @@ public class MainService extends Service {
                         } else if (stringExtra.equals(Sensor.BATTERY.getData().toString())) {
                             int unused3 = MainService.this.batterylevel = Sensor.BATTERY.convertBAT(intent.getByteArrayExtra("com.hopetruly.ec.services.EXTRA_DATA"));
                             MainService.this.mmainecggApp.appMachine.setBatteryLevel(MainService.this.batterylevel);
+                            Log.d("------batterylevel",batterylevel+"");
                             if (MainService.this.batterylevel < 20) {
                                 LocalBroadcastManager.getInstance(MainService.this.getApplicationContext()).sendBroadcast(new Intent("com.hopetruly.ecg.services.MainService.POWER_LOW"));
                             }
@@ -306,12 +307,16 @@ public class MainService extends Service {
                                     return;
                                 }
                                 return;
-                            } else if (stringExtra2.equals(Sensor.ECG.getData().toString()) && MainService.this.isStartEcg) {
-                                ConvertECG convertECG = Sensor.ECG.convertECG(intent.getByteArrayExtra("com.hopetruly.ec.services.EXTRA_DATA"));
-                                MainService.this.mmainFileService.savemRealEcgData(convertECG.ecgArr);
-                                if (MainService.this.mmainNetService.isNetRun()) {
-                                    MainService.this.mmainNetService.uploadEcgDatas(convertECG.ecgArr, 75);
-                                    return;
+                            } else  if (stringExtra2.equals(Sensor.ECG.getData().toString()) ) {
+                                if (isStartEcg){
+                                    ConvertECG convertECG = Sensor.ECG.convertECG(intent.getByteArrayExtra("com.hopetruly.ec.services.EXTRA_DATA"));
+                                    MainService.this.mmainFileService.savemRealEcgData(convertECG.ecgArr);
+                                    if (MainService.this.mmainNetService.isNetRun()) {
+                                        MainService.this.mmainNetService.uploadEcgDatas(convertECG.ecgArr, 75);
+                                        return;
+                                    }
+                                }else {
+                                    getMyBatt(intent.getByteArrayExtra("com.hopetruly.ec.services.EXTRA_DATA"));
                                 }
                                 return;
                             } else if (stringExtra2.equals(Sensor.SIMPLE_KEYS.getData().toString())) {
@@ -483,6 +488,7 @@ public class MainService extends Service {
         intentFilter.addAction("com.hopetruly.part.StepCounter.CAL");
         intentFilter.addAction("com.holptruly.part.FallDetection.FALLDOWN");
         intentFilter.addAction("com.hopetruly.ecg.util.MyAlarmClock.DATE_CHANGE");
+        intentFilter.addAction("com.hopetruly.ec.services.BATTERY");
         return intentFilter;
     }
 
@@ -914,4 +920,67 @@ public class MainService extends Service {
         return this.batterylevel;
     }
 
+
+    /* renamed from: a */
+    public void startMyBattery() {
+        if (this.isConn) {
+            LogUtils.logW(this.TAG, "startBattery~~~~~");
+
+            writeCharacteristicBoolean(Sensor.ECG, true);
+            return;
+        }
+        Toast.makeText(getApplicationContext(), getResources().getString(R.string.ble_not_connect), Toast.LENGTH_LONG).show();
+    }
+
+
+    public void stopBattery() {
+        LogUtils.logI(this.TAG, "StopBattery~~~~~");
+
+        if (this.isConn) {
+            writeCharacteristicBoolean(Sensor.ECG, false);
+        } else {
+            LogUtils.logW(this.TAG, "StartECG!!>蓝牙未连接错误！");
+        }
+
+    }
+
+    private static final char[] HEX_ARRAY = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F'};
+
+    public static String bytesToHex(byte[] bytes, int start, int length, boolean add0x) {
+        if (bytes == null || bytes.length <= start || length <= 0) {
+            return "";
+        }
+        int maxLength = Math.min(length, bytes.length - start);
+        char[] hexChars = new char[(maxLength * 2)];
+        for (int j = 0; j < maxLength; j++) {
+            int v = bytes[start + j] & 255;
+            hexChars[j * 2] = HEX_ARRAY[v >>> 4];
+            hexChars[(j * 2) + 1] = HEX_ARRAY[v & 15];
+        }
+        if (!add0x) {
+            return new String(hexChars);
+        }
+        return "0x" + new String(hexChars);
+    }
+
+    private void getMyBatt(byte[] bytes) {
+        String tempdata = bytesToHex(bytes, 0, bytes.length, false);
+
+        if (tempdata.contains("56A1D1")) {
+            //todo
+            int index = tempdata.indexOf("56A1D1");
+            if (index<8){
+
+                MainService.this.batterylevel =bytes[15+index/2];
+                this.mmainecggApp.appMachine.setBatteryLevel(batterylevel);
+                Intent intent = new Intent("com.hopetruly.ec.services.BATTERY");
+                intent.putExtra("com.hopetruly.ec.services.BATTERY", batterylevel);
+                LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(intent);
+            }
+        }
+
+        if (MainService.this.batterylevel < 20) {
+            LocalBroadcastManager.getInstance(MainService.this.getApplicationContext()).sendBroadcast(new Intent("com.hopetruly.ecg.services.MainService.POWER_LOW"));
+        }
+    }
 }
