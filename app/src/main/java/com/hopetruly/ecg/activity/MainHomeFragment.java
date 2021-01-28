@@ -47,7 +47,7 @@ public class MainHomeFragment extends Fragment {
     /* access modifiers changed from: private */
 
     /* renamed from: f */
-    public ImageView iv_step_start;
+//    public ImageView iv_step_start;
     /* access modifiers changed from: private */
 
     /* renamed from: g */
@@ -85,9 +85,9 @@ public class MainHomeFragment extends Fragment {
                 MainHomeFragment.this.iv_dev_icon_img.setImageResource(R.drawable.dev_note);
                 MainHomeFragment.this.iv_ecg_conn_btn.setVisibility(View.VISIBLE);
                 MainHomeFragment.this.iv_ecg_start.setVisibility(View.GONE);
-                MainHomeFragment.this.iv_step_start.setVisibility(View.GONE);
-            } else if (action.equals("com.hopetruly.ec.services.ACTION_GATT_DATA_NOTIFY") && intent.getStringExtra("com.hopetruly.ec.services.EXTRA_UUID").equals(Sensor.BATTERY.getData().toString())) {
-                MainHomeFragment.this.assertBattery(Sensor.BATTERY.convertBAT(intent.getByteArrayExtra("com.hopetruly.ec.services.EXTRA_DATA")));
+                //                MainHomeFragment.this.iv_step_start.setVisibility(View.GONE);
+            } else if (action.equals("com.hopetruly.ec.services.BATTERY")) {
+                MainHomeFragment.this.assertBattery(intent.getIntExtra("com.hopetruly.ec.services.BATTERY",0));
             }
         }
     };
@@ -187,27 +187,28 @@ public class MainHomeFragment extends Fragment {
                 }
             }
         });
-        this.iv_step_start = (ImageView) getView().findViewById(R.id.step_start);
-        this.iv_step_start.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View view) {
-                if (MainHomeFragment.this.mFunChooseActivity.isBleConn()) {
-                    MainHomeFragment.this.mFunChooseActivity.fcECGApplication.appPedometerConf.mo2673b(1);
-//                    ((RadioButton) MainHomeFragment.this.mFunChooseActivity.findViewById(R.id.nav_step)).setChecked(true);
-                }
-            }
-        });
+//        this.iv_step_start = (ImageView) getView().findViewById(R.id.step_start);
+//        this.iv_step_start.setOnClickListener(new View.OnClickListener() {
+//            public void onClick(View view) {
+//                if (MainHomeFragment.this.mFunChooseActivity.isBleConn()) {
+//                    MainHomeFragment.this.mFunChooseActivity.fcECGApplication.appPedometerConf.mo2673b(1);
+////                    ((RadioButton) MainHomeFragment.this.mFunChooseActivity.findViewById(R.id.nav_step)).setChecked(true);
+//                }
+//            }
+//        });
         if (this.mFunChooseActivity.isBleConn()) {
             this.iv_ecg_conn_btn.setVisibility(View.GONE);
             this.iv_ecg_start.setVisibility(View.VISIBLE);
-            this.iv_step_start.setVisibility(View.VISIBLE);
+//            this.iv_step_start.setVisibility(View.VISIBLE);
         } else {
             this.iv_ecg_conn_btn.setVisibility(View.VISIBLE);
             this.iv_ecg_start.setVisibility(View.GONE);
-            this.iv_step_start.setVisibility(View.GONE);
+//            this.iv_step_start.setVisibility(View.GONE);
         }
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction("com.hopetruly.ec.services.ACTION_GATT_DISCONNECTED");
         intentFilter.addAction("com.hopetruly.ec.services.ACTION_GATT_DATA_NOTIFY");
+        intentFilter.addAction("com.hopetruly.ec.services.BATTERY");
         LocalBroadcastManager.getInstance(getActivity().getApplicationContext()).registerReceiver(this.updataUiBroadcastReceiver, intentFilter);
         super.onStart();
     }
