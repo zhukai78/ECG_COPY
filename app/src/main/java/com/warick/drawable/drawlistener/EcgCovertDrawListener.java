@@ -54,7 +54,7 @@ public class EcgCovertDrawListener implements WarickSurfaceView.DrawListener {
     private float covertXFloat = 1.3f;
 
     /* renamed from: n */
-    private float covertYFloat = 0.13f;
+    private float covertYFloat = 0.10f;
 
     /* renamed from: o */
     private float mheight;
