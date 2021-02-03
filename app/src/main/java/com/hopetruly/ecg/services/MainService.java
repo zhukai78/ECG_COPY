@@ -299,6 +299,7 @@ public class MainService extends Service {
                                 float f2 = (((float) (((double) byteArrayExtra2[1]) / 16.0d)) * 1000.0f) / 5.0f;
                                 float f3 = (((float) (((double) (-1 * byteArrayExtra2[2])) / 16.0d)) * 1000.0f) / 5.0f;
                                 double sqrt = Math.sqrt((double) ((f * f) + (f2 * f2) + (f3 * f3)));
+                            Log.e("sdsd","ndgfgfdgdf"+sqrt);
                                 if (MainService.this.isGattStop) {
                                     MainService.this.mainmStepCounter.sendStep((float) sqrt);
                                 }
@@ -306,8 +307,10 @@ public class MainService extends Service {
                                     MainService.this.mFallDownAlgorithm.checkFall((int) f, (int) f2, (int) f3, (int) sqrt);
                                     return;
                                 }
+
                                 return;
-                            } else  if (stringExtra2.equals(Sensor.ECG.getData().toString()) ) {
+                            } else
+                                if (stringExtra2.equals(Sensor.ECG.getData().toString()) ) {
                                 if (isStartEcg){
                                     ConvertECG convertECG = Sensor.ECG.convertECG(intent.getByteArrayExtra("com.hopetruly.ec.services.EXTRA_DATA"));
                                     MainService.this.mmainFileService.savemRealEcgData(convertECG.ecgArr);
@@ -317,6 +320,7 @@ public class MainService extends Service {
                                     }
                                 }else {
                                     getMyBatt(intent.getByteArrayExtra("com.hopetruly.ec.services.EXTRA_DATA"));
+
                                 }
                                 return;
                             } else if (stringExtra2.equals(Sensor.SIMPLE_KEYS.getData().toString())) {
