@@ -160,6 +160,7 @@ public class BleHelper {
         intent.putExtra("com.hopetruly.ec.services.EXTRA_STATUS", i);
         intent.putExtra("com.hopetruly.ec.services.EXTRA_DATA", value);
         intent.putExtra("com.hopetruly.ec.services.EXTRA_UUID", bluetoothGattCharacteristic.getUuid().toString());
+//        Log.d("   sdsd",bluetoothGattCharacteristic.getUuid().toString()+"  "+bluetoothGattCharacteristic.getService().getUuid());
 //        C0140d.m485a(this.mCtx).mo390a(intent);
         LocalBroadcastManager.getInstance(mCtx).sendBroadcast(intent);
     }
