@@ -121,7 +121,7 @@
                 android:src="@drawable/ecg_start_btn" />
             <ImageView
                 android:id="@+id/step_start"
-                android:visibility="visible"
+                android:visibility="gone"
                 android:layout_width="120.0sp"
                 android:layout_height="120.0sp"
                 android:layout_marginLeft="127.0sp"

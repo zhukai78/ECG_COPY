@@ -2,12 +2,18 @@
   <dictionary name="Administrator">
     <words>
       <w>bynum</w>
+      <w>connectb</w>
       <w>dissmiss</w>
       <w>getgetbatterylevel</w>
+      <w>hopetruly</w>
       <w>initdraw</w>
+      <w>isdestroy</w>
       <w>isdisconnected</w>
       <w>isexit</w>
       <w>ispause</w>
+      <w>macid</w>
+      <w>mbluetooth</w>
+      <w>nable</w>
       <w>powerlow</w>
       <w>pupop</w>
       <w>removegps</w>

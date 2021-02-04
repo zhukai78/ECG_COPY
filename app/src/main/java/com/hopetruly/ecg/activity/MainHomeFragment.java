@@ -86,8 +86,8 @@ public class MainHomeFragment extends Fragment {
                 MainHomeFragment.this.iv_ecg_conn_btn.setVisibility(View.VISIBLE);
                 MainHomeFragment.this.iv_ecg_start.setVisibility(View.GONE);
                 MainHomeFragment.this.iv_step_start.setVisibility(View.GONE);
-            } else if (action.equals("com.hopetruly.ec.services.ACTION_GATT_DATA_NOTIFY") && intent.getStringExtra("com.hopetruly.ec.services.EXTRA_UUID").equals(Sensor.BATTERY.getData().toString())) {
-                MainHomeFragment.this.assertBattery(Sensor.BATTERY.convertBAT(intent.getByteArrayExtra("com.hopetruly.ec.services.EXTRA_DATA")));
+            } else if (action.equals("com.hopetruly.ec.services.BATTERY")) {
+                MainHomeFragment.this.assertBattery(intent.getIntExtra("com.hopetruly.ec.services.BATTERY",0));
             }
         }
     };
@@ -199,7 +199,7 @@ public class MainHomeFragment extends Fragment {
         if (this.mFunChooseActivity.isBleConn()) {
             this.iv_ecg_conn_btn.setVisibility(View.GONE);
             this.iv_ecg_start.setVisibility(View.VISIBLE);
-            this.iv_step_start.setVisibility(View.VISIBLE);
+            this.iv_step_start.setVisibility(View.GONE);
         } else {
             this.iv_ecg_conn_btn.setVisibility(View.VISIBLE);
             this.iv_ecg_start.setVisibility(View.GONE);
@@ -207,7 +207,7 @@ public class MainHomeFragment extends Fragment {
         }
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction("com.hopetruly.ec.services.ACTION_GATT_DISCONNECTED");
-        intentFilter.addAction("com.hopetruly.ec.services.ACTION_GATT_DATA_NOTIFY");
+        intentFilter.addAction("com.hopetruly.ec.services.BATTERY");
         LocalBroadcastManager.getInstance(getActivity().getApplicationContext()).registerReceiver(this.updataUiBroadcastReceiver, intentFilter);
         super.onStart();
     }
